@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des susars{% endblock %}
+
+{% block body %}
+
+
+<div>
+    {# {{ dump(TousSusars) }} #}
+
+
+<ul>
+    {% for Susar in TousSusars %}
+        <li>{{ Susar.MasterId|e }} / {{ Susar.specificcaseid|e }} / {{ Susar.DLPVersion|e }}</li>
+    {% endfor %}
+</ul>
+</div>
+
+
+
+{% endblock %}

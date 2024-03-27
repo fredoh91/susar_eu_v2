@@ -256,6 +256,9 @@
             "./config/routes/web_profiler.yaml"
         ]
     },
+    "symfony/webpack-encore-bundle": {
+        "version": "v2.1.1"
+    },
     "twig/extra-bundle": {
         "version": "v3.8.0"
     }
