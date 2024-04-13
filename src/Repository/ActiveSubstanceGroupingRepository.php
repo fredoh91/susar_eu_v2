@@ -21,6 +21,33 @@ class ActiveSubstanceGroupingRepository extends ServiceEntityRepository
         parent::__construct($registry, ActiveSubstanceGrouping::class);
     }
 
+    public function inactiveTout()
+    {
+        $query = $this->createQueryBuilder('c')
+            ->update(ActiveSubstanceGrouping::class, 'a')
+            ->set('a.inactif', ':nouveauStatut')
+            ->setParameter('nouveauStatut', true)
+            ->getQuery();
+
+        $query->execute();
+    }
+
+       /**
+        * @return ActiveSubstanceGrouping[] Returns an array of ActiveSubstanceGrouping objects
+        */
+       public function findByActif(): array
+       {
+           return $this->createQueryBuilder('a')
+               ->andWhere('a.inactif = :val')
+               ->setParameter('val', false)
+               ->orderBy('a.ActiveSubstanceHighLevel', 'ASC')
+               ->addOrderBy('a.ActiveSubstanceLowLevel', 'ASC')
+            //    ->setMaxResults(10)
+               ->getQuery()
+               ->getResult()
+           ;
+       }
+
     //    /**
     //     * @return ActiveSubstanceGrouping[] Returns an array of ActiveSubstanceGrouping objects
     //     */

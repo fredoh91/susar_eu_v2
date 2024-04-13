@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ImportExcelActiveSubGroupingController!{% endblock %}
+
+{% block body %}
+
+<div class="container-fluid p-5">
+	{{form_start(form)}}
+
+	{{form_end(form)}}
+    {% if tabActSubGrp %}
+        <table class="table table-dark table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Active Substance (High Level)</th>
+                    <th scope="col">Active Substance (Low Level)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ActSubGrp in tabActSubGrp %}
+                    <tr>
+                        <td>{{ActSubGrp.ActiveSubstanceHighLevel}}</td>
+                        <td>{{ActSubGrp.ActiveSubstanceLowLevel}}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+</div>
+
+{% endblock %}

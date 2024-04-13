@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des intervenants/substances{% endblock %}
+
+{% block body %}
+
+
+<div class="container-fluid p-5">
+
+		<div class="container-fluid">
+			{% if TousIntSub %}
+			
+				Nombre de lignes : {{ NbIntSub }}
+				<h3>Liste des intervenants/substances</h3>
+                <table class="table table-dark table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">HL_SN</th>
+                            <th scope="col">Association</th>
+                            <th scope="col">LL_SA</th>
+                            <th scope="col">Type</th>
+                            <th scope="col">DMM/Pôle</th>
+                            <th scope="col">Eval.</th>
+                            <th scope="col">Inactif</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+					    {% for IntSub in TousIntSub %}
+                            <tr>
+                                <th scope="row">{{IntSub.ActiveSubstanceHighLevel}}</th>
+                                {% if IntSub.AssociationDeSubstances == true %}
+                                    <td>Oui</td>
+                                    <td>
+                                        <ul>
+                                            {% for LL_SA in IntSub.IntervenantSubstanceDMMSubstances %}
+                                                <li>{{ LL_SA.ActiveSubstanceLowLevel }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    </td>
+                                {% else %}
+                                    <td>Non</td>
+                                    <td></td>
+                                {% endif %}
+                                <td>{{IntSub.TypeSaMSMono}}</td>
+                                <td>{{IntSub.DMM}} - {{IntSub.PoleCourt}}</td>
+                                <td>{{IntSub.Evaluateur}}</td>
+                                <td>
+                                    {% if IntSub.Inactif == true %}
+                                        Inactif
+                                    {% else %}
+                                        Actif
+                                    {% endif %}
+                                </td>
+                            </tr>
+					    {% endfor %}
+                    </tbody>
+                </table>
+			{% endif %}
+        </div>
+</div>
+
+{% endblock %}

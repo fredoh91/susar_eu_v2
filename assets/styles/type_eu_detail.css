@@ -1,0 +1,22 @@
+html, body {
+  background: #FBFDBB;
+}
+
+.tab_susar_eu_dtl {
+  border-collapse: collapse;
+}
+.tab_susar_eu_dtl > * {
+  border: 1px solid #ccc;
+  padding: 8px;
+}
+
+.chp_susar_eu_dtl {
+  border: 1px solid #ccc;
+  background-color: #fff;
+  padding: 10px;
+}
+
+.chp_narr_dtl {
+  max-height: 200px;
+  overflow: auto;
+}/*# sourceMappingURL=type_eu_detail.css.map */

@@ -1,0 +1,323 @@
+.container-tab > div:nth-child(even) {
+  background: #D9C7FD;
+}
+
+.container-tab > div:nth-child(odd) {
+  background: #EEE6FE;
+}
+
+.container_flex_left > div,
+.container_flex_right > div {
+  border-color: #aeb6bf;
+  min-height: 25px;
+  min-height: -moz-max-content;
+  min-height: max-content;
+}
+
+.container_flex_left {
+  height: 100%;
+  margin: 0;
+  width: 60%;
+  padding: 2px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  grid-template-rows: minmax(1fr, 4rem);
+  grid-auto-columns: 1fr;
+  gap: 0px 0px;
+  grid-auto-flow: row;
+  justify-items: stretch;
+  align-items: stretch;
+  grid-template-areas: "suspectDrug_lib . PT_outcome_lib . ." "suspectDrug suspectDrug PT_outcome PT_outcome PT_outcome" "seriousness_lib . indication_lib . ." "seriousness seriousness indication indication indication" ". . medicalHistory_lib . ." ". . medicalHistory medicalHistory medicalHistory" "population_lib population medicalHistory medicalHistory medicalHistory" "age_lib age medicalHistory medicalHistory medicalHistory" "sex_lib sex medicalHistory medicalHistory medicalHistory";
+}
+
+.container_flex_right {
+  height: 100%;
+  margin: 0;
+  width: 40%;
+  padding: 2px;
+  display: grid;
+  grid-template-columns: 0.5fr 1fr 0.7fr 1fr;
+  grid-template-rows: minmax(1fr, 4rem);
+  grid-auto-columns: 1fr;
+  gap: 10px 0px;
+  grid-auto-flow: row;
+  justify-items: stretch;
+  align-items: stretch;
+  grid-template-areas: "numBNPV_lib numBNPV FU_BNPV_lib FU_BNPV" "StudyTittle_lib StudyTittle StudyTittle StudyTittle" "WW_id_lib WW_id WW_id WW_id" "NumEUDRA_CT_lib NumEUDRA_CT SponsStudyNum_lib SponsStudyNum" "DMM_Pole_lib DMM_Pole DtAiguil_lib DtAiguil" "MesureAction_lib MesureAction DtMesureAction_lib DtMesureAction";
+}
+
+.suspectDrug_lib {
+  grid-area: suspectDrug_lib;
+  padding-left: 5%;
+}
+
+.suspectDrug {
+  grid-area: suspectDrug;
+  border-top: 1px solid;
+  border-bottom: 1px solid;
+  border-left: 1px solid;
+}
+
+.PT_outcome_lib {
+  grid-area: PT_outcome_lib;
+  padding-left: 5%;
+}
+
+.PT_outcome {
+  grid-area: PT_outcome;
+  border-top: 1px solid;
+  border-right: 1px solid;
+  border-bottom: 1px solid;
+  border-left: 1px solid;
+}
+
+.seriousness_lib {
+  grid-area: seriousness_lib;
+  padding-left: 5%;
+}
+
+.seriousness {
+  grid-area: seriousness;
+  border-top: 1px solid;
+  border-bottom: 1px solid;
+  border-left: 1px solid;
+}
+
+.indication_lib {
+  grid-area: indication_lib;
+  padding-left: 5%;
+}
+
+.indication {
+  grid-area: indication;
+  border-top: 1px solid;
+  border-right: 1px solid;
+  border-bottom: 1px solid;
+  border-left: 1px solid;
+}
+
+.medicalHistory_lib {
+  grid-area: medicalHistory_lib;
+  padding-right: 5%;
+}
+
+.medicalHistory {
+  grid-area: medicalHistory;
+  border-top: 1px solid;
+  border-right: 1px solid;
+  border-bottom: 1px solid;
+  border-left: 1px solid;
+}
+
+.population_lib {
+  grid-area: population_lib;
+  text-align: right;
+  padding-right: 5%;
+  display: flex;
+  justify-content: end;
+  align-items: center;
+}
+
+.population {
+  grid-area: population;
+  border-top: 1px solid;
+  border-right: 1px solid;
+  border-bottom: 1px solid;
+  border-left: 1px solid;
+  margin: 1%;
+}
+
+.age_lib {
+  grid-area: age_lib;
+  text-align: right;
+  padding-right: 5%;
+  display: flex;
+  justify-content: end;
+  align-items: center;
+}
+
+.age {
+  grid-area: age;
+  border-top: 1px solid;
+  border-right: 1px solid;
+  border-bottom: 1px solid;
+  border-left: 1px solid;
+  margin: 1%;
+}
+
+.sex_lib {
+  grid-area: sex_lib;
+  text-align: right;
+  padding-right: 5%;
+  display: flex;
+  justify-content: end;
+  align-items: center;
+}
+
+.sex {
+  grid-area: sex;
+  border-top: 1px solid;
+  border-right: 1px solid;
+  border-bottom: 1px solid;
+  border-left: 1px solid;
+  margin: 1%;
+}
+
+.ligne_susar {
+  display: flex;
+  padding: 2px;
+  border: 5px solid #eac8c0;
+  border-radius: 10px;
+  justify-content: space-around;
+}
+
+.cell_tab {
+  padding: 2px;
+  border: 2px solid blue;
+}
+
+.numBNPV {
+  grid-area: numBNPV;
+  border: 1px solid;
+}
+
+.numBNPV_lib {
+  grid-area: numBNPV_lib;
+  text-align: right;
+  padding-right: 5%;
+  display: flex;
+  justify-content: end;
+  align-items: center;
+}
+
+.FU_BNPV {
+  grid-area: FU_BNPV;
+  border: 1px solid;
+}
+
+.FU_BNPV_lib {
+  grid-area: FU_BNPV_lib;
+  text-align: right;
+  padding-right: 5%;
+  display: flex;
+  justify-content: end;
+  align-items: center;
+}
+
+.DMM_Pole_lib {
+  grid-area: DMM_Pole_lib;
+  text-align: right;
+  padding-right: 5%;
+  display: flex;
+  justify-content: end;
+  align-items: center;
+}
+
+.DMM_Pole {
+  grid-area: DMM_Pole;
+  border: 1px solid;
+}
+
+.DtAiguil_lib {
+  grid-area: DtAiguil_lib;
+  text-align: right;
+  padding-right: 5%;
+  display: flex;
+  justify-content: end;
+  align-items: center;
+}
+
+.DtAiguil {
+  grid-area: DtAiguil;
+  border: 1px solid;
+}
+
+.SponsStudyNum {
+  grid-area: SponsStudyNum;
+  border: 1px solid;
+}
+
+.SponsStudyNum_lib {
+  grid-area: SponsStudyNum_lib;
+  text-align: right;
+  padding-right: 5%;
+  display: flex;
+  justify-content: end;
+  align-items: center;
+}
+
+.NumEUDRA_CT {
+  grid-area: NumEUDRA_CT;
+  border: 1px solid;
+}
+
+.NumEUDRA_CT_lib {
+  grid-area: NumEUDRA_CT_lib;
+  text-align: right;
+  padding-right: 5%;
+  display: flex;
+  justify-content: end;
+  align-items: center;
+}
+
+.StudyTittle_lib {
+  grid-area: StudyTittle_lib;
+  text-align: right;
+  padding-right: 5%;
+  display: flex;
+  justify-content: end;
+  align-items: center;
+}
+
+.StudyTittle {
+  grid-area: StudyTittle;
+  border: 1px solid;
+}
+
+.WW_id_lib {
+  grid-area: WW_id_lib;
+  text-align: right;
+  padding-right: 5%;
+  display: flex;
+  justify-content: end;
+  align-items: center;
+}
+
+.WW_id {
+  grid-area: WW_id;
+  border: 1px solid;
+}
+
+.MesureAction {
+  grid-area: MesureAction;
+  border: 1px solid;
+}
+
+.MesureAction_lib {
+  grid-area: MesureAction_lib;
+  text-align: right;
+  padding-right: 5%;
+  display: flex;
+  justify-content: end;
+  align-items: center;
+}
+
+.DtMesureAction {
+  grid-area: DtMesureAction;
+  border: 1px solid;
+}
+
+.DtMesureAction_lib {
+  grid-area: DtMesureAction_lib;
+  text-align: right;
+  padding-right: 5%;
+  display: flex;
+  justify-content: end;
+  align-items: center;
+}
+
+/*.cell_tab {
+    padding: 2px;
+    border: 2px solid #eac8c0;
+    border-radius: 10px;
+  }*//*# sourceMappingURL=type_eu.css.map */

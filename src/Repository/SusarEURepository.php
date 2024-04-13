@@ -21,6 +21,23 @@ class SusarEURepository extends ServiceEntityRepository
         parent::__construct($registry, SusarEU::class);
     }
 
+
+
+
+    public function findSusarByMasterId(int $master_id): ?SusarEU
+    {
+        return $this->createQueryBuilder('s')
+            ->andWhere('s.master_id = :val')
+            ->setParameter('val', $master_id)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
+
+
+
+
+
     //    /**
     //     * @return SusarEU[] Returns an array of SusarEU objects
     //     */

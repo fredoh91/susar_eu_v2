@@ -13,7 +13,9 @@
         "doctrine/doctrine-bundle": "^2.11",
         "doctrine/doctrine-migrations-bundle": "^3.3",
         "doctrine/orm": "^3.1",
+        "knplabs/knp-paginator-bundle": "^6.3",
         "phpdocumentor/reflection-docblock": "^5.3",
+        "phpoffice/phpspreadsheet": "^2.0",
         "phpstan/phpdoc-parser": "^1.26",
         "symfony/asset": "6.4.*",
         "symfony/asset-mapper": "6.4.*",
@@ -43,9 +45,10 @@
         "symfony/ux-turbo": "^2.16",
         "symfony/validator": "6.4.*",
         "symfony/web-link": "6.4.*",
-        "symfony/webpack-encore-bundle": "*",
+        "symfony/webpack-encore-bundle": "^2.1",
         "symfony/yaml": "6.4.*",
         "twig/extra-bundle": "^2.12|^3.0",
+        "twig/intl-extra": "^3.8",
         "twig/twig": "^2.12|^3.0"
     },
     "config": {

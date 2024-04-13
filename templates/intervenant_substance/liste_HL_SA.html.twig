@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des intervenants/substances{% endblock %}
+
+{% block body %}
+
+<div class="container-fluid p-5">
+
+		<div class="container-fluid">
+			{% if TousHL_SA %}
+			
+				Nombre de lignes : {{ NbHL_SA }}
+				<h3>Liste des HL_SA</h3>
+
+                {# {% dump(TousHL_SA) %} #}
+                {% set LstHL_SA = '' %}
+                        {% for HL_SA in TousHL_SA %}
+                            {% set LstHL_SA = (LstHL_SA == '' 
+                                                        ? HL_SA.ActiveSubstanceHighLevel 
+                                                        : LstHL_SA ~ '\n' ~ HL_SA.ActiveSubstanceHighLevel) %}
+                            
+                        {% endfor %}
+                    <textarea name="" id="" cols="150" rows="50">{{ LstHL_SA | raw }}</textarea>
+                
+			{% endif %}
+        </div>
+</div>
+
+{% endblock %}

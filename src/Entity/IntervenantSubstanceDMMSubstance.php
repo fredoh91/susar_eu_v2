@@ -28,6 +28,9 @@ class IntervenantSubstanceDMMSubstance
     #[ORM\Column]
     private ?\DateTimeImmutable $updatedAt = null;
 
+    #[ORM\Column(length: 1000, nullable: true)]
+    private ?string $ActiveSubstanceLowLevel = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -89,6 +92,18 @@ class IntervenantSubstanceDMMSubstance
     public function setUpdatedAt(\DateTimeImmutable $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function getActiveSubstanceLowLevel(): ?string
+    {
+        return $this->ActiveSubstanceLowLevel;
+    }
+
+    public function setActiveSubstanceLowLevel(?string $ActiveSubstanceLowLevel): static
+    {
+        $this->ActiveSubstanceLowLevel = $ActiveSubstanceLowLevel;
 
         return $this;
     }

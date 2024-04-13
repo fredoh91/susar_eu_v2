@@ -31,6 +31,15 @@ class Indications
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $productcharacterization = null;
 
+    #[ORM\Column]
+    private ?\DateTimeImmutable $createdAt = null;
+
+    #[ORM\Column]
+    private ?\DateTimeImmutable $updatedAt = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $master_id = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -107,4 +116,41 @@ class Indications
 
         return $this;
     }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $createdAt): static
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeImmutable
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(\DateTimeImmutable $updatedAt): static
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function getMasterId(): ?int
+    {
+        return $this->master_id;
+    }
+
+    public function setMasterId(?int $master_id): static
+    {
+        $this->master_id = $master_id;
+
+        return $this;
+    }
+
 }

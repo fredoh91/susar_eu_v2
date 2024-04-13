@@ -21,6 +21,31 @@ class IntervenantSubstanceDMMRepository extends ServiceEntityRepository
         parent::__construct($registry, IntervenantSubstanceDMM::class);
     }
 
+       /**
+        * @return IntervenantSubstanceDMM[] Returns an array of IntervenantSubstanceDMM objects
+        */
+        public function findAllSortHL_SA(): array
+        {
+            return $this->createQueryBuilder('i')
+                ->orderBy('i.active_substance_high_level', 'ASC')
+                ->getQuery()
+                ->getResult()
+            ;
+        }
+        /**
+         * @return IntervenantSubstanceDMM[] Returns an array of IntervenantSubstanceDMM objects
+         */
+        public function findHL_SA_Rgp(): array
+        {
+            return $this->createQueryBuilder('i')
+                       ->andWhere('i.inactif = :val')
+                       ->setParameter('val', false)
+                ->orderBy('i.active_substance_high_level', 'ASC')
+                ->addGroupBy('i.active_substance_high_level')
+                ->getQuery()
+                ->getResult()
+            ;
+        }
     //    /**
     //     * @return IntervenantSubstanceDMM[] Returns an array of IntervenantSubstanceDMM objects
     //     */

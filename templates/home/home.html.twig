@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}SUSAR_EU_v2
+{% endblock %}
+
+{% block body %}
+
+	<div class="container">
+		<div class="text-center">
+			<h1 class="text-center">SUSAR_Jardé</h1>
+			<ul>
+				<li class="">
+					<a class="" href="{{ path ('app_affiche_susar_eu') }}">test : liste des SUSARs (master_id)</a>
+				</li>
+				<li class="">
+					<a class="" href="{{ path ('app_liste_susar_eu') }}">Liste des SUSARs (type SUSAR_EU)</a>
+				</li>
+				<li class="">
+					<a class="" href="{{ path ('app_intervenant_substance') }}">Intervenants/substances</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+	{# Affichage d'un message en cas de redirection vers cette page d'accueil, par exemple après la modif du mot de passe par l'utilisateur connecté #}
+	<div class="p-3">
+		{% for message in app.flashes('success') %}
+			<div class="alert alert-success">
+				{{ message }}
+			</div>
+		{% endfor %}
+	</div>
+{% endblock %}
