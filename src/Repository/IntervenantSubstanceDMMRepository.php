@@ -32,6 +32,7 @@ class IntervenantSubstanceDMMRepository extends ServiceEntityRepository
                 ->getResult()
             ;
         }
+
         /**
          * @return IntervenantSubstanceDMM[] Returns an array of IntervenantSubstanceDMM objects
          */
@@ -44,6 +45,43 @@ class IntervenantSubstanceDMMRepository extends ServiceEntityRepository
                 ->addGroupBy('i.active_substance_high_level')
                 ->getQuery()
                 ->getResult()
+            ;
+        }
+
+        /**
+         * permet de retourner toutes les lignes de la table "intervenant_substance_dmm" qui ont pour high level substance name la valeur passée en paramètre
+         * Nottamment utilisée au moment de l'import du fichier activ substance grouping, pour rattacher les lignes de "intervenant_substance_dmm"
+         *
+         * @param string $HL_SA : high level substance name
+         * @return IntervenantSubstanceDMM[] : retourne un array d'objet IntervenantSubstanceDMM
+         */
+        public function findByHL_SA(string $HL_SA): array
+        {
+            return $this->createQueryBuilder('i')
+                ->andWhere('i.active_substance_high_level = :val')
+                ->setParameter('val', $HL_SA)
+                ->andWhere('i.inactif = :val_2')
+                ->setParameter('val_2', false)
+                ->orderBy('i.id', 'ASC')
+                // ->addGroupBy('i.active_substance_high_level')
+                ->getQuery()
+                ->getResult()
+            ;
+        }
+
+        /**
+         * Undocumented function
+         *
+         * @param [type] $value
+         * @return IntervenantSubstanceDMM|null
+         */
+        public function findIntSubById($value): ?IntervenantSubstanceDMM
+        {
+            return $this->createQueryBuilder('i')
+                ->andWhere('i.id = :val')
+                ->setParameter('val', $value)
+                ->getQuery()
+                ->getOneOrNullResult()
             ;
         }
     //    /**

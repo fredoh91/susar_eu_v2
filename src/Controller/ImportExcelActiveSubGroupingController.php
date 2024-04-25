@@ -5,6 +5,7 @@ namespace App\Controller;
 // use DateTime;
 use DateTimeImmutable;
 use App\Entity\ActiveSubstanceGrouping;
+use App\Entity\IntervenantSubstanceDMM;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
@@ -22,7 +23,7 @@ class ImportExcelActiveSubGroupingController extends AbstractController
     {
         $form = $this->createForm(UploadExcelActiveSubGroupingType::class);
         $form->handleRequest($request);
-        // $tabActSubGrp = [];
+        $tabActSubGrp = [];
 
         if ($form->isSubmitted() && $form->isValid()) {
             /** @var UploadedFile $FicExcel */
@@ -56,24 +57,37 @@ class ImportExcelActiveSubGroupingController extends AbstractController
                 for ($row = 2; $row <= $highestRow; $row++) {
 
 
+                    $AS_HL = $activeWorksheet->getCell('A' . $row)->getFormattedValue();
+                    $AS_LL = $activeWorksheet->getCell('B' . $row)->getFormattedValue();
 
+                    
                     $activeSubstanceGrouping = new ActiveSubstanceGrouping;
-                    $activeSubstanceGrouping->setActiveSubstanceHighLevel($activeWorksheet->getCell('A' . $row)->getFormattedValue());
-                    $activeSubstanceGrouping->setActiveSubstanceLowLevel($activeWorksheet->getCell('B' . $row)->getFormattedValue());
+                    $activeSubstanceGrouping->setActiveSubstanceHighLevel($AS_HL);
+                    $activeSubstanceGrouping->setActiveSubstanceLowLevel($AS_LL);
                     $activeSubstanceGrouping->setInactif(false);
                     $activeSubstanceGrouping->setDateFichier($creation_time);
                     $activeSubstanceGrouping->setUtilisateurImport('Frederic.RANNOU@ansm.sante.fr');
                     $activeSubstanceGrouping->setCreatedAt($creation_date);
                     $activeSubstanceGrouping->setUpdatedAt($creation_date);
                     $em->persist($activeSubstanceGrouping);
-                    $em->flush();
+                    
+                    // Liaison de cet ActiveSubstanceGrouping à/aux IntervenantSubstanceDMM ayant le même high level substance name
+                    $IntervenantSubstanceDMM = $entityManager->getRepository(IntervenantSubstanceDMM::class)->findByHL_SA($AS_HL);
+
+                    foreach ($IntervenantSubstanceDMM as $intSubDMM) {
+                        $intSubDMM->setActSubGrouping($activeSubstanceGrouping);
+                        $em->persist($intSubDMM);
+                    }
+
+
 
                     // $tabActSubGrp[] = array(
-                    //     'AS_HL' => $activeWorksheet->getCell('A' . $row)->getFormattedValue(),
-                    //     'AS_LL' => $activeWorksheet->getCell('B' . $row)->getFormattedValue()
-                    // );
-        
+                        //     'AS_HL' => $activeWorksheet->getCell('A' . $row)->getFormattedValue(),
+                        //     'AS_LL' => $activeWorksheet->getCell('B' . $row)->getFormattedValue()
+                        // );
+                        
                 }
+                $em->flush();
                 // $date_unique = date("Ymd");
                 $dateHeureUnique = date('Ymd_His');
                 // $fileName = $FicExcel->getClientOriginalName();
@@ -95,6 +109,20 @@ class ImportExcelActiveSubGroupingController extends AbstractController
         return $this->render('import_excel_active_sub_grouping/upload_excel.html.twig', [
             'form' => $form->createView(),
             // 'controller_name' => 'ImportExcelActiveSubGroupingController',
+            'tabActSubGrp' => $tabActSubGrp
+        ]);
+    }
+
+
+    #[Route('/aff_activesubgrouping', name: 'app_aff_active_sub_grouping')]
+    public function aff_activesubgrouping(ManagerRegistry $doctrine, EntityManagerInterface $em): Response
+    {
+
+        $tabActSubGrp = [];
+        $entityManager = $doctrine->getManager();
+        $tabActSubGrp = $entityManager->getRepository(ActiveSubstanceGrouping::class)->findByActif();
+
+        return $this->render('import_excel_active_sub_grouping/aff_active_sub_grouping.html.twig', [
             'tabActSubGrp' => $tabActSubGrp
         ]);
     }

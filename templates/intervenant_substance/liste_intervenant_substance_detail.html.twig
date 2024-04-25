@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détail d'un intervenant/substance{% endblock %}
+
+{% block body %}
+
+{# {{ encore_entry_link_tags('intervenant_substance_css') }} #}
+
+<div class="container-fluid p-5">
+    {{ form_start(form) }}
+
+    {{ form_end(form) }}
+
+    <div class="container-fluid">
+        {% if IntSub %}
+            {# {{ IntSub.id }}<BR>
+            {{ IntSub.DMM }}<BR>
+            {{ IntSub.PoleCourt }}<BR>
+            {{ IntSub.evaluateur }}<BR>
+            {{ IntSub.inactif }}<BR>
+            {{ IntSub.TypeSaMSMono }}<BR>
+            {{ IntSub.ActiveSubstanceHighLevel }}<BR>
+            {{ IntSub.AssociationDeSubstances }}<BR> #}
+            {% for LL_SA in IntSub.IntervenantSubstanceDMMSubstances %}
+                {{ LL_SA.id }} - {{ LL_SA.ActiveSubstanceLowLevel }}<BR>
+            {% endfor %}
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,30 @@
+<nav class="navbar navbar-expand-lg bg-light">
+	<div class="container-fluid">
+		<a class="navbar-brand" href="{{ path ('app_home') }}">SUSAR_EU_v2</a>
+		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div
+			class="collapse navbar-collapse" id="navbarNav">
+			<ul
+				class="navbar-nav">
+					<li class="nav-item me-auto mb-2 mb-lg-0">
+						<a class="nav-link" href="{{ path ('app_affiche_susar_eu') }}">test : liste des SUSARs (master_id)</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="{{ path ('app_liste_susar_eu') }}">Liste des SUSARs (type SUSAR_EU)</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="{{ path ('app_intervenant_substance') }}">Intervenants/substances</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="{{ path ('app_liste_HL_SA') }}">Liste des High Level (pour requête EVDAS)</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="{{ path ('app_upload_excel_active_sub_grouping') }}">Import du fichier "Active substance grouping"</a>
+						{# <a class="nav-link" href="{{ path ('app_import_excel_active_sub_grouping') }}">Import du fichier "Active substance grouping"</a> #}
+					</li>
+			</ul>
+		</div>
+	</div>
+</nav>

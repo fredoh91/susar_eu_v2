@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ActiveSubstanceGroupingRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -34,6 +36,17 @@ class ActiveSubstanceGrouping
 
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $updatedAt = null;
+
+    /**
+     * @var Collection<int, IntervenantSubstanceDMM>
+     */
+    #[ORM\OneToMany(targetEntity: IntervenantSubstanceDMM::class, mappedBy: 'ActSubGrouping')]
+    private Collection $intervenantSubstanceDMMs;
+
+    public function __construct()
+    {
+        $this->intervenantSubstanceDMMs = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -120,6 +133,36 @@ class ActiveSubstanceGrouping
     public function setUpdatedAt(?\DateTimeImmutable $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, IntervenantSubstanceDMM>
+     */
+    public function getIntervenantSubstanceDMMs(): Collection
+    {
+        return $this->intervenantSubstanceDMMs;
+    }
+
+    public function addIntervenantSubstanceDMM(IntervenantSubstanceDMM $intervenantSubstanceDMM): static
+    {
+        if (!$this->intervenantSubstanceDMMs->contains($intervenantSubstanceDMM)) {
+            $this->intervenantSubstanceDMMs->add($intervenantSubstanceDMM);
+            $intervenantSubstanceDMM->setActSubGrouping($this);
+        }
+
+        return $this;
+    }
+
+    public function removeIntervenantSubstanceDMM(IntervenantSubstanceDMM $intervenantSubstanceDMM): static
+    {
+        if ($this->intervenantSubstanceDMMs->removeElement($intervenantSubstanceDMM)) {
+            // set the owning side to null (unless already changed)
+            if ($intervenantSubstanceDMM->getActSubGrouping() === $this) {
+                $intervenantSubstanceDMM->setActSubGrouping(null);
+            }
+        }
 
         return $this;
     }

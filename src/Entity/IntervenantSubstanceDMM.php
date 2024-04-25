@@ -51,6 +51,12 @@ class IntervenantSubstanceDMM
     #[ORM\Column(nullable: true)]
     private ?bool $AssociationDeSubstances = null;
 
+    #[ORM\ManyToOne(inversedBy: 'intervenantSubstanceDMMs')]
+    private ?ActiveSubstanceGrouping $ActSubGrouping = null;
+
+    #[ORM\ManyToOne(inversedBy: 'intervenantSubstanceDMMs')]
+    private ?IntervenantsANSM $IntervenantANSM = null;
+
     // #[ORM\ManyToMany(targetEntity: SusarEU::class, mappedBy: 'IntervenantSubstanceDMM')]
     // private Collection $susarEUs;
 
@@ -262,6 +268,30 @@ class IntervenantSubstanceDMM
     public function setAssociationDeSubstances(?bool $AssociationDeSubstances): static
     {
         $this->AssociationDeSubstances = $AssociationDeSubstances;
+
+        return $this;
+    }
+
+    public function getActSubGrouping(): ?ActiveSubstanceGrouping
+    {
+        return $this->ActSubGrouping;
+    }
+
+    public function setActSubGrouping(?ActiveSubstanceGrouping $ActSubGrouping): static
+    {
+        $this->ActSubGrouping = $ActSubGrouping;
+
+        return $this;
+    }
+
+    public function getIntervenantANSM(): ?IntervenantsANSM
+    {
+        return $this->IntervenantANSM;
+    }
+
+    public function setIntervenantANSM(?IntervenantsANSM $IntervenantANSM): static
+    {
+        $this->IntervenantANSM = $IntervenantANSM;
 
         return $this;
     }

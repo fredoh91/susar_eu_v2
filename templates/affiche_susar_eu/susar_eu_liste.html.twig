@@ -4,9 +4,6 @@
 
 	{{ encore_entry_link_tags('type_eu_css') }}
 
-	{% block javascripts %}
-		{{ encore_entry_script_tags('listeEvalSusar') }}
-	{% endblock %}
 
 	<div class="container-fluid p-5">
 
@@ -176,4 +173,9 @@
 			{% endif %}
 		</div>
 	</div>
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+	{{ encore_entry_script_tags('listeEvalSusar') }}
 {% endblock %}
