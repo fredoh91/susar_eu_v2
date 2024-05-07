@@ -51,11 +51,23 @@ class IntervenantSubstanceDMM
     #[ORM\Column(nullable: true)]
     private ?bool $AssociationDeSubstances = null;
 
-    #[ORM\ManyToOne(inversedBy: 'intervenantSubstanceDMMs')]
-    private ?ActiveSubstanceGrouping $ActSubGrouping = null;
+    // #[ORM\ManyToOne(inversedBy: 'intervenantSubstanceDMMs')]
+    // private ?ActiveSubstanceGrouping $ActSubGrouping = null;
 
     #[ORM\ManyToOne(inversedBy: 'intervenantSubstanceDMMs')]
     private ?IntervenantsANSM $IntervenantANSM = null;
+
+    /**
+     * @var Collection<int, ActiveSubstanceGrouping>
+     */
+    #[ORM\OneToMany(targetEntity: ActiveSubstanceGrouping::class, mappedBy: 'IntSubDMM')]
+    private Collection $activeSubstanceGroupings;
+
+    /**
+     * @var Collection<int, Medicaments>
+     */
+    #[ORM\OneToMany(targetEntity: Medicaments::class, mappedBy: 'IntervenantSubstanceDMM')]
+    private Collection $medicaments;
 
     // #[ORM\ManyToMany(targetEntity: SusarEU::class, mappedBy: 'IntervenantSubstanceDMM')]
     // private Collection $susarEUs;
@@ -64,6 +76,8 @@ class IntervenantSubstanceDMM
     {
         // $this->susarEUs = new ArrayCollection();
         $this->intervenantSubstanceDMMSubstances = new ArrayCollection();
+        $this->activeSubstanceGroupings = new ArrayCollection();
+        $this->medicaments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -272,17 +286,17 @@ class IntervenantSubstanceDMM
         return $this;
     }
 
-    public function getActSubGrouping(): ?ActiveSubstanceGrouping
-    {
-        return $this->ActSubGrouping;
-    }
+    // public function getActSubGrouping(): ?ActiveSubstanceGrouping
+    // {
+    //     return $this->ActSubGrouping;
+    // }
 
-    public function setActSubGrouping(?ActiveSubstanceGrouping $ActSubGrouping): static
-    {
-        $this->ActSubGrouping = $ActSubGrouping;
+    // public function setActSubGrouping(?ActiveSubstanceGrouping $ActSubGrouping): static
+    // {
+    //     $this->ActSubGrouping = $ActSubGrouping;
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
     public function getIntervenantANSM(): ?IntervenantsANSM
     {
@@ -292,6 +306,66 @@ class IntervenantSubstanceDMM
     public function setIntervenantANSM(?IntervenantsANSM $IntervenantANSM): static
     {
         $this->IntervenantANSM = $IntervenantANSM;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ActiveSubstanceGrouping>
+     */
+    public function getActiveSubstanceGroupings(): Collection
+    {
+        return $this->activeSubstanceGroupings;
+    }
+
+    public function addActiveSubstanceGrouping(ActiveSubstanceGrouping $activeSubstanceGrouping): static
+    {
+        if (!$this->activeSubstanceGroupings->contains($activeSubstanceGrouping)) {
+            $this->activeSubstanceGroupings->add($activeSubstanceGrouping);
+            $activeSubstanceGrouping->setIntSubDMM($this);
+        }
+
+        return $this;
+    }
+
+    public function removeActiveSubstanceGrouping(ActiveSubstanceGrouping $activeSubstanceGrouping): static
+    {
+        if ($this->activeSubstanceGroupings->removeElement($activeSubstanceGrouping)) {
+            // set the owning side to null (unless already changed)
+            if ($activeSubstanceGrouping->getIntSubDMM() === $this) {
+                $activeSubstanceGrouping->setIntSubDMM(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Medicaments>
+     */
+    public function getMedicaments(): Collection
+    {
+        return $this->medicaments;
+    }
+
+    public function addMedicament(Medicaments $medicament): static
+    {
+        if (!$this->medicaments->contains($medicament)) {
+            $this->medicaments->add($medicament);
+            $medicament->setIntervenantSubstanceDMM($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMedicament(Medicaments $medicament): static
+    {
+        if ($this->medicaments->removeElement($medicament)) {
+            // set the owning side to null (unless already changed)
+            if ($medicament->getIntervenantSubstanceDMM() === $this) {
+                $medicament->setIntervenantSubstanceDMM(null);
+            }
+        }
 
         return $this;
     }

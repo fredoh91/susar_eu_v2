@@ -125,7 +125,8 @@
 									<div class="DMM_Pole">
 										{% for intAnsm in Susar.IntervenantSubstanceDMMs %}
 											{% if intAnsm.PoleCourt != null %}
-												{{ intAnsm.DMM }} / {{ intAnsm.PoleCourt }} / {{ intAnsm.Evaluateur }}
+												{{ intAnsm.DMM }} / {{ intAnsm.PoleCourt }} / {{ intAnsm.Evaluateur }} 
+												<BR>
 											{% else %}
 												Non-attribué
 											{% endif %}	

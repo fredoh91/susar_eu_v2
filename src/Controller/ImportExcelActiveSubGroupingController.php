@@ -69,15 +69,37 @@ class ImportExcelActiveSubGroupingController extends AbstractController
                     $activeSubstanceGrouping->setUtilisateurImport('Frederic.RANNOU@ansm.sante.fr');
                     $activeSubstanceGrouping->setCreatedAt($creation_date);
                     $activeSubstanceGrouping->setUpdatedAt($creation_date);
-                    $em->persist($activeSubstanceGrouping);
-                    
-                    // Liaison de cet ActiveSubstanceGrouping à/aux IntervenantSubstanceDMM ayant le même high level substance name
+
+
                     $IntervenantSubstanceDMM = $entityManager->getRepository(IntervenantSubstanceDMM::class)->findByHL_SA($AS_HL);
 
-                    foreach ($IntervenantSubstanceDMM as $intSubDMM) {
-                        $intSubDMM->setActSubGrouping($activeSubstanceGrouping);
-                        $em->persist($intSubDMM);
-                    }
+                    
+                    // if (!is_null($IntervenantSubstanceDMM)) {
+                        if (count($IntervenantSubstanceDMM) == 0) {
+                            // il n'y a pas d'intervenantSubstanceDMM, on ne fait rien
+
+                        } elseif (count($IntervenantSubstanceDMM) == 1) {
+                            // il n'y a qu'un seul intervenantSubstanceDMM, on l'ajoute à activeSubstanceGrouping
+                            $activeSubstanceGrouping->setIntSubDMM($IntervenantSubstanceDMM[0]);
+                            
+                        } else {
+                            // dd($IntervenantSubstanceDMM);
+                            $response = new Response('Impossible d\'effectuer le charment du fichier Excel.<BR>Il existe plusieurs ligne pour le "High Level" suivant, merci de ne laisser qu\'une seule ligne active : ' . 
+                                                        $IntervenantSubstanceDMM[0]->getActiveSubstanceHighLevel(), Response::HTTP_NOT_FOUND);
+                            $response->send();
+                            exit;
+                        }
+                    // }
+                    
+                    $em->persist($activeSubstanceGrouping);
+                    
+                    // // Liaison de cet ActiveSubstanceGrouping à/aux IntervenantSubstanceDMM ayant le même high level substance name
+                    // $IntervenantSubstanceDMM = $entityManager->getRepository(IntervenantSubstanceDMM::class)->findByHL_SA($AS_HL);
+
+                    // foreach ($IntervenantSubstanceDMM as $intSubDMM) {
+                    //     $intSubDMM->setActSubGrouping($activeSubstanceGrouping);
+                    //     $em->persist($intSubDMM);
+                    // }
 
 
 

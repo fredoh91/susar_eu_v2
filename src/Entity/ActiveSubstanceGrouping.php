@@ -37,16 +37,19 @@ class ActiveSubstanceGrouping
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $updatedAt = null;
 
-    /**
-     * @var Collection<int, IntervenantSubstanceDMM>
-     */
-    #[ORM\OneToMany(targetEntity: IntervenantSubstanceDMM::class, mappedBy: 'ActSubGrouping')]
-    private Collection $intervenantSubstanceDMMs;
+    #[ORM\ManyToOne(inversedBy: 'activeSubstanceGroupings')]
+    private ?IntervenantSubstanceDMM $IntSubDMM = null;
 
-    public function __construct()
-    {
-        $this->intervenantSubstanceDMMs = new ArrayCollection();
-    }
+    // /**
+    //  * @var Collection<int, IntervenantSubstanceDMM>
+    //  */
+    // #[ORM\OneToMany(targetEntity: IntervenantSubstanceDMM::class, mappedBy: 'ActSubGrouping')]
+    // private Collection $intervenantSubstanceDMMs;
+
+    // public function __construct()
+    // {
+    //     $this->intervenantSubstanceDMMs = new ArrayCollection();
+    // }
 
     public function getId(): ?int
     {
@@ -137,32 +140,44 @@ class ActiveSubstanceGrouping
         return $this;
     }
 
-    /**
-     * @return Collection<int, IntervenantSubstanceDMM>
-     */
-    public function getIntervenantSubstanceDMMs(): Collection
+    // /**
+    //  * @return Collection<int, IntervenantSubstanceDMM>
+    //  */
+    // public function getIntervenantSubstanceDMMs(): Collection
+    // {
+    //     return $this->intervenantSubstanceDMMs;
+    // }
+
+    // public function addIntervenantSubstanceDMM(IntervenantSubstanceDMM $intervenantSubstanceDMM): static
+    // {
+    //     if (!$this->intervenantSubstanceDMMs->contains($intervenantSubstanceDMM)) {
+    //         $this->intervenantSubstanceDMMs->add($intervenantSubstanceDMM);
+    //         $intervenantSubstanceDMM->setActSubGrouping($this);
+    //     }
+
+    //     return $this;
+    // }
+
+    // public function removeIntervenantSubstanceDMM(IntervenantSubstanceDMM $intervenantSubstanceDMM): static
+    // {
+    //     if ($this->intervenantSubstanceDMMs->removeElement($intervenantSubstanceDMM)) {
+    //         // set the owning side to null (unless already changed)
+    //         if ($intervenantSubstanceDMM->getActSubGrouping() === $this) {
+    //             $intervenantSubstanceDMM->setActSubGrouping(null);
+    //         }
+    //     }
+
+    //     return $this;
+    // }
+
+    public function getIntSubDMM(): ?IntervenantSubstanceDMM
     {
-        return $this->intervenantSubstanceDMMs;
+        return $this->IntSubDMM;
     }
 
-    public function addIntervenantSubstanceDMM(IntervenantSubstanceDMM $intervenantSubstanceDMM): static
+    public function setIntSubDMM(?IntervenantSubstanceDMM $IntSubDMM): static
     {
-        if (!$this->intervenantSubstanceDMMs->contains($intervenantSubstanceDMM)) {
-            $this->intervenantSubstanceDMMs->add($intervenantSubstanceDMM);
-            $intervenantSubstanceDMM->setActSubGrouping($this);
-        }
-
-        return $this;
-    }
-
-    public function removeIntervenantSubstanceDMM(IntervenantSubstanceDMM $intervenantSubstanceDMM): static
-    {
-        if ($this->intervenantSubstanceDMMs->removeElement($intervenantSubstanceDMM)) {
-            // set the owning side to null (unless already changed)
-            if ($intervenantSubstanceDMM->getActSubGrouping() === $this) {
-                $intervenantSubstanceDMM->setActSubGrouping(null);
-            }
-        }
+        $this->IntSubDMM = $IntSubDMM;
 
         return $this;
     }

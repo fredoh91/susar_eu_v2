@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20240315161723 extends AbstractMigration
+final class Version20240501203115 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -20,14 +20,12 @@ final class Version20240315161723 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE medicaments ADD active_substance_high_level VARCHAR(1000) DEFAULT NULL');
-        $this->addSql('ALTER TABLE susar_eu DROP active_substance_high_level');
+        $this->addSql('ALTER TABLE medicaments ADD association_de_substances TINYINT(1) DEFAULT NULL');
     }
 
     public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE medicaments DROP active_substance_high_level');
-        $this->addSql('ALTER TABLE susar_eu ADD active_substance_high_level VARCHAR(1000) DEFAULT NULL');
+        $this->addSql('ALTER TABLE medicaments DROP association_de_substances');
     }
 }

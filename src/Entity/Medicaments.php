@@ -52,6 +52,12 @@ class Medicaments
     #[ORM\Column(length: 1000, nullable: true)]
     private ?string $active_substance_high_level = null;
 
+    #[ORM\ManyToOne(inversedBy: 'medicaments')]
+    private ?IntervenantSubstanceDMM $IntervenantSubstanceDMM = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?bool $AssociationDeSubstances = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -209,6 +215,30 @@ class Medicaments
     public function setActiveSubstanceHighLevel(?string $active_substance_high_level): static
     {
         $this->active_substance_high_level = $active_substance_high_level;
+
+        return $this;
+    }
+
+    public function getIntervenantSubstanceDMM(): ?IntervenantSubstanceDMM
+    {
+        return $this->IntervenantSubstanceDMM;
+    }
+
+    public function setIntervenantSubstanceDMM(?IntervenantSubstanceDMM $IntervenantSubstanceDMM): static
+    {
+        $this->IntervenantSubstanceDMM = $IntervenantSubstanceDMM;
+
+        return $this;
+    }
+
+    public function isAssociationDeSubstances(): ?bool
+    {
+        return $this->AssociationDeSubstances;
+    }
+
+    public function setAssociationDeSubstances(?bool $AssociationDeSubstances): static
+    {
+        $this->AssociationDeSubstances = $AssociationDeSubstances;
 
         return $this;
     }
