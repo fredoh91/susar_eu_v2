@@ -84,6 +84,55 @@ class IntervenantSubstanceDMMRepository extends ServiceEntityRepository
                 ->getOneOrNullResult()
             ;
         }
+
+        /**
+         * Undocumented function
+         *
+         * @return array
+         */
+        public function findConcatenatedDmmAndPoleCourt() : array
+        {
+            $qb = $this->createQueryBuilder('i')
+                ->select("CONCAT(i.DMM, '/', i.pole_court) AS concatenated")
+                ->groupBy('i.DMM, i.pole_court')
+                ->orderBy('i.DMM, i.pole_court');
+    
+                $results = $qb->getQuery()->getResult();
+
+                // Transform the results into a suitable format for ChoiceType
+                $choices = [];
+                foreach ($results as $result) {
+                    $choices[$result['concatenated']] = $result['concatenated'];
+                }
+        
+                return $choices;
+        }
+
+        /**
+         * Undocumented function
+         *
+         * @return array
+         */
+        public function findEvaluateur() : array
+        {
+            $qb = $this->createQueryBuilder('i')
+                ->select("i.evaluateur")
+                ->groupBy('i.evaluateur')
+                ->orderBy('i.evaluateur');
+    
+                $results = $qb->getQuery()->getResult();
+
+                // Transform the results into a suitable format for ChoiceType
+                $choices = [];
+                foreach ($results as $result) {
+                    $choices[$result['evaluateur']] = $result['evaluateur'];
+                }
+        
+                return $choices;
+        }
+
+
+
     //    /**
     //     * @return IntervenantSubstanceDMM[] Returns an array of IntervenantSubstanceDMM objects
     //     */

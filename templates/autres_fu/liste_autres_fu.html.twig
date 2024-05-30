@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Autres Follow-up{% endblock %}
+
+{% block body %}
+
+
+	{{ encore_entry_link_tags('type_eu_css') }}
+
+
+    {# {{dump(NbSusar)}}
+    {{dump(Susars)}} #}
+
+
+	<div class="container-fluid p-5">
+
+		<div class="container-fluid container-tab">
+			{% if Susars %}
+			
+				Nombre de lignes : {{ NbSusar }}
+				<h3>Liste des SUSARs</h3>
+				{# {{dump(Susars)}} #}
+
+
+				{% include "_partials/_susar_eu_liste.html.twig" %}
+				
+			{% endif %}
+		</div>
+	</div>
+
+{% endblock %}
