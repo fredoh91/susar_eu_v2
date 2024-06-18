@@ -89,7 +89,9 @@
     "WW_id_lib WW_id WW_id WW_id"
     "NumEUDRA_CT_lib NumEUDRA_CT SponsStudyNum_lib SponsStudyNum"
     "DMM_Pole_lib DMM_Pole DtAiguil_lib DtAiguil"
+    "Prio_lib Prio . ."
     "ConcluCas_lib ConcluCas CommentConclu_lib CommentConclu"
+    "DtEval_lib DtEval . ."
     ". btn-FU btn-AWA ."
     "narratif_lib narratif narratif narratif"
     ". narratif narratif narratif"
@@ -320,6 +322,20 @@
   border: 1px solid;
 }
 
+.Prio_lib {
+  grid-area: Prio_lib;
+  text-align: right;
+  padding-right: 5%;
+  display: flex;
+  justify-content: end;
+  align-items: center;
+}
+
+.Prio {
+  grid-area: Prio;
+  border: 1px solid;
+}
+
 .DtAiguil_lib {
   grid-area: DtAiguil_lib;
   text-align: right;
@@ -331,6 +347,20 @@
 
 .DtAiguil {
   grid-area: DtAiguil;
+  border: 1px solid;
+}
+
+.DtEval_lib {
+  grid-area: DtEval_lib;
+  text-align: right;
+  padding-right: 5%;
+  display: flex;
+  justify-content: end;
+  align-items: center;
+}
+
+.DtEval {
+  grid-area: DtEval;
   border: 1px solid;
 }
 

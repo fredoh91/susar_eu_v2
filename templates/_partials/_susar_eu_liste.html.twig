@@ -119,6 +119,8 @@
                             {% endif %}	
                         {% endfor %}
                     </div>
+                    <div class="Prio_lib fw-bold">Classification :</div>
+                    <div class="Prio">{{ Susar.Priorisation|e }}</div>
                     <div class="DtAiguil_lib fw-bold">Date d'import :</div>
                     <div class="DtAiguil">
                         {% if Susar.CreatedAt != null %}
@@ -139,16 +141,26 @@
                     <div class="ConcluCas"></div>
                     <div class="CommentConclu_lib fw-bold">Commentaire :</div>
                     <div class="CommentConclu"></div>
-                    <div class="narratif_lib fw-bold">Narratif :</div>
-                    <div class="narratif">{{ Susar.narratif|e }}</div>
                     <div class="ConcluCas_lib fw-bold">Conclusion cas :</div>
                     <div class="ConcluCas"></div>
+
+                    <div class="DtEval_lib fw-bold">Date d'évaluation :</div>
+                    <div class="DtEval">
+                        {% if Susar.dateEvaluation != null %}
+                            {{ Susar.dateEvaluation|format_datetime(dateFormat='full', timeFormat='none', locale='fr') }}
+                        {% else %}
+                            Non-évalué
+                        {% endif %}
+                    </div>
+
                     {# <div class="btn-FU"><a href="#" class="btn-access">Autres F.U.</a></div> #}
                     {% if app.request.attributes.get('_route') == 'app_liste_susar_eu' %}
                         <div class="btn-FU"><a href="{{ path('app_autres_FU',{'specificcaseid':Susar.specificcaseid}) }}" class="btn-access" target="_blank">Autres F.U.</a></div>
                     {% else %}
                     {% endif %}
-                    <div class="btn-AWA"><a href="#" class="btn-access">Assessed without action</a></div>
+                    <div class="btn-AWA"><a href="{{ path('app_awa_lst_SA_PT',{'idsusar':Susar.id}) }}" class="btn-access" target="_blank">Assessed without action</a></div>
+                    <div class="narratif_lib fw-bold">Narratif :</div>
+                    <div class="narratif">{{ Susar.narratif|e }}</div>
                 </div>
             </div>
         </tr>

@@ -148,6 +148,9 @@ class SusarEU
     #[ORM\ManyToMany(targetEntity: SubstancePtEval::class, mappedBy: 'susarEUs')]
     private Collection $substancePtEvals;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $priorisation = null;
+
     // #[ORM\ManyToMany(targetEntity: IntervenantSubstanceDMM::class, inversedBy: 'susarEUs')]
     // private Collection $IntervenantSubstanceDMM;
 
@@ -897,6 +900,18 @@ class SusarEU
         if ($this->substancePtEvals->removeElement($substancePtEval)) {
             $substancePtEval->removeSusarEUs($this);
         }
+
+        return $this;
+    }
+
+    public function getPriorisation(): ?string
+    {
+        return $this->priorisation;
+    }
+
+    public function setPriorisation(?string $priorisation): static
+    {
+        $this->priorisation = $priorisation;
 
         return $this;
     }
