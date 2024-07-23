@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello AWAController!{% endblock %}
+
+
+{% block javascripts %}
+    {# {{ encore_entry_script_tags('popUpAWA') }} #}
+{% endblock %}
+
+
+
+{% block body %}
+
+
+
+
+
+<div class="container">
+    <p class="text-center text-warning fw-bold">SUSAR affecté à plusieurs évaluateurs</p>
+    <p>Attention, ce SUSAR est affecté à plusieurs évaluateurs car la France est saMS pour plusieurs produits :</p>
+    <p><strong>évaluateur</strong></p>
+    <p>Merci de :</p>
+    <p>
+        1) Réaliser votre évaluation pour votre substance active.<br><br>
+        2) Ne pas renseigner votre évaluation sur la base, pour ne pas que le cas disparaisse des cas "à traiter" pour les autres évaluateurs.<br><br>
+        3) Contacter par mail les autres évaluateurs en indiquant :<br><br>
+        &nbsp; &nbsp; a - L'identifiant (nombre) "idCTLL" du cas pour le retrouver.<br><br>
+        &nbsp; &nbsp; b - Le couple Substance active / PT que vous souhaitez évaluer.<br><br>
+        &nbsp; &nbsp; c - Votre évaluation.<br><br>
+        &nbsp; &nbsp; d - Le commentaire éventuel à ajouter pour ce couple SA/PT.<br><br>
+        4) Si vous êtes le dernier évaluateur impliqué, compléter la base avec les conclusions reçues par mail pour chaque couple SA/PT ainsi que la vôtre.
+    </p>
+    <p>&nbsp;</p>
+    <p><strong>Souhaitez-vous maintenir la finalisation du cas, qui disparaîtra alors des cas "A traiter" pour tous les évaluateurs ?</strong></p>
+    <p>&nbsp;</p>
+    <p>&nbsp;</p>
+    <p>&nbsp;</p>
+
+    <div class="d-flex justify-content-center">
+        <a href="{{ path('app_autres_FU',{'specificcaseid':Susar.specificcaseid}) }}" class="btn btn-primary me-2">Continuer vers l'écran "Autres F.U."</a>
+        <a href="#" class="btn btn-secondary" onclick="window.close(); return false;">annuler</a>
+    </div>
+
+</div>
+
+
+{% endblock %}

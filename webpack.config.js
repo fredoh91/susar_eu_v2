@@ -24,9 +24,11 @@ Encore
     .addEntry('app', './assets/app.js')
     
     .addEntry('listeEvalSusar', './assets/js/listeEvalSusar.js')
+    // .addEntry('popUpAWA', './assets/js/popUpAWA.js')
 
     .addStyleEntry('type_eu_css', './assets/styles/type_eu.scss')
     .addStyleEntry('type_eu_detail_css', './assets/styles/type_eu_detail.scss')
+    .addStyleEntry('eval_susar_css', './assets/styles/eval_susar.scss')
     // .addStyleEntry('intervenant_substance_css', './assets/styles/intervenant_substance.scss')
 
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.

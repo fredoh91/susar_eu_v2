@@ -4,122 +4,211 @@
 
 	{{ encore_entry_link_tags('type_eu_css') }}
 
-	<div class="container-fluid p-5">
-		{{form_start(form)}}
+	<div class="page_liste_susar">
+		<div class="p-3">
+			{% for message in app.flashes('success') %}
+				<div class="alert alert-success">
+					{{ message }}
+				</div>
+			{% endfor %}
+		</div>
+
+		<div class="container-fluid p-5">
 		
-
-	<div class="row">
-		<div class="col-2">
-				{{ form_label(form.specificcaseid, 'Num. BNPV :') }}
-				{{ form_widget(form.specificcaseid) }}
-		</div>
-		<div class="col-1">
-		</div>
-		<div class="col-2">
-		</div>
-		<div class="col-2">
-		</div>
-		<div class="col-2">
-		</div>
-		<div class="col-2">
-		</div>
-	</div>
-
-
-	<div class="row">
-		<div class="col-2">
-			{{ form_label(form.dmmPoleChoice, 'DMM/Pôle :') }}
-			{{ form_widget(form.dmmPoleChoice) }}
-		</div>
-		<div class="col-1">
-			{{ form_label(form.evaluateurChoice, 'Évaluateur :') }}
-			{{ form_widget(form.evaluateurChoice) }}
-		</div>
-		<div class="col-2">
-		</div>
-		<div class="col-2">
-		</div>
-		<div class="col-2">
-		</div>
-		<div class="col-2">
-		</div>
-	</div>
-
-	<div class="row">
-		<div class="col-2">
-		</div>
-		<div class="col-1">
-		</div>
-		<div class="col-2">
-		</div>
-		<div class="col-2">
-		</div>
-		<div class="col-2">
-			{{ form_label(form.debutDateImport, 'Début date import :') }}
-			{{ form_widget(form.debutDateImport) }}
-		</div>
-		<div class="col-2">
-			{{ form_label(form.finDateImport, 'Fin date import :') }}
-			{{ form_widget(form.finDateImport) }}
-		</div>
-	</div>
-
-	<div class="row">
-		<div class="col-2">
-			{{ form_label(form.substanceName, 'Substance :') }}
-			{{ form_widget(form.substanceName) }}
-		</div>
-		<div class="col-1">
-		</div>
-		<div class="col-2">
-			{{ form_label(form.effetIndesirable, 'EI (Meddra PT) :') }}
-			{{ form_widget(form.effetIndesirable) }}
-		</div>
-		<div class="col-1">
-		</div>
-		<div class="col-2">
-			{{ form_label(form.narratif, 'Narratif :') }}
-			{{ form_widget(form.narratif) }}
-		</div>
-		<div class="col-1">
-		</div>
-		<div class="col-2">
-		</div>
-		<div class="col-1">
-		</div>
-	</div>
-
-	<div class="row">
-		<div class="col-10">
-		</div>
-		<div class="col-1">
-			{{ form_label(form.recherche, 'Recherche') }}
-			{{ form_widget(form.recherche) }}
-		</div>
-		<div class="col-1">
-			{{ form_label(form.reset, 'Reset') }}
-			{{ form_widget(form.reset) }}
-		</div>
-
-	</div>
-
-		{{form_end(form)}}
-	</div>
-
-	<div class="container-fluid p-5">
-
-		<div class="container-fluid container-tab">
-			{% if Susars %}
+			{{form_start(form)}}
 			
-				Nombre de lignes : {{ NbSusar }}
-				<h3>Liste des SUSARs</h3>
-				{# {{dump(Susars)}} #}
+
+			<div class="row">
+				<div class="col-2">
+					{{ form_label(form.dmmPoleChoice, 'DMM/Pôle :') }}
+					{{ form_widget(form.dmmPoleChoice) }}
+				</div>
+				<div class="col-1">
+					{{ form_label(form.evaluateurChoice, 'Évaluateur :') }}
+					{{ form_widget(form.evaluateurChoice) }}
+				</div>
+				<div class="col-2">
+				</div>
+				<div class="col-2">
+				</div>
+				<div class="col-2">
+				</div>
+				<div class="col-2">
+				</div>
+			</div>
 
 
-				{% include "_partials/_susar_eu_liste.html.twig" %}
+
+			<div class="row">
+				<div class="col-2">
+					{{ form_label(form.specificcaseid, 'Num. BNPV :') }}
+					{{ form_widget(form.specificcaseid) }}
+				</div>
+				<div class="col-2">
+					{{ form_label(form.idSusar, 'IdSUSAR :') }}
+					{{ form_widget(form.idSusar) }}
+				</div>
+				<div class="col-1">
+				</div>
+				<div class="col-2">
+
+<div class="chbx_niv_grille">
+    <table class="chbx_niv_tableau">
+        <thead>
+            <tr>
+                <th colspan="2" class="chbx_niv_header">Niveau de classification</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="chbx_niv_cell">
+                    <div class="chbx_niv_contenu">
+                        {{ form_row(form.niveau1, {'label': 'Niveau 1', 'row_attr': {'class': 'chbx_niv_form_row'}}) }}
+                    </div>
+                </td>
+                <td class="chbx_niv_cell">
+                    <div class="chbx_niv_contenu">
+                        {{ form_row(form.niveau2a, {'label': 'Niveau 2a', 'row_attr': {'class': 'chbx_niv_form_row'}}) }}
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="chbx_niv_cell">
+                    <div class="chbx_niv_contenu">
+                        {{ form_row(form.niveau2b, {'label': 'Niveau 2b', 'row_attr': {'class': 'chbx_niv_form_row'}}) }}
+                    </div>
+                </td>
+                <td class="chbx_niv_cell">
+                    <div class="chbx_niv_contenu">
+                        {{ form_row(form.niveau2c, {'label': 'Niveau 2c', 'row_attr': {'class': 'chbx_niv_form_row'}}) }}
+                    </div>
+                </td>
+            </tr>
+        </tbody>			
+    </table>
+</div>
+				</div>
+				<div class="col-2">
+
+
+				</div>
+				<div class="col-2">
+				</div>
+			</div>
+
+
+
+			<div class="row">
+				<div class="col-2">
+					{{ form_label(form.worldWide_id, 'world Wide id :') }}
+					{{ form_widget(form.worldWide_id) }}
+				</div>
+				<div class="col-2">
+					{{ form_label(form.num_eudract, 'Num. EudraCT :') }}
+					{{ form_widget(form.num_eudract) }}
+				</div>
+				<div class="col-2">
+					{{ form_label(form.sponsorstudynumb, 'Sponsor study num. :') }}
+					{{ form_widget(form.sponsorstudynumb) }}
+				</div>
+				<div class="col-1">
+					{{ form_label(form.caseVersion, 'Case version :') }}
+					{{ form_widget(form.caseVersion) }}
+				</div>
+				<div class="col-2">
+					{{ form_label(form.debutDateImport, 'Début date import :') }}
+					{{ form_widget(form.debutDateImport) }}
+				</div>
+				<div class="col-2">
+					{{ form_label(form.finDateImport, 'Fin date import :') }}
+					{{ form_widget(form.finDateImport) }}
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-2">
+					{{ form_label(form.substanceName, 'Substance :') }}
+					{{ form_widget(form.substanceName) }}
+				</div>
+				<div class="col-1">
+				</div>
+				<div class="col-2">
+					{{ form_label(form.effetIndesirable, 'EI (Meddra PT) :') }}
+					{{ form_widget(form.effetIndesirable) }}
+				</div>
+				<div class="col-1">
+				</div>
+				<div class="col-2">
+					{{ form_label(form.narratif, 'Narratif :') }}
+					{{ form_widget(form.narratif) }}
+				</div>
+				<div class="col-1">
+					{{ form_label(form.casTraite, 'Cas traité :') }}
+					{{ form_widget(form.casTraite) }}
+				</div>
+				<div class="col-2">
+					{{ form_label(form.assessment_outcome, 'Assessment outcome :') }}
+					{{ form_widget(form.assessment_outcome) }}
+				</div>
+				<div class="col-1">
+				</div>
+			</div>
+
+
+
+
+
+			{# <div class="row">
+				<div class="col-2">
+					{{ form_label(form.niveau1, 'Niveau 1') }}
+					{{ form_row(form.niveau1) }}
+				</div>
+				<div class="col-2">
+					{{ form_label(form.niveau2a, 'Niveau 2a') }}
+					{{ form_row(form.niveau2a) }}
+				</div>
+				<div class="col-2">
+					{{ form_label(form.niveau2b, 'Niveau 2b') }}
+					{{ form_row(form.niveau2b) }}
+				</div>
+				<div class="col-2">
+					{{ form_label(form.niveau2c, 'Niveau 2c') }}
+					{{ form_row(form.niveau2c) }}
+				</div>
+			</div> #}
+
+			<div class="row">
+				<div class="col-10">
+				</div>
+				<div class="col-1">
+					{{ form_label(form.recherche, 'Recherche') }}
+					{{ form_widget(form.recherche) }}
+				</div>
+				<div class="col-1">
+					{{ form_label(form.reset, 'Reset') }}
+					{{ form_widget(form.reset) }}
+				</div>
+
+			</div>
+
+			{{form_end(form)}}
+		</div>
+
+		<div class="container-fluid p-5">
+
+			<div class="container-fluid container-tab">
+				{% if Susars %}
 				
-				{{ knp_pagination_render(Susars) }}
-			{% endif %}
+					Nombre de lignes : {{ NbSusar }}
+					<h3>Liste des SUSARs</h3>
+					{# {{dump(Susars)}} #}
+
+
+					{% include "_partials/_susar_eu_liste.html.twig" %}
+					
+					{{ knp_pagination_render(Susars) }}
+				{% endif %}
+			</div>
 		</div>
 	</div>
 {% endblock %}

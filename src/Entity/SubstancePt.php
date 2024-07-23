@@ -25,6 +25,7 @@ class SubstancePt
     private ?string $reactionmeddrapt = null;
 
     #[ORM\ManyToMany(targetEntity: SusarEU::class, inversedBy: 'substancePts')]
+    // #[ORM\JoinTable(name: 'substance_pt_susar_eu')]
     private Collection $susarEUs;
 
     #[ORM\Column]

@@ -1,4 +1,61 @@
+@import '_variables.scss';
 
+
+.page_liste_susar {
+    background-color: $Fond_liste_susar;
+}
+
+/******************************************/
+/* Tableau des cases à cocher des niveaux */
+/******************************************/
+
+.chbx_niv_tableau {
+  border-collapse: collapse;
+  border: 2px solid #CCC; /* Liseré autour du tableau */
+}
+.chbx_niv_header {
+  font-weight: bold;
+  text-align: center;
+  padding: 5px;
+  border-bottom: 2px solid #CCC; /* Séparation entre l'en-tête et le corps du tableau */
+}
+.chbx_niv_cell {
+  padding: 0;
+  border: 1px solid #CCC; /* Lignes internes du tableau */
+  vertical-align: middle; /* Centre verticalement le contenu de la cellule */
+  height: 40px; /* Hauteur fixe pour toutes les cellules, ajustez selon vos besoins */
+}
+.chbx_niv_cell label {
+  display: inline-block;
+  margin: 0 0 0 5px;
+  vertical-align: middle; /* Aligne verticalement le label avec la case à cocher */
+}
+/* Style pour aligner la case à cocher avec le label */
+.chbx_niv_cell input[type="checkbox"] {
+  vertical-align: middle;
+  margin: 0;
+}
+/* Wrapper pour le contenu de la cellule */
+.chbx_niv_contenu {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  padding: 5px;
+}
+/* Ajoutez ces styles pour réinitialiser les marges et paddings des éléments du formulaire */
+.chbx_niv_contenu .form-group {
+  margin: 0;
+  padding: 0;
+}
+.chbx_niv_form_row {
+  margin: 0;
+  padding: 0;
+}
+.chbx_niv_form_row .form-check {
+  margin: 0;
+  padding: 0;
+}
+/******************** Fin du tableau des cases à cocher de niveau **********************/
 
 // pour avoir une ligne colorée sur deux dans les tableaux
 
@@ -25,7 +82,7 @@
   height: 100%;
   margin: 0;
   // margin: auto;
-  width: 60%;
+  width: 40%;
   padding: 2px;
   // border: 2px solid blue;
   display: grid;
@@ -43,22 +100,22 @@
   justify-items: stretch;
   align-items: stretch;
   grid-template-areas:
-    "suspectDrug_lib . PT_outcome_lib . ."
-    "suspectDrug suspectDrug PT_outcome PT_outcome PT_outcome"
-    "seriousness_lib . indication_lib . ."
-    "seriousness seriousness indication indication indication"
-    ". . medicalHistory_lib . ."
-    ". . medicalHistory medicalHistory medicalHistory"
-    "population_lib population medicalHistory medicalHistory medicalHistory"
-    "age_lib age medicalHistory medicalHistory medicalHistory"
-    "sex_lib sex medicalHistory medicalHistory medicalHistory";
+    "suspectDrug_lib . PT_outcome_lib . . ."
+    "suspectDrug suspectDrug PT_outcome PT_outcome PT_outcome ."
+    "seriousness_lib . indication_lib . . ."
+    "seriousness seriousness indication indication indication ."
+    ". . medicalHistory_lib . . ."
+    ". . medicalHistory medicalHistory medicalHistory ."
+    "population_lib population medicalHistory medicalHistory medicalHistory ."
+    "age_lib age medicalHistory medicalHistory medicalHistory ."
+    "sex_lib sex medicalHistory medicalHistory medicalHistory .";
 }
 
 .container_flex_right {
   height: 100%;
   margin: 0;
   // margin: auto;
-  width: 40%;
+  width: 60%;
   padding: 2px;
   // border: 2px solid green;
   display: grid;
@@ -84,17 +141,17 @@
   justify-items: stretch;
   align-items: stretch;
   grid-template-areas:
-    "numBNPV_lib numBNPV FU_BNPV_lib FU_BNPV"
-    "StudyTittle_lib StudyTittle StudyTittle StudyTittle"
-    "WW_id_lib WW_id WW_id WW_id"
-    "NumEUDRA_CT_lib NumEUDRA_CT SponsStudyNum_lib SponsStudyNum"
-    "DMM_Pole_lib DMM_Pole DtAiguil_lib DtAiguil"
-    "Prio_lib Prio . ."
-    "ConcluCas_lib ConcluCas CommentConclu_lib CommentConclu"
-    "DtEval_lib DtEval . ."
-    ". btn-FU btn-AWA ."
-    "narratif_lib narratif narratif narratif"
-    ". narratif narratif narratif"
+    "numBNPV_lib numBNPV FU_BNPV_lib FU_BNPV idSusar"
+    "StudyTittle_lib StudyTittle StudyTittle StudyTittle ."
+    "WW_id_lib WW_id WW_id WW_id ."
+    "NumEUDRA_CT_lib NumEUDRA_CT SponsStudyNum_lib SponsStudyNum ."
+    "DMM_Pole_lib DMM_Pole DtAiguil_lib DtAiguil ."
+    "Prio_lib Prio . . ."
+    "ConcluCas_lib ConcluCas CommentConclu_lib CommentConclu ."
+    "DtEval_lib DtEval . . ."
+    ". btn-FU btn-AWA . ."
+    "narratif_lib narratif narratif narratif narratif"
+    ". narratif narratif narratif narratif"
     ;
   // grid-template-areas:
   //   "numBNPV_lib numBNPV FU_BNPV_lib FU_BNPV"
@@ -259,7 +316,9 @@
 .ligne_susar {
   display: flex;
   padding: 2px;
-  border: 5px solid #eac8c0;
+  // border: 5px solid #eac8c0;
+  // border: 5px solid #604C78;
+  border: 5px solid $Entourage_susar;
   border-radius: 10px;
   //justify-content: space-between;
   justify-content: space-around;
@@ -292,6 +351,15 @@
   display: flex;
   justify-content: end;
   align-items: center;
+}
+
+.idSusar {
+  grid-area: idSusar;
+  // border: 1px solid;
+  text-align: right;
+  color: gray; // color: #eac8c0;
+  font-size: 0.8em;
+
 }
 
 .FU_BNPV {
@@ -537,3 +605,4 @@
     box-shadow: 0px 0px 0px #808080;
   }
   
+

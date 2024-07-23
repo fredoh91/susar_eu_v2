@@ -20,7 +20,18 @@ class SubstancePtEvalRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, SubstancePtEval::class);
     }
-
+    public function findExistingEval($susar, $substancePt)
+    {
+        return $this->createQueryBuilder('e')
+            ->innerJoin('e.susarEUs', 's')
+            ->innerJoin('e.substancePts', 'sp')
+            ->where('s.id = :susarId')
+            ->andWhere('sp.id = :substancePtId')
+            ->setParameter('susarId', $susar->getId())
+            ->setParameter('substancePtId', $substancePt->getId())
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
     //    /**
     //     * @return SubstancePtEval[] Returns an array of SubstancePtEval objects
     //     */

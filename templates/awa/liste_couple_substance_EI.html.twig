@@ -2,12 +2,83 @@
 
 {% block title %}Hello AWAController!{% endblock %}
 
+
+{% block javascripts %}
+    {# {{ encore_entry_script_tags('popUpAWA') }} #}
+{% endblock %}
+
+
+
 {% block body %}
 
 
-idsusar : {{idsusar}}
+idsusar : {{idsusar}} <BR>
 
-{{dump(Susar)}}
 
+Nb intervenants liés : {{nbIntSub}} <BR>
+
+{# {{dump(Susar)}} #}
+{# {{dump(SubPTs)}} #}
+
+					{# {% for SubPT in Susar.SubstancePt %}
+
+{{dump(SubPT)}}
+
+
+					{% endfor %} #}
+{{Susar.WorldWideId}}
+        {% for substancePt in Susar.substancePts %}
+            <li>
+                {{ substancePt.id }} - 
+                {{ substancePt.activeSubstanceHighLevel }} - 
+                {{ substancePt.reactionMeddraPt }}
+            </li>
+        {% else %}
+            <li>No SubstancePts found.</li>
+        {% endfor %}
+
+        {# {% for intSubDmm in intSubDmms %}
+
+                {{ intSubDmm.id }} - 
+                {{ intSubDmm.DMM }} / 
+                {{ intSubDmm.PoleCourt }} / 
+                {{ intSubDmm.Evaluateur }}
+            </li>
+        {% else %}
+            <li>Pas d'intervenant trouvé.</li>
+        {% endfor %} #}
+
+
+<!-- Button trigger modal -->
+{# <a href="#" data-bs-toggle="modal" data-bs-target="#exampleModal">
+  Open modal
+</a> #}
+
+<!-- Modal -->
+<div class="modal fade" id="modal-msg-AWA" tabindex="-1" aria-labelledby="SUSAR affecté à plusieurs évaluateurs" aria-hidden="true" data-bs-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        {# <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> #}
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        {# <a href="{{ path('page1') }}" class="btn btn-secondary" data-bs-dismiss="modal">Page 1</a>
+        <a href="{{ path('page2') }}" class="btn btn-primary" data-bs-dismiss="modal">Page 2</a> #}
+        <a href="#" class="btn btn-secondary" data-bs-dismiss="modal">Page 1</a>
+        <a href="#" class="btn btn-primary" data-bs-dismiss="modal">Page 2</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- bouton caché de lancement de la pop-up -->
+{# <button type="button" class="btn btn-primary d-none" id="openModalButton" data-bs-toggle="modal" data-bs-target="#modal-msg-AWA"> #}
+<button type="button" class="btn btn-primary" id="openModalButton" data-bs-toggle="modal" data-bs-target="#modal-msg-AWA">
+    Open Modal
+</button>
 
 {% endblock %}

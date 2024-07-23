@@ -23,8 +23,56 @@ class SusarEURepository extends ServiceEntityRepository
     }
 
 
+    public function findWithSubstancePts(int $id): ?SusarEU
+    {
+        $query = $this->createQueryBuilder('s')
+            ->leftJoin('s.substancePts', 'sp')
+            ->addSelect('sp')
+            ->where('s.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery();
 
+        return $query->getOneOrNullResult();
+    }
 
+    public function donneNbIntervenant(int $id): ?SusarEU
+    {
+        $query = $this->createQueryBuilder('s')
+            ->leftJoin('s.IntervenantSubstanceDMMs', 'isd')
+            ->addSelect('isd')
+            ->where('s.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery();
+
+        return $query->getOneOrNullResult();
+    }
+    // public function findWithMedicamentsWithIntervenantSubstanceDMM(int $id): ?SusarEU
+    // {
+    //     $query = $this->createQueryBuilder('s')
+    //         ->leftJoin('s.Medicament', 'med')
+    //         ->addSelect('med')
+    //         ->where('s.id = :id')
+    //         ->setParameter('id', $id)
+    //         ->getQuery();
+
+    //     return $query->getOneOrNullResult();
+    // }
+    /**
+     * Retourne le nombre d'Intervenantsubstancedmm liés à un Susareu donné.
+     *
+     * @param int $susareuId
+     * @return int
+     */
+    public function nbIntSubDMM(int $susareuId): int
+    {
+        $qb = $this->createQueryBuilder('s')
+            ->select('COUNT(i.id)')
+            ->join('s.intervenantSubstanceDMMs', 'i')
+            ->where('s.id = :susareuId')
+            ->setParameter('susareuId', $susareuId);
+
+        return (int) $qb->getQuery()->getSingleScalarResult();
+    }
     public function findSusarByMasterId(int $master_id): ?SusarEU
     {
         return $this->createQueryBuilder('s')
@@ -60,14 +108,22 @@ class SusarEURepository extends ServiceEntityRepository
 
         $query = $this->createQueryBuilder('s');
 
-        $query->join('s.intervenantSubstanceDMMs', 'isd');
+        // $query->join('s.intervenantSubstanceDMMs', 'isd');
+        $query->leftJoin('s.intervenantSubstanceDMMs', 'isd');        // Je mets un left join pour les cas où il n'y a pas d'intervenantSubstanceDMMs et ainsi pouvoir retrouver les susars de ce type
         $query->join('s.Medicament', 'med');
         $query->join('s.EffetsIndesirables', 'ei');
-
+        $query->leftJoin('s.substancePtEvals', 'spe');
+        
         if ($search->getSpecificcaseid()) {
             $query = $query
-                ->andWhere('s.specificcaseid = :sci')
-                ->setParameter('sci', $search->getSpecificcaseid());
+            ->andWhere('s.specificcaseid = :sci')
+            ->setParameter('sci', $search->getSpecificcaseid());
+        }
+
+        if ($search->getIdSusar()) {
+            $query = $query
+                ->andWhere('s.id = :ids')
+                ->setParameter('ids', $search->getIdSusar());
         }
 
         if ($search->getdmmPoleChoice()) {
@@ -85,14 +141,21 @@ class SusarEURepository extends ServiceEntityRepository
             }
             
         }
-
         if ($search->getevaluateurChoice()) {
             $Eval = $search->getevaluateurChoice();
-            $query = $query
-                ->andWhere($query->expr()->eq('isd.evaluateur', ':eval'))
-                ->setParameter('eval', $Eval);
-            
+            //     $query = $query
+            //         ->andWhere($query->expr()->eq('isd.evaluateur', ':eval'))
+            //         ->setParameter('eval', $Eval);
+            if ($Eval === "_non attribué_") {
+                $query = $query
+                    ->andWhere($query->expr()->isNull('isd.evaluateur'));
+            } else {
+                $query = $query
+                    ->andWhere($query->expr()->eq('isd.evaluateur', ':eval'))
+                    ->setParameter('eval', $Eval);
+            }
         }
+
         if ($search->getDebutDateImport()) {
             $query = $query
                 ->andWhere('s.dateImport >= :ddi')
@@ -122,6 +185,110 @@ class SusarEURepository extends ServiceEntityRepository
                 ->andWhere($query->expr()->like('s.narratif', ':nar'))
                 ->setParameter('nar', '%' . $narr . '%');
         }
+
+
+        if ($search->getNiveau1()) {
+            $query = $query
+            ->orWhere('s.priorisation = :n1')
+            ->setParameter('n1', 'Niveau 1');
+        } else {
+            $query = $query
+            ->andWhere('s.priorisation != :n1')
+            ->setParameter('n1', 'Niveau 1');
+        }
+        
+        if ($search->getNiveau2a()) {
+            $query = $query
+            ->orWhere('s.priorisation = :n2a')
+            ->setParameter('n2a', 'Niveau 2a');
+        } else {
+            $query = $query
+            ->andWhere('s.priorisation != :n2a')
+            ->setParameter('n2a', 'Niveau 2a');
+        }
+        
+        if ($search->getNiveau2b()) {
+            $query = $query
+            ->orWhere('s.priorisation = :n2b')
+            ->setParameter('n2b', 'Niveau 2b');
+        } else {
+            $query = $query
+            ->andWhere('s.priorisation != :n2b')
+            ->setParameter('n2b', 'Niveau 2b');
+        }
+        
+        if ($search->getNiveau2c()) {
+            $query = $query
+            ->orWhere('s.priorisation = :n2c')
+            ->setParameter('n2c', 'Niveau 2c');
+        } else {
+            $query = $query
+            ->andWhere('s.priorisation != :n2c')
+            ->setParameter('n2c', 'Niveau 2c');
+        }
+
+        if ($search->getCasTraite()) {
+
+            $casTraite = $search->getCasTraite();
+
+            if ($casTraite === 'oui') {
+                $query = $query
+                    ->andWhere('s.dateEvaluation IS NOT NULL');
+            } elseif ($casTraite === 'non') {
+                $query = $query
+                    ->andWhere('s.dateEvaluation IS NULL');
+            }
+        }
+
+        if ($search->getAssessmentOutcome()) {
+
+            $query = $query
+                ->andWhere('spe.AssessmentOutcome = :aso')
+                ->setParameter('aso', $search->getAssessmentOutcome());
+
+        }
+
+        if ($search->getWorldWideId()) {
+            $query = $query
+                ->andWhere($query->expr()->like('s.worldWide_id', ':wwi'))
+                ->setParameter('wwi', '%' . $search->getWorldWideId() . '%');
+        }
+
+        if ($search->getNumEudract()) {
+            $query = $query
+                ->andWhere($query->expr()->like('s.num_eudract', ':nct'))
+                ->setParameter('nct', '%' . $search->getNumEudract() . '%');
+        }
+
+        if ($search->getSponsorstudynumb()) {
+            $query = $query
+                ->andWhere($query->expr()->like('s.sponsorstudynumb', ':ssn'))
+                ->setParameter('ssn', '%' . $search->getSponsorstudynumb() . '%');
+        }
+
+
+        if ($search->getCaseVersion()) {
+
+            $caseVersion = $search->getCaseVersion();
+
+            if ($caseVersion === 'cas_initial') {
+                $query = $query
+                    ->andWhere('s.DLPVersion = 0');
+            } elseif ($caseVersion === 'follow_up') {
+                $query = $query
+                    ->andWhere('s.DLPVersion != 0');
+            }
+        }
+
+
+
+
+
+
+        
+// dd("stop !!");
+
+
         // if ($search->getMasterId()) {
         //     $query = $query
         //         ->andWhere('s.master_id = :mi')
@@ -290,6 +457,41 @@ class SusarEURepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+
+/**
+     * Vérifie l'existence d'une SubstancePtEval liée pour un SusarEU donné
+     * avec des valeurs spécifiques de substance et pt.
+     *
+     * @param int $susarEuId
+     * @param string $substance
+     * @param string $pt
+     * @return bool
+     */
+    public function hasLinkedSubstancePtEval(int $susarEuId, string $substance, string $pt): bool
+    {
+        $qb = $this->createQueryBuilder('se')
+            ->select('COUNT(spe.id)')
+            ->join('se.substancePts', 'sp')
+            ->join('sp.substancePtEvals', 'spe')
+            ->where('se.id = :susarEuId')
+            ->andWhere('sp.active_substance_high_level = :substance')
+            ->andWhere('sp.reactionmeddrapt = :pt')
+            ->setParameter('susarEuId', $susarEuId)
+            ->setParameter('substance', $substance)
+            ->setParameter('pt', $pt);
+
+        $count = $qb->getQuery()->getSingleScalarResult();
+
+        return $count > 0;
+    }
+
+
+
+
+
+
+
 
 
     //    /**

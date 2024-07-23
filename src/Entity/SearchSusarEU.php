@@ -2,9 +2,12 @@
 
 namespace App\Entity;
 
+// use Doctrine\ORM\Mapping as ORM;
+// use App\Repository\SusarEURepository;
+
 class SearchSusarEU
 {
-    private ?int $id = null;
+    private ?int $idSusar = null;
     private ?int $master_id = null;
     private ?int $caseid = null;
     private ?string $specificcaseid = null;
@@ -52,10 +55,23 @@ class SearchSusarEU
     private ?\DateTimeInterface $debutDateImport = null;
     private ?\DateTimeInterface $finDateImport = null;
     // private ?SubstancePtEval $substancePtEvals = null;
+    private ?bool $niveau1 = true;
+    private ?bool $niveau2a = true;
+    private ?bool $niveau2b = true;
+    private ?bool $niveau2c = true;
+    private ?string $casTraite = null;
+    private ?string $assessment_outcome = null;
+    private ?string $caseVersion = null;
 
-    public function getId(): ?int
+    public function getIdSusar(): ?int
     {
-        return $this->id;
+        return $this->idSusar;
+    }
+    public function setIdSusar(int $idSusar): self
+    {
+        $this->idSusar = $idSusar;
+
+        return $this;
     }
 
     public function getMasterId(): ?int
@@ -866,6 +882,162 @@ class SearchSusarEU
     public function setEffetIndesirable($effetIndesirable)
     {
         $this->effetIndesirable = $effetIndesirable;
+
+        return $this;
+    }
+    
+    /**
+     * permet d'afficher un objet SearchSusarEU avec un dump()
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        $properties = get_object_vars($this);
+        $string = '';
+        foreach ($properties as $key => $value) {
+            $string .= sprintf('%s=%s, ', $key, $value);
+        }
+        return sprintf('SearchSusarEU(%s)', rtrim($string, ', '));
+    } 
+
+    /**
+     * Get the value of niveau1
+     */ 
+    public function getNiveau1()
+    {
+        return $this->niveau1;
+    }
+
+    /**
+     * Set the value of niveau1
+     *
+     * @return  self
+     */ 
+    public function setNiveau1($niveau1)
+    {
+        $this->niveau1 = $niveau1;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of niveau2a
+     */ 
+    public function getNiveau2a()
+    {
+        return $this->niveau2a;
+    }
+
+    /**
+     * Set the value of niveau2a
+     *
+     * @return  self
+     */ 
+    public function setNiveau2a($niveau2a)
+    {
+        $this->niveau2a = $niveau2a;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of niveau2b
+     */ 
+    public function getNiveau2b()
+    {
+        return $this->niveau2b;
+    }
+
+    /**
+     * Set the value of niveau2b
+     *
+     * @return  self
+     */ 
+    public function setNiveau2b($niveau2b)
+    {
+        $this->niveau2b = $niveau2b;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of niveau2c
+     */ 
+    public function getNiveau2c()
+    {
+        return $this->niveau2c;
+    }
+
+    /**
+     * Set the value of niveau2c
+     *
+     * @return  self
+     */ 
+    public function setNiveau2c($niveau2c)
+    {
+        $this->niveau2c = $niveau2c;
+
+        return $this;
+    }
+
+
+    /**
+     * Get the value of casTraite
+     */ 
+    public function getCasTraite(): ?string
+    {
+        return $this->casTraite;
+    }
+
+    /**
+     * Set the value of casTraite
+     *
+     * @return  self
+     */ 
+    public function setCasTraite(?string $casTraite)
+    {
+        $this->casTraite = $casTraite;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of assessment_outcome
+     */ 
+    public function getAssessmentOutcome(): ?string
+    {
+        return $this->assessment_outcome;
+    }
+
+    /**
+     * Set the value of assessment_outcome
+     *
+     * @return  self
+     */ 
+    public function setAssessmentOutcome(?string $assessment_outcome)
+    {
+        $this->assessment_outcome = $assessment_outcome;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of caseVersion
+     */ 
+    public function getCaseVersion(): ?string
+    {
+        return $this->caseVersion;
+    }
+
+    /**
+     * Set the value of caseVersion
+     *
+     * @return  self
+     */ 
+    public function setCaseVersion(?string $caseVersion)
+    {
+        $this->caseVersion = $caseVersion;
 
         return $this;
     }

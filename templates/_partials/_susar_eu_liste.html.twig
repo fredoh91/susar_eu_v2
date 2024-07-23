@@ -108,6 +108,7 @@
                     </div>
                     <div class="FU_BNPV_lib fw-bold">F.U. BNPV :</div>
                     <div class="FU_BNPV">{{ Susar.DLPVersion|e }}</div>
+                    <div class="idSusar">idSusar : {{ Susar.id|e }}</div>
                     <div class="DMM_Pole_lib fw-bold">DMM/Pôle/Éval. :</div>
                     <div class="DMM_Pole">
                         {% for intAnsm in Susar.IntervenantSubstanceDMMs %}
@@ -158,7 +159,8 @@
                         <div class="btn-FU"><a href="{{ path('app_autres_FU',{'specificcaseid':Susar.specificcaseid}) }}" class="btn-access" target="_blank">Autres F.U.</a></div>
                     {% else %}
                     {% endif %}
-                    <div class="btn-AWA"><a href="{{ path('app_awa_lst_SA_PT',{'idsusar':Susar.id}) }}" class="btn-access" target="_blank">Assessed without action</a></div>
+                    {# <div class="btn-AWA"><a href="{{ path('app_awa_lst_SA_PT',{'idsusar':Susar.id}) }}" class="btn-access" target="_blank">Assessed without action</a></div> #}
+                    <div class="btn-AWA"><a href="{{ path('app_awa_lst_SA_PT',{'idsusar':Susar.id}) }}" class="btn-access">Assessed without action</a></div>
                     <div class="narratif_lib fw-bold">Narratif :</div>
                     <div class="narratif">{{ Susar.narratif|e }}</div>
                 </div>

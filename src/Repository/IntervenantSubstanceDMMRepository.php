@@ -94,6 +94,8 @@ class IntervenantSubstanceDMMRepository extends ServiceEntityRepository
         {
             $qb = $this->createQueryBuilder('i')
                 ->select("CONCAT(i.DMM, '/', i.pole_court) AS concatenated")
+                ->andWhere('i.inactif = :value')
+                ->setParameter('value', false)
                 ->groupBy('i.DMM, i.pole_court')
                 ->orderBy('i.DMM, i.pole_court');
     
@@ -117,6 +119,8 @@ class IntervenantSubstanceDMMRepository extends ServiceEntityRepository
         {
             $qb = $this->createQueryBuilder('i')
                 ->select("i.evaluateur")
+                // ->andWhere('i.inactif = :value')
+                // ->setParameter('value', false)
                 ->groupBy('i.evaluateur')
                 ->orderBy('i.evaluateur');
     

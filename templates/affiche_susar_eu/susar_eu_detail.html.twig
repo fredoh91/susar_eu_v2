@@ -4,239 +4,348 @@
 
 {{ encore_entry_link_tags('type_eu_detail_css') }}
 
-{# <div class="container_susar_eu_dtl"> #}
-	<div class="container-fluid">
+{% if Susar is not empty %}
 
-		<div class="suspectDrug_lib fw-bold">Médicament(s) suspect(s) :</div>
-		<div class="suspectDrug">
-			<table class="table table-bordered table-striped tab_susar_eu_dtl">
-			{# <table class="table table-bordered table-striped"> #}
-				<thead>
-					<tr>
-						<th>Sub. act. High-level</th>
-						<th>Product name</th>
-						<th>Substance name</th>
-						<th>Characterization</th>
-					</tr>
-				</thead>
-				<tbody>
-					{% for med in Susar.Medicament %}
-
-						{% if med.productcharacterization == 'Suspect' or med.productcharacterization == 'Interacting' %}
-							<tr>
-								<td>{{med.ActiveSubstanceHighLevel}}</td>
-								<td>{{med.Productname}}</td>
-								<td>{{med.Substancename}}</td>
-								<td>{{med.productcharacterization}}</td>
-							</tr>
-
-						{% endif %}
-
-					{% endfor %}
-				</tbody>
-			</table>
-		</div>
+	{# Affichage des messages flash #}
+	{% for type, messages in app.flashes %}
+		{% for message in messages %}
+			{% if type == 'error' %}
+				<div class="alert alert-danger">{{ message }}</div>
+			{% elseif type == 'success' %}
+				<div class="alert alert-success">{{ message }}</div>
+			{% elseif type == 'warning' %}
+				<div class="alert alert-warning">{{ message }}</div>
+			{% else %}
+				<div class="alert alert-info">{{ message }}</div>
+			{% endif %}
+		{% endfor %}
+	{% endfor %}
 
 
-		<div class="suspectDrug_lib fw-bold">Médicament(s) concomitant(s) :</div>
-		<div class="suspectDrug">
-			<table class="table table-bordered table-striped tab_susar_eu_dtl">
-			{# <table class="table table-bordered table-striped"> #}
-				<thead>
-					<tr>
-						<th>Sub. act. High-level</th>
-						<th>Product name</th>
-						<th>Substance name</th>
-						<th>Characterization</th>
-					</tr>
-				</thead>
-				<tbody>
-					{% for med in Susar.Medicament %}
 
-						{% if med.productcharacterization == 'Concomitant' or med.productcharacterization == 'Drug Not Administered' %}
-							<tr>
-								<td>{{med.ActiveSubstanceHighLevel}}</td>
-								<td>{{med.Productname}}</td>
-								<td>{{med.Substancename}}</td>
-								<td>{{med.productcharacterization}}</td>
-							</tr>
+	{# <div class="container_susar_eu_dtl"> #}
+		<div class="container-fluid">
 
-						{% endif %}
-
-					{% endfor %}
-				</tbody>
-			</table>
-		</div>
-
-		<div class="PT_outcome_lib fw-bold">Reaction PT :</div>
-		<div class="PT_outcome">
-			<table class="table table-bordered table-striped tab_susar_eu_dtl">
-				<thead>
-					<tr>
-						<th>Lib. PT</th>
-						<th>Date début</th>
-						<th>Lib. SOC</th>
-						<th>Lib. HLGT</th>
-						<th>Lib. HLT</th>
-					</tr>
-				</thead>
-				<tbody>
-					{% for EI in Susar.EffetsIndesirables %}
+			<div class="suspectDrug_lib fw-bold">Médicament(s) suspect(s) :</div>
+			<div class="suspectDrug">
+				<table class="table table-bordered table-striped tab_susar_eu_dtl">
+				{# <table class="table table-bordered table-striped"> #}
+					<thead>
 						<tr>
-							<td>{{EI.Reactionmeddrapt}}</th>
-							<td>{{EI.Reactionstartdate|format_datetime(dateFormat='short', timeFormat='none', locale='fr')}}</td>
-							<td>{{EI.Soc}}</td>
-							<td>{{EI.Reactionmeddrahlgt}}</td>
-							<td>{{EI.Reactionmeddrahlt}}</td>
+							<th>Sub. act. High-level</th>
+							<th>Product name</th>
+							<th>Substance name</th>
+							<th>Characterization</th>
 						</tr>
-					{% endfor %}
-				</tbody>
-			</table>
-		</div>
+					</thead>
+					<tbody>
 
 
-		<div class="row">
-			<div class="col-1">
-				<div>Age :</div>
-				<div class="chp_susar_eu_dtl">{{ Susar.patientAge }} {{ Susar.patientAgeUnitLabel }}</div>
+
+						{% for med in Susar.Medicament %}
+
+							{% if med.productcharacterization == 'Suspect' or med.productcharacterization == 'Interacting' %}
+								<tr>
+									<td>{{med.ActiveSubstanceHighLevel}}</td>
+									<td>{{med.Productname}}</td>
+									<td>{{med.Substancename}}</td>
+									<td>{{med.productcharacterization}}</td>
+								</tr>
+
+							{% endif %}
+
+						{% endfor %}
+
+					</tbody>
+				</table>
 			</div>
-			<div class="col-1">
-				<div>Age group :</div>
-				<div class="chp_susar_eu_dtl">{{ Susar.patientAgeGroup }}</div>
+
+
+			<div class="suspectDrug_lib fw-bold">Médicament(s) concomitant(s) :</div>
+			<div class="suspectDrug">
+				<table class="table table-bordered table-striped tab_susar_eu_dtl">
+				{# <table class="table table-bordered table-striped"> #}
+					<thead>
+						<tr>
+							<th>Sub. act. High-level</th>
+							<th>Product name</th>
+							<th>Substance name</th>
+							<th>Characterization</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for med in Susar.Medicament %}
+
+							{% if med.productcharacterization == 'Concomitant' or med.productcharacterization == 'Drug Not Administered' %}
+								<tr>
+									<td>{{med.ActiveSubstanceHighLevel}}</td>
+									<td>{{med.Productname}}</td>
+									<td>{{med.Substancename}}</td>
+									<td>{{med.productcharacterization}}</td>
+								</tr>
+
+							{% endif %}
+
+						{% endfor %}
+					</tbody>
+				</table>
 			</div>
-			<div class="col-1">
-				<div>Sex :</div>
-				<div class="chp_susar_eu_dtl">{{ Susar.patientSex }}</div>
+
+			<div class="PT_outcome_lib fw-bold">Reaction PT :</div>
+			<div class="PT_outcome">
+				<table class="table table-bordered table-striped tab_susar_eu_dtl">
+					<thead>
+						<tr>
+							<th>Lib. PT</th>
+							<th>Date début</th>
+							<th>Lib. SOC</th>
+							<th>Lib. HLGT</th>
+							<th>Lib. HLT</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for EI in Susar.EffetsIndesirables %}
+							<tr>
+								<td>{{EI.Reactionmeddrapt}}</th>
+								<td>{{EI.Reactionstartdate|format_datetime(dateFormat='short', timeFormat='none', locale='fr')}}</td>
+								<td>{{EI.Soc}}</td>
+								<td>{{EI.Reactionmeddrahlgt}}</td>
+								<td>{{EI.Reactionmeddrahlt}}</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
 			</div>
-			<div class="col-4">
-				<div>Seriousness fields :</div>
-				<div class="chp_susar_eu_dtl">{{ Susar.seriousnessCriteria|raw }}</div>
+
+
+			<div class="row">
+				<div class="col-1">
+					<div>Age :</div>
+					<div class="chp_susar_eu_dtl">{{ Susar.patientAge }} {{ Susar.patientAgeUnitLabel }}</div>
+				</div>
+				<div class="col-1">
+					<div>Age group :</div>
+					<div class="chp_susar_eu_dtl">{{ Susar.patientAgeGroup }}</div>
+				</div>
+				<div class="col-1">
+					<div>Sex :</div>
+					<div class="chp_susar_eu_dtl">{{ Susar.patientSex }}</div>
+				</div>
+				<div class="col-4">
+					<div>Seriousness fields :</div>
+					<div class="chp_susar_eu_dtl">{{ Susar.seriousnessCriteria|raw }}</div>
+				</div>
+				<div class="col-5">
+					<div class="indication_lib fw-bold">Indication(s) :</div>
+					<div class="indication">
+						<table class="table table-bordered table-striped tab_susar_eu_dtl">
+							<thead>
+								<tr>
+									<th>Product name</th>
+									<th>Indication fr.</th>
+									<th>Indication en.</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for indic in Susar.IndicationsTable %}
+									<tr>
+										<td>{{indic.ProductName}}</th>
+										<td>{{indic.ProductIndications}}</td>
+										<td>{{indic.ProductIndicationsEng}}</td>
+									</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+					</div>
+				</div>
 			</div>
-			<div class="col-5">
-				<div class="indication_lib fw-bold">Indication(s) :</div>
-				<div class="indication">
+
+			<div class="row">
+				<div class="col-1">
+					<div>N° cas BNPV :</div>
+					<div class="chp_susar_eu_dtl">{{ Susar.specificcaseid }}</div>
+				</div>
+				<div class="col-1">
+					<div>DLP version :</div>
+					<div class="chp_susar_eu_dtl">{{ Susar.DLPVersion }}</div>
+				</div>
+				<div class="col-1">
+					<div>Master_id :</div>
+					<div class="chp_susar_eu_dtl">{{ Susar.MasterId }}</div>
+				</div>
+				<div class="col-1">
+					<div>idSusar :</div>
+					<div class="chp_susar_eu_dtl">{{ Susar.id }}</div>
+				</div>
+				<div class="col-2">
+					<div>Pays de survenue :</div>
+					<div class="chp_susar_eu_dtl">{{ Susar.PaysSurvenue }}</div>
+				</div>
+				<div class="col-7">
+
+
+
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-2">
+					<div>Study registration number (num EUDRA_CT) :</div>
+					<div class="chp_susar_eu_dtl">{{ Susar.NumEudract }}</div>
+				</div>
+				<div class="col-2">
+					<div>World wide id :</div>
+					<div class="chp_susar_eu_dtl">{{ Susar.WorldWideId }}</div>
+				</div>
+				<div class="col-2">
+					<div>Nom de l'étude :</div>
+					<div class="chp_susar_eu_dtl">{{ Susar.studytitle }}</div>
+				</div>
+			</div>
+
+
+			<div class="row">
+				<div class="col-12">
+					<div>Narratif (complet) :</div>
+					<div class="chp_susar_eu_dtl chp_narr_dtl">{{ Susar.narratif }}</div>
+				</div>
+			</div>
+
+
+			<div class="tab_eval">
+				<div class="eval_lib fw-bold">Évaluation(s) :
+				{# </div>
+				<div class="d-flex justify-content-end mb-3"> #}
+					{# <a href="#" class="btn btn-primary me-2">Ajout d'une évaluation</a> #}
+					<a href="{{ path('app_eval_susar',{'idsusar':Susar.id}) }}" class="btn btn-primary me-2">Ajout d'une évaluation</a>					
+					<a href="{{ path('app_supp_tout_eval',{'idsusar':Susar.id}) }}" class="btn btn-danger">Supprimer toutes les évaluations</a>
+				</div>
+
+				<div class="eval">
 					<table class="table table-bordered table-striped tab_susar_eu_dtl">
+					{# <table class="table table-bordered table-striped"> #}
 						<thead>
 							<tr>
-								<th>Product name</th>
-								<th>Indication fr.</th>
-								<th>Indication en.</th>
+								<th>Substance name</th>
+								<th>PT</th>
+								<th>Assessment outcome</th>
+								<th>Comments</th>
+								<th>Date éval.</th>
+								<th>Utilisateur créa.</th>
+								<th>Utilisateur modif.</th>
+								<th>Modif.</th>
+								<th>Supp.</th>
 							</tr>
 						</thead>
 						<tbody>
-							{% for indic in Susar.IndicationsTable %}
+							{% for substancePt in Susar.substancePts %}
 								<tr>
-									<td>{{indic.ProductName}}</th>
-									<td>{{indic.ProductIndications}}</td>
-									<td>{{indic.ProductIndicationsEng}}</td>
-								</tr>
+									<td>{{substancePt.ActiveSubstanceHighLevel}}</td>
+									<td>{{substancePt.Reactionmeddrapt}}</td>
+
+									{% set idSubstancePtEval = '' %}
+									{% set AssessmentOutcome = '' %}
+									{% set Comments = '' %}
+									{% set DateEval = '' %}
+									{% for SubstancePtEval in substancePt.SubstancePtEvals %}
+										{% set idSubstancePtEval = SubstancePtEval.id %}
+										{% set AssessmentOutcome = AssessmentOutcome ~ SubstancePtEval.AssessmentOutcome ~ ' ' %}
+										{% set Comments = Comments ~ SubstancePtEval.Comments ~ ' ' %}
+										{% set DateEval = DateEval ~ SubstancePtEval.DateEval|format_datetime(dateFormat='full', timeFormat='none', locale='fr') ~ ' ' %}
+
+									{% endfor %}
+
+									{% if AssessmentOutcome is not empty %}
+										<td>{{ AssessmentOutcome }}</td>
+									{% else %}
+										<td>Pas d'évaluation</td>
+									{% endif %}								
+									<td>{{ Comments }}</td>
+									<td>{{ DateEval }}</td>
+									<td></td>
+									<td></td>
+
+
+									{% if idSubstancePtEval != '' %}
+										<td><a href="{{ path('app_modif_eval',{'idsusar': Susar.id, 'idSubstancePt': substancePt.id, 'idSubstancePtEval': idSubstancePtEval}) }}" class="btn btn-primary">Modifier</a></td>
+										<td><a href="{{ path('app_supp_eval',{'idsusar': Susar.id, 'idSubstancePt': substancePt.id, 'idSubstancePtEval': idSubstancePtEval}) }}" class="btn btn-danger">Supprimer</a></td>
+									{% else %}
+										{# <td><a href="#" class="btn btn-primary">Ajouter</a></td> #}
+										<td></td>
+										<td></td>
+									{% endif %}	
+									{# <td><a href="{{ path('app_supp_eval',{'idsusar':Susar.id},{'idSubstancePt':substancePt.id},{'idSubstancePtEval':idSubstancePtEval}) }}" class="btn btn-danger">Supprimer</a></td> #}
+
+								</tr>						
 							{% endfor %}
 						</tbody>
 					</table>
 				</div>
 			</div>
-		</div>
-
-		<div class="row">
-			<div class="col-1">
-				<div>N° cas BNPV :</div>
-				<div class="chp_susar_eu_dtl">{{ Susar.specificcaseid }}</div>
-			</div>
-			<div class="col-1">
-				<div>DLP version :</div>
-				<div class="chp_susar_eu_dtl">{{ Susar.DLPVersion }}</div>
-			</div>
-			<div class="col-1">
-				<div>Master_id :</div>
-				<div class="chp_susar_eu_dtl">{{ Susar.MasterId }}</div>
-			</div>
-			<div class="col-2">
-				<div>Pays de survenue :</div>
-				<div class="chp_susar_eu_dtl">{{ Susar.PaysSurvenue }}</div>
-			</div>
-			<div class="col-7">
 
 
 
-
-
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-2">
-				<div>Study registration number (num EUDRA_CT) :</div>
-				<div class="chp_susar_eu_dtl">{{ Susar.NumEudract }}</div>
-			</div>
-			<div class="col-2">
-				<div>World wide id :</div>
-				<div class="chp_susar_eu_dtl">{{ Susar.WorldWideId }}</div>
-			</div>
-			<div class="col-2">
-				<div>Nom de l'étude :</div>
-				<div class="chp_susar_eu_dtl">{{ Susar.studytitle }}</div>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-12">
-				<div>Narratif (complet) :</div>
-				<div class="chp_susar_eu_dtl chp_narr_dtl">{{ Susar.narratif }}</div>
-			</div>
-		</div>
-
-		<div class="DMM_Pole_lib fw-bold">DMM/Pôle/évaluateur :</div>
-		<div class="DMM_Pole">
-			<table class="table table-bordered table-striped tab_susar_eu_dtl">
-				<thead>
-					<tr>
-						<th>DMM</th>
-						<th>Pôle</th>
-						<th>Évaluateur</th>
-					</tr>
-				</thead>
-				<tbody>
-					{% for intervenant in Susar.IntervenantSubstanceDMMs %}
+			<div class="DMM_Pole_lib fw-bold">DMM/Pôle/évaluateur :</div>
+			<div class="DMM_Pole">
+				<table class="table table-bordered table-striped tab_susar_eu_dtl">
+					<thead>
 						<tr>
-							<td>{{intervenant.DMM}}</th>
-							<td>{{intervenant.PoleCourt}}</td>
-							<td>{{intervenant.Evaluateur}}</td>
+							<th>DMM</th>
+							<th>Pôle</th>
+							<th>Évaluateur</th>
 						</tr>
-					{% endfor %}
-				</tbody>
-			</table>
-		</div>
-
-		<div class="medicalHistory_lib fw-bold">medical history :</div>
-		<div class="medicalHistory">
-			<table class="table table-bordered table-striped tab_susar_eu_dtl">
-				<thead>
-					<tr>
-						<th>Lib. PT</th>
-						<th>Lib. LLT</th>
-						<th>Continuing</th>
-						<th>Medicalcomment</th>
-					</tr>
-				</thead>
-				<tbody>
-					{% for med_his in Susar.medicalHistories %}
-						<tr>
-							<td>{{med_his.DiseaseLibPT}}</td>
-							<td>{{med_his.DiseaseLibLLT}}</td>
-							<td>{{med_his.Continuing}}</td>
-							<td>{{med_his.Medicalcomment}}</td>
-						</tr>
-					{% endfor %}
-				</tbody>
-			</table>
-		</div>
-
-		{# {{ form_start(form) }}
-		<div class="row">
-			<div class="col-3">
-				{{ form_widget(form.Save) }}
+					</thead>
+					<tbody>
+						{% for intervenant in Susar.IntervenantSubstanceDMMs %}
+							<tr>
+								<td>{{intervenant.DMM}}</th>
+								<td>{{intervenant.PoleCourt}}</td>
+								<td>{{intervenant.Evaluateur}}</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
 			</div>
+
+			<div class="medicalHistory_lib fw-bold">medical history :</div>
+			<div class="medicalHistory">
+				<table class="table table-bordered table-striped tab_susar_eu_dtl">
+					<thead>
+						<tr>
+							<th>Lib. PT</th>
+							<th>Lib. LLT</th>
+							<th>Continuing</th>
+							<th>Medicalcomment</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for med_his in Susar.medicalHistories %}
+							<tr>
+								<td>{{med_his.DiseaseLibPT}}</td>
+								<td>{{med_his.DiseaseLibLLT}}</td>
+								<td>{{med_his.Continuing}}</td>
+								<td>{{med_his.Medicalcomment}}</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+
+			{# {{ form_start(form) }}
+			<div class="row">
+				<div class="col-3">
+					{{ form_widget(form.Save) }}
+				</div>
+			</div>
+			{{ form_end(form) }} #}
 		</div>
-		{{ form_end(form) }} #}
+	{# </div> #}
+{% else %}
+	{# On n'a pas de Susar #}
+	<div class="alert alert-danger" role="alert">
+    	Ce SUSAR n'existe pas
 	</div>
-{# </div> #}
+{% endif %}
+
+
 
 {% endblock %}

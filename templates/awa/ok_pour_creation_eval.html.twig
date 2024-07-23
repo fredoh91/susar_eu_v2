@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello AWAController!{% endblock %}
+
+
+{% block javascripts %}
+    {# {{ encore_entry_script_tags('popUpAWA') }} #}
+{% endblock %}
+
+
+
+{% block body %}
+
+
+idsusar : {{idsusar}} <BR>
+
+
+World Wide Id : {{Susar.WorldWideId}}
+
+Substance PT : 
+{% for substancePt in Susar.substancePts %}
+    <li>
+        {{ substancePt.id }} - 
+        {{ substancePt.activeSubstanceHighLevel }} - 
+        {{ substancePt.reactionMeddraPt }}
+    </li>
+{% else %}
+    <li>No SubstancePts found.</li>
+{% endfor %}
+
+Substance PT évalution : 
+{% for substancePtEval in Susar.substancePtEvals %}
+    <li>
+        {{ substancePtEval.id }} - 
+        {{ substancePtEval.AssessmentOutcome }} - 
+        {{ substancePtEval.Comments }} - 
+        {{ substancePtEval.DateEval|format_datetime(dateFormat='full', timeFormat='none', locale='fr') }}
+    </li>
+{% else %}
+    <li>No SubstancePtEvals found.</li>
+{% endfor %}
+
+
+<div class="p-3">
+  {% for message in app.flashes('success') %}
+    <div class="alert alert-success">
+      {{ message }}
+    </div>
+  {% endfor %}
+</div>
+
+
+
+
+
+{% endblock %}

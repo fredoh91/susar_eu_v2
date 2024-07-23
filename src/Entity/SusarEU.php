@@ -151,6 +151,15 @@ class SusarEU
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $priorisation = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?bool $CasIME = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?bool $CasDME = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?bool $CasEurope = null;
+
     // #[ORM\ManyToMany(targetEntity: IntervenantSubstanceDMM::class, inversedBy: 'susarEUs')]
     // private Collection $IntervenantSubstanceDMM;
 
@@ -167,8 +176,8 @@ class SusarEU
         $this->IndicationsTable = new ArrayCollection();
         $this->medicalHistories = new ArrayCollection();
         // $this->IntervenantSubstanceDMM = new ArrayCollection();
-        // $this->substancePts = new ArrayCollection();
-        // $this->substancePtEvals = new ArrayCollection();
+        $this->substancePts = new ArrayCollection();
+        $this->substancePtEvals = new ArrayCollection();
         $this->intervenantSubstanceDMMs = new ArrayCollection();
     }
 
@@ -912,6 +921,42 @@ class SusarEU
     public function setPriorisation(?string $priorisation): static
     {
         $this->priorisation = $priorisation;
+
+        return $this;
+    }
+
+    public function isCasIME(): ?bool
+    {
+        return $this->CasIME;
+    }
+
+    public function setCasIME(?bool $CasIME): static
+    {
+        $this->CasIME = $CasIME;
+
+        return $this;
+    }
+
+    public function isCasDME(): ?bool
+    {
+        return $this->CasDME;
+    }
+
+    public function setCasDME(?bool $CasDME): static
+    {
+        $this->CasDME = $CasDME;
+
+        return $this;
+    }
+
+    public function isCasEurope(): ?bool
+    {
+        return $this->CasEurope;
+    }
+
+    public function setCasEurope(?bool $CasEurope): static
+    {
+        $this->CasEurope = $CasEurope;
 
         return $this;
     }

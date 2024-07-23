@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Entity\SearchSusarEU;
 use App\Entity\IntervenantsANSM;
 use Doctrine\ORM\EntityRepository;
 use App\Entity\IntervenantSubstanceDMM;
@@ -14,6 +15,9 @@ use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 // use App\Repository\IntervenantSubstanceDmmRepository;
 
 class SearchSusarEUType extends AbstractType
@@ -35,56 +39,94 @@ class SearchSusarEUType extends AbstractType
 
         $builder
             ->add(
-                'specificcaseid', TextType::class, 
+                'specificcaseid', 
+                TextType::class, 
                 [
                     'required' => false,
                     // 'attr' => ['class' => 'chpRq'],
-                ]
-            )
-            ->add('dmmPoleChoice', ChoiceType::class, [
-                'choices' => $DmmPoleChoices,
-                'required' => false,
-                // 'placeholder' => 'Select Intervenant',
-                // Autres options de configuration
-            ])
-            ->add('evaluateurChoice', ChoiceType::class, [
-                'choices' => $EvaluateurChoices,
-                'required' => false,
-                // 'placeholder' => 'Select Intervenant',
-                // Autres options de configuration
-            ])
-            ->add('debutDateImport', DateType::class, [
-                'widget' => 'single_text',
-                'label' => 'début de date d\'import dans SUSAR_EU : ',
-                'format' => 'yyyy-MM-dd',
-                // 'input' => 'string',
-                'required' => false,
-                // 'attr' => ['class' => 'chpRq'],
                 ])
-            ->add('finDateImport', DateType::class, [
-                'widget' => 'single_text',
-                'label' => 'fin de date d\'import dans SUSAR_EU : ',
-                'format' => 'yyyy-MM-dd',
-                // 'input' => 'string',
-                'required' => false,
-                // 'attr' => ['class' => 'chpRq'],
+            ->add(
+                'idSusar', 
+                IntegerType::class, 
+                [
+                    'required' => false,
+                    // 'attr' => ['class' => 'chpRq'],
+                ])
+            // ->add(
+            //     'idSusar', 
+            //     IntegerType::class, 
+            //     [
+            //         'required' => false,
+            //         // 'attr' => ['class' => 'chpRq'],
+            //         'label' => 'ID', // Vous pouvez personnaliser le label si nécessaire
+            //         'attr' => [
+            //             'min' => 1, // Valeur minimale autorisée (optionnel)
+            //             // 'max' => PHP_INT_MAX, // Valeur maximale autorisée (optionnel)
+            //             'step' => 1, // Pas d'incrémentation (optionnel)
+            //         ],
+            //     ])
+
+            ->add(
+                'dmmPoleChoice', 
+                ChoiceType::class, 
+                [
+                    'choices' => $DmmPoleChoices,
+                    'required' => false,
+                ])
+            ->add(
+                'evaluateurChoice', 
+                ChoiceType::class, 
+                [
+                    'choices' => $EvaluateurChoices,
+                    'required' => false,
+                ])
+            ->add(
+                'debutDateImport', 
+                DateType::class, 
+                [
+                    'widget' => 'single_text',
+                    'label' => 'début de date d\'import dans SUSAR_EU : ',
+                    'format' => 'yyyy-MM-dd',
+                    // 'input' => 'string',
+                    'required' => false,
+                    // 'attr' => ['class' => 'chpRq'],
+                ])
+            ->add(
+                'finDateImport', 
+                DateType::class, 
+                [
+                    'widget' => 'single_text',
+                    'label' => 'fin de date d\'import dans SUSAR_EU : ',
+                    'format' => 'yyyy-MM-dd',
+                    // 'input' => 'string',
+                    'required' => false,
+                    // 'attr' => ['class' => 'chpRq'],
                 ])
             // ->add('productName', TextType::class, [
             //     'required' => false,
             //     // 'attr' => ['class' => 'chpRq'],
             // ])
-            ->add('substanceName', TextType::class, [
-                'required' => false,
-                // 'attr' => ['class' => 'chpRq'],
-            ])
-            ->add('effetIndesirable', TextType::class, [
-                'required' => false,
-                // 'attr' => ['class' => 'chpRq'],
-            ])
-            ->add('narratif', TextType::class, [
-                'required' => false,
-                // 'attr' => ['class' => 'chpRq'],
-            ])
+            ->add(
+                'substanceName', 
+                TextType::class, 
+                [
+                    'required' => false,
+                    // 'attr' => ['class' => 'chpRq'],
+                ])
+            ->add(
+                'effetIndesirable', 
+                TextType::class, 
+                [
+                    'required' => false,
+                    // 'attr' => ['class' => 'chpRq'],
+                ])
+            ->add(
+                'narratif', 
+                TextType::class, 
+                [
+                    'required' => false,
+                    // 'attr' => ['class' => 'chpRq'],
+                ])
             // ->add('intervenantANSM', EntityType::class, [
             //     'class' => IntervenantSubstanceDMM::class,
             //     'query_builder' => function (EntityRepository $er) {
@@ -96,6 +138,73 @@ class SearchSusarEUType extends AbstractType
             //     'required' => false,
             //     'attr' => ['class' => 'chpRq'],
             // ])
+            ->add('niveau1', CheckboxType::class, [
+                'label' => 'Niveau 1',
+                'required' => false,
+            ])
+            ->add('niveau2a', CheckboxType::class, [
+                'label' => 'Niveau 2a',
+                'required' => false,
+            ])
+            ->add('niveau2b', CheckboxType::class, [
+                'label' => 'Niveau 2b',
+                'required' => false,
+            ])
+            ->add('niveau2c', CheckboxType::class, [
+                'label' => 'Niveau 2c',
+                'required' => false,
+            ])
+            ->add('casTraite', ChoiceType::class, [
+                'label' => 'Cas traité',
+                'choices' => [
+                    '' => '',
+                    'Oui' => 'oui',
+                    'Non' => 'non',
+                ],
+                'required' => false,
+                'placeholder' => false, // Ceci empêche Symfony d'ajouter une option vide supplémentaire
+            ])
+            ->add('assessment_outcome', ChoiceType::class, [
+                'choices' => [
+                    'Screened without action' => 'Screened without action',
+                    'Assessed without action' => 'Assessed without action',
+                    'Under assessment' => 'Under assessment',
+                    'Monitor' => 'Monitor',
+                    'Concern in CT' => 'Concern in CT',
+                    'À garder en mémoire' => 'À garder en mémoire',
+                ],
+                'required' => false,
+                // 'placeholder' => false, // Ceci empêche Symfony d'ajouter une option vide supplémentaire
+            ])
+            ->add(
+                'worldWide_id', 
+                TextType::class, 
+                [
+                    'required' => false,
+                    // 'attr' => ['class' => 'chpRq'],
+                ])
+            ->add(
+                'num_eudract', 
+                TextType::class, 
+                [
+                    'required' => false,
+                    // 'attr' => ['class' => 'chpRq'],
+                ])
+            ->add(
+                'sponsorstudynumb', 
+                TextType::class, 
+                [
+                    'required' => false,
+                    // 'attr' => ['class' => 'chpRq'],
+                ])
+            ->add('caseVersion', ChoiceType::class, [
+                'label' => 'Case version',
+                'choices' => [
+                    'Cas initial' => 'cas_initial',
+                    'Follow-up' => 'follow_up',
+                ],
+                'required' => false,
+            ])
             ->add(
                 'recherche',
                 SubmitType::class,
@@ -103,18 +212,14 @@ class SearchSusarEUType extends AbstractType
                     'attr' => ['class' => 'btn btn-primary m-2'],
                     'label' => 'Rechercher',
                     'row_attr' => ['id' => 'recherche'],
-                ]
-
-            )
+                ])
             ->add(
                 'reset',
-                SubmitType::class,
-                [
+                SubmitType::class,[
                     'attr' => ['class' => 'btn btn-primary m-2'],
                     'label' => 'Reset',
                     'row_attr' => ['id' => 'reset'],
-                ]
-            )
+                ])
         ;
     }
 
@@ -122,6 +227,7 @@ class SearchSusarEUType extends AbstractType
     {
         $resolver->setDefaults([
             // Configure your form options here
+            'data_class' => SearchSusarEU::class,
         ]);
     }
 }

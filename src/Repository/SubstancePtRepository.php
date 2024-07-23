@@ -2,9 +2,10 @@
 
 namespace App\Repository;
 
+use App\Entity\SusarEU;
 use App\Entity\SubstancePt;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @extends ServiceEntityRepository<SubstancePt>
@@ -20,7 +21,41 @@ class SubstancePtRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, SubstancePt::class);
     }
-
+    /**
+     * Cette méthode permet de retourner une entité SubstancePt selon la substance et le libelle PT passés en paramètres
+     *
+     * @param [type] $activeSubstance
+     * @param [type] $reactionMeddraPt
+     * @return void
+     */
+    public function findByActiveSubstanceAndReactionMeddraPt($activeSubstance, $reactionMeddraPt)
+    {
+        return $this->createQueryBuilder('s')
+            ->where('s.active_substance_high_level = :active_substance')
+            ->andWhere('s.reactionmeddrapt = :reaction_meddra_pt')
+            ->setParameter('active_substance', $activeSubstance)
+            ->setParameter('reaction_meddra_pt', $reactionMeddraPt)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+    /**
+     * Cette méthode permet de savoir si une entité SubstancePt et une entité SusarEU sont liées
+     *
+     * @param SubstancePt $substancePt
+     * @param SusarEU $susarEU
+     * @return boolean
+     */
+    public function isLinkedToSusarEU(SubstancePt $substancePt, SusarEU $susarEU)
+    {
+        return $this->createQueryBuilder('s')
+            ->where('s = :substance_pt')
+            ->andWhere(':susar_eu MEMBER OF s.susarEUs')
+            ->setParameter('substance_pt', $substancePt)
+            ->setParameter('susar_eu', $susarEU)
+            ->getQuery()
+            ->getOneOrNullResult() !== null;
+    }
+    
     //    /**
     //     * @return SubstancePt[] Returns an array of SubstancePt objects
     //     */

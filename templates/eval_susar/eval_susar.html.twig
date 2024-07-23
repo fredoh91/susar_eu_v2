@@ -1,0 +1,81 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Évaluation d'un SUSAR{% endblock %}
+
+{% block body %}
+
+{{ encore_entry_link_tags('eval_susar_css') }}
+
+{# {{ dump(SubPTs) }} #}
+
+<div class="container">
+
+    {{ form_start(form) }}
+        <div class="row mb-3 mt-3">
+            <div class="col-2">
+            </div>
+            <div class="col-2 text-end">
+                {{ form_label(form.substance, 'Substance :') }}
+            </div>
+            <div class="col-4">
+                {{ form_widget(form.substance) }}
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-2">
+            </div>
+            <div class="col-2 text-end">
+                {{ form_label(form.pt, 'PT :') }}
+            </div>
+            <div class="col-4">
+                {{ form_widget(form.pt) }}
+            </div>
+        </div>
+        
+        <div class="row mb-3">
+            <div class="col-2">
+            </div>
+            <div class="col-2 text-end">
+                {{ form_label(form.assessment_outcome, 'Assessment outcome :') }}
+            </div>    
+            <div class="col-4">
+                {{ form_widget(form.assessment_outcome) }}
+            </div>            
+        </div>
+        <div class="row mb-3">
+            <div class="col-2">
+            </div>
+            <div class="col-8">
+                {{ form_label(form.comments, 'Commentaire :') }}
+                {{ form_widget(form.comments) }}
+            </div>            
+        </div>
+
+        <div class="row mb-3 justify-content-center">
+            <div class="col-1">
+                {{ form_widget(form.eval) }}
+            </div>
+            <div class="col-1">
+            </div>
+            <div class="col-1">
+                {{ form_widget(form.reset) }}
+            </div>
+        </div>
+    {{ form_end(form) }}            
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% endblock %}
