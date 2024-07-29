@@ -143,9 +143,6 @@ class SusarEURepository extends ServiceEntityRepository
         }
         if ($search->getevaluateurChoice()) {
             $Eval = $search->getevaluateurChoice();
-            //     $query = $query
-            //         ->andWhere($query->expr()->eq('isd.evaluateur', ':eval'))
-            //         ->setParameter('eval', $Eval);
             if ($Eval === "_non attribué_") {
                 $query = $query
                     ->andWhere($query->expr()->isNull('isd.evaluateur'));
@@ -189,42 +186,42 @@ class SusarEURepository extends ServiceEntityRepository
 
         if ($search->getNiveau1()) {
             $query = $query
-            ->orWhere('s.priorisation = :n1')
-            ->setParameter('n1', 'Niveau 1');
+                ->orWhere('s.priorisation = :n1')
+                ->setParameter('n1', 'Niveau 1');
         } else {
             $query = $query
-            ->andWhere('s.priorisation != :n1')
-            ->setParameter('n1', 'Niveau 1');
+                ->andWhere('s.priorisation != :n1')
+                ->setParameter('n1', 'Niveau 1');
         }
         
         if ($search->getNiveau2a()) {
             $query = $query
-            ->orWhere('s.priorisation = :n2a')
-            ->setParameter('n2a', 'Niveau 2a');
+                ->orWhere('s.priorisation = :n2a')
+                ->setParameter('n2a', 'Niveau 2a');
         } else {
             $query = $query
-            ->andWhere('s.priorisation != :n2a')
-            ->setParameter('n2a', 'Niveau 2a');
+                ->andWhere('s.priorisation != :n2a')
+                ->setParameter('n2a', 'Niveau 2a');
         }
         
         if ($search->getNiveau2b()) {
             $query = $query
-            ->orWhere('s.priorisation = :n2b')
-            ->setParameter('n2b', 'Niveau 2b');
+                ->orWhere('s.priorisation = :n2b')
+                ->setParameter('n2b', 'Niveau 2b');
         } else {
             $query = $query
-            ->andWhere('s.priorisation != :n2b')
-            ->setParameter('n2b', 'Niveau 2b');
+                ->andWhere('s.priorisation != :n2b')
+                ->setParameter('n2b', 'Niveau 2b');
         }
         
         if ($search->getNiveau2c()) {
             $query = $query
-            ->orWhere('s.priorisation = :n2c')
-            ->setParameter('n2c', 'Niveau 2c');
+                ->orWhere('s.priorisation = :n2c')
+                ->setParameter('n2c', 'Niveau 2c');
         } else {
             $query = $query
-            ->andWhere('s.priorisation != :n2c')
-            ->setParameter('n2c', 'Niveau 2c');
+                ->andWhere('s.priorisation != :n2c')
+                ->setParameter('n2c', 'Niveau 2c');
         }
 
         if ($search->getCasTraite()) {
@@ -266,7 +263,6 @@ class SusarEURepository extends ServiceEntityRepository
                 ->setParameter('ssn', '%' . $search->getSponsorstudynumb() . '%');
         }
 
-
         if ($search->getCaseVersion()) {
 
             $caseVersion = $search->getCaseVersion();
@@ -280,10 +276,44 @@ class SusarEURepository extends ServiceEntityRepository
             }
         }
 
+        if ($search->getCasIME()) {
 
+            $casIME = $search->getCasIME();
 
+            if ($casIME === 'oui') {
+                $query = $query
+                    ->andWhere('s.CasIME = TRUE');
+            } elseif ($casIME === 'non') {
+                $query = $query
+                    ->andWhere('s.CasIME = FALSE');
+            }
+        }
 
+        if ($search->getCasDME()) {
 
+            $casDME = $search->getCasDME();
+
+            if ($casDME === 'oui') {
+                $query = $query
+                ->andWhere('s.CasDME = TRUE');
+            } elseif ($casDME === 'non') {
+                $query = $query
+                ->andWhere('s.CasDME = FALSE');
+            }
+        }
+
+        if ($search->getCasEurope()) {
+
+            $casEurope = $search->getCasEurope();
+
+            if ($casEurope === 'oui') {
+                $query = $query
+                ->andWhere('s.CasEurope = TRUE');
+            } elseif ($casEurope === 'non') {
+                $query = $query
+                ->andWhere('s.CasEurope = FALSE');
+            }
+        }
 
         
 // dd("stop !!");

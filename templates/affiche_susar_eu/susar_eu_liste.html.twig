@@ -154,32 +154,30 @@
 				</div>
 			</div>
 
-
-
-
-
-			{# <div class="row">
-				<div class="col-2">
-					{{ form_label(form.niveau1, 'Niveau 1') }}
-					{{ form_row(form.niveau1) }}
-				</div>
-				<div class="col-2">
-					{{ form_label(form.niveau2a, 'Niveau 2a') }}
-					{{ form_row(form.niveau2a) }}
-				</div>
-				<div class="col-2">
-					{{ form_label(form.niveau2b, 'Niveau 2b') }}
-					{{ form_row(form.niveau2b) }}
-				</div>
-				<div class="col-2">
-					{{ form_label(form.niveau2c, 'Niveau 2c') }}
-					{{ form_row(form.niveau2c) }}
-				</div>
-			</div> #}
-
 			<div class="row">
-				<div class="col-10">
+
+				<div class="col-1">
+					{{ form_label(form.casIME, 'Cas IME : ') }}
+					{{ form_widget(form.casIME) }}
+
 				</div>
+				<div class="col-1">
+					{{ form_label(form.casDME, 'Cas DME : ') }}
+					{{ form_widget(form.casDME) }}
+
+				</div>
+				<div class="col-1">
+					{{ form_label(form.casEurope, 'Cas Europe : ') }}
+					{{ form_widget(form.casEurope) }}
+
+				</div>
+				<div class="col-1">
+
+				</div>
+				<div class="col-6">
+
+				</div>
+
 				<div class="col-1">
 					{{ form_label(form.recherche, 'Recherche') }}
 					{{ form_widget(form.recherche) }}

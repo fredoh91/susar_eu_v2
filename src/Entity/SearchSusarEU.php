@@ -62,6 +62,9 @@ class SearchSusarEU
     private ?string $casTraite = null;
     private ?string $assessment_outcome = null;
     private ?string $caseVersion = null;
+    private ?string $casIME = null;
+    private ?string $casDME = null;
+    private ?string $casEurope = null;
 
     public function getIdSusar(): ?int
     {
@@ -1038,6 +1041,66 @@ class SearchSusarEU
     public function setCaseVersion(?string $caseVersion)
     {
         $this->caseVersion = $caseVersion;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of casIME
+     */ 
+    public function getCasIME(): ?string
+    {
+        return $this->casIME;
+    }
+
+    /**
+     * Set the value of casIME
+     *
+     * @return  self
+     */ 
+    public function setCasIME(?string $casIME)
+    {
+        $this->casIME = $casIME;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of casDME
+     */ 
+    public function getCasDME(): ?string
+    {
+        return $this->casDME;
+    }
+
+    /**
+     * Set the value of casDME
+     *
+     * @return  self
+     */ 
+    public function setCasDME(?string $casDME)
+    {
+        $this->casDME = $casDME;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of casEurope
+     */ 
+    public function getCasEurope(): ?string
+    {
+        return $this->casEurope;
+    }
+
+    /**
+     * Set the value of casEurope
+     *
+     * @return  self
+     */ 
+    public function setCasEurope(?string $casEurope)
+    {
+        $this->casEurope = $casEurope;
 
         return $this;
     }

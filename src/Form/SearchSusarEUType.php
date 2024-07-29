@@ -205,6 +205,36 @@ class SearchSusarEUType extends AbstractType
                 ],
                 'required' => false,
             ])
+            ->add('casIME', ChoiceType::class, [
+                'label' => 'Cas IME',
+                'choices' => [
+                    '' => '',
+                    'Oui' => 'oui',
+                    'Non' => 'non',
+                ],
+                'required' => false,
+                'placeholder' => false, // Ceci empêche Symfony d'ajouter une option vide supplémentaire
+            ])
+            ->add('casDME', ChoiceType::class, [
+                'label' => 'Cas DME',
+                'choices' => [
+                    '' => '',
+                    'Oui' => 'oui',
+                    'Non' => 'non',
+                ],
+                'required' => false,
+                'placeholder' => false, // Ceci empêche Symfony d'ajouter une option vide supplémentaire
+            ])
+            ->add('casEurope', ChoiceType::class, [
+                'label' => 'Cas Europe',
+                'choices' => [
+                    '' => '',
+                    'Oui' => 'oui',
+                    'Non' => 'non',
+                ],
+                'required' => false,
+                'placeholder' => false, // Ceci empêche Symfony d'ajouter une option vide supplémentaire
+            ])
             ->add(
                 'recherche',
                 SubmitType::class,
