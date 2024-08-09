@@ -43,6 +43,9 @@ class IntervenantsANSM
     #[ORM\OneToMany(targetEntity: IntervenantSubstanceDMM::class, mappedBy: 'IntervenantANSM')]
     private Collection $intervenantSubstanceDMMs;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $evaluateur = null;
+
     public function __construct()
     {
         $this->intervenantSubstanceDMMs = new ArrayCollection();
@@ -163,6 +166,18 @@ class IntervenantsANSM
                 $intervenantSubstanceDMM->setIntervenantANSM(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getEvaluateur(): ?string
+    {
+        return $this->evaluateur;
+    }
+
+    public function setEvaluateur(?string $evaluateur): static
+    {
+        $this->evaluateur = $evaluateur;
 
         return $this;
     }

@@ -25,9 +25,8 @@ class SearchSusarEUType extends AbstractType
     private $intervenantRepository;
 
 
-    public function __construct(
-        IntervenantSubstanceDMMRepository $intervenantRepository,
-    ) {
+    public function __construct(IntervenantSubstanceDMMRepository $intervenantRepository)
+    {
         $this->intervenantRepository = $intervenantRepository;
     }
     

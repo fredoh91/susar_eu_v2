@@ -1,0 +1,21 @@
+{# templates/intervenant_substance/intervenant_substance_dmm_substances_widget.html.twig #}
+{% block intervenant_substance_dmm_substances_widget %}
+
+    <div class="asso-sub-low-level">
+    
+        <div class="row">
+            <div class="col-2 text-end">
+                {{ form_label(form.ActiveSubstanceLowLevel, 'Low level substance name :') }}
+            </div>
+            <div class="col-4">
+                {{ form_widget(form.ActiveSubstanceLowLevel) }}
+            </div>
+            <div class="col-2">
+                <button type="button" class="btn btn-danger remove-substance">Supprimer</button>
+            </div>
+            <div class="col-2">
+                {{ form_widget(form.active_substance_high_level) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

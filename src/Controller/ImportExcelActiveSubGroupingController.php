@@ -41,25 +41,13 @@ class ImportExcelActiveSubGroupingController extends AbstractController
                 $spreadsheet = IOFactory::load($inputFileName);
                 $activeWorksheet = $spreadsheet->getActiveSheet();
                 $highestRow = $activeWorksheet->getHighestRow();
-                // $creationtime = filectime($inputFileName);
-                // $creation_Time = new DateTime();
-                // $creation_Time->setTimestamp(filectime($inputFileName));
-                // dump($creation_Time);
-                // $creation_time = filectime($inputFileName);
                 $creation_time = DateTimeImmutable::createFromFormat('U', filectime($inputFileName));
-                // dump('Heure de création : ' . date('Y-m-d H:i:s', $creation_time));
                 $creation_date = new DateTimeImmutable();
 
-
-                // $creationTime = new DateTime();
-                // $creationTime->setTimestamp($FicExcel->getMTime());
-                // dump($creationTime);
                 for ($row = 2; $row <= $highestRow; $row++) {
-
 
                     $AS_HL = $activeWorksheet->getCell('A' . $row)->getFormattedValue();
                     $AS_LL = $activeWorksheet->getCell('B' . $row)->getFormattedValue();
-
                     
                     $activeSubstanceGrouping = new ActiveSubstanceGrouping;
                     $activeSubstanceGrouping->setActiveSubstanceHighLevel($AS_HL);
@@ -70,44 +58,25 @@ class ImportExcelActiveSubGroupingController extends AbstractController
                     $activeSubstanceGrouping->setCreatedAt($creation_date);
                     $activeSubstanceGrouping->setUpdatedAt($creation_date);
 
-
                     $IntervenantSubstanceDMM = $entityManager->getRepository(IntervenantSubstanceDMM::class)->findByHL_SA($AS_HL);
-
                     
-                    // if (!is_null($IntervenantSubstanceDMM)) {
-                        if (count($IntervenantSubstanceDMM) == 0) {
-                            // il n'y a pas d'intervenantSubstanceDMM, on ne fait rien
+                    if (count($IntervenantSubstanceDMM) == 0) {
+                        // il n'y a pas d'intervenantSubstanceDMM, on ne fait rien
 
-                        } elseif (count($IntervenantSubstanceDMM) == 1) {
-                            // il n'y a qu'un seul intervenantSubstanceDMM, on l'ajoute à activeSubstanceGrouping
-                            $activeSubstanceGrouping->setIntSubDMM($IntervenantSubstanceDMM[0]);
-                            
-                        } else {
-                            // dd($IntervenantSubstanceDMM);
-                            $response = new Response('Impossible d\'effectuer le charment du fichier Excel.<BR>Il existe plusieurs ligne pour le "High Level" suivant, merci de ne laisser qu\'une seule ligne active : ' . 
-                                                        $IntervenantSubstanceDMM[0]->getActiveSubstanceHighLevel(), Response::HTTP_NOT_FOUND);
-                            $response->send();
-                            exit;
-                        }
-                    // }
+                    } elseif (count($IntervenantSubstanceDMM) == 1) {
+                        // il n'y a qu'un seul intervenantSubstanceDMM, on l'ajoute à activeSubstanceGrouping
+                        $activeSubstanceGrouping->setIntSubDMM($IntervenantSubstanceDMM[0]);
+                        
+                    } else {
+                        // dd($IntervenantSubstanceDMM);
+                        $response = new Response('Impossible d\'effectuer le charment du fichier Excel.<BR>Il existe plusieurs ligne pour le "High Level" suivant, merci de ne laisser qu\'une seule ligne active : ' . 
+                                                    $IntervenantSubstanceDMM[0]->getActiveSubstanceHighLevel(), Response::HTTP_NOT_FOUND);
+                        $response->send();
+                        exit;
+                    }
                     
                     $em->persist($activeSubstanceGrouping);
-                    
-                    // // Liaison de cet ActiveSubstanceGrouping à/aux IntervenantSubstanceDMM ayant le même high level substance name
-                    // $IntervenantSubstanceDMM = $entityManager->getRepository(IntervenantSubstanceDMM::class)->findByHL_SA($AS_HL);
 
-                    // foreach ($IntervenantSubstanceDMM as $intSubDMM) {
-                    //     $intSubDMM->setActSubGrouping($activeSubstanceGrouping);
-                    //     $em->persist($intSubDMM);
-                    // }
-
-
-
-                    // $tabActSubGrp[] = array(
-                        //     'AS_HL' => $activeWorksheet->getCell('A' . $row)->getFormattedValue(),
-                        //     'AS_LL' => $activeWorksheet->getCell('B' . $row)->getFormattedValue()
-                        // );
-                        
                 }
                 $em->flush();
                 // $date_unique = date("Ymd");
@@ -119,13 +88,7 @@ class ImportExcelActiveSubGroupingController extends AbstractController
                 $tabActSubGrp = $entityManager->getRepository(ActiveSubstanceGrouping::class)->findByActif();
 
             }
-
-            // ... persist the $product variable or any other work
-
-            // return $this->redirectToRoute('app_upload_excel_active_sub_grouping');
         }
-
-
 
 
         return $this->render('import_excel_active_sub_grouping/upload_excel.html.twig', [

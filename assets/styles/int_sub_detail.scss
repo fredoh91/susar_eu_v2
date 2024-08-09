@@ -1,0 +1,44 @@
+@import '_variables.scss';
+
+// body {
+//   background-color: $Fond_eval_susar;
+// }
+// html, body {
+//   height: 100%;
+//   width: 100%;
+//   margin: 0;
+//   padding: 0;
+// }
+body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.asso-sub-low-level {
+    border: 1px solid $ANSM_violet;
+    background-color: $Fond_liste_susar;
+    padding: 10px;
+    margin: 5px;
+}
+
+ul, ol, li {
+  list-style-type: none;
+}
+
+// #form-bg.vert-clair {
+//   background-color: $Form_vert_clair;
+// }
+
+// #form-bg.rouge-clair {
+//   background-color: $Form_rouge_clair;
+// }
+
+.vert-clair {
+  background-color: $Form_vert_clair;
+}
+
+.rouge-clair {
+  background-color: $Form_rouge_clair;
+}

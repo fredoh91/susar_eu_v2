@@ -21,6 +21,37 @@ class IntervenantsANSMRepository extends ServiceEntityRepository
         parent::__construct($registry, IntervenantsANSM::class);
     }
 
+    public function getFormattedChoices(): array
+    {
+        $qb = $this->createQueryBuilder('i')
+            ->select('i.evaluateur, i.DMM, i.pole_court')
+            ->orderBy('i.evaluateur', 'ASC')
+            ->getQuery();
+
+        $results = $qb->getResult();
+
+        $choices = [];
+        foreach ($results as $result) {
+            $evaluateur = $result['evaluateur'];
+            $dmm = $result['DMM'];
+            $poleCourt = $result['pole_court'];
+
+            $choices[$evaluateur] = "$evaluateur|$dmm|$poleCourt";
+        }
+
+        return $choices;
+    }
+
+    public function findFirstEvaluatorByName($userName)
+    {
+        return $this->createQueryBuilder('i')
+            ->where('i.evaluateur = :userName')
+            ->setParameter('userName', $userName)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
     //    /**
     //     * @return IntervenantsANSM[] Returns an array of IntervenantsANSM objects
     //     */

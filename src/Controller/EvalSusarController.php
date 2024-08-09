@@ -61,7 +61,7 @@ class EvalSusarController extends AbstractController
             $formData = $request->request->all();
 
             if (isset($formData['eval_susar']['reset'])) {
-                dump(1);
+                // dump(1);
                 // L'utilisateur a cliqué sur le bouton 'Annulation'
                 // return $this->redirectToRoute('app_eval_susar',['idsusar' => $idsusar]);
                 return $this->redirectToRoute('app_detail_susar_eu', ['master_id' => $Susar->getMasterId()]);
