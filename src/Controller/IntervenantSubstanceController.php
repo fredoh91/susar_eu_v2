@@ -97,7 +97,7 @@ class IntervenantSubstanceController extends AbstractController
         $TousHL_SA = $entityManager->getRepository(IntervenantSubstanceDMM::class)->findHL_SA_Rgp();
 
         $NbHL_SA = count($TousHL_SA);
-
+        
         return $this->render('intervenant_substance/liste_HL_SA.html.twig', [
             'TousHL_SA' => $TousHL_SA,
             'NbHL_SA' => $NbHL_SA,
