@@ -1,0 +1,100 @@
+{% extends 'base.html.twig' %}
+
+{% form_theme form.intervenantSubstanceDMMSubstances 'intervenant_substance/intervenant_substance_dmm_substances_widget.html.twig' %}
+
+{% block title %}Détail d'un intervenant/substance{% endblock %}
+
+{% block body %}
+
+{{ encore_entry_link_tags('int_sub_detail') }}
+<div id="form-bg">
+    <div class="container-fluid p-5">
+        {{ form_start(form) }}
+
+            <div class="row mb-3 mt-3">
+                <div class="col-1">
+        {{ form_label(form.inactif, 'Inactif :') }}
+        {{ form_widget(form.inactif) }}
+                </div>
+                <div class="col-1">
+                </div>
+
+            </div>
+
+        <div class="no-asso-sub" id="no_asso_sub">
+            {{ form_label(form.ActiveSubstanceHighLevel, 'High level substance name :') }}
+            {{ form_widget(form.ActiveSubstanceHighLevel) }}
+            {# {{ form_label(form.ActiveSubstanceLowLevel, 'Low level substance name :') }}
+            {{ form_widget(form.ActiveSubstanceLowLevel) }} #}
+        </div>
+
+        {{ form_label(form.AssociationDeSubstances, 'Association de substance :') }}
+        {{ form_widget(form.AssociationDeSubstances) }}
+        
+        <div class="asso-sub" id="asso_sub">
+
+            <h3>Association de substances</h3>
+            <ul class="substances" data-prototype="{{ form_widget(form.intervenantSubstanceDMMSubstances.vars.prototype)|e('html_attr') }}">
+                {% for substance in form.intervenantSubstanceDMMSubstances %}
+                    <li>
+                        {{ form_widget(substance) }}
+                    </li>
+                {% endfor %}
+            </ul>
+            <button type="button" class="btn btn-primary btn-new" data-collection=".substances">Ajouter une substance</button>
+
+        </div>
+
+            <div class="row mb-3 mt-3">
+                <div class="col-1 text-end">
+                    {{ form_label(form.evaluateur, 'Évaluateur :') }}
+                </div>
+                <div class="col-2">
+                    {{ form_widget(form.evaluateur) }}
+                </div>
+
+                <div class="col-1 text-end">
+                    {{ form_label(form.dmm, 'DMM :') }}
+                </div>
+                <div class="col-2">
+                    {{ form_widget(form.dmm) }}
+                </div>
+
+                <div class="col-1 text-end">
+                    {{ form_label(form.pole_court, 'Pôle :') }}
+                </div>
+                <div class="col-2">
+                    {{ form_widget(form.pole_court) }}
+                </div>
+
+                <div class="col-1 text-end">
+                    {{ form_label(form.type_saMS_Mono, 'Type (saMS/Mono) :') }}
+                </div>
+                <div class="col-2">
+                    {{ form_widget(form.type_saMS_Mono) }}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-1">
+
+                </div>
+                <div class="col-9">
+
+                </div>
+                <div class="col-1">
+                    <button type="submit" class="btn btn-success" id="btn-enregistrer">Enregistrer</button>
+                </div>
+            </div>
+
+        {{ form_end(form) }}
+
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+	{{ encore_entry_script_tags('intervenanSubstanceDetail') }}
+{% endblock %}
+

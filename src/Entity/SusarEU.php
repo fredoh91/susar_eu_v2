@@ -160,6 +160,15 @@ class SusarEU
     #[ORM\Column(nullable: true)]
     private ?bool $CasEurope = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?bool $casSusarEuV1 = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $dateRepriseSusarEuV1 = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $idCTLL = null;
+
     // #[ORM\ManyToMany(targetEntity: IntervenantSubstanceDMM::class, inversedBy: 'susarEUs')]
     // private Collection $IntervenantSubstanceDMM;
 
@@ -957,6 +966,42 @@ class SusarEU
     public function setCasEurope(?bool $CasEurope): static
     {
         $this->CasEurope = $CasEurope;
+
+        return $this;
+    }
+
+    public function isCasSusarEuV1(): ?bool
+    {
+        return $this->casSusarEuV1;
+    }
+
+    public function setCasSusarEuV1(?bool $casSusarEuV1): static
+    {
+        $this->casSusarEuV1 = $casSusarEuV1;
+
+        return $this;
+    }
+
+    public function getDateRepriseSusarEuV1(): ?\DateTimeImmutable
+    {
+        return $this->dateRepriseSusarEuV1;
+    }
+
+    public function setDateRepriseSusarEuV1(?\DateTimeImmutable $dateRepriseSusarEuV1): static
+    {
+        $this->dateRepriseSusarEuV1 = $dateRepriseSusarEuV1;
+
+        return $this;
+    }
+
+    public function getIdCTLL(): ?int
+    {
+        return $this->idCTLL;
+    }
+
+    public function setIdCTLL(?int $idCTLL): static
+    {
+        $this->idCTLL = $idCTLL;
 
         return $this;
     }

@@ -61,8 +61,23 @@
 
 // .container-tab > div:nth-child(even) {background: #f0f0f0}
 // .container-tab > div:nth-child(odd) {background: #ead6fa}
-.container-tab > div:nth-child(even) {background: #D9C7FD}
-.container-tab > div:nth-child(odd) {background: #EEE6FE}
+// .container-tab > div:nth-child(even) {background: #D9C7FD}
+// .container-tab > div:nth-child(odd) {background: #EEE6FE}
+// .container-tab > div:nth-child(even) {background: $Ctnr_tab_violet_clair}
+// .container-tab > div:nth-child(odd) {background: $Ctnr_tab_violet_fonce}
+
+.container-tab {
+    > div {
+        &:nth-child(even) {
+            &.susar-v2 { background: $Ctnr_tab_violet_clair; }
+            &.susar-v1 { background: $Ctnr_tab_rouge_clair; }
+        }
+        &:nth-child(odd) {
+            &.susar-v2 { background: $Ctnr_tab_violet_fonce; }
+            &.susar-v1 { background: $Ctnr_tab_rouge_fonce; }
+        }
+    }
+}
 
 .container_flex_left > div,
 .container_flex_right > div {

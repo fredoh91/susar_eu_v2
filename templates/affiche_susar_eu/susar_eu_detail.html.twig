@@ -24,7 +24,8 @@
 
 
 	{# <div class="container_susar_eu_dtl"> #}
-		<div class="container-fluid">
+		{# <div class="container-fluid"> #}
+		<div class="container-fluid {% if Susar.casSusarEuV1 == true %}bg-susar-v1{% else %}bg-susar-v2{% endif %}">
 
 			<div class="suspectDrug_lib fw-bold">Médicament(s) suspect(s) :</div>
 			<div class="suspectDrug">
@@ -177,7 +178,17 @@
 					<div>idSusar :</div>
 					<div class="chp_susar_eu_dtl">{{ Susar.id }}</div>
 				</div>
-				<div class="col-2">
+				{% if Susar.casSusarEuV1 == true %}
+					<div class="col-1">
+						<div>idCTLL :</div>
+						<div class="chp_susar_eu_dtl">{{ Susar.idCTLL }}</div>
+					</div>
+                {% else %}
+					<div class="col-1">
+					</div>
+				{% endif %}
+
+				<div class="col-1">
 					<div>Pays de survenue :</div>
 					<div class="chp_susar_eu_dtl">{{ Susar.PaysSurvenue }}</div>
 				</div>
@@ -216,8 +227,15 @@
 				{# </div>
 				<div class="d-flex justify-content-end mb-3"> #}
 					{# <a href="#" class="btn btn-primary me-2">Ajout d'une évaluation</a> #}
-					<a href="{{ path('app_eval_susar',{'idsusar':Susar.id}) }}" class="btn btn-primary me-2">Ajout d'une évaluation</a>					
-					<a href="{{ path('app_supp_tout_eval',{'idsusar':Susar.id}) }}" class="btn btn-danger">Supprimer toutes les évaluations</a>
+					{% if Susar.casSusarEuV1 == false %}
+						<a href="{{ path('app_eval_susar',{'idsusar':Susar.id}) }}" class="btn btn-primary me-2">Ajout d'une évaluation</a>					
+						<a href="{{ path('app_supp_tout_eval',{'idsusar':Susar.id}) }}" class="btn btn-danger">Supprimer toutes les évaluations</a>
+						{# bg-susar-v2 #}
+					{% else %}
+						{# bg-susar-v1 #}
+					{% endif %}
+
+
 				</div>
 
 				<div class="eval">
@@ -266,8 +284,16 @@
 
 
 									{% if idSubstancePtEval != '' %}
-										<td><a href="{{ path('app_modif_eval',{'idsusar': Susar.id, 'idSubstancePt': substancePt.id, 'idSubstancePtEval': idSubstancePtEval}) }}" class="btn btn-primary">Modifier</a></td>
-										<td><a href="{{ path('app_supp_eval',{'idsusar': Susar.id, 'idSubstancePt': substancePt.id, 'idSubstancePtEval': idSubstancePtEval}) }}" class="btn btn-danger">Supprimer</a></td>
+
+										{% if Susar.casSusarEuV1 == false %}
+											{# bg-susar-v2 #}
+											<td><a href="{{ path('app_modif_eval',{'idsusar': Susar.id, 'idSubstancePt': substancePt.id, 'idSubstancePtEval': idSubstancePtEval}) }}" class="btn btn-primary">Modifier</a></td>
+											<td><a href="{{ path('app_supp_eval',{'idsusar': Susar.id, 'idSubstancePt': substancePt.id, 'idSubstancePtEval': idSubstancePtEval}) }}" class="btn btn-danger">Supprimer</a></td>
+										{% else %}
+											{# bg-susar-v1 #}
+											<td></td>
+											<td></td>
+										{% endif %}
 									{% else %}
 										{# <td><a href="#" class="btn btn-primary">Ajouter</a></td> #}
 										<td></td>

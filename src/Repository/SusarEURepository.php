@@ -184,45 +184,103 @@ class SusarEURepository extends ServiceEntityRepository
         }
 
 
+        // if ($search->getNiveau1()) {
+        //     $query = $query
+        //         ->orWhere('s.priorisation = :n1')
+        //         ->setParameter('n1', 'Niveau 1');
+        // } else {
+        //     $query = $query
+        //         ->andWhere('s.priorisation != :n1')
+        //         ->setParameter('n1', 'Niveau 1');
+        // }
+        
+        // if ($search->getNiveau2a()) {
+        //     $query = $query
+        //         ->orWhere('s.priorisation = :n2a')
+        //         ->setParameter('n2a', 'Niveau 2a');
+        // } else {
+        //     $query = $query
+        //         ->andWhere('s.priorisation != :n2a')
+        //         ->setParameter('n2a', 'Niveau 2a');
+        // }
+        
+        // if ($search->getNiveau2b()) {
+        //     $query = $query
+        //         ->orWhere('s.priorisation = :n2b')
+        //         ->setParameter('n2b', 'Niveau 2b');
+        // } else {
+        //     $query = $query
+        //         ->andWhere('s.priorisation != :n2b')
+        //         ->setParameter('n2b', 'Niveau 2b');
+        // }
+        
+        // if ($search->getNiveau2c()) {
+        //     $query = $query
+        //         ->orWhere('s.priorisation = :n2c')
+        //         ->setParameter('n2c', 'Niveau 2c');
+        // } else {
+        //     $query = $query
+        //         ->andWhere('s.priorisation != :n2c')
+        //         ->setParameter('n2c', 'Niveau 2c');
+        // }
+
+
+
+
+        // $query->andWhere(
+        //     $query->expr()->orX(
+        //         $query->expr()->eq('s.priorisation', ':n1'),
+        //         $query->expr()->eq('s.priorisation', ':n2a'),
+        //         $query->expr()->eq('s.priorisation', ':n2b'),
+        //         $query->expr()->eq('s.priorisation', ':n2c')
+        //     )
+        // )
+        // ->setParameter('n1', 'Niveau 1')
+        // ->setParameter('n2a', 'Niveau 2a')
+        // ->setParameter('n2b', 'Niveau 2b')
+        // ->setParameter('n2c', 'Niveau 2c');
+
+
+        $orExpressions = [];
+        $parameters = [];
+        
         if ($search->getNiveau1()) {
-            $query = $query
-                ->orWhere('s.priorisation = :n1')
-                ->setParameter('n1', 'Niveau 1');
-        } else {
-            $query = $query
-                ->andWhere('s.priorisation != :n1')
-                ->setParameter('n1', 'Niveau 1');
+            $orExpressions[] = $query->expr()->eq('s.priorisation', ':n1');
+            $parameters['n1'] = 'Niveau 1';
         }
         
         if ($search->getNiveau2a()) {
-            $query = $query
-                ->orWhere('s.priorisation = :n2a')
-                ->setParameter('n2a', 'Niveau 2a');
-        } else {
-            $query = $query
-                ->andWhere('s.priorisation != :n2a')
-                ->setParameter('n2a', 'Niveau 2a');
+            $orExpressions[] = $query->expr()->eq('s.priorisation', ':n2a');
+            $parameters['n2a'] = 'Niveau 2a';
         }
         
         if ($search->getNiveau2b()) {
-            $query = $query
-                ->orWhere('s.priorisation = :n2b')
-                ->setParameter('n2b', 'Niveau 2b');
-        } else {
-            $query = $query
-                ->andWhere('s.priorisation != :n2b')
-                ->setParameter('n2b', 'Niveau 2b');
+            $orExpressions[] = $query->expr()->eq('s.priorisation', ':n2b');
+            $parameters['n2b'] = 'Niveau 2b';
         }
         
         if ($search->getNiveau2c()) {
-            $query = $query
-                ->orWhere('s.priorisation = :n2c')
-                ->setParameter('n2c', 'Niveau 2c');
-        } else {
-            $query = $query
-                ->andWhere('s.priorisation != :n2c')
-                ->setParameter('n2c', 'Niveau 2c');
+            $orExpressions[] = $query->expr()->eq('s.priorisation', ':n2c');
+            $parameters['n2c'] = 'Niveau 2c';
         }
+        
+        if (!empty($orExpressions)) {
+            $query->andWhere($query->expr()->orX(...$orExpressions));
+            
+            foreach ($parameters as $key => $value) {
+                $query->setParameter($key, $value);
+            }
+        } else {
+            // Si aucune option n'est sélectionnée, exclure tous les niveaux
+            $query->andWhere(
+                $query->expr()->notIn('s.priorisation', [':n1', ':n2a', ':n2b', ':n2c'])
+            )
+            ->setParameter('n1', 'Niveau 1')
+            ->setParameter('n2a', 'Niveau 2a')
+            ->setParameter('n2b', 'Niveau 2b')
+            ->setParameter('n2c', 'Niveau 2c');
+        }
+        
 
         if ($search->getCasTraite()) {
 

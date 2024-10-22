@@ -1,12 +1,18 @@
 @import '_variables.scss';
 
-html, body {
-    background: $fond_susar_eu_detail
-  }
+// html, body {
+//     background: $fond_susar_eu_detail
+//   }
 
 // .container_susar_eu_dtl{
 //     background: $fond_susar_eu_detail
 // }
+.bg-susar-v1 {
+  background-color: $fond_susar_eu_detail_susar_v1;
+}
+.bg-susar-v2 {
+  background-color: $fond_susar_eu_detail;
+}
 
 .tab_susar_eu_dtl{
   border-collapse: collapse;

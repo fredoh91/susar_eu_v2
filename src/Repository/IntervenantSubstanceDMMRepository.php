@@ -69,6 +69,51 @@ class IntervenantSubstanceDMMRepository extends ServiceEntityRepository
             ;
         }
 
+
+        /**
+         * permet de retourner toutes les lignes de la table "intervenant_substance_dmm" qui ont pour high level substance name la valeur passée en paramètre
+         * Nottamment utilisée au moment de l'import du fichier activ substance grouping, pour rattacher les lignes de "intervenant_substance_dmm"
+         * dans le cadre de la reprise des données
+         *
+         * @param string $HL_SA : high level substance name
+         * @return IntervenantSubstanceDMM[] : retourne un array d'objet IntervenantSubstanceDMM
+         */
+        public function findByHL_SA_avec_inactifs(string $HL_SA): array
+        {
+            // dump($HL_SA);
+            $result = $this->createQueryBuilder('i')
+                ->andWhere('i.active_substance_high_level = :val')
+                ->setParameter('val', $HL_SA)
+                ->andWhere('i.inactif = :val_2')
+                ->setParameter('val_2', false)
+                ->orderBy('i.id', 'ASC')
+                ->getQuery()
+                ->getResult();
+
+                if (empty($result)) {
+                    // dump('vide');
+                    $result = $this->createQueryBuilder('i')
+                    ->andWhere('i.active_substance_high_level = :val')
+                    ->setParameter('val', $HL_SA)
+                    ->orderBy('i.id', 'DESC')
+                    ->setMaxResults(1)
+                    ->getQuery()
+                    ->getResult();
+
+                    // if (empty($result)) {
+                    //     // dump('vide');
+                    // } else {
+                    //     // dump($result);
+                    // }
+
+                    
+                } else {
+                    // dump($result);
+                }
+                return $result;
+
+        }
+
         /**
          * Undocumented function
          *

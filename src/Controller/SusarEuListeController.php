@@ -71,11 +71,11 @@ class SusarEuListeController extends AbstractController
         if ($form->isSubmitted()) {
             $formData = $request->request->all();
 
-            // LOG //
-            if (isset($formData)) {
-                dump($formData);
-            }
-            // LOG //
+            // // LOG //
+            // if (isset($formData)) {
+            //     dump($formData);
+            // }
+            // // LOG //
 
             if (isset($formData['search_susar_eu']['reset'])) {
                 dump(1);
@@ -84,9 +84,11 @@ class SusarEuListeController extends AbstractController
                 return $this->redirectToRoute('app_liste_susar_eu');
                 // $TousSusars = $entityManager->getRepository(SusarEU::class)->findAll();
             } elseif (isset($formData['search_susar_eu']['recherche'])) {
-                // L'utilisateur a cliqué sur le bouton 'recherche'
+                // L'utilisateur a cliqué sur le bouton 'recherche' 
+                // On reset le parametre ?page= dans l'url
                 if ($form->isValid()) {
                     dump(2);
+                    $page = null;
                     // Stocker les critères de recherche dans la session
                     $session->set('search_susar_eu', $searchSusarEU);
                     // Le formulaire est valide, on peut faire la recherche    
@@ -112,9 +114,12 @@ class SusarEuListeController extends AbstractController
             } else {
                 // On test si la variable de session 'search_susar_eu' n'est pas vide
                 if ($session->has('search_susar_eu')) {
+                    // l'utilisateur arrive sur cette page poru la premiere fois
                     dump(5);
                     // On récupère la variable de session 'search_susar_eu'
-                    $searchSusarEU = $session->get('search_susar_eu');
+                    // $searchSusarEU = $session->get('search_susar_eu');
+                    $session->remove('search_susar_eu');
+                    $TousSusars = $entityManager->getRepository(SusarEU::class)->findAll();
                     // peut etre qu'on pourrait également tester sur quelle page on se trouve ? : 
                     //          $page = $request->query->getInt('page', 1); 
                     //          puis  if ($page > 1 && $session->has('search_susar_eu')) {}

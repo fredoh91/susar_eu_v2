@@ -66,7 +66,7 @@ class IntervenantSubstanceDMM_detailType extends AbstractType
                 'choice_label' => function($choice, $key, $value) {
                     return explode('|', $value)[0]; // Afficher seulement la première colonne
                 },
-                // 'placeholder' => 'Select an option',
+                'placeholder' => '',
                 'mapped' => false, // Ne pas mapper ce champ directement à l'entité
                 'data' => $options['evaluateur_choice'] // Définir la valeur initiale
             ])

@@ -84,6 +84,51 @@ class IntervenantSubstanceController extends AbstractController
         ]);
     }
 
+    #[Route('/intervenant_substance/crea', name: 'app_intervenant_substance_crea')]
+    public function liste_intervenant_substance_crea(ManagerRegistry $doctrine, IntervenantsANSMRepository $intervenantsRepository, Request $request): Response
+    {
+        $entityManager = $doctrine->getManager();
+        // $IntSub = $entityManager->getRepository(IntervenantSubstanceDMM::class)->findIntSubById($id);
+        $IntSub = new IntervenantSubstanceDMM();
+        
+        $evaluateur = $IntSub->getEvaluateur();
+        // $intervenant = $intervenantsRepository->findOneBy(['evaluateur' => $evaluateur]);
+
+        $form = $this->createForm(IntervenantSubstanceDMM_detailType::class, $IntSub);
+
+        // $form = $this->createForm(IntervenantSubstanceDMM_detailType::class, $IntSub, [
+        //     'evaluateur_choice' => $evaluateur ? "$evaluateur|{$intervenant->getDmm()}|{$intervenant->getPoleCourt()}" : null,
+        //     'dmm' => $intervenant ? $intervenant->getDmm() : '',
+        //     'pole_court' => $intervenant ? $intervenant->getPoleCourt() : '',
+        // ]);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            
+            $formData = $request->request->all();
+
+            $newEvalua = explode("|", $formData["intervenant_substance_dmm_substances"]["evaluateur"])[0];
+
+            $newIntervenant = $intervenantsRepository->findOneBy(['evaluateur' => $newEvalua]);
+
+            $IntSub->setEvaluateur($newEvalua);
+            $IntSub->setDMM($newIntervenant->getDMM());
+            $IntSub->setPoleCourt($newIntervenant->getPoleCourt());
+            $IntSub->setPoleLong($newIntervenant->getPoleLong());
+
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_intervenant_substance');
+        
+        }
+
+        return $this->render('intervenant_substance/liste_intervenant_substance_crea.html.twig', [
+            'IntSub' => $IntSub,
+            'form' => $form->createView(),
+        ]);
+    }
+
     /**
      * Permet d'afficher la liste des high level substance name pour faire un copier-coller sur la plateforme EVDAS et ainsi récupérer le fichier "active substance grouping"
      *
