@@ -45,7 +45,11 @@ class IntervenantSubstanceDMM
     #[ORM\ManyToMany(targetEntity: SusarEU::class, inversedBy: 'intervenantSubstanceDMMs')]
     private Collection $susarEUs;
 
-    #[ORM\OneToMany(targetEntity: IntervenantSubstanceDMMSubstance::class, mappedBy: 'IntervenantSubstanceDMM')]
+    #[ORM\OneToMany(
+        targetEntity: IntervenantSubstanceDMMSubstance::class, 
+        mappedBy: 'IntervenantSubstanceDMM',
+        // cascade: ['persist']
+    )]
     private Collection $intervenantSubstanceDMMSubstances;
 
     #[ORM\Column(nullable: true)]

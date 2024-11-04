@@ -2,12 +2,13 @@
 
 namespace App\Controller;
 
+use DateTimeImmutable;
 use App\Entity\IntervenantSubstanceDMM;
 use App\Form\IntervenantSubstanceDMMType;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use App\Repository\IntervenantsANSMRepository;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Form\IntervenantSubstanceDMM_detailType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -33,11 +34,11 @@ class IntervenantSubstanceController extends AbstractController
     {
         $entityManager = $doctrine->getManager();
         $IntSub = $entityManager->getRepository(IntervenantSubstanceDMM::class)->findIntSubById($id);
-        $form = $this->createForm(IntervenantSubstanceDMMType::class, $IntSub);
+        // $form = $this->createForm(IntervenantSubstanceDMMType::class, $IntSub);
         
         return $this->render('intervenant_substance/liste_intervenant_substance_detail.html.twig', [
             'IntSub' => $IntSub,
-            'form' => $form->createView(),
+            // 'form' => $form->createView(),
         ]);
     }
 
@@ -61,6 +62,11 @@ class IntervenantSubstanceController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             
+            $dateNow = new DateTimeImmutable();
+
+            // On récupère les données des substances liées si elles existent depuis le formulaire
+            $substancesData = $formData['intervenant_substance_dmm_substances']['intervenantSubstanceDMMSubstances'] ?? [];
+
             $formData = $request->request->all();
 
             $newEvalua = explode("|", $formData["intervenant_substance_dmm_substances"]["evaluateur"])[0];
@@ -71,6 +77,26 @@ class IntervenantSubstanceController extends AbstractController
             $IntSub->setDMM($newIntervenant->getDMM());
             $IntSub->setPoleCourt($newIntervenant->getPoleCourt());
             $IntSub->setPoleLong($newIntervenant->getPoleLong());
+            $IntSub->setUpdatedAt($dateNow);
+
+            // On traite manuellement les entités IntervenantSubstanceDMMSubstance liées
+            foreach ($IntSub->getIntervenantSubstanceDMMSubstances() as $index => $substance) {
+                // Mettre à jour le champ updatedAt
+                $substance->setUpdatedAt($dateNow);
+            
+                // Mettre à jour ActiveSubstanceLowLevel et active_substance_high_level
+                if (isset($substancesData[$index])) {
+                    $substanceData = $substancesData[$index];
+                    $substance->setActiveSubstanceLowLevel($substanceData['ActiveSubstanceLowLevel'] ?? null);
+                    $substance->setActiveSubstanceHighLevel($substanceData['active_substance_high_level'] ?? null);
+                }
+            
+                if (!$entityManager->contains($substance)) {
+                    // L'entité est nouvelle, initialisons createdAt
+                    $substance->setCreatedAt($dateNow);
+                    $entityManager->persist($substance);
+                }
+            }
 
             $entityManager->flush();
 
@@ -84,7 +110,7 @@ class IntervenantSubstanceController extends AbstractController
         ]);
     }
 
-    #[Route('/intervenant_substance/crea', name: 'app_intervenant_substance_crea')]
+    #[Route('/intervenant_substance/creation', name: 'app_intervenant_substance_creation')]
     public function liste_intervenant_substance_crea(ManagerRegistry $doctrine, IntervenantsANSMRepository $intervenantsRepository, Request $request): Response
     {
         $entityManager = $doctrine->getManager();
@@ -96,34 +122,51 @@ class IntervenantSubstanceController extends AbstractController
 
         $form = $this->createForm(IntervenantSubstanceDMM_detailType::class, $IntSub);
 
-        // $form = $this->createForm(IntervenantSubstanceDMM_detailType::class, $IntSub, [
-        //     'evaluateur_choice' => $evaluateur ? "$evaluateur|{$intervenant->getDmm()}|{$intervenant->getPoleCourt()}" : null,
-        //     'dmm' => $intervenant ? $intervenant->getDmm() : '',
-        //     'pole_court' => $intervenant ? $intervenant->getPoleCourt() : '',
-        // ]);
 
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             
             $formData = $request->request->all();
-
+            $dateNow = new DateTimeImmutable();
             $newEvalua = explode("|", $formData["intervenant_substance_dmm_substances"]["evaluateur"])[0];
-
+            
             $newIntervenant = $intervenantsRepository->findOneBy(['evaluateur' => $newEvalua]);
-
+            
             $IntSub->setEvaluateur($newEvalua);
             $IntSub->setDMM($newIntervenant->getDMM());
             $IntSub->setPoleCourt($newIntervenant->getPoleCourt());
             $IntSub->setPoleLong($newIntervenant->getPoleLong());
+            $IntSub->setCreatedAt($dateNow);
+            $IntSub->setUpdatedAt($dateNow);
 
+            // dd($IntSub);
+
+            // On traite manuellement les entités IntervenantSubstanceDMMSubstance liées
+            foreach ($IntSub->getIntervenantSubstanceDMMSubstances() as $index => $substance) {
+                // Mettre à jour le champ updatedAt
+                $substance->setUpdatedAt($dateNow);
+            
+                // Mettre à jour ActiveSubstanceLowLevel et active_substance_high_level
+                if (isset($substancesData[$index])) {
+                    $substanceData = $substancesData[$index];
+                    $substance->setActiveSubstanceLowLevel($substanceData['ActiveSubstanceLowLevel'] ?? null);
+                    $substance->setActiveSubstanceHighLevel($substanceData['active_substance_high_level'] ?? null);
+                }
+            
+                if (!$entityManager->contains($substance)) {
+                    // L'entité est nouvelle, initialisons createdAt
+                    $substance->setCreatedAt($dateNow);
+                    $entityManager->persist($substance);
+                }
+            }            
+            $entityManager->persist($IntSub);
             $entityManager->flush();
 
             return $this->redirectToRoute('app_intervenant_substance');
         
         }
 
-        return $this->render('intervenant_substance/liste_intervenant_substance_crea.html.twig', [
+        return $this->render('intervenant_substance/liste_intervenant_substance_creation.html.twig', [
             'IntSub' => $IntSub,
             'form' => $form->createView(),
         ]);

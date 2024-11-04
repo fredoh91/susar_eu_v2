@@ -6,26 +6,55 @@
 
 {# {{ encore_entry_link_tags('intervenant_substance_css') }} #}
 
-<div class="container-fluid p-5">
-    {{ form_start(form) }}
+{{ encore_entry_link_tags('int_sub_detail') }}
 
-    {{ form_end(form) }}
-
-    <div class="container-fluid">
+{# <div class="{% if IntSub.inactif %}rouge-clair{% else %}vert-clair{% endif %}"> #}
+<body class="{% if IntSub.inactif %}rouge-clair{% else %}vert-clair{% endif %}">
+    <div class="container-md">
         {% if IntSub %}
-            {# {{ IntSub.id }}<BR>
-            {{ IntSub.DMM }}<BR>
-            {{ IntSub.PoleCourt }}<BR>
-            {{ IntSub.evaluateur }}<BR>
-            {{ IntSub.inactif }}<BR>
-            {{ IntSub.TypeSaMSMono }}<BR>
-            {{ IntSub.ActiveSubstanceHighLevel }}<BR>
-            {{ IntSub.AssociationDeSubstances }}<BR> #}
-            {% for LL_SA in IntSub.IntervenantSubstanceDMMSubstances %}
-                {{ LL_SA.id }} - {{ LL_SA.ActiveSubstanceLowLevel }}<BR>
-            {% endfor %}
+            <div class="row justify-content-center align-items-center">
+                <div class="col-12 text-center">
+                    <h1>{{ IntSub.ActiveSubstanceHighLevel }}</h1>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 text-left">
+
+                    Intervenant Substance DMM
+                    {% if IntSub.inactif %}
+                        <span class="fw-bold fs-4">Inactif</span><br>
+                    {% else %}
+                        <span class="fw-bold fs-4">Actif</span><br>
+                    {% endif %}
+                    Id : {{ IntSub.id }}<br>
+                    DMM : {{ IntSub.DMM }}<br>
+                    Pole court : {{ IntSub.PoleCourt }}<br>
+                    Évaluateur : {{ IntSub.evaluateur }}<br>
+                    SaMS/Mono : {{ IntSub.TypeSaMSMono }}<br>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    {% if IntSub.AssociationDeSubstances %}
+                        <h2>Association de substances :</h2>
+                        <ul>
+                            {% for LL_SA in IntSub.IntervenantSubstanceDMMSubstances %}
+                                <li>{{ LL_SA.ActiveSubstanceLowLevel }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        Pas d'association de substances
+                    {% endif %}
+                </div>
+            </div>
+        {% else %}
+            <div class="row">
+                <div class="col-12 text-center">
+                    Il n'y pas d'intervenant substance DMM
+                </div>
+            </div>
         {% endif %}
     </div>
-</div>
+</body>
 
 {% endblock %}

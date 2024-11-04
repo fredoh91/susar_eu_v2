@@ -8,7 +8,8 @@
 
 {{ encore_entry_link_tags('int_sub_detail') }}
 <div id="form-bg">
-    <div class="container-fluid p-5">
+    {# <div class="container-fluid p-5"> #}
+    <div class="container">
         {{ form_start(form) }}
 
             <div class="row mb-3 mt-3">
@@ -47,11 +48,12 @@
 
             <div class="row mb-3 mt-3">
                 <div class="col-1 text-end">
-                    {{ form_label(form.evaluateur, 'Évaluateur :') }}
+                    {{ form_label(form.evaluateur, 'Éval. :') }}
                 </div>
                 <div class="col-2">
                     {{ form_widget(form.evaluateur) }}
                 </div>
+                <div class="col-1"></div>
 
                 <div class="col-1 text-end">
                     {{ form_label(form.dmm, 'DMM :') }}
@@ -59,27 +61,24 @@
                 <div class="col-2">
                     {{ form_widget(form.dmm) }}
                 </div>
-
+                <div class="col-1"></div>
                 <div class="col-1 text-end">
                     {{ form_label(form.pole_court, 'Pôle :') }}
                 </div>
                 <div class="col-2">
                     {{ form_widget(form.pole_court) }}
                 </div>
-
-                <div class="col-1 text-end">
+            </div>
+            <div class="row">
+                <div class="col-2 text-end">
                     {{ form_label(form.type_saMS_Mono, 'Type (saMS/Mono) :') }}
                 </div>
                 <div class="col-2">
                     {{ form_widget(form.type_saMS_Mono) }}
                 </div>
-            </div>
 
-            <div class="row">
-                <div class="col-1">
 
-                </div>
-                <div class="col-9">
+                <div class="col-7">
 
                 </div>
                 <div class="col-1">

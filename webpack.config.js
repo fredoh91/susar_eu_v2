@@ -31,6 +31,7 @@ Encore
     .addStyleEntry('type_eu_detail_css', './assets/styles/type_eu_detail.scss')
     .addStyleEntry('eval_susar_css', './assets/styles/eval_susar.scss')
     .addStyleEntry('int_sub_detail', './assets/styles/int_sub_detail.scss')
+    
     // .addStyleEntry('intervenant_substance_css', './assets/styles/intervenant_substance.scss')
 
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
