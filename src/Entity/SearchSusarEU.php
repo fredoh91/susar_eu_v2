@@ -60,6 +60,7 @@ class SearchSusarEU
     private ?bool $niveau2b = true;
     private ?bool $niveau2c = true;
     private ?string $casTraite = null;
+    private ?string $casArchive = null;
     private ?string $assessment_outcome = null;
     private ?string $caseVersion = null;
     private ?string $casIME = null;
@@ -1001,10 +1002,30 @@ class SearchSusarEU
     public function setCasTraite(?string $casTraite)
     {
         $this->casTraite = $casTraite;
+        
+        return $this;
+    }
+    
+    /**
+     * Get the value of casArchive
+     */ 
+    public function getCasArchive()
+    {
+        return $this->casArchive;
+    }
+
+    /**
+     * Set the value of casArchive
+     *
+     * @return  self
+     */ 
+    public function setCasArchive($casArchive)
+    {
+        $this->casArchive = $casArchive;
 
         return $this;
     }
-
+    
     /**
      * Get the value of assessment_outcome
      */ 

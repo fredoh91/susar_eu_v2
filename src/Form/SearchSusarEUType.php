@@ -163,6 +163,17 @@ class SearchSusarEUType extends AbstractType
                 'required' => false,
                 'placeholder' => false, // Ceci empêche Symfony d'ajouter une option vide supplémentaire
             ])
+            ->add('casArchive', ChoiceType::class, [
+                'label' => 'Cas archivé',
+                'choices' => [
+                    'Uniquement les cas archivés' => 'archive',
+                    'Uniquement les cas non-archivés' => 'non_archive',
+                    'Tous les cas' => 'tous',
+                ],
+                'required' => false,
+                'placeholder' => false, // Ceci empêche Symfony d'ajouter une option vide supplémentaire,
+                'data' => 'non_archive', // Spécifie 'non_archive' comme valeur par défaut
+            ])
             ->add('assessment_outcome', ChoiceType::class, [
                 'choices' => [
                     'Screened without action' => 'Screened without action',

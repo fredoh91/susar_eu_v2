@@ -172,6 +172,14 @@
                     <div class="narratif">{{ Susar.narratif|e }}</div>
                 </div>
                 <div>
+                    Status date : <br> {{ Susar.statusdate|date('d/m/Y')}} <br>
+                    Sponsor study number : <br> {{ Susar.sponsorstudynumb|e }} <br>
+                    world wide id : <br> {{ Susar.WorldWideId|e }} <br>
+                </div>
+
+
+
+                {# <div>
                     {% if Susar.casSusarEuV1 %}
                         idCTLL : {{ Susar.idCTLL|e }} <br>
 
@@ -190,7 +198,7 @@
                     {% else %}
                         c'est un susar_V2 <br>
                     {% endif %}
-                </div>
+                </div> #}
             </div>
         </tr>
     {% endfor %}

@@ -67,6 +67,11 @@ class SusarEuListeController extends AbstractController
 
         $entityManager = $doctrine->getManager();
 
+        $triSearchSusarEU = [
+                    ['field' => 'statusdate', 'direction' => 'DESC'],
+                    ['field' => 'sponsorstudynumb', 'direction' => 'ASC'],
+                    ['field' => 'worldWide_id', 'direction' => 'ASC']
+        ];
         
         if ($form->isSubmitted()) {
             $formData = $request->request->all();
@@ -81,6 +86,7 @@ class SusarEuListeController extends AbstractController
                 dump(1);
                 // L'utilisateur a cliqué sur le bouton 'reset'
                 $session->remove('search_susar_eu');
+                $session->remove('tri_search_susar_eu');
                 return $this->redirectToRoute('app_liste_susar_eu');
                 // $TousSusars = $entityManager->getRepository(SusarEU::class)->findAll();
             } elseif (isset($formData['search_susar_eu']['recherche'])) {
@@ -91,8 +97,9 @@ class SusarEuListeController extends AbstractController
                     $page = null;
                     // Stocker les critères de recherche dans la session
                     $session->set('search_susar_eu', $searchSusarEU);
-                    // Le formulaire est valide, on peut faire la recherche    
-                    $TousSusars = $entityManager->getRepository(SusarEU::class)->findBySearchSusarEuListe($searchSusarEU);
+                    $session->set('tri_search_susar_eu', $triSearchSusarEU);
+                    // Le formulaire est valide, on peut faire la recherche
+                    $TousSusars = $entityManager->getRepository(SusarEU::class)->findBySearchSusarEuListe($searchSusarEU,$triSearchSusarEU);
                 } else {
                     // Formulaire soumis, mais invalide
                 }
@@ -110,25 +117,33 @@ class SusarEuListeController extends AbstractController
                 dump(4);
                 // L'utilisateur a cliqué sur un bouton du paginator
                 $searchSusarEU = $session->get('search_susar_eu');
-                $TousSusars = $entityManager->getRepository(SusarEU::class)->findBySearchSusarEuListe($searchSusarEU);
+                $triSearchSusarEU = $session->get('tri_search_susar_eu');
+
+                $TousSusars = $entityManager->getRepository(SusarEU::class)->findBySearchSusarEuListe($searchSusarEU,$triSearchSusarEU);
             } else {
                 // On test si la variable de session 'search_susar_eu' n'est pas vide
                 if ($session->has('search_susar_eu')) {
-                    // l'utilisateur arrive sur cette page poru la premiere fois
+                    // l'utilisateur arrive sur cette page pour la premiere fois
                     dump(5);
                     // On récupère la variable de session 'search_susar_eu'
                     // $searchSusarEU = $session->get('search_susar_eu');
                     $session->remove('search_susar_eu');
-                    $TousSusars = $entityManager->getRepository(SusarEU::class)->findAll();
+                    $session->remove('tri_search_susar_eu');
+                    // $TousSusars = $entityManager->getRepository(SusarEU::class)->findAll();
+                    // $TousSusars = $entityManager->getRepository(SusarEU::class)->findAllOrder('creationdate', 'DESC');
+                    $TousSusars = $entityManager->getRepository(SusarEU::class)->findAllOrder($triSearchSusarEU);
+
                     // peut etre qu'on pourrait également tester sur quelle page on se trouve ? : 
                     //          $page = $request->query->getInt('page', 1); 
                     //          puis  if ($page > 1 && $session->has('search_susar_eu')) {}
                     // dump($searchSusarEU);
-                    $TousSusars = $entityManager->getRepository(SusarEU::class)->findBySearchSusarEuListe($searchSusarEU);
+                    $TousSusars = $entityManager->getRepository(SusarEU::class)->findBySearchSusarEuListe($searchSusarEU,$triSearchSusarEU);
                 } else {
                     dump(6);
                     // Affichage de tous les susars par défaut (lors de la première visite)
-                    $TousSusars = $entityManager->getRepository(SusarEU::class)->findAll();
+                    // $TousSusars = $entityManager->getRepository(SusarEU::class)->findAll();
+                    // $TousSusars = $entityManager->getRepository(SusarEU::class)->findAllOrder('creationdate', 'DESC');
+                    $TousSusars = $entityManager->getRepository(SusarEU::class)->findAllOrder($triSearchSusarEU);
 
                 }
             }            
