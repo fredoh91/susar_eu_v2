@@ -59,6 +59,15 @@ class LienEvaluationBnpv
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $UtilisateurModif = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?int $PT_code = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $Reaction_List_PT = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $Reaction_List_PT_FR = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -240,6 +249,42 @@ class LienEvaluationBnpv
     public function setUtilisateurModif(?string $UtilisateurModif): static
     {
         $this->UtilisateurModif = $UtilisateurModif;
+
+        return $this;
+    }
+
+    public function getPTCode(): ?int
+    {
+        return $this->PT_code;
+    }
+
+    public function setPTCode(?int $PT_code): static
+    {
+        $this->PT_code = $PT_code;
+
+        return $this;
+    }
+
+    public function getReactionListPT(): ?string
+    {
+        return $this->Reaction_List_PT;
+    }
+
+    public function setReactionListPT(?string $Reaction_List_PT): static
+    {
+        $this->Reaction_List_PT = $Reaction_List_PT;
+
+        return $this;
+    }
+
+    public function getReactionListPTFR(): ?string
+    {
+        return $this->Reaction_List_PT_FR;
+    }
+
+    public function setReactionListPTFR(?string $Reaction_List_PT_FR): static
+    {
+        $this->Reaction_List_PT_FR = $Reaction_List_PT_FR;
 
         return $this;
     }

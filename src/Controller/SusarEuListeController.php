@@ -154,7 +154,8 @@ class SusarEuListeController extends AbstractController
         $Susars = $paginator->paginate(
             $TousSusars, // Requête contenant les données à paginer
             $request->query->getInt('page', 1), // Numéro de la page en cours, passé dans l'URL, 1 si aucune page
-            50 // Nombre de résultats par page
+            10 // Nombre de résultats par page
+            // 50 // Nombre de résultats par page
         );
 
         return $this->render('affiche_susar_eu/susar_eu_liste.html.twig', [
