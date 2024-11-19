@@ -94,6 +94,11 @@
 // flex de gauche
 
 .container_flex_left {
+
+
+  flex: 1; /* Prend un espace égal pour chaque div */
+  min-width: 300px; /* Largeur minimale pour chaque div */
+
   height: 100%;
   margin: 0;
   // margin: auto;
@@ -127,6 +132,10 @@
 }
 
 .container_flex_right {
+  
+  flex: 1; /* Prend un espace égal pour chaque div */
+  min-width: 300px; /* Largeur minimale pour chaque div */
+
   height: 100%;
   margin: 0;
   // margin: auto;
@@ -181,6 +190,12 @@
   //   ". . . ."
   //   "MesureAction_lib MesureAction DtMesureAction_lib DtMesureAction";
 }
+
+#container_eval {
+  width: 100%; /* Prend toute la largeur disponible */
+  margin-top: 20px; /* Optionnel : espace au-dessus de la div */
+}
+
 
 .suspectDrug_lib {
   grid-area: suspectDrug_lib;
@@ -338,6 +353,10 @@
   //justify-content: space-between;
   justify-content: space-around;
   //justify-content: space-evenly;
+
+  flex-wrap: wrap;
+
+
 }
 
 .cell_tab {

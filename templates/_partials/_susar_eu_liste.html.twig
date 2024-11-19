@@ -160,9 +160,11 @@
                     {% if app.request.attributes.get('_route') == 'app_liste_susar_eu' %}
                         <div class="btn-FU"><a href="{{ path('app_autres_FU',{'specificcaseid':Susar.specificcaseid}) }}" class="btn-access" target="_blank">Autres F.U.</a></div>
                     {% else %}
+                        <div></div>
                     {% endif %}
                     {# <div class="btn-AWA"><a href="{{ path('app_awa_lst_SA_PT',{'idsusar':Susar.id}) }}" class="btn-access" target="_blank">Assessed without action</a></div> #}
                     {% if Susar.casSusarEuV1 == true %}
+                        <div></div>
                         {# pas de bouton Assessed without action #}
                     {% else %}
                         <div class="btn-AWA"><a href="{{ path('app_awa_lst_SA_PT',{'idsusar':Susar.id}) }}" class="btn-access">Assessed without action</a></div>
@@ -171,11 +173,11 @@
                     <div class="narratif_lib fw-bold">Narratif :</div>
                     <div class="narratif">{{ Susar.narratif|e }}</div>
                 </div>
-                <div>
+                {# <div>
                     Status date : <br> {{ Susar.statusdate|date('d/m/Y')}} <br>
                     Sponsor study number : <br> {{ Susar.sponsorstudynumb|e }} <br>
                     world wide id : <br> {{ Susar.WorldWideId|e }} <br>
-                </div>
+                </div> #}
 
 
 
@@ -199,7 +201,13 @@
                         c'est un susar_V2 <br>
                     {% endif %}
                 </div> #}
+                
+                <div id="container_eval">
+			        {# {% include "_partials/_eval_tab_2.html.twig" %} #}
+                </div>
+
             </div>
+
         </tr>
     {% endfor %}
     </tbody>

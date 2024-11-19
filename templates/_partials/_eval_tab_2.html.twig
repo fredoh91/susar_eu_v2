@@ -1,0 +1,81 @@
+<div class="tab_eval">
+    <div class="eval_lib fw-bold">
+        Évaluation(s) :
+    </div>
+
+    <div>
+        {% if Susar.casSusarEuV1 == false %}
+            <a href="{{ path('app_eval_susar',{'idsusar':Susar.id}) }}" class="btn btn-primary me-2">Ajout d'une évaluation</a>					
+            <a href="{{ path('app_supp_tout_eval',{'idsusar':Susar.id}) }}" class="btn btn-danger">Supprimer toutes les évaluations</a>
+            {# bg-susar-v2 #}
+        {% else %}
+            {# bg-susar-v1 #}
+        {% endif %}
+    </div>
+
+
+    <div class="eval">
+        {# {% if Susar.substancePtEvals %} #}
+        {% if not Susar.substancePtEvals is empty %}
+            <table class="table table-bordered table-striped tab_susar_eu_dtl">
+                <thead>
+                    <tr>
+                        <th>Substance name</th>
+                        <th>PT</th>
+                        <th>Assessment outcome</th>
+                        <th>Comments</th>
+                        <th>Date éval.</th>
+                        <th>Utilisateur créa.</th>
+                        <th>Utilisateur modif.</th>
+                        <th>Modif.</th>
+                        <th>Supp.</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    {% for substancePtEval in Susar.substancePtEvals %}
+                        
+                        {% set ActiveSubstanceHighLevel = '' %}
+                        {% set Reactionmeddrapt = '' %}
+                        {% set idSubstancePt = '' %}
+
+                        <tr>
+                            
+                            {% for substancePt in substancePtEval.SubstancePts %}
+                                {# {% set substancePt = substancePtEval.SubstancePts %} #}
+                                {% set ActiveSubstanceHighLevel = ActiveSubstanceHighLevel ~ substancePt.ActiveSubstanceHighLevel ~ ' ' %}
+                                {% set Reactionmeddrapt = Reactionmeddrapt ~ substancePt.Reactionmeddrapt ~ ' ' %}
+                                {% set idSubstancePt = substancePt.id %}
+                                
+                            
+                            {% endfor %}
+
+                            <td>{{ ActiveSubstanceHighLevel }}</td>
+                            <td>{{ Reactionmeddrapt }}</td>
+
+                            <td>{{ substancePtEval.AssessmentOutcome }}</td> 
+
+                            <td>{{ substancePtEval.Comments }}</td>
+                            <td>{{ substancePtEval.DateEval|format_datetime(dateFormat='full', timeFormat='none', locale='fr') }}</td>
+                            <td>{{ substancePtEval.UserCreate }} ({{ substancePtEval.CreatedAt|date('d/m/Y H:i:s') }})</td>
+                            <td>{{ substancePtEval.UserModif }} ({{ substancePtEval.UpdatedAt|date('d/m/Y H:i:s') }})</td>
+
+                            {% if Susar.casSusarEuV1 == false %}
+                                <td><a href="{{ path('app_modif_eval', {'idsusar': Susar.id, 'idSubstancePt': idSubstancePt, 'idSubstancePtEval': substancePtEval.id}) }}" class="btn btn-primary">Modifier</a></td>
+                                <td><a href="{{ path('app_supp_eval', {'idsusar': Susar.id, 'idSubstancePt': idSubstancePt, 'idSubstancePtEval': substancePtEval.id}) }}" class="btn btn-danger">Supprimer</a></td>
+                            {% else %}
+                                <td></td>
+                                <td></td>
+                            {% endif %}
+
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <div class="alert alert-info" role="alert" style="font-weight: 900;">
+                Il n'y a pas encore d'évaluation pour ce susar.
+            </div>
+        {% endif %}                
+    </div>
+</div>

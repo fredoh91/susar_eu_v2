@@ -59,6 +59,7 @@ class SusarEuListeController extends AbstractController
     public function liste_susar_eu(ManagerRegistry $doctrine, Request $request, PaginatorInterface $paginator): Response
     {
 
+        $nbResuPage = 50;
         $searchSusarEU = new SearchSusarEU;
         $session = $request->getSession();
         $form = $this->createForm(SearchSusarEUType::class, $searchSusarEU);
@@ -94,11 +95,16 @@ class SusarEuListeController extends AbstractController
                 // On reset le parametre ?page= dans l'url
                 if ($form->isValid()) {
                     dump(2);
-                    $page = null;
+                    // $page = null;
+                    $page = 1;
                     // Stocker les critères de recherche dans la session
                     $session->set('search_susar_eu', $searchSusarEU);
                     $session->set('tri_search_susar_eu', $triSearchSusarEU);
                     // Le formulaire est valide, on peut faire la recherche
+                    // dump('$page : ' . $page);
+                    // dump('$nbResuPage : ' . $nbResuPage);
+                    // dump('$searchSusarEU : ' . $searchSusarEU);
+                    // $TousSusars = $entityManager->getRepository(SusarEU::class)->findBySearchSusarEuListe($searchSusarEU,$triSearchSusarEU, $page, $nbResuPage);
                     $TousSusars = $entityManager->getRepository(SusarEU::class)->findBySearchSusarEuListe($searchSusarEU,$triSearchSusarEU);
                 } else {
                     // Formulaire soumis, mais invalide
@@ -112,6 +118,7 @@ class SusarEuListeController extends AbstractController
         } else {
             // Vérifiez si la requête contient des paramètres de pagination
             $page = $request->query->getInt('page', 1);
+
             if ($page > 1 && $session->has('search_susar_eu')) {
                 
                 dump(4);
@@ -119,6 +126,7 @@ class SusarEuListeController extends AbstractController
                 $searchSusarEU = $session->get('search_susar_eu');
                 $triSearchSusarEU = $session->get('tri_search_susar_eu');
 
+                // $TousSusars = $entityManager->getRepository(SusarEU::class)->findBySearchSusarEuListe($searchSusarEU,$triSearchSusarEU, $page, $nbResuPage);
                 $TousSusars = $entityManager->getRepository(SusarEU::class)->findBySearchSusarEuListe($searchSusarEU,$triSearchSusarEU);
             } else {
                 // On test si la variable de session 'search_susar_eu' n'est pas vide
@@ -137,7 +145,8 @@ class SusarEuListeController extends AbstractController
                     //          $page = $request->query->getInt('page', 1); 
                     //          puis  if ($page > 1 && $session->has('search_susar_eu')) {}
                     // dump($searchSusarEU);
-                    $TousSusars = $entityManager->getRepository(SusarEU::class)->findBySearchSusarEuListe($searchSusarEU,$triSearchSusarEU);
+                    // $TousSusars = $entityManager->getRepository(SusarEU::class)->findBySearchSusarEuListe($searchSusarEU,$triSearchSusarEU, $page, $nbResuPage);
+                    // $TousSusars = $entityManager->getRepository(SusarEU::class)->findBySearchSusarEuListe($searchSusarEU,$triSearchSusarEU);
                 } else {
                     dump(6);
                     // Affichage de tous les susars par défaut (lors de la première visite)
@@ -154,8 +163,7 @@ class SusarEuListeController extends AbstractController
         $Susars = $paginator->paginate(
             $TousSusars, // Requête contenant les données à paginer
             $request->query->getInt('page', 1), // Numéro de la page en cours, passé dans l'URL, 1 si aucune page
-            10 // Nombre de résultats par page
-            // 50 // Nombre de résultats par page
+            $nbResuPage // Nombre de résultats par page
         );
 
         return $this->render('affiche_susar_eu/susar_eu_liste.html.twig', [

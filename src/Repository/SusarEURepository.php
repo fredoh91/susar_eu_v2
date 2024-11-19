@@ -103,12 +103,18 @@ class SusarEURepository extends ServiceEntityRepository
      * @param SearchListeEvalSusar $search
      * @return Susar|null
      */
+    // public function findBySearchSusarEuListe(SearchSusarEU $search,
+    // array $orderCriteria = [['field' => 'statusdate', 'direction' => 'ASC']],
+    // int $page = 1, 
+    // int $nbResuPage = 50
+    // ): ?array
     public function findBySearchSusarEuListe(SearchSusarEU $search,
                                             array $orderCriteria = [['field' => 'statusdate', 'direction' => 'ASC']]
                                             ): ?array
     {
 
-        $query = $this->createQueryBuilder('s');
+        $query = $this->createQueryBuilder('s')
+                    ->distinct();
 
         // $query->join('s.intervenantSubstanceDMMs', 'isd');
         $query->leftJoin('s.intervenantSubstanceDMMs', 'isd');        // Je mets un left join pour les cas où il n'y a pas d'intervenantSubstanceDMMs et ainsi pouvoir retrouver les susars de ce type
@@ -341,7 +347,9 @@ class SusarEURepository extends ServiceEntityRepository
         }
 
         // $query->orderBy('s.statusdate', 'DESC');
-        
+        // Ajoutez la pagination
+        // $query->setFirstResult(($page - 1) * $nbResuPage)
+        //     ->setMaxResults($nbResuPage);        
         // dump($query->getQuery()->getSQL());
 
         return $query
@@ -355,19 +363,26 @@ class SusarEURepository extends ServiceEntityRepository
      * @param array $orderCriteria
      * @return array
      */
+//     public function findAllOrder(array $orderCriteria = [['field' => 'statusdate', 'direction' => 'ASC']],
+//     int $page = 1,
+//     int $nbResuPage = 10
+// ): array
     public function findAllOrder(array $orderCriteria = [['field' => 'statusdate', 'direction' => 'ASC']]): array
     {
         $queryBuilder = $this->createQueryBuilder('s')
+                            ->distinct()
                             ->andWhere('s.casSusarEuV1 IS NULL');
         foreach ($orderCriteria as $criteria) {
             $field = $criteria['field'];
             $direction = $criteria['direction'] ?? 'ASC'; // Default to 'ASC' if not specified
             $queryBuilder->addOrderBy('s.' . $field, $direction);
         }
-
-        return $queryBuilder
-            ->getQuery()
-            ->getResult();
+        // Ajout de la pagination
+        // $queryBuilder->setFirstResult(($page - 1) * $nbResuPage)
+        //     ->setMaxResults($nbResuPage);
+            return $queryBuilder
+                ->getQuery()
+                ->getResult();
     }
 
 /**

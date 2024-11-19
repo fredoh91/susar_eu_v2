@@ -53,52 +53,48 @@
 				<div class="col-1">
 				</div>
 				<div class="col-2">
-
-<div class="chbx_niv_grille">
-    <table class="chbx_niv_tableau">
-        <thead>
-            <tr>
-                <th colspan="2" class="chbx_niv_header">Niveau de classification</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td class="chbx_niv_cell">
-                    <div class="chbx_niv_contenu">
-                        {{ form_row(form.niveau1, {'label': 'Niveau 1', 'row_attr': {'class': 'chbx_niv_form_row'}}) }}
-                    </div>
-                </td>
-                <td class="chbx_niv_cell">
-                    <div class="chbx_niv_contenu">
-                        {{ form_row(form.niveau2a, {'label': 'Niveau 2a', 'row_attr': {'class': 'chbx_niv_form_row'}}) }}
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td class="chbx_niv_cell">
-                    <div class="chbx_niv_contenu">
-                        {{ form_row(form.niveau2b, {'label': 'Niveau 2b', 'row_attr': {'class': 'chbx_niv_form_row'}}) }}
-                    </div>
-                </td>
-                <td class="chbx_niv_cell">
-                    <div class="chbx_niv_contenu">
-                        {{ form_row(form.niveau2c, {'label': 'Niveau 2c', 'row_attr': {'class': 'chbx_niv_form_row'}}) }}
-                    </div>
-                </td>
-            </tr>
-        </tbody>			
-    </table>
-</div>
+					<div class="chbx_niv_grille">
+						<table class="chbx_niv_tableau">
+							<thead>
+								<tr>
+									<th colspan="2" class="chbx_niv_header">Niveau de classification</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td class="chbx_niv_cell">
+										<div class="chbx_niv_contenu">
+											{{ form_row(form.niveau1, {'label': 'Niveau 1', 'row_attr': {'class': 'chbx_niv_form_row'}}) }}
+										</div>
+									</td>
+									<td class="chbx_niv_cell">
+										<div class="chbx_niv_contenu">
+											{{ form_row(form.niveau2a, {'label': 'Niveau 2a', 'row_attr': {'class': 'chbx_niv_form_row'}}) }}
+										</div>
+									</td>
+								</tr>
+								<tr>
+									<td class="chbx_niv_cell">
+										<div class="chbx_niv_contenu">
+											{{ form_row(form.niveau2b, {'label': 'Niveau 2b', 'row_attr': {'class': 'chbx_niv_form_row'}}) }}
+										</div>
+									</td>
+									<td class="chbx_niv_cell">
+										<div class="chbx_niv_contenu">
+											{{ form_row(form.niveau2c, {'label': 'Niveau 2c', 'row_attr': {'class': 'chbx_niv_form_row'}}) }}
+										</div>
+									</td>
+								</tr>
+							</tbody>			
+						</table>
+					</div>
 				</div>
+
 				<div class="col-2">
-
-
 				</div>
 				<div class="col-2">
 				</div>
 			</div>
-
-
 
 			<div class="row">
 				<div class="col-2">
@@ -161,25 +157,19 @@
 				<div class="col-1">
 					{{ form_label(form.casIME, 'Cas IME : ') }}
 					{{ form_widget(form.casIME) }}
-
 				</div>
 				<div class="col-1">
 					{{ form_label(form.casDME, 'Cas DME : ') }}
 					{{ form_widget(form.casDME) }}
-
 				</div>
 				<div class="col-1">
 					{{ form_label(form.casEurope, 'Cas Europe : ') }}
 					{{ form_widget(form.casEurope) }}
-
 				</div>
 				<div class="col-1">
-
 				</div>
 				<div class="col-6">
-
 				</div>
-
 				<div class="col-1">
 					{{ form_label(form.recherche, 'Recherche') }}
 					{{ form_widget(form.recherche) }}
@@ -188,7 +178,6 @@
 					{{ form_label(form.reset, 'Reset') }}
 					{{ form_widget(form.reset) }}
 				</div>
-
 			</div>
 
 			{{form_end(form)}}

@@ -61,35 +61,38 @@
 				</table>
 			</div>
 
+			<button id="toggleBtnMedConcom" class="btn btn-primary">Afficher les médicaments concomitants</button>
 
-			<div class="suspectDrug_lib fw-bold">Médicament(s) concomitant(s) :</div>
-			<div class="suspectDrug">
-				<table class="table table-bordered table-striped tab_susar_eu_dtl">
-				{# <table class="table table-bordered table-striped"> #}
-					<thead>
-						<tr>
-							<th>Sub. act. High-level</th>
-							<th>Product name</th>
-							<th>Substance name</th>
-							<th>Characterization</th>
-						</tr>
-					</thead>
-					<tbody>
-						{% for med in Susar.Medicament %}
+			<div id="med_concomitant" class="d-none">
+				<div class="suspectDrug_lib fw-bold">Médicament(s) concomitant(s) :</div>
+				<div class="suspectDrug">
+					<table class="table table-bordered table-striped tab_susar_eu_dtl">
+					{# <table class="table table-bordered table-striped"> #}
+						<thead>
+							<tr>
+								<th>Sub. act. High-level</th>
+								<th>Product name</th>
+								<th>Substance name</th>
+								<th>Characterization</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for med in Susar.Medicament %}
 
-							{% if med.productcharacterization == 'Concomitant' or med.productcharacterization == 'Drug Not Administered' %}
-								<tr>
-									<td>{{med.ActiveSubstanceHighLevel}}</td>
-									<td>{{med.Productname}}</td>
-									<td>{{med.Substancename}}</td>
-									<td>{{med.productcharacterization}}</td>
-								</tr>
+								{% if med.productcharacterization == 'Concomitant' or med.productcharacterization == 'Drug Not Administered' %}
+									<tr>
+										<td>{{med.ActiveSubstanceHighLevel}}</td>
+										<td>{{med.Productname}}</td>
+										<td>{{med.Substancename}}</td>
+										<td>{{med.productcharacterization}}</td>
+									</tr>
 
-							{% endif %}
+								{% endif %}
 
-						{% endfor %}
-					</tbody>
-				</table>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
 			</div>
 
 			<div class="PT_outcome_lib fw-bold">Reaction PT :</div>
@@ -220,95 +223,10 @@
 					<div class="chp_susar_eu_dtl chp_narr_dtl">{{ Susar.narratif }}</div>
 				</div>
 			</div>
-
-
-			<div class="tab_eval">
-				<div class="eval_lib fw-bold">Évaluation(s) :
-				{# </div>
-				<div class="d-flex justify-content-end mb-3"> #}
-					{# <a href="#" class="btn btn-primary me-2">Ajout d'une évaluation</a> #}
-					{% if Susar.casSusarEuV1 == false %}
-						<a href="{{ path('app_eval_susar',{'idsusar':Susar.id}) }}" class="btn btn-primary me-2">Ajout d'une évaluation</a>					
-						<a href="{{ path('app_supp_tout_eval',{'idsusar':Susar.id}) }}" class="btn btn-danger">Supprimer toutes les évaluations</a>
-						{# bg-susar-v2 #}
-					{% else %}
-						{# bg-susar-v1 #}
-					{% endif %}
-
-
-				</div>
-
-				<div class="eval">
-					<table class="table table-bordered table-striped tab_susar_eu_dtl">
-					{# <table class="table table-bordered table-striped"> #}
-						<thead>
-							<tr>
-								<th>Substance name</th>
-								<th>PT</th>
-								<th>Assessment outcome</th>
-								<th>Comments</th>
-								<th>Date éval.</th>
-								<th>Utilisateur créa.</th>
-								<th>Utilisateur modif.</th>
-								<th>Modif.</th>
-								<th>Supp.</th>
-							</tr>
-						</thead>
-						<tbody>
-							{% for substancePt in Susar.substancePts %}
-								<tr>
-									<td>{{substancePt.ActiveSubstanceHighLevel}}</td>
-									<td>{{substancePt.Reactionmeddrapt}}</td>
-
-									{% set idSubstancePtEval = '' %}
-									{% set AssessmentOutcome = '' %}
-									{% set Comments = '' %}
-									{% set DateEval = '' %}
-									{% for SubstancePtEval in substancePt.SubstancePtEvals %}
-										{% set idSubstancePtEval = SubstancePtEval.id %}
-										{% set AssessmentOutcome = AssessmentOutcome ~ SubstancePtEval.AssessmentOutcome ~ ' ' %}
-										{% set Comments = Comments ~ SubstancePtEval.Comments ~ ' ' %}
-										{% set DateEval = DateEval ~ SubstancePtEval.DateEval|format_datetime(dateFormat='full', timeFormat='none', locale='fr') ~ ' ' %}
-
-									{% endfor %}
-
-									{% if AssessmentOutcome is not empty %}
-										<td>{{ AssessmentOutcome }}</td>
-									{% else %}
-										<td>Pas d'évaluation</td>
-									{% endif %}								
-									<td>{{ Comments }}</td>
-									<td>{{ DateEval }}</td>
-									<td></td>
-									<td></td>
-
-
-									{% if idSubstancePtEval != '' %}
-
-										{% if Susar.casSusarEuV1 == false %}
-											{# bg-susar-v2 #}
-											<td><a href="{{ path('app_modif_eval',{'idsusar': Susar.id, 'idSubstancePt': substancePt.id, 'idSubstancePtEval': idSubstancePtEval}) }}" class="btn btn-primary">Modifier</a></td>
-											<td><a href="{{ path('app_supp_eval',{'idsusar': Susar.id, 'idSubstancePt': substancePt.id, 'idSubstancePtEval': idSubstancePtEval}) }}" class="btn btn-danger">Supprimer</a></td>
-										{% else %}
-											{# bg-susar-v1 #}
-											<td></td>
-											<td></td>
-										{% endif %}
-									{% else %}
-										{# <td><a href="#" class="btn btn-primary">Ajouter</a></td> #}
-										<td></td>
-										<td></td>
-									{% endif %}	
-									{# <td><a href="{{ path('app_supp_eval',{'idsusar':Susar.id},{'idSubstancePt':substancePt.id},{'idSubstancePtEval':idSubstancePtEval}) }}" class="btn btn-danger">Supprimer</a></td> #}
-
-								</tr>						
-							{% endfor %}
-						</tbody>
-					</table>
-				</div>
-			</div>
-
-
+			
+			{# {% include "templates/_partials/_eval_tab_1.html.twig" %} #}
+			{% include "_partials/_eval_tab_1.html.twig" %}
+			{% include "_partials/_eval_tab_2.html.twig" %}
 
 			<div class="DMM_Pole_lib fw-bold">DMM/Pôle/évaluateur :</div>
 			<div class="DMM_Pole">
@@ -374,4 +292,10 @@
 
 
 
+{% endblock %}
+
+
+{% block javascripts %}
+	{{ parent() }}
+	{{ encore_entry_script_tags('SusarEuDetail') }}
 {% endblock %}
