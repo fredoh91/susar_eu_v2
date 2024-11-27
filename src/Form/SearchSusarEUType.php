@@ -260,6 +260,13 @@ class SearchSusarEUType extends AbstractType
                     'label' => 'Reset',
                     'row_attr' => ['id' => 'reset'],
                 ])
+            ->add(
+                'exportExcel',
+                SubmitType::class,[
+                    'attr' => ['class' => 'btn btn-primary m-2'],
+                    'label' => 'Export Excel',
+                    'row_attr' => ['id' => 'exportExcel'],
+                ])
         ;
     }
 

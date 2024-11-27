@@ -14,6 +14,9 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
 class IntervenantSubstanceDMM_detailType extends AbstractType
@@ -88,6 +91,7 @@ class IntervenantSubstanceDMM_detailType extends AbstractType
             'evaluateur_choice' => null,
             'dmm' => null,
             'pole_court' => null,
+            'idIntSub' => null,
         ]);
     }
     public function getBlockPrefix()

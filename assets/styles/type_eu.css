@@ -1,9 +1,78 @@
-.container-tab > div:nth-child(even) {
-  background: #D9C7FD;
+@charset "UTF-8";
+.page_liste_susar {
+  background-color: #FCE6D4;
 }
 
-.container-tab > div:nth-child(odd) {
+/******************************************/
+/* Tableau des cases à cocher des niveaux */
+/******************************************/
+.chbx_niv_tableau {
+  border-collapse: collapse;
+  border: 2px solid #CCC; /* Liseré autour du tableau */
+}
+
+.chbx_niv_header {
+  font-weight: bold;
+  text-align: center;
+  padding: 5px;
+  border-bottom: 2px solid #CCC; /* Séparation entre l'en-tête et le corps du tableau */
+}
+
+.chbx_niv_cell {
+  padding: 0;
+  border: 1px solid #CCC; /* Lignes internes du tableau */
+  vertical-align: middle; /* Centre verticalement le contenu de la cellule */
+  height: 40px; /* Hauteur fixe pour toutes les cellules, ajustez selon vos besoins */
+}
+
+.chbx_niv_cell label {
+  display: inline-block;
+  margin: 0 0 0 5px;
+  vertical-align: middle; /* Aligne verticalement le label avec la case à cocher */
+}
+
+/* Style pour aligner la case à cocher avec le label */
+.chbx_niv_cell input[type=checkbox] {
+  vertical-align: middle;
+  margin: 0;
+}
+
+/* Wrapper pour le contenu de la cellule */
+.chbx_niv_contenu {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  padding: 5px;
+}
+
+/* Ajoutez ces styles pour réinitialiser les marges et paddings des éléments du formulaire */
+.chbx_niv_contenu .form-group {
+  margin: 0;
+  padding: 0;
+}
+
+.chbx_niv_form_row {
+  margin: 0;
+  padding: 0;
+}
+
+.chbx_niv_form_row .form-check {
+  margin: 0;
+  padding: 0;
+}
+
+/******************** Fin du tableau des cases à cocher de niveau **********************/
+.container-tab > div:nth-child(even).susar-v2 {
+  background: #D9C7FD;
+}
+.container-tab > div:nth-child(even).susar-v1 {
+  background: #FFB6C1;
+}
+.container-tab > div:nth-child(odd).susar-v2 {
   background: #EEE6FE;
+}
+.container-tab > div:nth-child(odd).susar-v1 {
+  background: #F79F9F;
 }
 
 .container_flex_left > div,
@@ -15,9 +84,11 @@
 }
 
 .container_flex_left {
+  flex: 1; /* Prend un espace égal pour chaque div */
+  min-width: 300px; /* Largeur minimale pour chaque div */
   height: 100%;
   margin: 0;
-  width: 60%;
+  width: 40%;
   padding: 2px;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
@@ -27,13 +98,15 @@
   grid-auto-flow: row;
   justify-items: stretch;
   align-items: stretch;
-  grid-template-areas: "suspectDrug_lib . PT_outcome_lib . ." "suspectDrug suspectDrug PT_outcome PT_outcome PT_outcome" "seriousness_lib . indication_lib . ." "seriousness seriousness indication indication indication" ". . medicalHistory_lib . ." ". . medicalHistory medicalHistory medicalHistory" "population_lib population medicalHistory medicalHistory medicalHistory" "age_lib age medicalHistory medicalHistory medicalHistory" "sex_lib sex medicalHistory medicalHistory medicalHistory";
+  grid-template-areas: "suspectDrug_lib . PT_outcome_lib . . ." "suspectDrug suspectDrug PT_outcome PT_outcome PT_outcome ." "seriousness_lib . indication_lib . . ." "seriousness seriousness indication indication indication ." ". . medicalHistory_lib . . ." ". . medicalHistory medicalHistory medicalHistory ." "population_lib population medicalHistory medicalHistory medicalHistory ." "age_lib age medicalHistory medicalHistory medicalHistory ." "sex_lib sex medicalHistory medicalHistory medicalHistory .";
 }
 
 .container_flex_right {
+  flex: 1; /* Prend un espace égal pour chaque div */
+  min-width: 300px; /* Largeur minimale pour chaque div */
   height: 100%;
   margin: 0;
-  width: 40%;
+  width: 60%;
   padding: 2px;
   display: grid;
   grid-template-columns: 0.5fr 1fr 0.7fr 1fr;
@@ -43,7 +116,12 @@
   grid-auto-flow: row;
   justify-items: stretch;
   align-items: stretch;
-  grid-template-areas: "numBNPV_lib numBNPV FU_BNPV_lib FU_BNPV" "StudyTittle_lib StudyTittle StudyTittle StudyTittle" "WW_id_lib WW_id WW_id WW_id" "NumEUDRA_CT_lib NumEUDRA_CT SponsStudyNum_lib SponsStudyNum" "DMM_Pole_lib DMM_Pole DtAiguil_lib DtAiguil" "MesureAction_lib MesureAction DtMesureAction_lib DtMesureAction";
+  grid-template-areas: "numBNPV_lib numBNPV FU_BNPV_lib FU_BNPV idSusar" "StudyTittle_lib StudyTittle StudyTittle StudyTittle ." "WW_id_lib WW_id WW_id WW_id ." "NumEUDRA_CT_lib NumEUDRA_CT SponsStudyNum_lib SponsStudyNum ." "DMM_Pole_lib DMM_Pole DtAiguil_lib DtAiguil ." "Prio_lib Prio . . ." "ConcluCas_lib ConcluCas CommentConclu_lib CommentConclu ." "DtEval_lib DtEval . . ." ". btn-FU btn-AWA . ." "narratif_lib narratif narratif narratif narratif" ". narratif narratif narratif narratif";
+}
+
+#container_eval {
+  width: 100%; /* Prend toute la largeur disponible */
+  margin-top: 20px; /* Optionnel : espace au-dessus de la div */
 }
 
 .suspectDrug_lib {
@@ -109,6 +187,22 @@
   border-left: 1px solid;
 }
 
+.narratif_lib {
+  grid-area: narratif_lib;
+  text-align: right;
+  padding-right: 5%;
+  display: flex;
+  justify-content: end;
+  align-items: center;
+}
+
+.narratif {
+  grid-area: narratif;
+  border: 1px solid;
+  height: 6em; /* Fixer la hauteur à 5 fois la hauteur d'une ligne de texte */
+  overflow-y: auto; /* Afficher un ascenseur vertical si le contenu dépasse la hauteur */
+}
+
 .population_lib {
   grid-area: population_lib;
   text-align: right;
@@ -166,9 +260,10 @@
 .ligne_susar {
   display: flex;
   padding: 2px;
-  border: 5px solid #eac8c0;
+  border: 5px solid #604C78;
   border-radius: 10px;
   justify-content: space-around;
+  flex-wrap: wrap;
 }
 
 .cell_tab {
@@ -188,6 +283,13 @@
   display: flex;
   justify-content: end;
   align-items: center;
+}
+
+.idSusar {
+  grid-area: idSusar;
+  text-align: right;
+  color: gray;
+  font-size: 0.8em;
 }
 
 .FU_BNPV {
@@ -218,6 +320,20 @@
   border: 1px solid;
 }
 
+.Prio_lib {
+  grid-area: Prio_lib;
+  text-align: right;
+  padding-right: 5%;
+  display: flex;
+  justify-content: end;
+  align-items: center;
+}
+
+.Prio {
+  grid-area: Prio;
+  border: 1px solid;
+}
+
 .DtAiguil_lib {
   grid-area: DtAiguil_lib;
   text-align: right;
@@ -229,6 +345,20 @@
 
 .DtAiguil {
   grid-area: DtAiguil;
+  border: 1px solid;
+}
+
+.DtEval_lib {
+  grid-area: DtEval_lib;
+  text-align: right;
+  padding-right: 5%;
+  display: flex;
+  justify-content: end;
+  align-items: center;
+}
+
+.DtEval {
+  grid-area: DtEval;
   border: 1px solid;
 }
 
@@ -288,13 +418,13 @@
   border: 1px solid;
 }
 
-.MesureAction {
-  grid-area: MesureAction;
+.ConcluCas {
+  grid-area: ConcluCas;
   border: 1px solid;
 }
 
-.MesureAction_lib {
-  grid-area: MesureAction_lib;
+.ConcluCas_lib {
+  grid-area: ConcluCas_lib;
   text-align: right;
   padding-right: 5%;
   display: flex;
@@ -302,13 +432,13 @@
   align-items: center;
 }
 
-.DtMesureAction {
-  grid-area: DtMesureAction;
+.CommentConclu {
+  grid-area: CommentConclu;
   border: 1px solid;
 }
 
-.DtMesureAction_lib {
-  grid-area: DtMesureAction_lib;
+.CommentConclu_lib {
+  grid-area: CommentConclu_lib;
   text-align: right;
   padding-right: 5%;
   display: flex;
@@ -320,4 +450,54 @@
     padding: 2px;
     border: 2px solid #eac8c0;
     border-radius: 10px;
-  }*//*# sourceMappingURL=type_eu.css.map */
+  }*/
+.btn-FU {
+  grid-area: btn-FU;
+}
+
+.btn-AWA {
+  grid-area: btn-AWA;
+}
+
+.btn-gray {
+  background-color: #cccccc;
+  color: #333333;
+  border: none;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.btn-gray:hover {
+  background-color: #aaaaaa;
+}
+
+.btn-access {
+  background-color: #d3d3d3;
+  color: #000000;
+  border: 1px solid #808080;
+  padding: 5px 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+  font-family: Arial, sans-serif;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 3px;
+  box-shadow: 1px 1px 1px #808080;
+}
+
+.btn-access:hover {
+  background-color: #e3e3e3;
+}
+
+.btn-access:active {
+  background-color: #c3c3c3;
+  box-shadow: 0px 0px 0px #808080;
+}/*# sourceMappingURL=type_eu.css.map */

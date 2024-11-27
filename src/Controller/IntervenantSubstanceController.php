@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use App\Repository\IntervenantsANSMRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+// use App\Entity\IntervenantSubstanceDMMSubstance;
 use App\Form\IntervenantSubstanceDMM_detailType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -19,13 +20,18 @@ class IntervenantSubstanceController extends AbstractController
     public function liste_intervenant_substance(ManagerRegistry $doctrine): Response
     {
         $entityManager = $doctrine->getManager();
-        $TousIntSub = $entityManager->getRepository(IntervenantSubstanceDMM::class)->findAllSortHL_SA();
+        $repos = $entityManager->getRepository(IntervenantSubstanceDMM::class);
+        $TousIntSub = $repos->findAllSortHL_SA();
+        $nbActif = $repos->nbIntSub(false);
+        $nbInactif = $repos->nbIntSub(true);
 
         $NbIntSub = count($TousIntSub);
 
         return $this->render('intervenant_substance/liste_intervenant_substance.html.twig', [
             'TousIntSub' => $TousIntSub,
             'NbIntSub' => $NbIntSub,
+            'NbActif' => $nbActif,
+            'NbInactif' => $nbInactif,
         ]);
     }
 
@@ -50,12 +56,28 @@ class IntervenantSubstanceController extends AbstractController
 
         $evaluateur = $IntSub->getEvaluateur();
         $intervenant = $intervenantsRepository->findOneBy(['evaluateur' => $evaluateur]);
+        $idIntSub= $IntSub->getId();
+        if ($intervenant === null) {
+            $this->addFlash(
+                        'error', 
+                        "Il y a un problème sur le nom de l'évaluateur ({$evaluateur}), contacter l'administrateur de BDD"
+                    );
+            return $this->redirectToRoute('app_intervenant_substance');
+        }
 
         // $form = $this->createForm(IntervenantSubstanceDMM_detailType::class, $IntSub);
+
+        // dump('Evaluateur : ',$evaluateur);
+        // dump('Intervenant : ', $intervenant);
+        // dump($intervenant->getPoleCourt(), 'Pole Court');
+
+
+
         $form = $this->createForm(IntervenantSubstanceDMM_detailType::class, $IntSub, [
             'evaluateur_choice' => $evaluateur ? "$evaluateur|{$intervenant->getDmm()}|{$intervenant->getPoleCourt()}" : null,
             'dmm' => $intervenant ? $intervenant->getDmm() : '',
             'pole_court' => $intervenant ? $intervenant->getPoleCourt() : '',
+            // 'idIntSub' => $idIntSub,
         ]);
 
         $form->handleRequest($request);
@@ -68,6 +90,28 @@ class IntervenantSubstanceController extends AbstractController
             $substancesData = $formData['intervenant_substance_dmm_substances']['intervenantSubstanceDMMSubstances'] ?? [];
 
             $formData = $request->request->all();
+
+            $HL_SA = $formData['intervenant_substance_dmm_substances']['ActiveSubstanceHighLevel'];
+
+            $isExist = $entityManager->getRepository(IntervenantSubstanceDMM::class)->isSubstanceExistActiv($HL_SA,$idIntSub);
+            $formData = $request->request->all();
+
+            if (!isset($formData['intervenant_substance_dmm_substances']['inactif'])) {
+                $inactif = false;
+            } else {
+                $inactif = $formData['intervenant_substance_dmm_substances']['inactif'];
+            }
+
+            if($isExist && $inactif === false){
+                // cette substance existe déjà
+
+                $this->addFlash('error', 'La substance suivante existe déjà avec un statut "actif" : ' . $HL_SA);
+
+                return $this->render('intervenant_substance/liste_intervenant_substance_creation.html.twig', [
+                    'IntSub' => $IntSub,
+                    'form' => $form->createView(),
+                ]);
+            }
 
             $newEvalua = explode("|", $formData["intervenant_substance_dmm_substances"]["evaluateur"])[0];
 
@@ -127,6 +171,24 @@ class IntervenantSubstanceController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             
             $formData = $request->request->all();
+
+            $HL_SA = $formData['intervenant_substance_dmm_substances']['ActiveSubstanceHighLevel'];
+            $idIntSub = -1;
+
+            // dump($formData["intervenant_substance_dmm_substances"]);
+            // est ce que il n'existe pas déjà cette même substance dans la table IntervenantSubstanceDMMSubstance avec un status "actif" ?
+            $isExist = $entityManager->getRepository(IntervenantSubstanceDMM::class)->isSubstanceExistActiv($HL_SA,$idIntSub);
+
+            if($isExist){
+                // cette substance existe déjà
+                $this->addFlash('error', 'La substance suivante existe déjà avec un statut "actif" : ' . $HL_SA);
+
+                return $this->render('intervenant_substance/liste_intervenant_substance_creation.html.twig', [
+                    'IntSub' => $IntSub,
+                    'form' => $form->createView(),
+                ]);
+            }
+
             $dateNow = new DateTimeImmutable();
             $newEvalua = explode("|", $formData["intervenant_substance_dmm_substances"]["evaluateur"])[0];
             

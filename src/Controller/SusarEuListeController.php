@@ -12,6 +12,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+// use PhpOffice\PhpSpreadsheet\Spreadsheet;
+// use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 // class AfficheSusarEuController extends AbstractController
 class SusarEuListeController extends AbstractController
@@ -109,6 +111,35 @@ class SusarEuListeController extends AbstractController
                 } else {
                     // Formulaire soumis, mais invalide
                 }
+
+                
+            } elseif (isset($formData['search_susar_eu']['exportExcel'])) {
+                dump(7);
+                // L'utilisateur a cliqué sur le bouton "Export Excel""
+                $searchSusarEU = $session->get('search_susar_eu');
+
+                if ($session->get('tri_search_susar_eu') !== null) {
+
+                    $triSearchSusarEU = $session->get('tri_search_susar_eu');
+                }
+                // dump($searchSusarEU);
+                // dump($triSearchSusarEU);
+
+                if ($searchSusarEU) {
+                    $TousSusars = $entityManager->getRepository(SusarEU::class)->findBySearchSusarEuListe($searchSusarEU,$triSearchSusarEU);
+                } else {
+                    $TousSusars = $entityManager->getRepository(SusarEU::class)->findAllOrder($triSearchSusarEU);
+                }
+
+                dump($searchSusarEU);
+                return $this->redirectToRoute('app_export_excel_susar_eu_liste', 
+                            ['searchSusarEU' => \json_encode($searchSusarEU),
+                            'triSearchSusarEU' => \json_encode($triSearchSusarEU)
+                            ]);
+
+                // return $this->redirectToRoute('app_export_excel_pilotage',['TousSusars' => 'TousSusars']);
+                // $this->export_Excel($TousSusars);
+                // dd();
             } else {
                 
                 dump(3);
@@ -174,4 +205,8 @@ class SusarEuListeController extends AbstractController
         ]);
     }
 
+
+    public function export_Excel($TousSusars) {
+        dd($TousSusars);
+    }
 }

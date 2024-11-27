@@ -68,7 +68,43 @@ class IntervenantSubstanceDMMRepository extends ServiceEntityRepository
                 ->getResult()
             ;
         }
+        /**
+         * Permet de savoir si la substance qui est crée ou modifiée n'existe pas déjà (même substance avec un id différent)
+         *
+         * @param string $HL_SA : nom de la substance
+         * @param integer $idIntSub : id de la substance en cours de modif (ou -1 si c'est une création)
+         * @return boolean : 1 si la substance existe déjà, 0 sinon
+         */
+        public function isSubstanceExistActiv(string $HL_SA, int $idIntSub = -1): bool
+        {
+            $qb = $this->createQueryBuilder('i')
+            ->andWhere('i.active_substance_high_level = :val')
+            ->setParameter('val', $HL_SA)
+            ->andWhere('i.inactif = false');
+            if ($idIntSub !== -1) {
+                $qb->andWhere('i.id != :val2')
+                   ->setParameter('val2', $idIntSub);
+            }
+            $results = $qb->getQuery()->getResult();
 
+            return !empty($results);
+        }
+
+        /**
+         * permet de savoir combien on a d'intervenant substance
+         *
+         * @param boolean $inactif  : est-ce qu'on compte les inactifs ou pas
+         * @return integer  : retourne le nombre d'intervenantSubstance
+         */
+        public function nbIntSub(bool $inactif = false): int
+        {
+            return $this->createQueryBuilder('i')
+            ->select('count(i.id)')
+            ->where('i.inactif = :val')
+            ->setParameter('val', $inactif)
+            ->getQuery()
+            ->getSingleScalarResult();
+        }
 
         /**
          * permet de retourner toutes les lignes de la table "intervenant_substance_dmm" qui ont pour high level substance name la valeur passée en paramètre

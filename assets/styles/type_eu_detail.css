@@ -1,5 +1,9 @@
-html, body {
-  background: #FBFDBB;
+.bg-susar-v1 {
+  background-color: #FFB6C1;
+}
+
+.bg-susar-v2 {
+  background-color: #FBFDBB;
 }
 
 .tab_susar_eu_dtl {
@@ -19,4 +23,15 @@ html, body {
 .chp_narr_dtl {
   max-height: 200px;
   overflow: auto;
+}
+
+.tab_eval {
+  background-color: orange;
+  padding: 8px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.eval_lib {
+  margin: 10px;
 }/*# sourceMappingURL=type_eu_detail.css.map */

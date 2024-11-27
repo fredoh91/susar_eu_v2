@@ -1,0 +1,25 @@
+body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.asso-sub-low-level {
+  border: 1px solid #5C2978;
+  background-color: #FCE6D4;
+  padding: 10px;
+  margin: 5px;
+}
+
+ul, ol, li {
+  list-style-type: none;
+}
+
+.vert-clair {
+  background-color: #d2ffd5;
+}
+
+.rouge-clair {
+  background-color: #FFB8AE;
+}/*# sourceMappingURL=int_sub_detail.css.map */

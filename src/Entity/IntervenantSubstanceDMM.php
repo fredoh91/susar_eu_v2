@@ -12,7 +12,7 @@ class IntervenantSubstanceDMM
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Column(type: 'integer')]
     private ?int $id = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -88,7 +88,11 @@ class IntervenantSubstanceDMM
     {
         return $this->id;
     }
-
+    // public function setId(?int $id): self
+    // {
+    //     $this->id = $id;
+    //     return $this;
+    // }
     public function getDMM(): ?string
     {
         return $this->DMM;
