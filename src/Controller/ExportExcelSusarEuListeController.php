@@ -9,7 +9,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class ExportExcelSusarEuListeController extends AbstractController
 {
-    #[Route('/export_excel_susar_eu_liste', name: 'app_export_excel_susar_eu_liste')]
+    #[Route('/export_excel_susar_eu_liste_old', name: 'app_export_excel_susar_eu_liste_old')]
     public function exportExcel(Request $request): Response
     {
         $searchSusarEU = json_decode($request->query->get('searchSusarEU'),true);

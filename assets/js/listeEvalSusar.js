@@ -1,9 +1,17 @@
-// const chp = document.querySelectorAll(".chpRq");
-// const btnRest = document.querySelector("#reset");
-// btnRest.addEventListener('click',resetChp)
 
-// function resetChp () {
-//     chp.forEach(ch => {
-//         ch.value = "";
-//     });
-// }
+// // console.log("Test JS module : 1");
+
+// const excelExport = require('./modules/excelExport');
+
+// // console.log("Test JS module : 2");
+
+// document.addEventListener('DOMContentLoaded', function() {
+//     excelExport.initializeExcelExport();
+// });
+
+// // console.log("Test JS module : 3");
+
+
+
+
+

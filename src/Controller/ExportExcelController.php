@@ -3,23 +3,110 @@
 namespace App\Controller;
 
 use DateTime;
-// use App\Entity\Susar;
-use App\Entity\SusarEU;
 use DateTimeImmutable;
+use App\Entity\SusarEU;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\ExpressionLanguage\Expression;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-
-
-
-class ExportExcelPilotageController extends AbstractController
+class ExportExcelController extends AbstractController
 {
+
+    #[Route('/export_excel_susar_eu_liste', name: 'app_export_excel_susar_eu_liste', methods: ['POST'])]
+    public function exportSusarEU(
+        Request $request,
+        EntityManagerInterface $entityManager
+    ): Response {
+        // $searchSusarEU = json_decode($request->get('searchSusarEU'), true);
+        // $triSearchSusarEU = json_decode($request->get('triSearchSusarEU'), true);
+        // $searchSusarEU = json_decode($request->request->get('search_susar_eu'), true);
+//         $searchSusarEU = json_decode($request->request->get('search_susar_eu'), true);
+
+//         // dump($request->request->get('search_susar_eu'));
+        // dump($request->request->get_headers()); 
+        // dd($request);
+//         // dd(json_decode($request->getContent(), true));
+// // dd( $searchSusarEU, $triSearchSusarEU);
+// dd( $searchSusarEU);
+
+
+$searchSusarEu = $request->request->get('search_susar_eu');
+
+// Vérifier si les données sont présentes
+if ($searchSusarEu === null) {
+    throw new \Exception('La clé "search_susar_eu" est absente dans la requête POST.');
+}
+
+// Afficher ou traiter les données
+dd($searchSusarEu); // Affiche dans la barre de débogage ou dans le log
+// Exemple d'accès à une sous-clé
+$casArchive = $searchSusarEu['casArchive'] ?? null;
+dump($casArchive); // Affiche la valeur de "casArchive"
+
+
+
+$searchSusarEU = json_decode($request->request->get('search_susar_eu'), true);
+
+if (json_last_error() !== JSON_ERROR_NONE) {
+    // Handle JSON decoding error
+    throw new \Exception('Error decoding JSON: ' . json_last_error_msg());
+}
+
+// Access data from the decoded array
+$casArchive = $searchSusarEU['casArchive'];
+// $evaluateurChoice = $searchSusarEU['evaluateurChoice'];
+dd($casArchive);
+
+
+
+        // Récupérer les données
+        if ($searchSusarEU) {
+            $susars = $entityManager->getRepository(SusarEU::class)
+                ->findBySearchSusarEuListe($searchSusarEU, $triSearchSusarEU);
+        } else {
+            $susars = $entityManager->getRepository(SusarEU::class)
+                ->findAllOrder($triSearchSusarEU);
+        }
+
+        // Créer le fichier Excel
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        // Définir les en-têtes (à adapter selon vos colonnes)
+        $headers = ['ID', 'Colonne1', 'Colonne2', 'Colonne3']; // Adaptez selon vos besoins
+        foreach ($headers as $key => $header) {
+            $sheet->setCellValue(chr(65 + $key) . '1', $header);
+        }
+
+        // Remplir les données
+        $row = 2;
+        foreach ($susars as $susar) {
+            $sheet->setCellValue('A' . $row, $susar->getId());
+            $sheet->setCellValue('B' . $row, $susar->getColonne1());
+            $sheet->setCellValue('C' . $row, $susar->getColonne2());
+            $sheet->setCellValue('D' . $row, $susar->getColonne3());
+            $row++;
+        }
+
+        // Créer le fichier Excel
+        $writer = new Xlsx($spreadsheet);
+        $fileName = 'export_susar_eu_' . date('Y-m-d_His') . '.xlsx';
+        $temp_file = tempnam(sys_get_temp_dir(), $fileName);
+        $writer->save($temp_file);
+
+        // Retourner le fichier
+        return $this->file($temp_file, $fileName, ResponseHeaderBag::DISPOSITION_ATTACHMENT);
+    }
+
+
+
+
     #[Route('/export_excel_pilotage', name: 'app_export_excel_pilotage')]
     public function exportExcel( ManagerRegistry $doctrine): Response
     {
