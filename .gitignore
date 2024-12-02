@@ -7,7 +7,6 @@
 /public/bundles/
 /var/
 /vendor/
-/public/Temp/
 ###< symfony/framework-bundle ###
 
 ###> phpunit/phpunit ###
@@ -26,3 +25,8 @@
 npm-debug.log
 yarn-error.log
 ###< symfony/webpack-encore-bundle ###
+
+###> fichiers_perso ###
+/public/Temp/ExportExcelListeSusarEU/
+/public/Temp/ExportExcelPilotage/
+###< fichiers_perso ###
