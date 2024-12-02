@@ -18,54 +18,34 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class ExportExcelController extends AbstractController
 {
 
-    #[Route('/export_excel_susar_eu_liste', name: 'app_export_excel_susar_eu_liste', methods: ['POST'])]
-    public function exportSusarEU(
-        Request $request,
-        EntityManagerInterface $entityManager
-    ): Response {
-        // $searchSusarEU = json_decode($request->get('searchSusarEU'), true);
-        // $triSearchSusarEU = json_decode($request->get('triSearchSusarEU'), true);
-        // $searchSusarEU = json_decode($request->request->get('search_susar_eu'), true);
-//         $searchSusarEU = json_decode($request->request->get('search_susar_eu'), true);
+    // #[Route('/export_excel_susar_eu_liste', name: 'app_export_excel_susar_eu_liste', methods: ['POST'])]
+    #[Route('/export_excel_susar_eu_liste', name: 'app_export_excel_susar_eu_liste')]
+    public function exportSusarEU(Request $request, EntityManagerInterface $entityManager): Response 
+    {
 
-//         // dump($request->request->get('search_susar_eu'));
-        // dump($request->request->get_headers()); 
-        // dd($request);
-//         // dd(json_decode($request->getContent(), true));
-// // dd( $searchSusarEU, $triSearchSusarEU);
-// dd( $searchSusarEU);
+        $date = new DateTimeImmutable();
+        $now = $date->format('Ymd_His');
+        $nomFichierExcel= "Liste_Susar_EU_" . $now . ".xlsx";
+        $repExport = "./Temp/ExportExcelListeSusarEU/";
 
 
-$searchSusarEu = $request->request->get('search_susar_eu');
+        $session = $request->getSession();
+        $searchSusarEU = $session->get('search_susar_eu');
+        $triSearchSusarEU = $session->get('tri_search_susar_eu');
 
-// Vérifier si les données sont présentes
-if ($searchSusarEu === null) {
-    throw new \Exception('La clé "search_susar_eu" est absente dans la requête POST.');
-}
+        
+        // dd($searchSusarEU);
 
-// Afficher ou traiter les données
-dd($searchSusarEu); // Affiche dans la barre de débogage ou dans le log
-// Exemple d'accès à une sous-clé
-$casArchive = $searchSusarEu['casArchive'] ?? null;
-dump($casArchive); // Affiche la valeur de "casArchive"
+        // // Retrieve the parameters from the query string
+        // $searchSusarEU = json_decode($request->query->get('searchSusarEU'), true);
+        // $triSearchSusarEU = json_decode($request->query->get('triSearchSusarEU'), true);
 
+        // // Check for JSON decoding errors
+        // if (json_last_error() !== JSON_ERROR_NONE) {
+        //     throw new \Exception('Error decoding JSON: ' . json_last_error_msg());
+        // }
 
-
-$searchSusarEU = json_decode($request->request->get('search_susar_eu'), true);
-
-if (json_last_error() !== JSON_ERROR_NONE) {
-    // Handle JSON decoding error
-    throw new \Exception('Error decoding JSON: ' . json_last_error_msg());
-}
-
-// Access data from the decoded array
-$casArchive = $searchSusarEU['casArchive'];
-// $evaluateurChoice = $searchSusarEU['evaluateurChoice'];
-dd($casArchive);
-
-
-
-        // Récupérer les données
+        // Retrieve the data
         if ($searchSusarEU) {
             $susars = $entityManager->getRepository(SusarEU::class)
                 ->findBySearchSusarEuListe($searchSusarEU, $triSearchSusarEU);
@@ -74,34 +54,319 @@ dd($casArchive);
                 ->findAllOrder($triSearchSusarEU);
         }
 
-        // Créer le fichier Excel
+
+        // dd(count($susars));
+        // Create the Excel file
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
 
-        // Définir les en-têtes (à adapter selon vos colonnes)
-        $headers = ['ID', 'Colonne1', 'Colonne2', 'Colonne3']; // Adaptez selon vos besoins
-        foreach ($headers as $key => $header) {
-            $sheet->setCellValue(chr(65 + $key) . '1', $header);
+        // Define the headers
+        // $headers = ['ID', 'Master ID', 'Case ID', 'Specific Case ID', 'DLP Version', 'WorldWide ID'];
+        // foreach ($headers as $key => $header) {
+        //     $sheet->setCellValue(chr(65 + $key) . '1', $header);
+        // }
+        $sheet->setCellValue('A1', 'ID Susar_EU');
+        $sheet->setCellValue('B1', 'WorldWide id');
+        $sheet->setCellValue('C1', 'Num. BNPV');
+        $sheet->setCellValue('D1', 'FU BNPV');
+        $sheet->setCellValue('E1', 'N° EudraCT');
+        $sheet->setCellValue('F1', 'Sender');
+        $sheet->setCellValue('G1', 'Pays survenue');
+        $sheet->setCellValue('H1', 'Status date');
+        $sheet->setCellValue('I1', 'Creation date');
+        $sheet->setCellValue('J1', 'Substance');
+        $sheet->setCellValue('K1', 'Effet(s) indésirable(s)');
+        $sheet->setCellValue('L1', 'Gravité');
+        $sheet->setCellValue('M1', 'Niveau Classification');
+        $sheet->setCellValue('N1', 'Évalué');
+        $sheet->setCellValue('O1', 'Type_saMS_Mono');
+        $sheet->setCellValue('P1', 'DMM');
+        $sheet->setCellValue('Q1', 'Pôle Court');
+        $sheet->setCellValue('R1', 'Évaluateur');
+        $sheet->setCellValue('S1', 'Assessment outcome');
+        $sheet->setCellValue('T1', 'Commentaire évaluation');
+
+        // Largeurs des colonnes
+        $columnWidths = [
+            'A' => 13,  // ID Susar_EU
+            'B' => 25,  // WorldWide id
+            'C' => 15,  // Num. BNPV
+            'D' => 11,  // FU BNPV
+            'E' => 20,  // N° EudraCT
+            'F' => 30,  // Sender
+            'G' => 16,  // Pays survenue
+            'H' => 13,  // Status date
+            'I' => 13,  // Creation date
+            'J' => 50,  // Substance
+            'K' => 50,  // Effet(s) indésirable(s)
+            'L' => 55,  // Gravité
+            'M' => 22,  // Niveau Classification
+            'N' => 10,  // Évalué
+            'O' => 19,  // Type_saMS_Mono
+            'P' => 15,  // DMM
+            'Q' => 20,  // Pôle Court
+            'R' => 25,  // Évaluateur
+            'S' => 85,  // Assessment outcome
+            'T' => 70,  // Commentaire évaluation
+        ];
+
+        foreach ($columnWidths as $column => $width) {
+            $sheet->getColumnDimension($column)->setWidth($width);
         }
 
-        // Remplir les données
+        $baseHeight = 15; // Hauteur de ligne de base en points
+        $additionalHeight = 15; // Hauteur additionnelle pour substance et EI
+
         $row = 2;
+
         foreach ($susars as $susar) {
+
+            // Substances
+            $medics = $susar->getMedicament();
+            $substances = '';
+            $medicCount = 0;
+            foreach ($medics as $medic) {
+                if ($medic->getProductcharacterization() === 'Suspect' || $medic->getProductcharacterization() === 'Interacting') {
+                    // $substances .= $medic->getProductName() . "\n";
+                    if ($substances !== '') {
+                        $substances .= "\n";
+                    }
+                    // $substances .= $medic->getProductName();
+                    $substances .= $medic->getSubstancename();
+                    $medicCount++;
+                }
+            }
+
+            // Effets indésirables
+            $EIs = $susar->getEffetsIndesirables();
+            $PT = '';
+            $eiCount = 0;
+            foreach ($EIs as $EI) {
+                // $PT .= $EI->getReactionmeddrapt() . ' (' . $EI->getCodereactionmeddrapt() . ')' . "\n";
+                if ($PT !== '') {
+                    $PT .= "\n";
+                }
+                $PT .= $EI->getReactionmeddrapt() . ' (' . $EI->getCodereactionmeddrapt() . ')';
+                $eiCount++;
+            }
+
+
             $sheet->setCellValue('A' . $row, $susar->getId());
-            $sheet->setCellValue('B' . $row, $susar->getColonne1());
-            $sheet->setCellValue('C' . $row, $susar->getColonne2());
-            $sheet->setCellValue('D' . $row, $susar->getColonne3());
+            $sheet->setCellValue('B' . $row, $susar->getWorldWideId());
+            // $sheet->setCellValue('B' . $row, $susar->getMasterId());
+            // $sheet->setCellValue('C' . $row, $susar->getCaseid());
+            $sheet->setCellValue('C' . $row, $susar->getSpecificcaseid());
+            $sheet->setCellValue('D' . $row, $susar->getDLPVersion());
+            $sheet->setCellValue('E' . $row, $susar->getNumEudract());
+            $sheet->setCellValue('F' . $row, '');
+            $sheet->setCellValue('G' . $row, $susar->getPaysSurvenue());
+
+            // Status date
+            if ($susar->getStatusdate() !== null) {
+                // Create a DateTime object from the 'dd/mm/yyyy' format
+                $statusDate = $susar->getStatusdate();
+    
+                if ($statusDate) {
+                    // Convert the DateTime object to Excel's serial date format
+                    $excelStatusDate = \PhpOffice\PhpSpreadsheet\Shared\Date::PHPToExcel($statusDate);
+    
+                    // Set the cell value with the Excel date serial number
+                    $sheet->setCellValue('H' . $row, $excelStatusDate);
+    
+                    // Apply the date format to the cell
+                    $sheet->getStyle('H' . $row)
+                        ->getNumberFormat()
+                        ->setFormatCode(\PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_DATE_DDMMYYYY);
+                } else {
+                    // Handle invalid date formats if necessary
+                    $sheet->setCellValue('H' . $row, 'Date Invalide');
+                }
+            }
+
+
+            // Creation date
+            if ($susar->getStatusdate() !== null) {
+                // Create a DateTime object from the 'dd/mm/yyyy' format
+                $creationDate = $susar->getCreationdate();
+    
+                if ($creationDate) {
+                    // Convert the DateTime object to Excel's serial date format
+                    $excelCreationDate = \PhpOffice\PhpSpreadsheet\Shared\Date::PHPToExcel($creationDate);
+    
+                    // Set the cell value with the Excel date serial number
+                    $sheet->setCellValue('I' . $row, $excelCreationDate);
+    
+                    // Apply the date format to the cell
+                    $sheet->getStyle('I' . $row)
+                        ->getNumberFormat()
+                        ->setFormatCode(\PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_DATE_DDMMYYYY);
+                } else {
+                    // Handle invalid date formats if necessary
+                    $sheet->setCellValue('I' . $row, 'Date Invalide');
+                }
+            }
+
+            $sheet->setCellValue('J' . $row, $substances);
+            $sheet->setCellValue('K' . $row, $PT);
+            
+            
+            // $sheet->setCellValue('L' . $row, $susar->getSeriousnessCriteria());
+            $seriousnessCriteria = str_replace('<BR>', "\n", $susar->getSeriousnessCriteria() ?? '');
+            $seriousnessCriteria = trim($seriousnessCriteria);
+            $countSeriousCrit = $seriousnessCriteria ? substr_count($seriousnessCriteria, "\n") + 1 : 0;
+            
+            $sheet->setCellValue('L' . $row, $seriousnessCriteria);
+
+            $sheet->setCellValue('M' . $row, $susar->getPriorisation());
+            
+
+            if ($susar->getDateEvaluation()  !== null) {
+                $sheet->setCellValue('N' . $row, 'Oui');
+            } else {
+                $sheet->setCellValue('N' . $row, 'Non');
+            }
+            
+            // saMS/Mone, DMM, Pôle et évaluateur
+            $IntSubs = $susar->getIntervenantSubstanceDMMs();
+            $samsMono = '';
+            $dmm = '';
+            $poleCourt = '';
+            $evaluateur = '';
+            foreach ($IntSubs as $IntSub) {
+                if ($samsMono !== '') {
+                    $samsMono .= "/";
+                }
+                $samsMono .= $IntSub->getTypeSaMSMono() ;
+
+                if ($dmm !== '') {
+                    $dmm .= "/";
+                }
+                $dmm .= $IntSub->getDMM() ;
+
+                if ($poleCourt !== '') {
+                    $poleCourt .= "/";
+                }
+                $poleCourt .= $IntSub->getPoleCourt() ;
+
+                if ($evaluateur !== '') {
+                    $evaluateur .= "/";
+                }
+                $evaluateur .= $IntSub->getEvaluateur() ;
+            }
+            $sheet->setCellValue('O' . $row, $samsMono);
+            $sheet->setCellValue('P' . $row, $dmm);
+            $sheet->setCellValue('Q' . $row, $poleCourt);
+            $sheet->setCellValue('R' . $row, $evaluateur);
+            
+
+            // Évaluations
+            $Evals = $susar->getSubstancePtEvals();
+            $assessOut = '';
+            $evalComm = '';
+            foreach ($Evals as $Eval) {
+                if ($assessOut !== '') {
+                    $assessOut .= "\n";
+                }
+
+                $AS_HL = '';
+                $PT = '';
+                $subPTs = $Eval->getSubstancePts();
+
+                foreach ($subPTs as $subPT) {   // Substances
+                    if ($AS_HL !== '') {
+                        $AS_HL .= "-";
+                    }
+                    $AS_HL .= $subPT->getActiveSubstanceHighLevel();
+
+                    if ($PT !== '') {
+                        $PT .= "-";
+                    }
+                    $PT .= $subPT->getReactionmeddrapt();
+                }
+                $assessOut .= $Eval->getAssessmentOutcome() . ' (' . 
+                                $AS_HL . '/' . 
+                                $PT . ')';
+
+                if ($evalComm !== '') {
+                    $evalComm .= "\n";
+                }
+                $evalComm .= $Eval->getComments() ;
+
+                // $eiCount++;
+            }
+            $sheet->setCellValue('S' . $row, $assessOut);
+            $sheet->setCellValue('T' . $row, $evalComm);
+
+
+
+            // Réglage de la hauteur de ligne
+            // $maxValue = max($medicCount, $eiCount, $autreCount, $encoreUnAutreCount);
+            $maxCount = max($medicCount, $eiCount, $countSeriousCrit);
+            $totalHeight = $baseHeight + ($additionalHeight * ($maxCount - 1));
+            $sheet->getRowDimension($row)->setRowHeight($totalHeight);
+
             $row++;
         }
+        
+        
+        ////////////////////////////////////
+        // Mise en forme du fichier Excel //
+        ////////////////////////////////////
+        
+        // On met la premier ligne en gris
+        for($col = 'A'; $col != 'U'; $col++) {
+            $sheet->getStyle($col . '1')->getFill()
+            ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+            ->getStartColor()->setARGB('D6DCE1');
+        }
+        
+        // Ajout du filtre automatique
+        $sheet->setAutoFilter(
+            $sheet->calculateWorksheetDimension()
+        );
+        
+        // On freeze la ligne de titre de colonne
+        $sheet->freezePane('A2');
+        
+        // On modifie le nom de l'onglet
+        $sheet->setTitle("Liste Susar_EU"); 
+        
+        // On modifie la largeur des colonnes avec auto-dimensionnement pour les colonnes non spécifiées
+        $allColumns = range('A', 'T');
+        foreach ($allColumns as $column) {
+            if (!array_key_exists($column, $columnWidths)) {
+                $sheet->getColumnDimension($column)->setAutoSize(true);
+            }
+        }
+        
+        // Activer le retour à la ligne et l'ajustement automatique de la hauteur pour les colonnes J, K, L, S et T
+        $sheet->getStyle('J1:L' . ($row + count($susars)))
+            ->getAlignment()
+            ->setWrapText(true)
+            ->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_TOP);
 
-        // Créer le fichier Excel
+        $sheet->getStyle('S1:T' . ($row + count($susars)))
+            ->getAlignment()
+            ->setWrapText(true)
+            ->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_TOP);
+
+        // On se positionne sur la cellule en haut à gauche
+        $sheet->setSelectedCell('A2');
+
+        // Create the Excel writer
         $writer = new Xlsx($spreadsheet);
-        $fileName = 'export_susar_eu_' . date('Y-m-d_His') . '.xlsx';
-        $temp_file = tempnam(sys_get_temp_dir(), $fileName);
-        $writer->save($temp_file);
+        
+        // Ensure the export directory exists
+        if (!is_dir($repExport)) {
+            mkdir($repExport, 0777, true);
+        }
 
-        // Retourner le fichier
-        return $this->file($temp_file, $fileName, ResponseHeaderBag::DISPOSITION_ATTACHMENT);
+        // Save the Excel file to the specified directory
+        $writer->save($repExport . $nomFichierExcel);
+
+        // Return the file as a response
+        return $this->file($repExport . $nomFichierExcel, $nomFichierExcel, ResponseHeaderBag::DISPOSITION_ATTACHMENT);
+
     }
 
 
