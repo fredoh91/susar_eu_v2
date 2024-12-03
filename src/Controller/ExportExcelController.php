@@ -89,20 +89,20 @@ class ExportExcelController extends AbstractController
         // Largeurs des colonnes
         $columnWidths = [
             'A' => 13,  // ID Susar_EU
-            'B' => 25,  // WorldWide id
-            'C' => 15,  // Num. BNPV
+            'B' => 40,  // WorldWide id
+            'C' => 17,  // Num. BNPV
             'D' => 11,  // FU BNPV
             'E' => 20,  // N° EudraCT
             'F' => 30,  // Sender
-            'G' => 16,  // Pays survenue
-            'H' => 13,  // Status date
-            'I' => 13,  // Creation date
+            'G' => 18,  // Pays survenue
+            'H' => 16,  // Status date
+            'I' => 16,  // Creation date
             'J' => 50,  // Substance
             'K' => 50,  // Effet(s) indésirable(s)
             'L' => 55,  // Gravité
             'M' => 22,  // Niveau Classification
             'N' => 10,  // Évalué
-            'O' => 19,  // Type_saMS_Mono
+            'O' => 24,  // Type_saMS_Mono
             'P' => 15,  // DMM
             'Q' => 20,  // Pôle Court
             'R' => 25,  // Évaluateur
