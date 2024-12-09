@@ -147,8 +147,8 @@ class SusarEURepository extends ServiceEntityRepository
             } else {
                 // Aucun tiret trouvé dans la chaîne.
             }
-            
         }
+        
         if ($search->getevaluateurChoice()) {
             $Eval = $search->getevaluateurChoice();
             if ($Eval === "_non attribué_") {
@@ -159,6 +159,23 @@ class SusarEURepository extends ServiceEntityRepository
                     ->andWhere($query->expr()->eq('isd.evaluateur', ':eval'))
                     ->setParameter('eval', $Eval);
             }
+        }
+        
+        if ($search->getTypeSaMSMono()) {
+            // dd($search->getTypeSaMSMono());
+            $query = $query
+                ->andWhere($query->expr()->eq('isd.type_saMS_Mono', ':typeSaMSMono'))
+                ->setParameter('typeSaMSMono', $search->getTypeSaMSMono());
+            // $Eval = $search->getTypeSaMSMono();
+            // if ($Eval === "_non attribué_") {
+            //     $query = $query
+            //         ->andWhere($query->expr()->isNull('isd.evaluateur'));
+            // } else {
+            //     $query = $query
+            //         ->andWhere($query->expr()->eq('isd.evaluateur', ':eval'))
+            //         ->setParameter('eval', $Eval);
+            // }
+
         }
 
         if ($search->getDebutDateImport()) {

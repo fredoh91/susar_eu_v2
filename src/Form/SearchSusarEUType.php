@@ -245,6 +245,16 @@ class SearchSusarEUType extends AbstractType
                 'required' => false,
                 'placeholder' => false, // Ceci empêche Symfony d'ajouter une option vide supplémentaire
             ])
+            ->add('type_saMS_Mono', ChoiceType::class, [
+                'label' => 'saMS/Mono.',
+                'choices' => [
+                    '' => '',
+                    'saMS' => 'saMS',
+                    'Mono' => 'Mono',
+                ],
+                'required' => false,
+                'placeholder' => false, // Ceci empêche Symfony d'ajouter une option vide supplémentaire
+            ])
             ->add(
                 'recherche',
                 SubmitType::class,

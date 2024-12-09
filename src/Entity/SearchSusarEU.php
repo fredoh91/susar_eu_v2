@@ -66,6 +66,7 @@ class SearchSusarEU
     private ?string $casIME = null;
     private ?string $casDME = null;
     private ?string $casEurope = null;
+    private ?string $type_saMS_Mono = null;
 
     public function getIdSusar(): ?int
     {
@@ -1125,4 +1126,19 @@ class SearchSusarEU
 
         return $this;
     }
+
+
+
+    public function getTypeSaMSMono(): ?string
+    {
+        return $this->type_saMS_Mono;
+    }
+
+    public function setTypeSaMSMono(?string $type_saMS_Mono): static
+    {
+        $this->type_saMS_Mono = $type_saMS_Mono;
+
+        return $this;
+    }
+
 }
