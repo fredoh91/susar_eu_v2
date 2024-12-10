@@ -28,7 +28,28 @@
             <li><a class="dropdown-item" href="{{ path ('app_aff_active_sub_grouping') }}">Affichage "Active substance grouping"</a></li>
             <li><a class="dropdown-item" href="{{ path ('app_upload_excel_active_sub_grouping_reprise_donnees') }}">Import du fichier "Active substance grouping" pour la reprise des données</a></li>
           </ul>
+
         </li>
+      </ul>
+      {# Liens pour la connexion/deconnexion #}
+      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+        {% if app.user %}
+          <li class="nav-item">
+            <a class="nav-link" href="{{ path ('app_logout') }}">Deconnexion</a>
+          </li>
+          {% if is_granted('ROLE_SUPER_ADMIN') == false %}
+            <li class="nav-item">
+              <a class="nav-link" href="{{ path ('app_modif_user_password') }}">Modification de mon mot de passe</a>
+            </li>
+          {% endif %}
+        {% else %}
+          <li class="nav-item">
+            <a class="nav-link" href="{{ path ('app_login') }}">Connexion</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ path ('app_contact_admin') }}">Inscription</a>
+          </li>
+        {% endif %}
       </ul>
     </div>
   </div>
