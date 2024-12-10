@@ -111,11 +111,11 @@
                     <div class="FU_BNPV_lib fw-bold">F.U. BNPV :</div>
                     <div class="FU_BNPV">{{ Susar.DLPVersion|e }}</div>
                     <div class="idSusar">idSusar : {{ Susar.id|e }}</div>
-                    <div class="DMM_Pole_lib fw-bold">DMM/Pôle/Éval. :</div>
+                    <div class="DMM_Pole_lib fw-bold">DMM/Pôle/Éval./SaMS-Mono. :</div>
                     <div class="DMM_Pole">
                         {% for intAnsm in Susar.IntervenantSubstanceDMMs %}
-                            {% if intAnsm.PoleCourt != null %}
-                                {{ intAnsm.DMM }} / {{ intAnsm.PoleCourt }} / {{ intAnsm.Evaluateur }} 
+                            {% if intAnsm.DMM != null %}
+                                {{ intAnsm.DMM }} / {{ intAnsm.PoleCourt }} / {{ intAnsm.Evaluateur }}  / {{ intAnsm.TypeSaMSMono }} 
                                 <BR>
                             {% else %}
                                 Non-attribué

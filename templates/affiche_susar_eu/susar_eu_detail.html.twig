@@ -225,7 +225,7 @@
 			</div>
 			
 			{# {% include "templates/_partials/_eval_tab_1.html.twig" %} #}
-			{% include "_partials/_eval_tab_1.html.twig" %}
+			{# {% include "_partials/_eval_tab_1.html.twig" %} #}
 			{% include "_partials/_eval_tab_2.html.twig" %}
 
 			<div class="DMM_Pole_lib fw-bold">DMM/Pôle/évaluateur :</div>
@@ -236,6 +236,7 @@
 							<th>DMM</th>
 							<th>Pôle</th>
 							<th>Évaluateur</th>
+							<th>SaMS/Mono.</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -244,6 +245,7 @@
 								<td>{{intervenant.DMM}}</th>
 								<td>{{intervenant.PoleCourt}}</td>
 								<td>{{intervenant.Evaluateur}}</td>
+								<td>{{intervenant.TypeSaMSMono}}</td>
 							</tr>
 						{% endfor %}
 					</tbody>
