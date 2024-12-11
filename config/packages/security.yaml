@@ -20,7 +20,7 @@ security:
             logout:
                 path: app_logout
                 # where to redirect after logout
-                # target: app_any_route
+                target: app_login
 
             remember_me:
                 secret: '%kernel.secret%'
@@ -41,6 +41,13 @@ security:
     access_control:
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
+    role_hierarchy:
+        ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_DMFR_ADMIN, ROLE_SURV_ADMIN] # gestion des utililisateurs
+        ROLE_ADMIN: [ROLE_DMFR_ADMIN, ROLE_SURV_ADMIN] # gestion des tables de références mais pas des utililisateurs
+        ROLE_DMFR_ADMIN: ROLE_DMFR_REF # gestion des tables de références DMFR (glossaire, )
+        ROLE_DMFR_REF: ROLE_DMFR_GEST
+        ROLE_EDITOR: ROLE_USER
+        ROLE_SURV_ADMIN: ROLE_SURV_PILOTEVEC # gestion des tables de références SURV/DMM (glossaire, )
 
 when@test:
     security:
