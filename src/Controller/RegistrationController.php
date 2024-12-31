@@ -6,7 +6,7 @@ use App\Entity\User;
 use App\Form\UserEditType;
 use App\Form\UserEditPasswordType;
 use App\Form\UserRegistrationType;
-use App\Security\UserAuthenticator;
+use App\Security\UsersAuthenticator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,7 +17,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use \Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 
-// #[Security("is_granted('ROLE_SUPER_ADMIN')")]
+#[IsGranted("ROLE_SUPER_ADMIN")]
 class RegistrationController extends AbstractController
 {
 
@@ -30,7 +30,11 @@ class RegistrationController extends AbstractController
 
     #[IsGranted('ROLE_SUPER_ADMIN')]
     #[Route('/super_admin/inscription', name: 'app_register')]
-    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, UserAuthenticatorInterface $userAuthenticator, UserAuthenticator $authenticator, EntityManagerInterface $entityManager): Response
+    public function register(Request $request, 
+                            UserPasswordHasherInterface $userPasswordHasher,
+                            UserAuthenticatorInterface $userAuthenticator, 
+                            UsersAuthenticator $authenticator, 
+                            EntityManagerInterface $entityManager): Response
     {
         $user = new User();
         $form = $this->createForm(UserRegistrationType::class, $user);
@@ -63,7 +67,10 @@ class RegistrationController extends AbstractController
 
     #[IsGranted('ROLE_SUPER_ADMIN')]
     #[Route('/super_admin/modif_user/{id}', name: 'app_modif_user')]
-    public function modif_user(User $user, Request $request, UserPasswordHasherInterface $userPasswordHasher, UserAuthenticatorInterface $userAuthenticator, UserAuthenticator $authenticator, EntityManagerInterface $entityManager): Response
+    public function modif_user(User $user, 
+                            Request $request, 
+                            UserPasswordHasherInterface $userPasswordHasher, 
+                            EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(UserEditType::class, $user);
         $form->handleRequest($request);
@@ -104,9 +111,12 @@ class RegistrationController extends AbstractController
         ]);
     }
 
-    #[IsGranted('ROLE_SUPER_ADMIN')]
+    #[IsGranted("ROLE_SUPER_ADMIN")]
     #[Route('/super_admin/modif_user_password/{id}', name: 'app_modif_user_password_super_admin')]
-    public function modif_user_password_super_admin(User $user, Request $request, UserPasswordHasherInterface $userPasswordHasher, UserAuthenticatorInterface $userAuthenticator, UserAuthenticator $authenticator, EntityManagerInterface $entityManager): Response
+    public function modif_user_password_super_admin(User $user, 
+                                                    Request $request, 
+                                                    UserPasswordHasherInterface $userPasswordHasher, 
+                                                    EntityManagerInterface $entityManager): Response
     {   
 
         $form = $this->createForm(UserEditPasswordType::class, $user);
@@ -151,7 +161,9 @@ class RegistrationController extends AbstractController
 
     #[IsGranted('ROLE_USER')]
     #[Route('/modif_user_password', name: 'app_modif_user_password')]
-    public function modif_user_password(Request $request, UserPasswordHasherInterface $userPasswordHasher, UserAuthenticatorInterface $userAuthenticator, UserAuthenticator $authenticator, EntityManagerInterface $entityManager): Response
+    public function modif_user_password(Request $request, 
+                                        UserPasswordHasherInterface $userPasswordHasher, 
+                                        EntityManagerInterface $entityManager): Response
     {   
 
         $user = $user = $this->security->getUser();

@@ -1,5 +1,8 @@
 const Encore = require('@symfony/webpack-encore');
 
+// const { SymfonyUxPlugin } = require('@symfony/webpack-encore/lib/plugins/symfony-ux');
+
+
 // Manually configure the runtime environment if not already configured yet by the "encore" command.
 // It's useful when you use tools that rely on webpack.config.js file.
 if (!Encore.isRuntimeEnvironmentConfigured()) {
@@ -35,6 +38,8 @@ Encore
     
     // .addStyleEntry('intervenant_substance_css', './assets/styles/intervenant_substance.scss')
 
+    // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
+    .enableStimulusBridge('./assets/controllers.json')
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
     .splitEntryChunks()
 
@@ -81,6 +86,8 @@ Encore
 
     // uncomment if you're having problems with a jQuery plugin
     //.autoProvidejQuery()
+    // .enableStimulusPlugin()
+    // .addPlugin(new SymfonyUxPlugin())
 ;
 
 module.exports = Encore.getWebpackConfig();

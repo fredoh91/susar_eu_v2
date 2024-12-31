@@ -9,8 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 // use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-// #[Security("is_granted('ROLE_USER')")]
-// #[IsGranted('ROLE_USER')]
+#[IsGranted("ROLE_USER")]
 class HomeController extends AbstractController
 {
     #[Route('/', name: 'app_home')]

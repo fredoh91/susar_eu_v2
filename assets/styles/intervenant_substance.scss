@@ -1,4 +1,5 @@
-@import '_variables.scss';
+// @import '_variables.scss';
+@use '_variables' as *;
 
 .tab-bg-vert-clair {
   background-color: $Tab_vert_clair;

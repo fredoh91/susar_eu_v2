@@ -1,5 +1,7 @@
 <?php
 
+// src\Security\UsersAuthenticator.php
+
 namespace App\Security;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -28,15 +30,28 @@ class UsersAuthenticator extends AbstractLoginFormAuthenticator
 
     public function authenticate(Request $request): Passport
     {
-        $email = $request->getPayload()->getString('email');
+        // $email = $request->getPayload()->getString('email');
+        // $password = $request->getPayload()->getString('password');
+        // $csrfToken = $request->getPayload()->getString('_csrf_token');
+
+        // $email = $request->request->get('email', '');
+
+        // $email = $request->request->get('toggle_password_form')['email'] ?? '';
+        // $password = $request->request->get('toggle_password_form')['password'] ?? '';
+        // $csrfToken = $request->request->get('toggle_password_form')['_csrf_token'] ?? '';
+
+        $formData = $request->request->all('toggle_password_form');
+        $email = $formData['email'] ?? '';
+        $password = $formData['password'] ?? '';
+        $csrfToken = $formData['_csrf_token'] ?? '';
 
         $request->getSession()->set(SecurityRequestAttributes::LAST_USERNAME, $email);
 
         return new Passport(
             new UserBadge($email),
-            new PasswordCredentials($request->getPayload()->getString('password')),
+            new PasswordCredentials($password),
             [
-                new CsrfTokenBadge('authenticate', $request->getPayload()->getString('_csrf_token')),
+                new CsrfTokenBadge('authenticate', $csrfToken),
                 new RememberMeBadge(),
             ]
         );

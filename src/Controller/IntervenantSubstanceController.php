@@ -13,7 +13,11 @@ use Symfony\Component\Routing\Attribute\Route;
 // use App\Entity\IntervenantSubstanceDMMSubstance;
 use App\Form\IntervenantSubstanceDMM_detailType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+// use Symfony\Component\ExpressionLanguage\Expression;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+// #[IsGranted(new Expression('is_granted("ROLE_DMFR_REF") or is_granted("ROLE_SURV_PILOTEVEC")'))]
+#[IsGranted("ROLE_SURV_PILOTEVEC")]
 class IntervenantSubstanceController extends AbstractController
 {
     #[Route('/intervenant_substance', name: 'app_intervenant_substance')]

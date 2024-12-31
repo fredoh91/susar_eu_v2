@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+	<div class="container p-5">
+		<div class="list-group">
+			{% if is_granted('ROLE_SUPER_ADMIN') %}
+				<a href="{{ path('app_register') }}" class="list-group-item list-group-item-action">
+					<div class="d-flex w-100 justify-content-between">
+						<h5 class="mb-1">Ajout d'un utilisateur</h5>
+					</div>
+					<p class="mb-1"></p>
+				</a>
+				<a href="{{ path('app_liste_user') }}" class="list-group-item list-group-item-action">
+					<div class="d-flex w-100 justify-content-between">
+						<h5 class="mb-1">Liste des utilisateurs</h5>
+					</div>
+					<p class="mb-1"></p>
+				</a>
+			{% endif %}
+		</div>
+	</div>
+{% endblock %}

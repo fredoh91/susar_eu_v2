@@ -15,7 +15,10 @@ use Symfony\Component\Routing\Attribute\Route;
 use App\Entity\ActiveSubstanceGroupingRepriseDonnees;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
+// use Symfony\Component\ExpressionLanguage\Expression;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+#[IsGranted('ROLE_ADMIN')]
 class ImportExcelActiveSubGroupingRepriseDonneesController extends AbstractController
 {
     #[Route('/upload_excel_activesubgrouping_reprise_donnees', name: 'app_upload_excel_active_sub_grouping_reprise_donnees')]

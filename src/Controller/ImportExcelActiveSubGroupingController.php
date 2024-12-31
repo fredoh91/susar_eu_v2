@@ -15,6 +15,10 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\ExpressionLanguage\Expression;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
+
+#[IsGranted(new Expression('is_granted("ROLE_DMFR_GEST") or is_granted("ROLE_SURV_PILOTEVEC")'))]
 
 class ImportExcelActiveSubGroupingController extends AbstractController
 {
