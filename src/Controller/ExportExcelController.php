@@ -33,20 +33,9 @@ class ExportExcelController extends AbstractController
 
 
         $session = $request->getSession();
+        
         $searchSusarEU = $session->get('search_susar_eu');
         $triSearchSusarEU = $session->get('tri_search_susar_eu');
-
-        
-        // dd($searchSusarEU);
-
-        // // Retrieve the parameters from the query string
-        // $searchSusarEU = json_decode($request->query->get('searchSusarEU'), true);
-        // $triSearchSusarEU = json_decode($request->query->get('triSearchSusarEU'), true);
-
-        // // Check for JSON decoding errors
-        // if (json_last_error() !== JSON_ERROR_NONE) {
-        //     throw new \Exception('Error decoding JSON: ' . json_last_error_msg());
-        // }
 
         // Retrieve the data
         if ($searchSusarEU) {

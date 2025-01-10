@@ -16,7 +16,7 @@
 				{% endif %}
 				{% if is_granted('ROLE_DMM_EVAL') or is_granted('ROLE_SURV_PILOTEVEC') %}
 				<li class="">
-					<a class="" href="{{ path ('app_liste_susar_eu') }}">Liste des SUSARs (type SUSAR_EU)</a>
+					<a class="" href="{{ path ('app_liste_susar_eu_init') }}">Liste des SUSARs (type SUSAR_EU)</a>
 				</li>
 				{% endif %}
 				{% if is_granted('ROLE_DMFR_REF') or is_granted('ROLE_SURV_PILOTEVEC') %}

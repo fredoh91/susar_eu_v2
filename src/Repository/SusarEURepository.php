@@ -151,6 +151,7 @@ class SusarEURepository extends ServiceEntityRepository
         
         if ($search->getevaluateurChoice()) {
             $Eval = $search->getevaluateurChoice();
+
             if ($Eval === "_non attribué_") {
                 $query = $query
                     ->andWhere($query->expr()->isNull('isd.evaluateur'));
