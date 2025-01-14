@@ -30,3 +30,7 @@ yarn-error.log
 /public/Temp/ExportExcelListeSusarEU/
 /public/Temp/ExportExcelPilotage/
 ###< fichiers_perso ###
+###> php-cs-fixer/shim ###
+/.php-cs-fixer.php
+/.php-cs-fixer.cache
+###< php-cs-fixer/shim ###
