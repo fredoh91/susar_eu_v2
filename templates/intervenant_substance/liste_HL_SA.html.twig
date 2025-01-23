@@ -18,7 +18,7 @@
                                                         ? HL_SA.ActiveSubstanceHighLevel 
                                                         : LstHL_SA ~ '\n' ~ HL_SA.ActiveSubstanceHighLevel) %}
                         {% endfor %}
-                    <textarea name="" id="" cols="150" rows="50">{{ LstHL_SA | raw }}</textarea>
+                    <textarea name="lst_HL_SA" id="lst_HL_SA" cols="150" rows="50" readonly>{{ LstHL_SA | raw }}</textarea>
                 
 			{% endif %}
         </div>

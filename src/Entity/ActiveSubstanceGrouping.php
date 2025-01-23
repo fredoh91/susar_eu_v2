@@ -40,6 +40,9 @@ class ActiveSubstanceGrouping
     #[ORM\ManyToOne(inversedBy: 'activeSubstanceGroupings')]
     private ?IntervenantSubstanceDMM $IntSubDMM = null;
 
+    #[ORM\ManyToOne(inversedBy: 'activeSubstanceGroupings')]
+    private ?ActiveSubstanceGroupingFicExcel $ficExcel = null;
+
     // /**
     //  * @var Collection<int, IntervenantSubstanceDMM>
     //  */
@@ -178,6 +181,18 @@ class ActiveSubstanceGrouping
     public function setIntSubDMM(?IntervenantSubstanceDMM $IntSubDMM): static
     {
         $this->IntSubDMM = $IntSubDMM;
+
+        return $this;
+    }
+
+    public function getFicExcel(): ?ActiveSubstanceGroupingFicExcel
+    {
+        return $this->ficExcel;
+    }
+
+    public function setFicExcel(?ActiveSubstanceGroupingFicExcel $ficExcel): static
+    {
+        $this->ficExcel = $ficExcel;
 
         return $this;
     }

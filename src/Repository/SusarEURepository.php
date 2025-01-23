@@ -414,10 +414,23 @@ class SusarEURepository extends ServiceEntityRepository
      */
     public function hasLinkedSubstancePtEval(int $susarEuId, string $substance, string $pt): bool
     {
+        // version 1
+        // $qb = $this->createQueryBuilder('se')
+        //     ->select('COUNT(spe.id)')
+        //     ->join('se.substancePts', 'sp')
+        //     ->join('sp.substancePtEvals', 'spe')
+        //     ->where('se.id = :susarEuId')
+        //     ->andWhere('sp.active_substance_high_level = :substance')
+        //     ->andWhere('sp.reactionmeddrapt = :pt')
+        //     ->setParameter('susarEuId', $susarEuId)
+        //     ->setParameter('substance', $substance)
+        //     ->setParameter('pt', $pt);
+
+        // version 2
         $qb = $this->createQueryBuilder('se')
             ->select('COUNT(spe.id)')
-            ->join('se.substancePts', 'sp')
-            ->join('sp.substancePtEvals', 'spe')
+            ->join('se.substancePtEvals', 'spe')
+            ->join('spe.substancePts', 'sp')
             ->where('se.id = :susarEuId')
             ->andWhere('sp.active_substance_high_level = :substance')
             ->andWhere('sp.reactionmeddrapt = :pt')
@@ -427,6 +440,7 @@ class SusarEURepository extends ServiceEntityRepository
 
         $count = $qb->getQuery()->getSingleScalarResult();
 
+        dump($qb->getQuery()->getSQL());
         return $count > 0;
     }
 

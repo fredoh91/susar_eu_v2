@@ -16,13 +16,13 @@ class EvalSusarType extends AbstractType
         $builder
         ->add('substance', ChoiceType::class, [
             'choices' => array_combine($options['substances'], $options['substances']),
-            // 'placeholder' => 'Choisir une substance',
-            'required' => false,
+            'placeholder' => 'Choisir une substance',
+            'required' => true,
         ])
         ->add('pt', ChoiceType::class, [
             'choices' => array_combine($options['pts'], $options['pts']),
-            // 'placeholder' => 'Choisir un PT',
-            'required' => false,
+            'placeholder' => 'Choisir un PT',
+            'required' => true,
         ])
         ->add('assessment_outcome', ChoiceType::class, [
             'choices' => [
@@ -33,8 +33,8 @@ class EvalSusarType extends AbstractType
                 'Concern in CT' => 'Concern in CT',
                 'À garder en mémoire' => 'À garder en mémoire',
             ],
-            // 'placeholder' => 'assessment outcome',
-            'required' => false,
+            'placeholder' => 'merci de renseigner un assessment outcome',
+            'required' => true,
             ])
             ->add('comments', TextareaType::class, [
                 'label' => 'Commentaire',

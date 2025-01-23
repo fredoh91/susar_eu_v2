@@ -18,13 +18,15 @@ class ModifEvalSusarType extends AbstractType
                 'choices' => [$options['substance'] => $options['substance']],
                 'disabled' => true,
                 'data' => $options['substance'],
-                'required' => false,
+                'placeholder' => 'Choisir une substance',
+                'required' => true,
             ])
             ->add('pt', ChoiceType::class, [
                 'choices' => [$options['pt'] => $options['pt']],
                 'disabled' => true,
                 'data' => $options['pt'],
-                'required' => false,
+                'placeholder' => 'Choisir un PT',
+                'required' => true,
             ])
             ->add('assessment_outcome', ChoiceType::class, [
                 'choices' => [
@@ -36,7 +38,8 @@ class ModifEvalSusarType extends AbstractType
                     'À garder en mémoire' => 'À garder en mémoire',
                 ],
                 'data' => $options['assessment_outcome'],
-                'required' => false,
+                'placeholder' => 'merci de renseigner un assessment outcome',
+                'required' => true,
             ])
             ->add('comments', TextareaType::class, [
                 'label' => 'Commentaire',

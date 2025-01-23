@@ -13,17 +13,19 @@ use Symfony\Component\HttpFoundation\Request;
 use App\Form\UploadExcelActiveSubGroupingType;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use App\Entity\ActiveSubstanceGroupingFicExcel;
 use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 #[IsGranted(new Expression('is_granted("ROLE_DMFR_GEST") or is_granted("ROLE_SURV_PILOTEVEC")'))]
 
 class ImportExcelActiveSubGroupingController extends AbstractController
 {
     #[Route('/upload_excel_activesubgrouping', name: 'app_upload_excel_active_sub_grouping')]
-    public function upload_excel(Request $request, ManagerRegistry $doctrine, EntityManagerInterface $em): Response
+    public function upload_excel(Request $request, ManagerRegistry $doctrine, EntityManagerInterface $em, AuthenticationUtils $authenticationUtils): Response
     {
         $form = $this->createForm(UploadExcelActiveSubGroupingType::class);
         $form->handleRequest($request);
@@ -47,9 +49,13 @@ class ImportExcelActiveSubGroupingController extends AbstractController
                 $highestRow = $activeWorksheet->getHighestRow();
                 $creation_time = DateTimeImmutable::createFromFormat('U', filectime($inputFileName));
                 $creation_date = new DateTimeImmutable();
-
+                $lastUsername = $authenticationUtils->getLastUsername();
+                $ficExcel = new ActiveSubstanceGroupingFicExcel;
+                $ficExcel->setDateFichier($creation_time);
+                $ficExcel->setUtilisateurImport($lastUsername);
+                $ficExcel->setDateImport($creation_date);
                 for ($row = 2; $row <= $highestRow; $row++) {
-
+                    
                     $AS_HL = $activeWorksheet->getCell('A' . $row)->getFormattedValue();
                     $AS_LL = $activeWorksheet->getCell('B' . $row)->getFormattedValue();
                     
@@ -58,15 +64,17 @@ class ImportExcelActiveSubGroupingController extends AbstractController
                     $activeSubstanceGrouping->setActiveSubstanceLowLevel($AS_LL);
                     $activeSubstanceGrouping->setInactif(false);
                     $activeSubstanceGrouping->setDateFichier($creation_time);
-                    $activeSubstanceGrouping->setUtilisateurImport('Frederic.RANNOU@ansm.sante.fr');
+                    // $activeSubstanceGrouping->setUtilisateurImport('Frederic.RANNOU@ansm.sante.fr');
+                    $activeSubstanceGrouping->setUtilisateurImport($lastUsername);
                     $activeSubstanceGrouping->setCreatedAt($creation_date);
                     $activeSubstanceGrouping->setUpdatedAt($creation_date);
-
+                    $activeSubstanceGrouping->setFicExcel($ficExcel);
+                    
                     $IntervenantSubstanceDMM = $entityManager->getRepository(IntervenantSubstanceDMM::class)->findByHL_SA($AS_HL);
                     
                     if (count($IntervenantSubstanceDMM) == 0) {
                         // il n'y a pas d'intervenantSubstanceDMM, on ne fait rien
-
+                        
                     } elseif (count($IntervenantSubstanceDMM) == 1) {
                         // il n'y a qu'un seul intervenantSubstanceDMM, on l'ajoute à activeSubstanceGrouping
                         $activeSubstanceGrouping->setIntSubDMM($IntervenantSubstanceDMM[0]);
@@ -74,21 +82,24 @@ class ImportExcelActiveSubGroupingController extends AbstractController
                     } else {
                         // dd($IntervenantSubstanceDMM);
                         $response = new Response('Impossible d\'effectuer le charment du fichier Excel.<BR>Il existe plusieurs ligne pour le "High Level" suivant, merci de ne laisser qu\'une seule ligne active : ' . 
-                                                    $IntervenantSubstanceDMM[0]->getActiveSubstanceHighLevel(), Response::HTTP_NOT_FOUND);
+                        $IntervenantSubstanceDMM[0]->getActiveSubstanceHighLevel(), Response::HTTP_NOT_FOUND);
                         $response->send();
                         exit;
                     }
                     
                     $em->persist($activeSubstanceGrouping);
-
+                    
                 }
-                $em->flush();
+
                 // $date_unique = date("Ymd");
                 $dateHeureUnique = date('Ymd_His');
                 // $fileName = $FicExcel->getClientOriginalName();
                 $fileName = 'SubActivGrp_' . $dateHeureUnique . '.xlsx';
+                $ficExcel->setFileName($fileName);
+                $em->persist($ficExcel);
+                $em->flush();
                 $FicExcel->move($this->getParameter('kernel.project_dir') . '/temp/active_substance_grouping_traites/', $fileName);
-
+                
                 $tabActSubGrp = $entityManager->getRepository(ActiveSubstanceGrouping::class)->findByActif();
 
             }

@@ -15,11 +15,12 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted(new Expression('is_granted("ROLE_DMM_EVAL") or is_granted("ROLE_SURV_PILOTEVEC")'))]
 class SusarEuDetailController extends AbstractController
 {
-    #[Route('/detail_susar_eu/{master_id}', name: 'app_detail_susar_eu')]
-    public function detail_susar_eu(int $master_id, ManagerRegistry $doctrine, Request $request): Response
+    #[Route('/detail_susar_eu/{idsusar}', name: 'app_detail_susar_eu')]
+    public function detail_susar_eu(int $idsusar, ManagerRegistry $doctrine, Request $request): Response
     {
         $entityManager = $doctrine->getManager();
-        $Susar = $entityManager->getRepository(SusarEU::class)->findSusarByMasterId($master_id);
+        // $Susar = $entityManager->getRepository(SusarEU::class)->findSusarByMasterId($master_id);
+        $Susar = $entityManager->getRepository(SusarEU::class)->findOneById($idsusar);
         // $lastUsername = $authenticationUtils->getLastUsername();
         // $form = $this->createForm(EvalSusarType::class, $Susar);
         $form = $this->createForm(DetailSusarEuType::class, $Susar);
@@ -43,5 +44,32 @@ class SusarEuDetailController extends AbstractController
             'Susar' => $Susar,
             'form' => $form->createView(),
         ]);
+    }
+    #[Route('/detail_susar_eu_nb_intsub/{idsusar}', name: 'app_detail_susar_eu_nb_intsub')]
+    public function detail_susar_eu_nb_eval(int $idsusar, ManagerRegistry $doctrine, Request $request): Response
+    {
+        $entityManager = $doctrine->getManager();
+        $Susar = $entityManager->getRepository(SusarEU::class)->findOneById($idsusar);
+        // $lastUsername = $authenticationUtils->getLastUsername();
+        // $form = $this->createForm(EvalSusarType::class, $Susar);
+        // $form = $this->createForm(DetailSusarEuType::class, $Susar);
+        
+        $nbIntSub = $entityManager->getRepository(SusarEU::class)->nbIntSubDMM($idsusar);
+
+
+        if ($nbIntSub > 1) { 
+            // on affiche une page demandant confirmation pour réaliser l'évaluation
+            return $this->render('affiche_susar_eu/popup_eval_multiple.html.twig', [
+                'idsusar' => $idsusar,
+                'Susar' => $Susar,
+                'nbIntSub' => $nbIntSub,
+            ]);
+        } else {
+            // on crée les évaluations
+            return $this->redirectToRoute('app_detail_susar_eu', [
+                'idsusar' => $idsusar,
+            ]);
+        }
+
     }
 }

@@ -12,9 +12,10 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 // use App\Entity\IntervenantSubstanceDMMSubstance;
 use App\Form\IntervenantSubstanceDMM_detailType;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-// use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+// use Symfony\Component\ExpressionLanguage\Expression;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 // #[IsGranted(new Expression('is_granted("ROLE_DMFR_REF") or is_granted("ROLE_SURV_PILOTEVEC")'))]
 #[IsGranted("ROLE_SURV_PILOTEVEC")]
@@ -53,7 +54,7 @@ class IntervenantSubstanceController extends AbstractController
     }
 
     #[Route('/intervenant_substance/modif/{id}', name: 'app_intervenant_substance_modif')]
-    public function liste_intervenant_substance_modif(ManagerRegistry $doctrine, int $id, IntervenantsANSMRepository $intervenantsRepository, Request $request): Response
+    public function liste_intervenant_substance_modif(ManagerRegistry $doctrine, int $id, IntervenantsANSMRepository $intervenantsRepository, Request $request, AuthenticationUtils $authenticationUtils): Response
     {
         $entityManager = $doctrine->getManager();
         $IntSub = $entityManager->getRepository(IntervenantSubstanceDMM::class)->findIntSubById($id);
@@ -89,6 +90,8 @@ class IntervenantSubstanceController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             
             $dateNow = new DateTimeImmutable();
+            // $dateModif = new \DateTimeImmutable();
+            $lastUsername = $authenticationUtils->getLastUsername();
 
             // On récupère les données des substances liées si elles existent depuis le formulaire
             $substancesData = $formData['intervenant_substance_dmm_substances']['intervenantSubstanceDMMSubstances'] ?? [];
@@ -126,6 +129,7 @@ class IntervenantSubstanceController extends AbstractController
             $IntSub->setPoleCourt($newIntervenant->getPoleCourt());
             $IntSub->setPoleLong($newIntervenant->getPoleLong());
             $IntSub->setUpdatedAt($dateNow);
+            $IntSub->setUserModif($lastUsername);
 
             // On traite manuellement les entités IntervenantSubstanceDMMSubstance liées
             foreach ($IntSub->getIntervenantSubstanceDMMSubstances() as $index => $substance) {
@@ -159,7 +163,7 @@ class IntervenantSubstanceController extends AbstractController
     }
 
     #[Route('/intervenant_substance/creation', name: 'app_intervenant_substance_creation')]
-    public function liste_intervenant_substance_crea(ManagerRegistry $doctrine, IntervenantsANSMRepository $intervenantsRepository, Request $request): Response
+    public function liste_intervenant_substance_crea(ManagerRegistry $doctrine, IntervenantsANSMRepository $intervenantsRepository, Request $request, AuthenticationUtils $authenticationUtils): Response
     {
         $entityManager = $doctrine->getManager();
         // $IntSub = $entityManager->getRepository(IntervenantSubstanceDMM::class)->findIntSubById($id);
@@ -194,6 +198,9 @@ class IntervenantSubstanceController extends AbstractController
             }
 
             $dateNow = new DateTimeImmutable();
+            // $dateModif = new \DateTimeImmutable();
+            $lastUsername = $authenticationUtils->getLastUsername();
+
             $newEvalua = explode("|", $formData["intervenant_substance_dmm_substances"]["evaluateur"])[0];
             
             $newIntervenant = $intervenantsRepository->findOneBy(['evaluateur' => $newEvalua]);
@@ -204,6 +211,8 @@ class IntervenantSubstanceController extends AbstractController
             $IntSub->setPoleLong($newIntervenant->getPoleLong());
             $IntSub->setCreatedAt($dateNow);
             $IntSub->setUpdatedAt($dateNow);
+            $IntSub->setUserCreate($lastUsername);
+            $IntSub->setUserModif($lastUsername);
 
             // dd($IntSub);
 

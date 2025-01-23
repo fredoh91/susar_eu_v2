@@ -73,6 +73,12 @@ class IntervenantSubstanceDMM
     #[ORM\OneToMany(targetEntity: Medicaments::class, mappedBy: 'IntervenantSubstanceDMM')]
     private Collection $medicaments;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $userCreate = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $userModif = null;
+
     // #[ORM\ManyToMany(targetEntity: SusarEU::class, mappedBy: 'IntervenantSubstanceDMM')]
     // private Collection $susarEUs;
 
@@ -374,6 +380,30 @@ class IntervenantSubstanceDMM
                 $medicament->setIntervenantSubstanceDMM(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getUserCreate(): ?string
+    {
+        return $this->userCreate;
+    }
+
+    public function setUserCreate(?string $userCreate): static
+    {
+        $this->userCreate = $userCreate;
+
+        return $this;
+    }
+
+    public function getUserModif(): ?string
+    {
+        return $this->userModif;
+    }
+
+    public function setUserModif(?string $userModif): static
+    {
+        $this->userModif = $userModif;
 
         return $this;
     }

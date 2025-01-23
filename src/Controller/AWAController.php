@@ -10,9 +10,10 @@ use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 #[IsGranted(new Expression('is_granted("ROLE_DMM_EVAL") or is_granted("ROLE_SURV_PILOTEVEC")'))]
 class AWAController extends AbstractController
@@ -57,7 +58,7 @@ class AWAController extends AbstractController
         ]);
     }
     #[Route('/awa_crea_eval/{idsusar}', name: 'app_awa_crea_eval')]
-    public function Crea_AWA(int $idsusar, ManagerRegistry $doctrine, Request $request, LoggerInterface $logger): Response
+    public function Crea_AWA(int $idsusar, ManagerRegistry $doctrine, Request $request, LoggerInterface $logger, AuthenticationUtils $authenticationUtils): Response
     {
         // $session = $request->getSession();
         $this->logger = $logger;
@@ -66,6 +67,7 @@ class AWAController extends AbstractController
         // 1/ Recherche des SubstancePt pour ce susar
         $SubPTs = $Susar->getSubstancePts();
         $dateModif = new \DateTimeImmutable();
+        $lastUsername = $authenticationUtils->getLastUsername();
         $evalCree = false;
         // dump("un : " . $session->get('search_susar_eu'));
         // dump($Susar);
@@ -85,6 +87,8 @@ class AWAController extends AbstractController
                     $substancePtEval->setDateEval($dateModif);
                     $substancePtEval->setCreatedAt($dateModif);
                     $substancePtEval->setUpdatedAt($dateModif);
+                    $substancePtEval->setUserCreate($lastUsername);
+                    $substancePtEval->setUserModif($lastUsername);
                     $substancePtEval->setAssessmentOutcome("Assessed without action");
                     $substancePtEval->setComments("Assessed without action (bouton AWA)");
                     // 3/ Création des liens SubstancePtEval vers SubstancePt
@@ -152,7 +156,8 @@ class AWAController extends AbstractController
                 $Susar->setDateEvaluation(null);
                 $entityManager->flush();
                 $this->addFlash('success', 'Votre évaluation a bien été prise en compte.');
-                return $this->redirectToRoute('app_detail_susar_eu', ['master_id' => $Susar->getMasterId()]);
+                // return $this->redirectToRoute('app_detail_susar_eu', ['master_id' => $Susar->getMasterId()]);
+                return $this->redirectToRoute('app_detail_susar_eu', ['idsusar' => $Susar->getId()]);
             }
         } else {
             // Ce susar n'a pas de SubstancePt, c'est étrange, il faut loguer cette erreur

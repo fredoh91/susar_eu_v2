@@ -104,7 +104,10 @@
                 <div class="container_flex_right">
                     <div class="numBNPV_lib fw-bold">Num. BNPV :</div>
                     <div class="numBNPV">
-                        <a href="{{ path('app_detail_susar_eu',{'master_id':Susar.MasterId}) }}" target="_blank">{{ Susar.specificcaseid|e }}</a>
+                        {# <a href="{{ path('app_detail_susar_eu',{'master_id':Susar.MasterId}) }}" target="_blank">{{ Susar.specificcaseid|e }}</a> #}
+                        {# <a href="{{ path('app_detail_susar_eu',{'idsusar':Susar.id}) }}" target="_blank">{{ Susar.specificcaseid|e }}</a> #}
+                        <a href="{{ path('app_detail_susar_eu_nb_intsub',{'idsusar':Susar.id}) }}" target="_blank">{{ Susar.specificcaseid|e }}</a>
+                        
                         {# {{ Susar.MasterId|e }}
                         {{ Susar.specificcaseid|e }} #}
                     </div>
