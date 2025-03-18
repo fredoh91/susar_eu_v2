@@ -33,6 +33,7 @@
               <li><a class="dropdown-item" href="{{ path ('app_liste_HL_SA') }}">Liste des High Level (pour requête EVDAS)</a></li>
               <li><a class="dropdown-item" href="{{ path ('app_upload_excel_active_sub_grouping') }}">Import du fichier "Active substance grouping"</a></li>
               <li><a class="dropdown-item" href="{{ path ('app_aff_active_sub_grouping') }}">Affichage "Active substance grouping"</a></li>
+              <li><a class="dropdown-item" href="{{ path ('app_import_excel_ctll') }}">Import d'un fichier CTLL</a></li>
               {% if is_granted('ROLE_SUPER_ADMIN') %}
                 <li><a class="dropdown-item" href="{{ path ('app_upload_excel_active_sub_grouping_reprise_donnees') }}">Import du fichier "Active substance grouping" pour la reprise des données</a></li>
               {% endif %}
