@@ -14,16 +14,16 @@ class EffetsIndesirables
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?int $master_id = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?int $caseid = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255,nullable: true)]
     private ?string $specificcaseid = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?int $DLPVersion = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
@@ -67,6 +67,24 @@ class EffetsIndesirables
 
     #[ORM\Column]
     private ?\DateTimeImmutable $updatedAt = null;
+
+    #[ORM\Column(length: 1000, nullable: true)]
+    private ?string $ReactionListPT_CTLL = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $ReactionListPT = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $Outcome = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $Date = null;
+
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $Date_FormatDate = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $Duration = null;
 
     public function getId(): ?int
     {
@@ -285,6 +303,78 @@ class EffetsIndesirables
     public function setUpdatedAt(\DateTimeImmutable $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function getReactionListPTCTLL(): ?string
+    {
+        return $this->ReactionListPT_CTLL;
+    }
+
+    public function setReactionListPTCTLL(?string $ReactionListPT_CTLL): static
+    {
+        $this->ReactionListPT_CTLL = $ReactionListPT_CTLL;
+
+        return $this;
+    }
+
+    public function getReactionListPT(): ?string
+    {
+        return $this->ReactionListPT;
+    }
+
+    public function setReactionListPT(?string $ReactionListPT): static
+    {
+        $this->ReactionListPT = $ReactionListPT;
+
+        return $this;
+    }
+
+    public function getOutcome(): ?string
+    {
+        return $this->Outcome;
+    }
+
+    public function setOutcome(?string $Outcome): static
+    {
+        $this->Outcome = $Outcome;
+
+        return $this;
+    }
+
+    public function getDate(): ?string
+    {
+        return $this->Date;
+    }
+
+    public function setDate(?string $Date): static
+    {
+        $this->Date = $Date;
+
+        return $this;
+    }
+
+    public function getDateFormatDate(): ?\DateTimeInterface
+    {
+        return $this->Date_FormatDate;
+    }
+
+    public function setDateFormatDate(?\DateTimeInterface $Date_FormatDate): static
+    {
+        $this->Date_FormatDate = $Date_FormatDate;
+
+        return $this;
+    }
+
+    public function getDuration(): ?string
+    {
+        return $this->Duration;
+    }
+
+    public function setDuration(?string $Duration): static
+    {
+        $this->Duration = $Duration;
 
         return $this;
     }

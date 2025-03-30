@@ -2,14 +2,14 @@
 
 namespace App\Entity;
 
-use App\Repository\ImportCttlFicExcelRepository;
+use App\Repository\ImportCtllFicExcelRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: ImportCttlFicExcelRepository::class)]
-class ImportCttlFicExcel
+#[ORM\Entity(repositoryClass: ImportCtllFicExcelRepository::class)]
+class ImportCtllFicExcel
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -31,8 +31,11 @@ class ImportCttlFicExcel
     /**
      * @var Collection<int, ImportCtll>
      */
-    #[ORM\OneToMany(targetEntity: ImportCtll::class, mappedBy: 'ImportCttlFicExcel')]
+    #[ORM\OneToMany(targetEntity: ImportCtll::class, mappedBy: 'ImportCtllFicExcel')]
     private Collection $importCtlls;
+
+    #[ORM\Column]
+    private ?int $nbLignesDataFicExcel = null;
 
     public function __construct()
     {
@@ -104,7 +107,7 @@ class ImportCttlFicExcel
     {
         if (!$this->importCtlls->contains($importCtll)) {
             $this->importCtlls->add($importCtll);
-            $importCtll->setImportCttlFicExcel($this);
+            $importCtll->setImportCtllFicExcel($this);
         }
 
         return $this;
@@ -114,10 +117,22 @@ class ImportCttlFicExcel
     {
         if ($this->importCtlls->removeElement($importCtll)) {
             // set the owning side to null (unless already changed)
-            if ($importCtll->getImportCttlFicExcel() === $this) {
-                $importCtll->setImportCttlFicExcel(null);
+            if ($importCtll->getImportCtllFicExcel() === $this) {
+                $importCtll->setImportCtllFicExcel(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getNbLignesDataFicExcel(): ?int
+    {
+        return $this->nbLignesDataFicExcel;
+    }
+
+    public function setNbLignesDataFicExcel(int $nbLignesDataFicExcel): static
+    {
+        $this->nbLignesDataFicExcel = $nbLignesDataFicExcel;
 
         return $this;
     }

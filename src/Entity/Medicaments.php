@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\MedicamentsRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: MedicamentsRepository::class)]
@@ -13,19 +14,19 @@ class Medicaments
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?int $master_id = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?int $caseid = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255,nullable: true)]
     private ?string $specificcaseid = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?int $DLPVersion = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255,nullable: true)]
     private ?string $productcharacterization = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -57,6 +58,36 @@ class Medicaments
 
     #[ORM\Column(nullable: true)]
     private ?bool $AssociationDeSubstances = null;
+
+    #[ORM\Column(length: 1000)]
+    private ?string $NomProduitBrut = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $Maladie = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $StatutMedicApresEffet = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $DateDerniereAdmin = null;
+
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $DateDerniereAdmin_FormatDate = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $DelaiAdministrationSurvenue = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $Dosage = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $VoieAdmin = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $Comment = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $Type_saMS_Mono = null;
 
     public function getId(): ?int
     {
@@ -239,6 +270,126 @@ class Medicaments
     public function setAssociationDeSubstances(?bool $AssociationDeSubstances): static
     {
         $this->AssociationDeSubstances = $AssociationDeSubstances;
+
+        return $this;
+    }
+
+    public function getNomProduitBrut(): ?string
+    {
+        return $this->NomProduitBrut;
+    }
+
+    public function setNomProduitBrut(string $NomProduitBrut): static
+    {
+        $this->NomProduitBrut = $NomProduitBrut;
+
+        return $this;
+    }
+
+    public function getMaladie(): ?string
+    {
+        return $this->Maladie;
+    }
+
+    public function setMaladie(?string $Maladie): static
+    {
+        $this->Maladie = $Maladie;
+
+        return $this;
+    }
+
+    public function getStatutMedicApresEffet(): ?string
+    {
+        return $this->StatutMedicApresEffet;
+    }
+
+    public function setStatutMedicApresEffet(?string $StatutMedicApresEffet): static
+    {
+        $this->StatutMedicApresEffet = $StatutMedicApresEffet;
+
+        return $this;
+    }
+
+    public function getDateDerniereAdmin(): ?string
+    {
+        return $this->DateDerniereAdmin;
+    }
+
+    public function setDateDerniereAdmin(?string $DateDerniereAdmin): static
+    {
+        $this->DateDerniereAdmin = $DateDerniereAdmin;
+
+        return $this;
+    }
+
+    public function getDateDerniereAdminFormatDate(): ?\DateTimeInterface
+    {
+        return $this->DateDerniereAdmin_FormatDate;
+    }
+
+    public function setDateDerniereAdminFormatDate(?\DateTimeInterface $DateDerniereAdmin_FormatDate): static
+    {
+        $this->DateDerniereAdmin_FormatDate = $DateDerniereAdmin_FormatDate;
+
+        return $this;
+    }
+
+    public function getDelaiAdministrationSurvenue(): ?string
+    {
+        return $this->DelaiAdministrationSurvenue;
+    }
+
+    public function setDelaiAdministrationSurvenue(?string $DelaiAdministrationSurvenue): static
+    {
+        $this->DelaiAdministrationSurvenue = $DelaiAdministrationSurvenue;
+
+        return $this;
+    }
+
+    public function getDosage(): ?string
+    {
+        return $this->Dosage;
+    }
+
+    public function setDosage(?string $Dosage): static
+    {
+        $this->Dosage = $Dosage;
+
+        return $this;
+    }
+
+    public function getVoieAdmin(): ?string
+    {
+        return $this->VoieAdmin;
+    }
+
+    public function setVoieAdmin(?string $VoieAdmin): static
+    {
+        $this->VoieAdmin = $VoieAdmin;
+
+        return $this;
+    }
+
+    public function getComment(): ?string
+    {
+        return $this->Comment;
+    }
+
+    public function setComment(?string $Comment): static
+    {
+        $this->Comment = $Comment;
+
+        return $this;
+    }
+
+    public function getTypeSaMSMono(): ?string
+    {
+        return $this->Type_saMS_Mono;
+    }
+
+    public function setTypeSaMSMono(?string $Type_saMS_Mono): static
+    {
+        $this->Type_saMS_Mono = $Type_saMS_Mono;
 
         return $this;
     }

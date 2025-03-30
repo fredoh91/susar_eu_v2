@@ -44,6 +44,18 @@ class MedicalHistory
     #[ORM\Column]
     private ?\DateTimeImmutable $updatedAt = null;
 
+    #[ORM\Column(length: 1000, nullable: true)]
+    private ?string $MedicalHistory_CTLL = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $Disease = null;
+
+    // #[ORM\Column(length: 255, nullable: true)]
+    // private ?string $Continuing = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $Comment = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -165,6 +177,42 @@ class MedicalHistory
     public function setUpdatedAt(\DateTimeImmutable $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function getMedicalHistoryCTLL(): ?string
+    {
+        return $this->MedicalHistory_CTLL;
+    }
+
+    public function setMedicalHistoryCTLL(?string $MedicalHistory_CTLL): static
+    {
+        $this->MedicalHistory_CTLL = $MedicalHistory_CTLL;
+
+        return $this;
+    }
+
+    public function getDisease(): ?string
+    {
+        return $this->Disease;
+    }
+
+    public function setDisease(?string $Disease): static
+    {
+        $this->Disease = $Disease;
+
+        return $this;
+    }
+
+    public function getComment(): ?string
+    {
+        return $this->Comment;
+    }
+
+    public function setComment(?string $Comment): static
+    {
+        $this->Comment = $Comment;
 
         return $this;
     }

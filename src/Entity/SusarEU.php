@@ -16,16 +16,16 @@ class SusarEU
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?int $master_id = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?int $caseid = null;
 
-    #[ORM\Column(length: 16)]
+    #[ORM\Column(length: 16,nullable: true)]
     private ?string $specificcaseid = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?int $DLPVersion = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
@@ -37,7 +37,7 @@ class SusarEU
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $studytitle = null;
 
-    #[ORM\Column(length: 50, nullable: true)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $sponsorstudynumb = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -168,6 +168,33 @@ class SusarEU
 
     #[ORM\Column(nullable: true)]
     private ?int $idCTLL = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $EV_SafetyReportIdentifier = null;
+
+    // #[ORM\Column(length: 1000, nullable: true)]
+    // private ?string $StudyRegistrationN = null;
+
+    #[ORM\OneToOne(inversedBy: 'susarEU', cascade: ['persist', 'remove'])]
+    private ?ImportCtll $ImportCtll = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $ReceiveDate = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $ReceiptDate = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $GatewayDate = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $InitialsHeightWeight = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $BirthDate = null;
+
+    #[ORM\Column(length: 1000, nullable: true)]
+    private ?string $PrimarySourceQualification = null;
 
     // #[ORM\ManyToMany(targetEntity: IntervenantSubstanceDMM::class, inversedBy: 'susarEUs')]
     // private Collection $IntervenantSubstanceDMM;
@@ -1002,6 +1029,114 @@ class SusarEU
     public function setIdCTLL(?int $idCTLL): static
     {
         $this->idCTLL = $idCTLL;
+
+        return $this;
+    }
+
+    public function getEVSafetyReportIdentifier(): ?string
+    {
+        return $this->EV_SafetyReportIdentifier;
+    }
+
+    public function setEVSafetyReportIdentifier(string $EV_SafetyReportIdentifier): static
+    {
+        $this->EV_SafetyReportIdentifier = $EV_SafetyReportIdentifier;
+
+        return $this;
+    }
+
+    // public function getStudyRegistrationN(): ?string
+    // {
+    //     return $this->StudyRegistrationN;
+    // }
+
+    // public function setStudyRegistrationN(?string $StudyRegistrationN): static
+    // {
+    //     $this->StudyRegistrationN = $StudyRegistrationN;
+
+    //     return $this;
+    // }
+
+    public function getImportCtll(): ?ImportCtll
+    {
+        return $this->ImportCtll;
+    }
+
+    public function setImportCtll(?ImportCtll $ImportCtll): static
+    {
+        $this->ImportCtll = $ImportCtll;
+
+        return $this;
+    }
+
+    public function getReceiveDate(): ?\DateTimeInterface
+    {
+        return $this->ReceiveDate;
+    }
+
+    public function setReceiveDate(?\DateTimeInterface $ReceiveDate): static
+    {
+        $this->ReceiveDate = $ReceiveDate;
+
+        return $this;
+    }
+
+    public function getReceiptDate(): ?\DateTimeInterface
+    {
+        return $this->ReceiptDate;
+    }
+
+    public function setReceiptDate(?\DateTimeInterface $ReceiptDate): static
+    {
+        $this->ReceiptDate = $ReceiptDate;
+
+        return $this;
+    }
+
+    public function getGatewayDate(): ?\DateTimeInterface
+    {
+        return $this->GatewayDate;
+    }
+
+    public function setGatewayDate(?\DateTimeInterface $GatewayDate): static
+    {
+        $this->GatewayDate = $GatewayDate;
+
+        return $this;
+    }
+
+    public function getInitialsHeightWeight(): ?string
+    {
+        return $this->InitialsHeightWeight;
+    }
+
+    public function setInitialsHeightWeight(?string $InitialsHeightWeight): static
+    {
+        $this->InitialsHeightWeight = $InitialsHeightWeight;
+
+        return $this;
+    }
+
+    public function getBirthDate(): ?string
+    {
+        return $this->BirthDate;
+    }
+
+    public function setBirthDate(?string $BirthDate): static
+    {
+        $this->BirthDate = $BirthDate;
+
+        return $this;
+    }
+
+    public function getPrimarySourceQualification(): ?string
+    {
+        return $this->PrimarySourceQualification;
+    }
+
+    public function setPrimarySourceQualification(?string $PrimarySourceQualification): static
+    {
+        $this->PrimarySourceQualification = $PrimarySourceQualification;
 
         return $this;
     }

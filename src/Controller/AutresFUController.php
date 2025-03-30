@@ -14,6 +14,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted(new Expression('is_granted("ROLE_DMM_EVAL") or is_granted("ROLE_SURV_PILOTEVEC")'))]
 class AutresFUController extends AbstractController
 {
+    // #[Route('/autres_FU/{specificcaseid}', name: 'app_autres_FU')]
     #[Route('/autres_FU/{specificcaseid}', name: 'app_autres_FU')]
     public function affiche_autres_fu(string $specificcaseid, ManagerRegistry $doctrine, Request $request): Response
     {

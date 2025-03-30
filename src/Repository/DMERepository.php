@@ -21,28 +21,42 @@ class DMERepository extends ServiceEntityRepository
         parent::__construct($registry, DME::class);
     }
 
-//    /**
-//     * @return DME[] Returns an array of DME objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('d')
-//            ->andWhere('d.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('d.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    public function isCasDME($value): bool
+    {
+        $result = $this->createQueryBuilder('i')
+            ->andWhere('i.inactif = false')
+            ->getQuery()
+            ->getResult();
 
-//    public function findOneBySomeField($value): ?DME
-//    {
-//        return $this->createQueryBuilder('d')
-//            ->andWhere('d.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+        foreach ($result as $dme) {
+            if (str_contains(strtolower($value), strtolower($dme->getLltNameEn()))) {
+                return true;
+            }
+        }
+        return false;
+    }
+    //    /**
+    //     * @return DME[] Returns an array of DME objects
+    //     */
+    //    public function findByExampleField($value): array
+    //    {
+    //        return $this->createQueryBuilder('d')
+    //            ->andWhere('d.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->orderBy('d.id', 'ASC')
+    //            ->setMaxResults(10)
+    //            ->getQuery()
+    //            ->getResult()
+    //        ;
+    //    }
+
+    //    public function findOneBySomeField($value): ?DME
+    //    {
+    //        return $this->createQueryBuilder('d')
+    //            ->andWhere('d.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->getQuery()
+    //            ->getOneOrNullResult()
+    //        ;
+    //    }
 }

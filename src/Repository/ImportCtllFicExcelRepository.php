@@ -2,22 +2,22 @@
 
 namespace App\Repository;
 
-use App\Entity\ImportCttlFicExcel;
+use App\Entity\ImportCtllFicExcel;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<ImportCttlFicExcel>
+ * @extends ServiceEntityRepository<ImportCtllFicExcel>
  */
-class ImportCttlFicExcelRepository extends ServiceEntityRepository
+class ImportCtllFicExcelRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, ImportCttlFicExcel::class);
+        parent::__construct($registry, ImportCtllFicExcel::class);
     }
 
 //    /**
-//     * @return ImportCttlFicExcel[] Returns an array of ImportCttlFicExcel objects
+//     * @return ImportCtllFicExcel[] Returns an array of ImportCtllFicExcel objects
 //     */
 //    public function findByExampleField($value): array
 //    {
@@ -31,7 +31,7 @@ class ImportCttlFicExcelRepository extends ServiceEntityRepository
 //        ;
 //    }
 
-//    public function findOneBySomeField($value): ?ImportCttlFicExcel
+//    public function findOneBySomeField($value): ?ImportCtllFicExcel
 //    {
 //        return $this->createQueryBuilder('i')
 //            ->andWhere('i.exampleField = :val')

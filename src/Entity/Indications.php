@@ -40,6 +40,12 @@ class Indications
     #[ORM\Column(nullable: true)]
     private ?int $master_id = null;
 
+    #[ORM\Column(length: 1000, nullable: true)]
+    private ?string $IndicationCTLL = null;
+
+    // #[ORM\Column(length: 1000, nullable: true)]
+    // private ?string $Indication_CTLL = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -149,6 +155,18 @@ class Indications
     public function setMasterId(?int $master_id): static
     {
         $this->master_id = $master_id;
+
+        return $this;
+    }
+
+    public function getIndicationCTLL(): ?string
+    {
+        return $this->IndicationCTLL;
+    }
+
+    public function setIndicationCTLL(?string $IndicationCTLL): static
+    {
+        $this->IndicationCTLL = $IndicationCTLL;
 
         return $this;
     }

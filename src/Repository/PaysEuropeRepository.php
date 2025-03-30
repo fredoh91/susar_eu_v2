@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\PaysEurope;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use PhpOffice\PhpSpreadsheet\Calculation\Logical\Boolean;
 
 /**
  * @extends ServiceEntityRepository<PaysEurope>
@@ -20,6 +21,18 @@ class PaysEuropeRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, PaysEurope::class);
     }
+
+    public function isCasEurope($value): bool
+    {
+        $result = $this->createQueryBuilder('p')
+            ->andWhere('p.LibPays = :val')
+            ->setParameter('val', $value)
+            ->getQuery()
+            ->getOneOrNullResult();
+
+        return $result !== null;
+    }
+
 
     //    /**
     //     * @return PaysEurope[] Returns an array of PaysEurope objects

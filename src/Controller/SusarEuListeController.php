@@ -20,6 +20,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 // use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Validator\Constraints\Length;
+use App\Service\SusarEUQueryService;
 
 // class AfficheSusarEuController extends AbstractController
 
@@ -28,11 +29,13 @@ class SusarEuListeController extends AbstractController
 {
     private $logger;
     private $kernel;
-
-    public function __construct(LoggerInterface $logger, KernelInterface $kernel)
+    private $susarEUQueryService;
+    
+    public function __construct(LoggerInterface $logger, KernelInterface $kernel, SusarEUQueryService $susarEUQueryService)
     {
         $this->logger = $logger;
         $this->kernel = $kernel;
+        $this->susarEUQueryService = $susarEUQueryService;
     }
     /**
      * Route de test, pour afficher tous les susars
@@ -190,7 +193,8 @@ class SusarEuListeController extends AbstractController
                     }
 
                     // Le formulaire est valide, on peut faire la recherche
-                    $TousSusars = $entityManager->getRepository(SusarEU::class)->findBySearchSusarEuListe($searchSusarEU,$triSearchSusarEU);
+                    // $TousSusars = $entityManager->getRepository(SusarEU::class)->findBySearchSusarEuListe($searchSusarEU,$triSearchSusarEU);
+                    $TousSusars = $this->susarEUQueryService->findBySearchSusarEuListe($searchSusarEU, $triSearchSusarEU);
                     // Redirection vers la route sans paramètres de page
                     return $this->redirectToRoute('app_liste_susar_eu');
                 } else {
@@ -230,7 +234,9 @@ class SusarEuListeController extends AbstractController
             
             $form = $this->createForm(SearchSusarEUType::class, $searchSusarEU);
 
-            $TousSusars = $entityManager->getRepository(SusarEU::class)->findBySearchSusarEuListe($searchSusarEU,$triSearchSusarEU);
+            // $TousSusars = $entityManager->getRepository(SusarEU::class)->findBySearchSusarEuListe($searchSusarEU,$triSearchSusarEU);
+            $TousSusars = $this->susarEUQueryService->findBySearchSusarEuListe($searchSusarEU, $triSearchSusarEU);
+
         }
         
         // $data = $request->request->all();

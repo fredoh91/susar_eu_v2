@@ -16,6 +16,21 @@ class ImportCtllRepository extends ServiceEntityRepository
         parent::__construct($registry, ImportCtll::class);
     }
 
+
+   /**
+    * @return ImportCtll[] Returns an array of ImportCtll objects
+    */
+   public function findByIdImport(int $idImportCtllFicExcel): array
+   {
+       return $this->createQueryBuilder('i')
+           ->andWhere('i.ImportCtllFicExcel = :val')
+           ->setParameter('val', $idImportCtllFicExcel)
+           ->orderBy('i.id', 'ASC')
+           ->getQuery()
+           ->getResult()
+       ;
+   }
+
 //    /**
 //     * @return ImportCtll[] Returns an array of ImportCtll objects
 //     */

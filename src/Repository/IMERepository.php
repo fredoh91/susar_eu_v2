@@ -21,28 +21,48 @@ class IMERepository extends ServiceEntityRepository
         parent::__construct($registry, IME::class);
     }
 
-//    /**
-//     * @return IME[] Returns an array of IME objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('i')
-//            ->andWhere('i.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('i.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
 
-//    public function findOneBySomeField($value): ?IME
-//    {
-//        return $this->createQueryBuilder('i')
-//            ->andWhere('i.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+
+    public function isCasIME($value): bool
+    {
+        $result = $this->createQueryBuilder('i')
+            ->andWhere('i.inactif = false')
+            ->getQuery()
+            ->getResult();
+
+        foreach ($result as $ime) {
+            // Convertir les deux chaînes en minuscules pour ignorer la casse
+            if (str_contains(strtolower($value), strtolower($ime->getLltNameEn()))) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+
+    //    /**
+    //     * @return IME[] Returns an array of IME objects
+    //     */
+    //    public function findByExampleField($value): array
+    //    {
+    //        return $this->createQueryBuilder('i')
+    //            ->andWhere('i.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->orderBy('i.id', 'ASC')
+    //            ->setMaxResults(10)
+    //            ->getQuery()
+    //            ->getResult()
+    //        ;
+    //    }
+
+    //    public function findOneBySomeField($value): ?IME
+    //    {
+    //        return $this->createQueryBuilder('i')
+    //            ->andWhere('i.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->getQuery()
+    //            ->getOneOrNullResult()
+    //        ;
+    //    }
 }
