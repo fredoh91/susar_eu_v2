@@ -22,10 +22,11 @@ final class ImportExcelCTLLController extends AbstractController{
     private int $importedRowsCount = 0;
     private int $idImportCtllFicExcel = -1;
     private ImportVersSusarEu $importVersSusarEu ;
-
+    private array $nbDonneesInserees;
     public function __construct(ImportVersSusarEu $importVersSusarEu)
     {
         $this->importVersSusarEu = $importVersSusarEu;
+        $this->nbDonneesInserees = [];
     }
 
     #[Route('/import_excel_ctll', name: 'app_import_excel_ctll')]
@@ -43,18 +44,19 @@ final class ImportExcelCTLLController extends AbstractController{
             if ($FicExcel) {
                 $this->importExcelVersTbImportCtll($FicExcel, $em, $authenticationUtils);
                 // TODO: 
-                $nbDonneesInserees=$this->importVersSusarEu->importExcelVersTbSusarEu($this->idImportCtllFicExcel, 
+                $this->nbDonneesInserees=$this->importVersSusarEu->importExcelVersTbSusarEu($this->idImportCtllFicExcel, 
                                                                     $em, 
                                                                     $authenticationUtils);
 
-                $nbDonneesInserees['nbOfExcelRow'] = $this->importedRowsCount;
-                dump($nbDonneesInserees);
+                $this->nbDonneesInserees['nbOfExcelRow'] = $this->importedRowsCount;
+                // dump($this->nbDonneesInserees);
             }
         }
         
         return $this->render('import_excel_ctll/upload_excel_ctll.html.twig', [
             // 'controller_name' => 'ImportExcelCTLLController',
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'nbDonneesInserees' => $this->nbDonneesInserees,
         ]);
     }
 

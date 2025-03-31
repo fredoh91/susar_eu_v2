@@ -106,7 +106,7 @@ class SusarEU
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $isCaseSerious = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(length: 1000, nullable: true)]
     private ?string $seriousnessCriteria = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -195,6 +195,9 @@ class SusarEU
 
     #[ORM\Column(length: 1000, nullable: true)]
     private ?string $PrimarySourceQualification = null;
+
+    #[ORM\Column(length: 5, nullable: true)]
+    private ?string $ParentChild = null;
 
     // #[ORM\ManyToMany(targetEntity: IntervenantSubstanceDMM::class, inversedBy: 'susarEUs')]
     // private Collection $IntervenantSubstanceDMM;
@@ -1137,6 +1140,18 @@ class SusarEU
     public function setPrimarySourceQualification(?string $PrimarySourceQualification): static
     {
         $this->PrimarySourceQualification = $PrimarySourceQualification;
+
+        return $this;
+    }
+
+    public function getParentChild(): ?string
+    {
+        return $this->ParentChild;
+    }
+
+    public function setParentChild(?string $ParentChild): static
+    {
+        $this->ParentChild = $ParentChild;
 
         return $this;
     }

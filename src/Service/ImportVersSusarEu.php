@@ -63,8 +63,10 @@ class ImportVersSusarEu
                     $dateImport = new \DateTimeImmutable();
                     $susarEU = new SusarEU();
 
-                    
-                    
+                    $casEurope = $this->paysEuropeRepository->isCasEurope($importCtll->getCountry());
+                    $casIME = $this->imeRepository->isCasIME($importCtll->getReactionListPT());
+                    $casDME = $this->dmeRepository->isCasDME($importCtll->getReactionListPT());
+
                     $susarEU->setEVSafetyReportIdentifier($importCtll->getEVSafetyReportIdentifier());
                     $susarEU->setDLPVersion($importCtll->getCaseVersion());
                     $susarEU->setWorldWideId($importCtll->getCaseReportNumber());
@@ -73,19 +75,21 @@ class ImportVersSusarEu
                     $susarEU->setNarratif($importCtll->getNarrativeReportersCommentsAndSendersComments());
                     // $susarEU->setPaysEtude($importCtll->getCountry());
                     $susarEU->setPaysSurvenue($importCtll->getCountry());
-                    $susarEU->setCasEurope($this->paysEuropeRepository->isCasEurope($importCtll->getCountry()));
-                    $susarEU->setCasIME($this->imeRepository->isCasIME($importCtll->getReactionListPT()));
-                    $susarEU->setCasDME($this->dmeRepository->isCasDME($importCtll->getReactionListPT()));
-
+                    $susarEU->setCasEurope($casEurope);
+                    $susarEU->setCasIME($casIME);
+                    $susarEU->setCasDME($casDME);
+                    $susarEU->setSeriousnessCriteria($this->donneGravite($importCtll));
+                    $susarEU->setIsCaseSerious($importCtll->getSerious());
                     $susarEU->setPatientAgeGroup($importCtll->getAgeGroup());
                     // $susarEU->setPatientAge(patientAge);
                     if (is_numeric($importCtll->getAge())) {
-                        $susarEU-> setPatientAge($importCtll->getAge());
+                        $susarEU->setPatientAge($importCtll->getAge());
                     } else {
                         $susarEU->setPatientAge(null);
                     }
                     $susarEU->setPatientSex($importCtll->getSex());
                     $susarEU->setBirthDate($importCtll->getBirthDate());
+                    $susarEU->setParentChild($importCtll->getParentChild());
                     $susarEU->setReceiveDate($importCtll->getReceiveDate());
                     $susarEU->setReceiptDate($importCtll->getReceiptDate());
                     $susarEU->setGatewayDate($importCtll->getGatewayDate());
@@ -94,7 +98,15 @@ class ImportVersSusarEu
                     $susarEU->setCasSusarEuV1(false);
 
                     // a faire :
-                    $susarEU->setPriorisation($this->priorisation->donneNiveauPriorisation());
+                    // $susarEU->setPriorisation($this->priorisation->donneNiveauPriorisation());
+                    $susarEU->setPriorisation(
+                        $this->priorisation->donneNiveauPriorisation(
+                            $importCtll,
+                            $casEurope,
+                            $casIME,
+                            $casDME
+                        )
+                    );
 
                     $susarEU->setImportCtll($importCtll);
                     $susarEU->setCreatedAt($dateImport);
@@ -248,8 +260,6 @@ class ImportVersSusarEu
     private function importeEffetsIndesirables($importCtll, $susarEU, $em, $dateImport)
     {
 
-
-
         $tousEffetInd = $importCtll->getReactionListPT();
 
         if ($tousEffetInd) {
@@ -339,4 +349,45 @@ class ImportVersSusarEu
             }
         }
     }
+
+    private function donneGravite($importCtll)
+    {
+        $gravite = '';
+        // $serious= $importCtll->getSerious();
+        // $death= $importCtll->getSeriousnessDeath();
+        // $lifethreatening= $importCtll->getSeriousnessLifethreatening();
+        // $hospitalization= $importCtll->getSeriousnessHospitalisation(); 
+        // $disability= $importCtll->getSeriousnessDisabling();
+        // $congenitalAnomaly= $importCtll->getSeriousnessCongenitalAnomaly();
+        // $otherSeriousness= $importCtll->getSeriousnessOther();
+
+        // dump($serious);
+        // dump($death);
+        // dump($lifethreatening);
+        // dump($hospitalization); 
+        // dump($disability);
+        // dump($congenitalAnomaly);
+        // dump($otherSeriousness);
+        if ($importCtll->getSeriousnessDeath() == 'Yes') {
+            $gravite = $gravite === '' ? 'Death' : $gravite . '<BR>Death';
+        }
+        if ($importCtll->getSeriousnessLifethreatening() == 'Yes') {
+            $gravite = $gravite === '' ? 'Life Threatening' : $gravite . '<BR>Life Threatening';
+        }
+        if ($importCtll->getSeriousnessHospitalisation() == 'Yes') {
+            $gravite = $gravite === '' ? 'Hospitalisation or prolongation of existing Hospitalisation' : $gravite . '<BR>Hospitalisation or prolongation of existing Hospitalisation';
+        }
+        if ($importCtll->getSeriousnessDisabling() == 'Yes') {
+            $gravite = $gravite === '' ? 'Persistent or significant Disability / Incapacity' : $gravite . '<BR>Persistent or significant Disability / Incapacity';
+        }
+        if ($importCtll->getSeriousnessCongenitalAnomaly() == 'Yes') {
+            $gravite = $gravite === '' ? 'Congenital Anomaly / Birth defect' : $gravite . '<BR>Congenital Anomaly / Birth defect';
+        }
+        if ($importCtll->getSeriousnessOther() == 'Yes') {
+            $gravite = $gravite === '' ? 'Other medically important condition' : $gravite . '<BR>Other medically important condition';
+        }
+
+        return $gravite;
+    }
+
 }
