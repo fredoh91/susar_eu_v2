@@ -15,12 +15,12 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class AutresFUController extends AbstractController
 {
     // #[Route('/autres_FU/{specificcaseid}', name: 'app_autres_FU')]
-    #[Route('/autres_FU/{specificcaseid}', name: 'app_autres_FU')]
-    public function affiche_autres_fu(string $specificcaseid, ManagerRegistry $doctrine, Request $request): Response
+    #[Route('/autres_FU/{EVSafetyReportIdentifier}', name: 'app_autres_FU')]
+    public function affiche_autres_fu(string $EVSafetyReportIdentifier, ManagerRegistry $doctrine, Request $request): Response
     {
 
         $entityManager = $doctrine->getManager();
-        $Susars = $entityManager->getRepository(SusarEU::class)->findSusarBySpecificcaseid($specificcaseid);
+        $Susars = $entityManager->getRepository(SusarEU::class)->findSusarByEVSafetyReportIdentifier($EVSafetyReportIdentifier);
         $NbSusar = count($Susars);
 
         return $this->render('autres_fu/liste_autres_fu.html.twig', [

@@ -174,7 +174,7 @@
     "Prio_lib Prio . . ."
     "ConcluCas_lib ConcluCas CommentConclu_lib CommentConclu ."
     "DtEval_lib DtEval . . ."
-    ". btn-FU btn-AWA . ."
+    ". btn-FU btn-AWA . lienICSR"
     "narratif_lib narratif narratif narratif narratif"
     ". narratif narratif narratif narratif"
     ;
@@ -259,6 +259,20 @@
   border-right: 1px solid;
   border-bottom: 1px solid;
   border-left: 1px solid;
+}
+
+.lienICSR {
+  grid-area: lienICSR;
+  border: 1px solid;
+}
+
+.lienICSR_lib {
+  grid-area: lienICSR_lib;
+  text-align: right;
+  padding-right: 5%;
+  display: flex;
+  justify-content: end;
+  align-items: center;
 }
 
 .narratif_lib {

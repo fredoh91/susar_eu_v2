@@ -92,6 +92,20 @@ class SusarEURepository extends ServiceEntityRepository
 
 
 
+    /**
+     * 
+     */
+    public function findSusarByEVSafetyReportIdentifier(string $EVSafetyReportIdentifier): ?array
+    {
+        return $this->createQueryBuilder('s')
+            ->andWhere('s.EV_SafetyReportIdentifier = :val')
+            ->setParameter('val', $EVSafetyReportIdentifier)
+            ->orderBy('s.DLPVersion', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+
 
     /**
      * Undocumented function

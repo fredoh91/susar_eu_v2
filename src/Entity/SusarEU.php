@@ -199,6 +199,18 @@ class SusarEU
     #[ORM\Column(length: 5, nullable: true)]
     private ?string $ParentChild = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?int $narratifNbCaractere = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $ICSR_formLink = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $E2B_link = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $CompleteNarrativeLink = null;
+
     // #[ORM\ManyToMany(targetEntity: IntervenantSubstanceDMM::class, inversedBy: 'susarEUs')]
     // private Collection $IntervenantSubstanceDMM;
 
@@ -1152,6 +1164,54 @@ class SusarEU
     public function setParentChild(?string $ParentChild): static
     {
         $this->ParentChild = $ParentChild;
+
+        return $this;
+    }
+
+    public function getNarratifNbCaractere(): ?int
+    {
+        return $this->narratifNbCaractere;
+    }
+
+    public function setNarratifNbCaractere(?int $narratifNbCaractere): static
+    {
+        $this->narratifNbCaractere = $narratifNbCaractere;
+
+        return $this;
+    }
+
+    public function getICSRFormLink(): ?string
+    {
+        return $this->ICSR_formLink;
+    }
+
+    public function setICSRFormLink(?string $ICSR_formLink): static
+    {
+        $this->ICSR_formLink = $ICSR_formLink;
+
+        return $this;
+    }
+
+    public function getE2BLink(): ?string
+    {
+        return $this->E2B_link;
+    }
+
+    public function setE2BLink(?string $E2B_link): static
+    {
+        $this->E2B_link = $E2B_link;
+
+        return $this;
+    }
+
+    public function getCompleteNarrativeLink(): ?string
+    {
+        return $this->CompleteNarrativeLink;
+    }
+
+    public function setCompleteNarrativeLink(?string $CompleteNarrativeLink): static
+    {
+        $this->CompleteNarrativeLink = $CompleteNarrativeLink;
 
         return $this;
     }

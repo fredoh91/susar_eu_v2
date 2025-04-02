@@ -3,16 +3,17 @@
 namespace App\Service;
 
 use App\Entity\SusarEU;
+use App\Entity\Indications;
 use App\Entity\Medicaments;
 use App\Service\Priorisation;
 use App\Entity\MedicalHistory;
 use App\Repository\DMERepository;
 use App\Repository\IMERepository;
 use App\Entity\EffetsIndesirables;
-use App\Entity\Indications;
 use App\Service\ParsingMedicaments;
 use App\Repository\SusarEURepository;
 use App\Repository\ImportCtllRepository;
+use App\Repository\MeddraMdHierarchyRepository;
 use App\Repository\PaysEuropeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
@@ -28,6 +29,7 @@ class ImportVersSusarEu
     private PaysEuropeRepository $paysEuropeRepository;
     private DMERepository $dmeRepository;
     private IMERepository $imeRepository;
+    private MeddraMdHierarchyRepository $meddraMdHierarchyRepository;
     private int $nbOfInsertedSusar = 0;
     private int $nbOfInsertedMedic = 0;
     private int $nbOfInsertedEffInd = 0;
@@ -42,6 +44,7 @@ class ImportVersSusarEu
         PaysEuropeRepository $paysEuropeRepository,
         DMERepository $dmeRepository,
         IMERepository $imeRepository,
+        MeddraMdHierarchyRepository $meddraMdHierarchyRepository,
     ) {
         $this->importCtllRepository = $importCtllRepository;
         $this->susarEURepository = $susarEURepository;
@@ -50,6 +53,7 @@ class ImportVersSusarEu
         $this->paysEuropeRepository = $paysEuropeRepository;
         $this->dmeRepository = $dmeRepository;
         $this->imeRepository = $imeRepository;
+        $this->meddraMdHierarchyRepository = $meddraMdHierarchyRepository;
     }
 
     public function importExcelVersTbSusarEu(int $idImportCtllFicExcel, EntityManagerInterface $em, AuthenticationUtils $authenticationUtils)
@@ -59,20 +63,34 @@ class ImportVersSusarEu
         if ($importCtll) {
 
             foreach ($importCtll as $importCtll) {
-                if (!$this->susarEURepository->existeEV_SafetyReportIdentifier($importCtll->getEVSafetyReportIdentifier())) {
+                $EVSafetyReportIdentifier = $importCtll->getEVSafetyReportIdentifier();
+                if (!$this->susarEURepository->existeEV_SafetyReportIdentifier($EVSafetyReportIdentifier)) {
                     $dateImport = new \DateTimeImmutable();
                     $susarEU = new SusarEU();
 
                     $casEurope = $this->paysEuropeRepository->isCasEurope($importCtll->getCountry());
                     $casIME = $this->imeRepository->isCasIME($importCtll->getReactionListPT());
                     $casDME = $this->dmeRepository->isCasDME($importCtll->getReactionListPT());
-
-                    $susarEU->setEVSafetyReportIdentifier($importCtll->getEVSafetyReportIdentifier());
+                    $EvRepID_11Chars = substr(rtrim($EVSafetyReportIdentifier), -11);
+                    $ICSR_form_link =   'https://eudravigilance-human.ema.europa.eu/ev-web/api/reports/safetyreport/' .
+                                        $EvRepID_11Chars .
+                                        '?reportType=CIOMS&reportFormat=pdf';
+                    $E2B_link = 'https://eudravigilance-human.ema.europa.eu/ev-web/api/reports/safetyreport/' .
+                                $EvRepID_11Chars .
+                                '?reportType=HUMAN_READABLE&reportFormat=html';
+                    $Complete_Narrative_link =  'http://bi.eudra.org/xmlpserver/PHV%20EudraVigilance%20DWH%20(EVDAS)/_filters/PHV%20EVDAS/Templates/Data%20Warehouse%20Subgroup/Narrative/Narrative.xdo?_xpf=&_xt=Narrative&p_narrati=' .
+                                                $EvRepID_11Chars .
+                                                '&_xpt=1&_xf=rtf';
+                    $susarEU->setICSRFormLink($ICSR_form_link);
+                    $susarEU->setE2BLink($E2B_link);
+                    $susarEU->setCompleteNarrativeLink($Complete_Narrative_link);
+                    $susarEU->setEVSafetyReportIdentifier($EVSafetyReportIdentifier);
                     $susarEU->setDLPVersion($importCtll->getCaseVersion());
                     $susarEU->setWorldWideId($importCtll->getCaseReportNumber());
                     $susarEU->setNumEudract($importCtll->getStudyRegistrationN());
                     $susarEU->setSponsorstudynumb($importCtll->getSponsorStudyNumber());
                     $susarEU->setNarratif($importCtll->getNarrativeReportersCommentsAndSendersComments());
+                    $susarEU->setNarratifNbCaractere($this->donneNarratifNbCaractere($importCtll->getNarrativePresent()));
                     // $susarEU->setPaysEtude($importCtll->getCountry());
                     $susarEU->setPaysSurvenue($importCtll->getCountry());
                     $susarEU->setCasEurope($casEurope);
@@ -115,9 +133,9 @@ class ImportVersSusarEu
                     $em->persist($susarEU);
 
                     // Import des médicaments
-                    $this->importeMedicaments($importCtll, $susarEU, $em, $dateImport);
+                    $this->importMedicaments($importCtll, $susarEU, $em, $dateImport);
                     // Import des médicaments
-                    $this->importeEffetsIndesirables($importCtll, $susarEU, $em, $dateImport);
+                    $this->importEffetsIndesirables($importCtll, $susarEU, $em, $dateImport);
                     // Import medical history
                     $this->importMedicalHistory($importCtll, $susarEU, $em, $dateImport);
                     // Import indications
@@ -147,7 +165,7 @@ class ImportVersSusarEu
 
         return $resultArray;
     }
-    private function importeMedicaments($importCtll, $susarEU, $em, $dateImport)
+    private function importMedicaments($importCtll, $susarEU, $em, $dateImport)
     {
 
         $tousMedicSuspInt = $importCtll->getSuspectInteractingEnhancedReportedDrugList();
@@ -257,7 +275,7 @@ class ImportVersSusarEu
         }
     }
 
-    private function importeEffetsIndesirables($importCtll, $susarEU, $em, $dateImport)
+    private function importEffetsIndesirables($importCtll, $susarEU, $em, $dateImport)
     {
 
         $tousEffetInd = $importCtll->getReactionListPT();
@@ -273,8 +291,16 @@ class ImportVersSusarEu
 
 
                 if ($parsingEffInd) {
+                    $reactionListPT = $parsingEffInd['ReactionListPT'];
 
-                    $effetIndesirable->setReactionListPT($parsingEffInd['ReactionListPT']);
+                    if ($reactionListPT) {
+                        $codePt = $this->meddraMdHierarchyRepository->findCodePtByPtName($reactionListPT);
+                        if ($codePt && count($codePt) == 1) {
+                            $effetIndesirable->setCodereactionmeddrapt($codePt[0]['PtCode']);
+                        }
+                        $effetIndesirable->setReactionListPT($reactionListPT);
+                    }
+
                     $effetIndesirable->setOutcome($parsingEffInd['Outcome']);
                     $effetIndesirable->setDate($parsingEffInd['Date']);
 
@@ -390,4 +416,17 @@ class ImportVersSusarEu
         return $gravite;
     }
 
+    private function donneNarratifNbCaractere($narPres)
+    {
+        $narratifNbCaractere = 0; // Valeur par défaut si rien n'est trouvé
+
+        if ($narPres) {
+            // Utiliser une expression régulière pour extraire le nombre après la première parenthèse
+            if (preg_match('/\((\d+)/', $narPres, $matches)) {
+                $narratifNbCaractere = (int) $matches[1]; // Convertir le résultat en entier
+            }
+        }
+
+        return $narratifNbCaractere;
+    }
 }

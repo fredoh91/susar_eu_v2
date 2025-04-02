@@ -32,31 +32,44 @@ final class ImportExcelCTLLController extends AbstractController{
     #[Route('/import_excel_ctll', name: 'app_import_excel_ctll')]
     public function upload_excel_ctll(Request $request, ManagerRegistry $doctrine, EntityManagerInterface $em, AuthenticationUtils $authenticationUtils): Response
     {
-
-
         $form = $this->createForm(UploadExcelCTLLType::class);
         $form->handleRequest($request);
 
-        if($form->isSubmitted() && $form->isValid()) {
+        $dureeImport = null; // Initialiser la variable pour le temps d'import
+
+        if ($form->isSubmitted() && $form->isValid()) {
             /** @var UploadedFile $FicExcel */
             $FicExcel = $form->get('FicExcel')->getData();
 
             if ($FicExcel) {
-                $this->importExcelVersTbImportCtll($FicExcel, $em, $authenticationUtils);
-                // TODO: 
-                $this->nbDonneesInserees=$this->importVersSusarEu->importExcelVersTbSusarEu($this->idImportCtllFicExcel, 
-                                                                    $em, 
-                                                                    $authenticationUtils);
+                // Démarrer le chronomètre
+                $startTime = microtime(true);
 
-                $this->nbDonneesInserees['nbOfExcelRow'] = $this->importedRowsCount;
-                // dump($this->nbDonneesInserees);
+                $this->importExcelVersTbImportCtll($FicExcel, $em, $authenticationUtils);
+
+
+                $this->nbDonneesInserees = $this->importVersSusarEu->importExcelVersTbSusarEu(
+                    $this->idImportCtllFicExcel,
+                    $em,
+                    $authenticationUtils
+                );
+
+                $this->nbDonneesInserees = array_merge(
+                    ['nbOfExcelRow' => $this->importedRowsCount],
+                    $this->nbDonneesInserees
+                );
+
+
+                // Arrêter le chronomètre
+                $endTime = microtime(true);
+                $dureeImport = $endTime - $startTime; // Calculer la durée en secondes
             }
         }
-        
+
         return $this->render('import_excel_ctll/upload_excel_ctll.html.twig', [
-            // 'controller_name' => 'ImportExcelCTLLController',
             'form' => $form->createView(),
             'nbDonneesInserees' => $this->nbDonneesInserees,
+            'dureeImport' => $dureeImport, // Passer la durée à la vue
         ]);
     }
 

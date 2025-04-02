@@ -30,33 +30,37 @@
 			<div class="suspectDrug_lib fw-bold">Médicament(s) suspect(s) :</div>
 			<div class="suspectDrug">
 				<table class="table table-bordered table-striped tab_susar_eu_dtl">
-				{# <table class="table table-bordered table-striped"> #}
+
+
 					<thead>
 						<tr>
-							<th>Sub. act. High-level</th>
 							<th>Product name</th>
 							<th>Substance name</th>
 							<th>Characterization</th>
+							<th>Indication</th>
+							<th>Action taken with drug</th>
+							<th>Start Date</th>
+							<th>Duration</th>
+							<th>Dose</th>
+							<th>Route</th>
 						</tr>
 					</thead>
 					<tbody>
-
-
-
 						{% for med in Susar.Medicament %}
-
 							{% if med.productcharacterization == 'Suspect' or med.productcharacterization == 'Interacting' %}
 								<tr>
-									<td>{{med.ActiveSubstanceHighLevel}}</td>
 									<td>{{med.Productname}}</td>
 									<td>{{med.Substancename}}</td>
 									<td>{{med.productcharacterization}}</td>
+									<td>{{med.Maladie}}</td>
+									<td>{{med.StatutMedicApresEffet}}</td>
+									<td>{{med.DateDerniereAdminFormatDate|format_datetime(dateFormat='short', timeFormat='none', locale='fr')}}</td>
+									<td>{{med.DelaiAdministrationSurvenue}}</td>
+									<td>{{med.Dosage}}</td>
+									<td>{{med.VoieAdmin}}</td>
 								</tr>
-
 							{% endif %}
-
 						{% endfor %}
-
 					</tbody>
 				</table>
 			</div>
@@ -67,28 +71,34 @@
 				<div class="suspectDrug_lib fw-bold">Médicament(s) concomitant(s) :</div>
 				<div class="suspectDrug">
 					<table class="table table-bordered table-striped tab_susar_eu_dtl">
-					{# <table class="table table-bordered table-striped"> #}
 						<thead>
 							<tr>
-								<th>Sub. act. High-level</th>
 								<th>Product name</th>
 								<th>Substance name</th>
 								<th>Characterization</th>
+								<th>Indication</th>
+								<th>Action taken with drug</th>
+								<th>Start Date</th>
+								<th>Duration</th>
+								<th>Dose</th>
+								<th>Route</th>
 							</tr>
 						</thead>
 						<tbody>
 							{% for med in Susar.Medicament %}
-
 								{% if med.productcharacterization == 'Concomitant' or med.productcharacterization == 'Drug Not Administered' %}
 									<tr>
-										<td>{{med.ActiveSubstanceHighLevel}}</td>
 										<td>{{med.Productname}}</td>
 										<td>{{med.Substancename}}</td>
 										<td>{{med.productcharacterization}}</td>
+										<td>{{med.Maladie}}</td>
+										<td>{{med.StatutMedicApresEffet}}</td>
+										<td>{{med.DateDerniereAdminFormatDate|format_datetime(dateFormat='short', timeFormat='none', locale='fr')}}</td>
+										<td>{{med.DelaiAdministrationSurvenue}}</td>
+										<td>{{med.Dosage}}</td>
+										<td>{{med.VoieAdmin}}</td>
 									</tr>
-
 								{% endif %}
-
 							{% endfor %}
 						</tbody>
 					</table>
@@ -98,6 +108,47 @@
 			<div class="PT_outcome_lib fw-bold">Reaction PT :</div>
 			<div class="PT_outcome">
 				<table class="table table-bordered table-striped tab_susar_eu_dtl">
+					<thead>
+						<tr>
+							<th>Lib. PT</th>
+							<th>Outcome</th>
+							<th>Start Date</th>
+							<th>Duration</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for EI in Susar.EffetsIndesirables %}
+							<tr>
+								<td>{{EI.ReactionListPT}}</th>
+								<td>{{EI.Outcome}}</td>
+								<td>{{EI.DateFormatDate|format_datetime(dateFormat='short', timeFormat='none', locale='fr')}}</td>
+								<td>{{EI.Duration}}</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+{#  #}
+					{# <thead>
+						<tr>
+							<th>Lib. PT</th>
+							<th>Outcome</th>
+							<th>Start Date</th>
+							<th>Duration</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for EI in Susar.EffetsIndesirables %}
+							<tr>
+								<td>{{EI.Reactionmeddrapt}}</td>
+							</tr>
+						</th>
+						<td>{{EI.Reactionstartdate|format_datetime(dateFormat='short', timeFormat='none', locale='fr')}}</td>
+						<td>{{EI.Soc}}</td>
+						<td>{{EI.Reactionmeddrahlgt}}</td>
+						<td>{{EI.Reactionmeddrahlt}}</td>
+					</tbody> #}
+{#  #}
+				{# <table class="table table-bordered table-striped tab_susar_eu_dtl">
 					<thead>
 						<tr>
 							<th>Lib. PT</th>
@@ -118,7 +169,10 @@
 							</tr>
 						{% endfor %}
 					</tbody>
-				</table>
+				</table> #}
+
+
+
 			</div>
 
 
@@ -219,7 +273,11 @@
 
 			<div class="row">
 				<div class="col-12">
-					<div>Narratif (complet) :</div>
+					<div>Narratif partiel
+					{% if Susar.NarratifNbCaractere > 0 %}
+						({{ Susar.NarratifNbCaractere }} premiers caractères - voir fiche ICSR)
+					{% endif %}
+					:</div>
 					<div class="chp_susar_eu_dtl chp_narr_dtl">{{ Susar.narratif }}</div>
 				</div>
 			</div>

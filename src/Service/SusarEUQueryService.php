@@ -23,24 +23,24 @@ class SusarEUQueryService
      * @return Susar|null
      */
 
-    public function findBySearchSusarEuListe(SearchSusarEU $search,
-                                            array $orderCriteria = [['field' => 'statusdate', 'direction' => 'ASC']]
-                                            ): ?array
-    {
+    public function findBySearchSusarEuListe(
+        SearchSusarEU $search,
+        array $orderCriteria = [['field' => 'statusdate', 'direction' => 'ASC']]
+    ): ?array {
 
 
         $query = $this->susarEURepository
-                    ->createQueryBuilder('s')
-                    ->distinct();
+            ->createQueryBuilder('s')
+            ->distinct();
         $query->leftJoin('s.intervenantSubstanceDMMs', 'isd');        // Je mets un left join pour les cas où il n'y a pas d'intervenantSubstanceDMMs et ainsi pouvoir retrouver les susars de ce type
         $query->join('s.Medicament', 'med');
         $query->join('s.EffetsIndesirables', 'ei');
         $query->leftJoin('s.substancePtEvals', 'spe');
-        
+
         if ($search->getSpecificcaseid()) {
             $query = $query
-            ->andWhere('s.specificcaseid = :sci')
-            ->setParameter('sci', $search->getSpecificcaseid());
+                ->andWhere('s.specificcaseid = :sci')
+                ->setParameter('sci', $search->getSpecificcaseid());
         }
 
         if ($search->getIdSusar()) {
@@ -63,7 +63,7 @@ class SusarEUQueryService
                 // Aucun tiret trouvé dans la chaîne.
             }
         }
-        
+
         if ($search->getevaluateurChoice()) {
             $Eval = $search->getevaluateurChoice();
 
@@ -76,7 +76,7 @@ class SusarEUQueryService
                     ->setParameter('eval', $Eval);
             }
         }
-        
+
         if ($search->getTypeSaMSMono()) {
             // dd($search->getTypeSaMSMono());
             $query = $query
@@ -126,30 +126,30 @@ class SusarEUQueryService
 
         $orExpressions = [];
         $parameters = [];
-        
+
         if ($search->getNiveau1()) {
             $orExpressions[] = $query->expr()->eq('s.priorisation', ':n1');
             $parameters['n1'] = 'Niveau 1';
         }
-        
+
         if ($search->getNiveau2a()) {
             $orExpressions[] = $query->expr()->eq('s.priorisation', ':n2a');
             $parameters['n2a'] = 'Niveau 2a';
         }
-        
+
         if ($search->getNiveau2b()) {
             $orExpressions[] = $query->expr()->eq('s.priorisation', ':n2b');
             $parameters['n2b'] = 'Niveau 2b';
         }
-        
+
         if ($search->getNiveau2c()) {
             $orExpressions[] = $query->expr()->eq('s.priorisation', ':n2c');
             $parameters['n2c'] = 'Niveau 2c';
         }
-        
+
         if (!empty($orExpressions)) {
             $query->andWhere($query->expr()->orX(...$orExpressions));
-            
+
             foreach ($parameters as $key => $value) {
                 $query->setParameter($key, $value);
             }
@@ -158,12 +158,12 @@ class SusarEUQueryService
             $query->andWhere(
                 $query->expr()->notIn('s.priorisation', [':n1', ':n2a', ':n2b', ':n2c'])
             )
-            ->setParameter('n1', 'Niveau 1')
-            ->setParameter('n2a', 'Niveau 2a')
-            ->setParameter('n2b', 'Niveau 2b')
-            ->setParameter('n2c', 'Niveau 2c');
+                ->setParameter('n1', 'Niveau 1')
+                ->setParameter('n2a', 'Niveau 2a')
+                ->setParameter('n2b', 'Niveau 2b')
+                ->setParameter('n2c', 'Niveau 2c');
         }
-        
+
 
         if ($search->getCasTraite()) {
 
@@ -183,11 +183,15 @@ class SusarEUQueryService
             $casArchive = $search->getCasArchive();
 
             if ($casArchive === 'archive') {
+                // $query = $query
+                //     ->andWhere('s.casSusarEuV1 = true');
                 $query = $query
-                    ->andWhere('s.casSusarEuV1 = true');
+                    ->andWhere('s.casSusarEuV1 = 1');
             } elseif ($casArchive === 'non_archive') {
+                // $query = $query
+                //     ->andWhere('s.casSusarEuV1 IS NULL');
                 $query = $query
-                    ->andWhere('s.casSusarEuV1 IS NULL');
+                    ->andWhere('s.casSusarEuV1 = 0');
             } elseif ($casArchive === 'tous') {
                 // $query = $query
                 //     ->andWhere('s.dateEvaluation IS NULL');
@@ -250,10 +254,10 @@ class SusarEUQueryService
 
             if ($casDME === 'oui') {
                 $query = $query
-                ->andWhere('s.CasDME = TRUE');
+                    ->andWhere('s.CasDME = TRUE');
             } elseif ($casDME === 'non') {
                 $query = $query
-                ->andWhere('s.CasDME = FALSE');
+                    ->andWhere('s.CasDME = FALSE');
             }
         }
 
@@ -263,10 +267,10 @@ class SusarEUQueryService
 
             if ($casEurope === 'oui') {
                 $query = $query
-                ->andWhere('s.CasEurope = TRUE');
+                    ->andWhere('s.CasEurope = TRUE');
             } elseif ($casEurope === 'non') {
                 $query = $query
-                ->andWhere('s.CasEurope = FALSE');
+                    ->andWhere('s.CasEurope = FALSE');
             }
         }
 
@@ -289,5 +293,4 @@ class SusarEUQueryService
             ->getQuery()
             ->getResult();
     }
-
 }

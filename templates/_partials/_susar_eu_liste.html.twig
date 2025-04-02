@@ -1,218 +1,223 @@
-<table class="table table-sm table-bordered table-hover text-center">
+<table
+	class="table table-sm table-bordered table-hover text-center">
 
-{# {{ app.request.attributes.get('_route') }} #}
+	{# {{ app.request.attributes.get('_route') }} #}
 
-    <thead class="table-secondary">
-        <tr></tr>
-    </thead>
-    <tbody>
-    {% for Susar in Susars %}
-        <tr>
-        {# <tr class="{% if Susar.casSusarEuV1 %}susar-v1{% else %}susar-v2{% endif %}"> #}
-        {# <tr class="{{ Susar.casSusarEuV1 ? 'susar-v1' : 'susar-v2' }}"> #}
-            <div class="ligne_susar {{ Susar.casSusarEuV1 ? 'susar-v1' : 'susar-v2' }}">
-                {# <div class="cell_tab"> #}
-                {# flex de gauche #}
-                <div class="container_flex_left">
-                    <div class="suspectDrug_lib fw-bold">Médicament(s) suspect(s) :</div>
-                    <div class="suspectDrug">
-                        {% for med in Susar.Medicament %}
-                            {% if med.productcharacterization == 'Suspect' %}
-                                {{med.substancename}}
-                                <br>
-                            {% endif %}
-                        {% endfor %}
-                    </div>
-                    <div class="PT_outcome_lib fw-bold">PT outcome :</div>
-                    <div class="PT_outcome">
-                        {% set pt_deja_vues = [] %}
-                        {% for EI in Susar.EffetsIndesirables %}
-                            {% if EI.reactionmeddrapt not in pt_deja_vues %}
-                                {% set pt_deja_vues = pt_deja_vues | merge([EI.reactionmeddrapt]) %}
-                                {{EI.reactionmeddrapt}}
-                                <br>
-                            {% endif %}
-                        {% endfor %}
-                        
-                    </div>
-                    <div class="seriousness_lib fw-bold">Gravité :</div>
-                    <div class="seriousness">{{Susar.seriousnessCriteria|raw}}</div>
-                    <div class="indication_lib fw-bold">Indication(s) :</div>
-                    <div class="indication">
-                        {# {% for indic in Susar.IndicationsTable | filter(v => v is not in Susar.IndicationsTable[:loop.index0]) %}
-                            {{indic.productIndications}}
-                            <br>
-                        {% endfor %} #}
-                        {% set valeur_deja_vues = [] %}
-                        {% for indic in Susar.IndicationsTable %}
-                            {% if indic.productIndications not in valeur_deja_vues %}
-                                {% set valeur_deja_vues = valeur_deja_vues | merge([indic.productIndications]) %}
-                                {{ indic.productIndications }}
-                                <br>
-                            {% endif %}
-                        {% endfor %}
+	<thead class="table-secondary">
+		<tr></tr>
+	</thead>
+	<tbody>
+		{% for Susar in Susars %}
+			<tr>
+				{# <tr class="{% if Susar.casSusarEuV1 %}susar-v1{% else %}susar-v2{% endif %}"> #}
+				{# <tr class="{{ Susar.casSusarEuV1 ? 'susar-v1' : 'susar-v2' }}"> #}
+					<div class="ligne_susar {{ Susar.casSusarEuV1 ? 'susar-v1' : 'susar-v2' }}"> {# <div class="cell_tab"> #}
+					{# flex de gauche #}
+						<div class="container_flex_left"> <div class="suspectDrug_lib fw-bold">Médicament(s) suspect(s) :</div>
+						<div class="suspectDrug">
+							{% for med in Susar.Medicament %}
+								{% if med.productcharacterization == 'Suspect' %}
+									{{med.substancename}}
+									<br>
+								{% endif %}
+							{% endfor %}
+						</div>
+						<div class="PT_outcome_lib fw-bold">PT outcome :</div>
+						<div class="PT_outcome">
+							{% for PT in Susar.EffetsIndesirables %}
+								{{PT.ReactionListPT}}
+								-
+								{{PT.Outcome}}
+								<br>
+							{% endfor %}
+						</div>
+						<div class="seriousness_lib fw-bold">Gravité :</div>
+						<div class="seriousness">{{Susar.seriousnessCriteria|raw}}</div>
+						<div class="indication_lib fw-bold">Indication(s) :</div>
+						<div class="indication">
+							{% for indic in Susar.IndicationsTable %}
+								{{indic.productName}}
+								-
+								{{indic.ProductIndicationsEng}}
+								<br>
+							{% endfor %}
+						</div>
+						<div class="medicalHistory_lib fw-bold">medical history :</div>
+						<div class="medicalHistory">
+							{% set nb_med_his = 0 %}
+							{% set nb_med_his_max = 5 %}
+							{% for MedHist in Susar.medicalHistories|slice(0, nb_med_his_max) %}
+								{{MedHist.Disease}}
+								<br>
+								{% set nb_med_his = nb_med_his + 1 %}
+							{% endfor %}
+							{% if nb_med_his >= nb_med_his_max %}
+								...
+							{% endif %}
+						</div>
+						<div class="population_lib fw-bold">Population :</div>
+						<div class="population">{{Susar.patientagegroup}}</div>
+						<div class="age_lib">age :</div>
+						<div class="age">{{Susar.patientAge}}
+							{% if Susar.patientAgeUnitLabel == 'Year' %}
+								ans
+							{% elseif Susar.patientAgeUnitLabel == 'Month' %}
+								mois
+							{% elseif Susar.patientAgeUnitLabel == 'Day' %}
+								jours
+							{% elseif Susar.patientAgeUnitLabel == 'Week' %}
+								semaines
+							{% elseif Susar.patientAgeUnitLabel == 'Hour' %}
+								heures
+							{% elseif Susar.patientAgeUnitLabel == 'Decade' %}
+								décennies
+							{% else %}
+								{{Susar.patientAgeUnitLabel}}
+							{% endif %}
+						</div>
+						<div class="sex_lib">sexe :</div>
+						<div class="sex">
+							{% if Susar.patientSex == 'F' %}
+								Femme
+							{% elseif Susar.patientSex == 'H' %}
+								Homme
+							{% else %}
+								{{Susar.patientSex}}
+							{% endif %}
+						</div>
+					</div>
+					{# </div> #}
 
-                    </div>
-                    <div class="medicalHistory_lib fw-bold">medical history :</div>
-                    <div class="medicalHistory">
-                        {% set nb_med_his = 0 %}
-                        {% set nb_med_his_max = 5 %}
-                        {% for med_his in Susar.medicalHistories|slice(0, nb_med_his_max) %}
-                            {{med_his.DiseaseLibPT}}
-                            <br>
-                            {% set nb_med_his = nb_med_his + 1 %}
-                        {% endfor %}
-                        {% if nb_med_his >= nb_med_his_max %}
-                            ...
-                        {% endif %}
-                    </div>
-                    <div class="population_lib fw-bold">Population :</div>
-                    <div class="population">{{Susar.patientagegroup}}</div>
-                    <div class="age_lib">age :</div>
-                    <div class="age">{{Susar.patientAge}} 
-                        {% if Susar.patientAgeUnitLabel == 'Year' %}
-                            ans
-                        {% elseif Susar.patientAgeUnitLabel == 'Month' %}
-                            mois
-                        {% elseif Susar.patientAgeUnitLabel == 'Day' %}
-                            jours
-                        {% elseif Susar.patientAgeUnitLabel == 'Week' %}
-                            semaines
-                        {% elseif Susar.patientAgeUnitLabel == 'Hour' %}
-                            heures
-                        {% elseif Susar.patientAgeUnitLabel == 'Decade' %}
-                            décennies
-                        {% else %}
-                            {{Susar.patientAgeUnitLabel}}
-                        {% endif %}
-                    </div>
-                    <div class="sex_lib">sexe :</div>
-                    <div class="sex">
-                        {% if Susar.patientSex == 'F' %}
-                            Femme
-                        {% elseif Susar.patientSex == 'H' %}
-                            Homme
-                        {% else %}
-                            {{Susar.patientSex}}
-                        {% endif %}
-                    </div>
-                </div>
-            {# </div> #}
-            
-            {# flex de droite #}
-            {# <div class="cell_tab"> #}
-                <div class="container_flex_right">
-                    <div class="numBNPV_lib fw-bold">Num. BNPV :</div>
-                    <div class="numBNPV">
-                        {# <a href="{{ path('app_detail_susar_eu',{'master_id':Susar.MasterId}) }}" target="_blank">{{ Susar.specificcaseid|e }}</a> #}
-                        {# <a href="{{ path('app_detail_susar_eu',{'idsusar':Susar.id}) }}" target="_blank">{{ Susar.specificcaseid|e }}</a> #}
-                        <a href="{{ path('app_detail_susar_eu_nb_intsub',{'idsusar':Susar.id}) }}" target="_blank">{{ Susar.specificcaseid|e }}</a>
-                        
-                        {# {{ Susar.MasterId|e }}
-                        {{ Susar.specificcaseid|e }} #}
-                    </div>
-                    <div class="FU_BNPV_lib fw-bold">F.U. BNPV :</div>
-                    <div class="FU_BNPV">{{ Susar.DLPVersion|e }}</div>
-                    <div class="idSusar">idSusar : {{ Susar.id|e }}</div>
-                    <div class="DMM_Pole_lib fw-bold">DMM/Pôle/Éval./SaMS-Mono. :</div>
-                    <div class="DMM_Pole">
-                        {% for intAnsm in Susar.IntervenantSubstanceDMMs %}
-                            {% if intAnsm.DMM != null %}
-                                {{ intAnsm.DMM }} / {{ intAnsm.PoleCourt }} / {{ intAnsm.Evaluateur }}  / {{ intAnsm.TypeSaMSMono }} 
-                                <BR>
-                            {% else %}
-                                Non-attribué
-                            {% endif %}	
-                        {% endfor %}
-                    </div>
-                    <div class="Prio_lib fw-bold">Classification :</div>
-                    <div class="Prio">{{ Susar.Priorisation|e }}</div>
-                    <div class="DtAiguil_lib fw-bold">Date d'import :</div>
-                    <div class="DtAiguil">
-                        {% if Susar.CreatedAt != null %}
-                            {{ Susar.CreatedAt|format_datetime(dateFormat='full', timeFormat='none', locale='fr') }}
-                        {% else %}
-                            ---
-                        {% endif %}
-                    </div>
-                    <div class="StudyTittle_lib fw-bold">Study tittle :</div>
-                    <div class="StudyTittle">{{ Susar.studytitle|e }}</div>
-                    <div class="SponsStudyNum_lib fw-bold">Sponsor study number :</div>
-                    <div class="SponsStudyNum">{{ Susar.sponsorstudynumb|e }}</div>
-                    <div class="NumEUDRA_CT_lib fw-bold">N° EudraCT :</div>
-                    <div class="NumEUDRA_CT">{{ Susar.NumEudract|e }}</div>
-                    <div class="WW_id_lib fw-bold">world wide id :</div>
-                    <div class="WW_id">{{ Susar.WorldWideId|e }}</div>
-                    <div class="ConcluCas_lib fw-bold">Conclusion cas :</div>
-                    <div class="ConcluCas"></div>
-                    <div class="CommentConclu_lib fw-bold">Commentaire :</div>
-                    <div class="CommentConclu"></div>
-                    <div class="ConcluCas_lib fw-bold">Conclusion cas :</div>
-                    <div class="ConcluCas"></div>
+					{# flex de droite #}
+					{# <div class="cell_tab"> #}
+						<div
+						class="container_flex_right"> {# <div class="numBNPV_lib fw-bold">Num. BNPV :</div>
+																					                    <div class="numBNPV">
+																					                        <a href="{{ path('app_detail_susar_eu_nb_intsub',{'idsusar':Susar.id}) }}" target="_blank">{{ Susar.specificcaseid|e }}</a>
+																					                    </div> #}
+						<div class="numBNPV_lib fw-bold">EV Safety Report Identifier :</div>
+						<div class="numBNPV">
+							<a href="{{ path('app_detail_susar_eu_nb_intsub',{'idsusar':Susar.id}) }}" target="_blank">{{ Susar.EVSafetyReportIdentifier|e }}</a>
+						</div>
+						<div class="FU_BNPV_lib fw-bold">F.U. EUDRA :</div>
+						<div class="FU_BNPV">{{ Susar.DLPVersion|e }}</div>
+						<div class="idSusar">idSusar :
+							{{ Susar.id|e }}</div>
+						<div class="DMM_Pole_lib fw-bold">DMM/Pôle/Éval./SaMS-Mono. :</div>
+						<div class="DMM_Pole">
+							{% for intAnsm in Susar.IntervenantSubstanceDMMs %}
+								{% if intAnsm.DMM != null %}
+									{{ intAnsm.DMM }}
+									/
+									{{ intAnsm.PoleCourt }}
+									/
+									{{ intAnsm.Evaluateur }}
+									/
+									{{ intAnsm.TypeSaMSMono }}
+									<BR>
+								{% else %}
+									Non-attribué
+								{% endif %}
+							{% endfor %}
+						</div>
+						<div class="Prio_lib fw-bold">Classification :</div>
+						<div class="Prio">{{ Susar.Priorisation|e }}</div>
+						<div class="DtAiguil_lib fw-bold">Date d'import :</div>
+						<div class="DtAiguil">
+							{% if Susar.CreatedAt != null %}
+								{{ Susar.CreatedAt|format_datetime(dateFormat='full', timeFormat='none', locale='fr') }}
+							{% else %}
+								---
+							{% endif %}
+						</div>
+						<div class="StudyTittle_lib fw-bold">Study tittle :</div>
+						<div class="StudyTittle">{{ Susar.studytitle|e }}</div>
+						<div class="SponsStudyNum_lib fw-bold">Sponsor study number :</div>
+						<div class="SponsStudyNum">{{ Susar.sponsorstudynumb|e }}</div>
+						<div class="NumEUDRA_CT_lib fw-bold">N° EudraCT :</div>
+						<div class="NumEUDRA_CT">{{ Susar.NumEudract|e }}</div>
+						<div class="WW_id_lib fw-bold">world wide id :</div>
+						<div class="WW_id">{{ Susar.WorldWideId|e }}</div>
+						<div class="ConcluCas_lib fw-bold">Conclusion cas :</div>
+						<div class="ConcluCas"></div>
+						<div class="CommentConclu_lib fw-bold">Commentaire :</div>
+						<div class="CommentConclu"></div>
+						<div class="ConcluCas_lib fw-bold">Conclusion cas :</div>
+						<div class="ConcluCas"></div>
 
-                    <div class="DtEval_lib fw-bold">Date d'évaluation :</div>
-                    <div class="DtEval">
-                        {% if Susar.dateEvaluation != null %}
-                            {{ Susar.dateEvaluation|format_datetime(dateFormat='full', timeFormat='none', locale='fr') }}
-                        {% else %}
-                            Non-évalué
-                        {% endif %}
-                    </div>
+						<div class="DtEval_lib fw-bold">Date d'évaluation :</div>
+						<div class="DtEval">
+							{% if Susar.dateEvaluation != null %}
+								{{ Susar.dateEvaluation|format_datetime(dateFormat='full', timeFormat='none', locale='fr') }}
+							{% else %}
+								Non-évalué
+							{% endif %}
+						</div>
 
-                    {# <div class="btn-FU"><a href="#" class="btn-access">Autres F.U.</a></div> #}
-                    {% if app.request.attributes.get('_route') == 'app_liste_susar_eu' %}
-                        {# <div class="btn-FU"><a href="{{ path('app_autres_FU',{'specificcaseid':Susar.specificcaseid}) }}" class="btn-access" target="_blank">Autres F.U.</a></div> #}
-                        <div class="btn-FU"><a href="{{ path('app_autres_FU',{'specificcaseid':Susar.EV_SafetyReportIdentifier}) }}" class="btn-access" target="_blank">Autres F.U.</a></div>
-                    {% else %}
-                        <div></div>
-                    {% endif %}
-                    {# <div class="btn-AWA"><a href="{{ path('app_awa_lst_SA_PT',{'idsusar':Susar.id}) }}" class="btn-access" target="_blank">Assessed without action</a></div> #}
-                    {% if Susar.casSusarEuV1 == true %}
-                        <div></div>
-                        {# pas de bouton Assessed without action #}
-                    {% else %}
-                        <div class="btn-AWA"><a href="{{ path('app_awa_lst_SA_PT',{'idsusar':Susar.id}) }}" class="btn-access">Assessed without action</a></div>
-                    {% endif %}
-                    
-                    <div class="narratif_lib fw-bold">Narratif :</div>
-                    <div class="narratif">{{ Susar.narratif|e }}</div>
-                </div>
-                {# <div>
-                    Status date : <br> {{ Susar.statusdate|date('d/m/Y')}} <br>
-                    Sponsor study number : <br> {{ Susar.sponsorstudynumb|e }} <br>
-                    world wide id : <br> {{ Susar.WorldWideId|e }} <br>
-                </div> #}
+						{# <div class="btn-FU"><a href="#" class="btn-access">Autres F.U.</a></div> #}
+						{% if app.request.attributes.get('_route') == 'app_liste_susar_eu' %}
+							{# <div class="btn-FU"><a href="{{ path('app_autres_FU',{'specificcaseid':Susar.specificcaseid}) }}" class="btn-access" target="_blank">Autres F.U.</a></div> #}
+							<div class="btn-FU">
+								<a href="{{ path('app_autres_FU',{'EVSafetyReportIdentifier':Susar.EVSafetyReportIdentifier}) }}" class="btn-access" target="_blank">Autres F.U.</a>
+							</div>
+						{% else %}
+							<div></div>
+						{% endif %}
+						{# <div class="btn-AWA"><a href="{{ path('app_awa_lst_SA_PT',{'idsusar':Susar.id}) }}" class="btn-access" target="_blank">Assessed without action</a></div> #}
+						{% if Susar.casSusarEuV1 == true %}
+							<div></div>
+							{# pas de bouton Assessed without action #}
+						{% else %}
+							<div class="btn-AWA">
+								<a href="{{ path('app_awa_lst_SA_PT',{'idsusar':Susar.id}) }}" class="btn-access">Assessed without action</a>
+							</div>
+						{% endif %}
+
+						{% if Susar.ICSRFormLink is not empty %}
+							<div class="lienICSR">
+								<a href="{{ Susar.ICSRFormLink }}" target="_blank">
+									lien ICSR
+								</a>
+							</div>
+						{% endif %}
+						<div class="narratif_lib fw-bold">Narratif partiel :</div>
+						<div class="narratif">{{ Susar.narratif|e }}</div>
+					</div>
+					{# <div>
+															                    Status date : <br> {{ Susar.statusdate|date('d/m/Y')}} <br>
+															                    Sponsor study number : <br> {{ Susar.sponsorstudynumb|e }} <br>
+															                    world wide id : <br> {{ Susar.WorldWideId|e }} <br>
+															                </div> #}
 
 
+					{# <div>
+															                    {% if Susar.casSusarEuV1 %}
+															                        idCTLL : {{ Susar.idCTLL|e }} <br>
+															
+															                        {% if Susar.idCTLL == true %}
+															                            c'est un susar_V1 <br>
+															                        {% else %}
+															                            c'est un susar_V2 <br>
+															                        {% endif %}
+															                    
+															                        {% if Susar.dateRepriseSusarEuV1 != null %}
+															                            date de reprise : {{ Susar.dateRepriseSusarEuV1|format_datetime(dateFormat='full', timeFormat='none', locale='fr') }}
+															                        {% else %}
+															                            <br>
+															                        {% endif %}
+															
+															                    {% else %}
+															                        c'est un susar_V2 <br>
+															                    {% endif %}
+															                </div> #}
 
-                {# <div>
-                    {% if Susar.casSusarEuV1 %}
-                        idCTLL : {{ Susar.idCTLL|e }} <br>
+					<div
+						id="container_eval">{# {% include "_partials/_eval_tab_2.html.twig" %} #}
+					</div>
 
-                        {% if Susar.idCTLL == true %}
-                            c'est un susar_V1 <br>
-                        {% else %}
-                            c'est un susar_V2 <br>
-                        {% endif %}
-                    
-                        {% if Susar.dateRepriseSusarEuV1 != null %}
-                            date de reprise : {{ Susar.dateRepriseSusarEuV1|format_datetime(dateFormat='full', timeFormat='none', locale='fr') }}
-                        {% else %}
-                            <br>
-                        {% endif %}
+				</div>
 
-                    {% else %}
-                        c'est un susar_V2 <br>
-                    {% endif %}
-                </div> #}
-                
-                <div id="container_eval">
-			        {# {% include "_partials/_eval_tab_2.html.twig" %} #}
-                </div>
-
-            </div>
-
-        </tr>
-    {% endfor %}
-    </tbody>
+			</tr>
+		{% endfor %}
+	</tbody>
 </table>
