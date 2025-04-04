@@ -155,6 +155,12 @@ class ImportCtll
     #[ORM\OneToOne(mappedBy: 'ImportCtll', cascade: ['persist', 'remove'])]
     private ?SusarEU $susarEU = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?bool $SusarAttribue = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?bool $SusarDejaExistant = null;
+
     // Getters and Setters
     public function getId(): ?int
     {
@@ -731,6 +737,30 @@ class ImportCtll
         }
 
         $this->susarEU = $susarEU;
+
+        return $this;
+    }
+
+    public function isSusarAttribue(): ?bool
+    {
+        return $this->SusarAttribue;
+    }
+
+    public function setSusarAttribue(?bool $SusarAttribue): static
+    {
+        $this->SusarAttribue = $SusarAttribue;
+
+        return $this;
+    }
+
+    public function isSusarDejaExistant(): ?bool
+    {
+        return $this->SusarDejaExistant;
+    }
+
+    public function setSusarDejaExistant(?bool $SusarDejaExistant): static
+    {
+        $this->SusarDejaExistant = $SusarDejaExistant;
 
         return $this;
     }

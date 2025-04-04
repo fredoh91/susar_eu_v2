@@ -12,10 +12,12 @@ use App\Repository\IMERepository;
 use App\Entity\EffetsIndesirables;
 use App\Service\ParsingMedicaments;
 use App\Repository\SusarEURepository;
+use App\Entity\IntervenantSubstanceDMM;
+use App\Entity\SubstancePt;
 use App\Repository\ImportCtllRepository;
-use App\Repository\MeddraMdHierarchyRepository;
 use App\Repository\PaysEuropeRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\MeddraMdHierarchyRepository;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class ImportVersSusarEu
@@ -35,6 +37,8 @@ class ImportVersSusarEu
     private int $nbOfInsertedEffInd = 0;
     private int $nbOfInsertedMedHist = 0;
     private int $nbOfInsertedIndic = 0;
+    private int $nbSusarAttribue = 0;
+    private int $nbMedicAttribue = 0;
 
     public function __construct(
         ImportCtllRepository $importCtllRepository,
@@ -65,6 +69,8 @@ class ImportVersSusarEu
             foreach ($importCtll as $importCtll) {
                 $EVSafetyReportIdentifier = $importCtll->getEVSafetyReportIdentifier();
                 if (!$this->susarEURepository->existeEV_SafetyReportIdentifier($EVSafetyReportIdentifier)) {
+                    $importCtll->setSusarDejaExistant(false);
+                    $em->persist($importCtll);
                     $dateImport = new \DateTimeImmutable();
                     $susarEU = new SusarEU();
 
@@ -73,14 +79,14 @@ class ImportVersSusarEu
                     $casDME = $this->dmeRepository->isCasDME($importCtll->getReactionListPT());
                     $EvRepID_11Chars = substr(rtrim($EVSafetyReportIdentifier), -11);
                     $ICSR_form_link =   'https://eudravigilance-human.ema.europa.eu/ev-web/api/reports/safetyreport/' .
-                                        $EvRepID_11Chars .
-                                        '?reportType=CIOMS&reportFormat=pdf';
+                        $EvRepID_11Chars .
+                        '?reportType=CIOMS&reportFormat=pdf';
                     $E2B_link = 'https://eudravigilance-human.ema.europa.eu/ev-web/api/reports/safetyreport/' .
-                                $EvRepID_11Chars .
-                                '?reportType=HUMAN_READABLE&reportFormat=html';
+                        $EvRepID_11Chars .
+                        '?reportType=HUMAN_READABLE&reportFormat=html';
                     $Complete_Narrative_link =  'http://bi.eudra.org/xmlpserver/PHV%20EudraVigilance%20DWH%20(EVDAS)/_filters/PHV%20EVDAS/Templates/Data%20Warehouse%20Subgroup/Narrative/Narrative.xdo?_xpf=&_xt=Narrative&p_narrati=' .
-                                                $EvRepID_11Chars .
-                                                '&_xpt=1&_xf=rtf';
+                        $EvRepID_11Chars .
+                        '&_xpt=1&_xf=rtf';
                     $susarEU->setICSRFormLink($ICSR_form_link);
                     $susarEU->setE2BLink($E2B_link);
                     $susarEU->setCompleteNarrativeLink($Complete_Narrative_link);
@@ -133,15 +139,22 @@ class ImportVersSusarEu
                     $em->persist($susarEU);
 
                     // Import des médicaments
-                    $this->importMedicaments($importCtll, $susarEU, $em, $dateImport);
+                    $lstMedSupInter = $this->importMedicaments($importCtll, $susarEU, $em, $dateImport);
                     // Import des médicaments
-                    $this->importEffetsIndesirables($importCtll, $susarEU, $em, $dateImport);
+                    $lstEffInd = $this->importEffetsIndesirables($importCtll, $susarEU, $em, $dateImport);
+                    // Création des lignes dans la table substance_pt
+                    $this->creationSubstancePt($lstMedSupInter,$lstEffInd, $susarEU, $em, $dateImport);
                     // Import medical history
                     $this->importMedicalHistory($importCtll, $susarEU, $em, $dateImport);
                     // Import indications
                     $this->importIndications($importCtll, $susarEU, $em, $dateImport);
 
                     $this->nbOfInsertedSusar++;
+                } else {
+                    // ce cas est déjà dans la base, on flag l'import comme "deja existant"
+                    $importCtll->setSusarDejaExistant(true);
+                    $importCtll->setSusarAttribue(false);
+                    $em->persist($importCtll);
                 }
             }
             $em->flush();
@@ -152,7 +165,9 @@ class ImportVersSusarEu
             'nbOfInsertedMedic' => $this->nbOfInsertedMedic,
             'nbOfInsertedEffInd' => $this->nbOfInsertedEffInd,
             'nbOfInsertedMedHist' => $this->nbOfInsertedMedHist,
-            'nbOfInsertedIndic' => $this->nbOfInsertedIndic
+            'nbOfInsertedIndic' => $this->nbOfInsertedIndic,
+            'nbSusarAttribue' => $this->nbSusarAttribue,
+            'nbMedicAttribue' => $this->nbMedicAttribue,
         ];
     }
 
@@ -165,9 +180,10 @@ class ImportVersSusarEu
 
         return $resultArray;
     }
-    private function importMedicaments($importCtll, $susarEU, $em, $dateImport)
+    private function importMedicaments($importCtll, $susarEU, $em, $dateImport): array
     {
-
+        $nbMedicAttribue = 0;
+        $lstMedSupInter = [];
         $tousMedicSuspInt = $importCtll->getSuspectInteractingEnhancedReportedDrugList();
 
         $tousMedicConc = $importCtll->getConcomitantNotAdministeredEnhancedReportedDrugList();
@@ -179,10 +195,18 @@ class ImportVersSusarEu
                 $medicament->setSusar($susarEU);
                 $medicament->setNomProduitBrut($medic);
 
-
                 $parsingMedic = $this->parsingMedicaments->donneParsing($medic);
                 if ($parsingMedic) {
-                    $medicament->setSubstanceName($parsingMedic['substance']);
+                    $substancePourRecherche = null;
+                    // Si le médicament ne contient pas de chaine de caractere entre crochet, on n'a pas de nom de substance, on prend le nom du produit
+                    if (($parsingMedic['substance']) === null || $parsingMedic['substance'] === '') {
+                        $medicament->setSubstanceName($parsingMedic['produit']);
+                        $substancePourRecherche = $parsingMedic['produit'];
+                    } else {
+                        $medicament->setSubstanceName($parsingMedic['substance']);
+                        $substancePourRecherche = $parsingMedic['substance'];
+                    }
+                    $lstMedSupInter[] = $substancePourRecherche;
                     $medicament->setProductname($parsingMedic['produit']);
                     switch ($parsingMedic['drug_char']) {
                         case 'S':
@@ -213,6 +237,32 @@ class ImportVersSusarEu
                     $medicament->setDosage($parsingMedic['dose']);
                     $medicament->setVoieAdmin($parsingMedic['route']);
                     $medicament->setComment($parsingMedic['comment']);
+
+                    // attribution de l'évaluateur a ce médicament
+                    if ($substancePourRecherche) {
+                        // $IntervenantSubstanceDMM = $em->getRepository(IntervenantSubstanceDMM::class)->findByInHL_SA($parsingMedic['substance']);
+                        $IntervenantSubstanceDMM = $em->getRepository(IntervenantSubstanceDMM::class)->findContainingHL_SA($substancePourRecherche);
+                        if ($IntervenantSubstanceDMM) {
+                            if (count($IntervenantSubstanceDMM) === 1 ) {
+                                // il n'y a qu'un seul intervenant-substance, on l'attribue au médicament
+                            } else {
+                                // il y a plusieurs intervenants-substance, on prend le premier de la liste
+                                dump('il y a plusieurs intervenants-substance pour la l\'id suivant de la table importCtll : ' . $importCtll->getId());
+                                dump('pour la substance suivante : ' . $substancePourRecherche);
+                                dd('le traitement est arreté, il faut voir avec Fred.');
+                            }
+                            $nbMedicAttribue++;
+                            // on tag cette ligne comme "attribuée" dans la table d'import
+                            $importCtll->setSusarAttribue(true);
+                            $em->persist($importCtll);
+                            // il faut lier ce médicament à l'intervenant substance DMM
+                            $medicament->setIntervenantSubstanceDMM($IntervenantSubstanceDMM[0]);
+                            $medicament->setTypeSaMSMono($IntervenantSubstanceDMM[0]->getTypeSaMSMono());
+
+                            // il faut lier l'intervenant-substance au susar passé en paramètre
+                            $susarEU->addIntervenantSubstanceDMM($IntervenantSubstanceDMM[0]);
+                        }
+                    }
                 }
 
 
@@ -220,10 +270,19 @@ class ImportVersSusarEu
                 $medicament->setCreatedAt($dateImport);
                 $medicament->setUpdatedAt($dateImport);
 
-
                 $em->persist($medicament);
                 $this->nbOfInsertedMedic++;
+
+
+                // return [
+                //     'nbSusarAttribue' => $nbSusarAttribue,
+                //     'nbMedicAttribue' => $nbMedicAttribue,
+                // ];
             }
+            $nbSusarAttribue = $nbMedicAttribue > 0 ? 1 : 0;
+
+            $this->nbSusarAttribue = $this->nbSusarAttribue  + $nbSusarAttribue;
+            $this->nbMedicAttribue = $this->nbMedicAttribue + $nbMedicAttribue;
         }
 
         if ($tousMedicConc) {
@@ -273,13 +332,14 @@ class ImportVersSusarEu
                 $this->nbOfInsertedMedic++;
             }
         }
+        return $lstMedSupInter;
     }
 
-    private function importEffetsIndesirables($importCtll, $susarEU, $em, $dateImport)
+    private function importEffetsIndesirables($importCtll, $susarEU, $em, $dateImport): array
     {
 
         $tousEffetInd = $importCtll->getReactionListPT();
-
+        $lstEffInd = [];
         if ($tousEffetInd) {
             $tousEffetIndArray = $this->split_BR_BR($tousEffetInd);
             foreach ($tousEffetIndArray as $effetInd) {
@@ -297,6 +357,15 @@ class ImportVersSusarEu
                         $codePt = $this->meddraMdHierarchyRepository->findCodePtByPtName($reactionListPT);
                         if ($codePt && count($codePt) == 1) {
                             $effetIndesirable->setCodereactionmeddrapt($codePt[0]['PtCode']);
+                            $lstEffInd[] = [
+                                'PtCode' => $codePt[0]['PtCode'],
+                                'ReactionListPT' => $reactionListPT,
+                            ];
+                        } else {
+                            $lstEffInd[] = [
+                                'PtCode' => null,
+                                'ReactionListPT' => $reactionListPT,
+                            ];
                         }
                         $effetIndesirable->setReactionListPT($reactionListPT);
                     }
@@ -320,6 +389,7 @@ class ImportVersSusarEu
                 $this->nbOfInsertedEffInd++;
             }
         }
+        return $lstEffInd;
     }
 
     private function importMedicalHistory($importCtll, $susarEU, $em, $dateImport)
@@ -376,24 +446,52 @@ class ImportVersSusarEu
         }
     }
 
+    /**
+     * Check si les différents couples substance/effet indésirable sont présents dans la base de données
+     * Si il n'existe pas, on les crée et on les lie au susar
+     * Si il existe, on les lie au susar
+     *
+     * @param [type] $lstMedSupInter
+     * @param [type] $lstEffInd
+     * @param [type] $susarEU
+     * @param [type] $em
+     * @param [type] $dateImport
+     * @return void
+     */
+    private function creationSubstancePt($lstMedSupInter,$lstEffInd, $susarEU, $em, $dateImport)
+    {
+        // dump($susarEU->getId());
+        if(count($lstMedSupInter)>0 && count($lstEffInd)>0){
+            foreach ($lstMedSupInter as $substance) {
+                foreach ($lstEffInd as $effetInd) {
+                    $substancePt = $em->getRepository(SubstancePt::class)->findByActiveSubstanceAndReactionMeddraPt($substance, $effetInd['ReactionListPT']);
+                    if (!$substancePt) {
+                        // Si la substance et l'effet indésirable n'existent pas, on les crée
+                        $substancePt = new SubstancePt();
+                        $substancePt->setActiveSubstanceHighLevel($substance);
+                        $substancePt->setReactionmeddrapt($effetInd['ReactionListPT']);
+                        $substancePt->setCodereactionmeddrapt($effetInd['PtCode']);
+                        $substancePt->setCreatedAt($dateImport);
+                        $substancePt->setUpdatedAt($dateImport);
+                        $em->persist($substancePt);
+                        $susarEU->addSubstancePt($substancePt);
+                    } else {
+                        if ($em->getRepository(SubstancePt::class)->isLinkedToSusarEU($substancePt, $susarEU) === false) {
+                            // On lie le susar à la substance et à l'effet indésirable
+                            $susarEU->addSubstancePt($substancePt);
+                            $em->persist($susarEU);
+                        }
+                    }
+
+
+                }
+            }
+        }
+    }
     private function donneGravite($importCtll)
     {
         $gravite = '';
-        // $serious= $importCtll->getSerious();
-        // $death= $importCtll->getSeriousnessDeath();
-        // $lifethreatening= $importCtll->getSeriousnessLifethreatening();
-        // $hospitalization= $importCtll->getSeriousnessHospitalisation(); 
-        // $disability= $importCtll->getSeriousnessDisabling();
-        // $congenitalAnomaly= $importCtll->getSeriousnessCongenitalAnomaly();
-        // $otherSeriousness= $importCtll->getSeriousnessOther();
 
-        // dump($serious);
-        // dump($death);
-        // dump($lifethreatening);
-        // dump($hospitalization); 
-        // dump($disability);
-        // dump($congenitalAnomaly);
-        // dump($otherSeriousness);
         if ($importCtll->getSeriousnessDeath() == 'Yes') {
             $gravite = $gravite === '' ? 'Death' : $gravite . '<BR>Death';
         }

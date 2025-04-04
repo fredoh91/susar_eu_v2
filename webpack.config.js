@@ -35,6 +35,7 @@ Encore
     .addStyleEntry('type_eu_detail_css', './assets/styles/type_eu_detail.scss')
     .addStyleEntry('eval_susar_css', './assets/styles/eval_susar.scss')
     .addStyleEntry('int_sub_detail', './assets/styles/int_sub_detail.scss')
+    .addStyleEntry('import_excel_css', './assets/styles/import_excel.scss')
     
     // .addStyleEntry('intervenant_substance_css', './assets/styles/intervenant_substance.scss')
 

@@ -3,25 +3,27 @@
 namespace App\Controller;
 
 use DateTimeImmutable;
+use App\Entity\SusarEU;
 use App\Entity\ImportCtll;
 use App\Form\UploadExcelCTLLType;
 use App\Entity\ImportCtllFicExcel;
+use App\Service\ImportVersSusarEu;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use App\Service\ImportVersSusarEu;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
-final class ImportExcelCTLLController extends AbstractController{
+final class ImportExcelCTLLController extends AbstractController
+{
     private int $importedRowsCount = 0;
     private int $idImportCtllFicExcel = -1;
-    private ImportVersSusarEu $importVersSusarEu ;
+    private ImportVersSusarEu $importVersSusarEu;
     private array $nbDonneesInserees;
     public function __construct(ImportVersSusarEu $importVersSusarEu)
     {
@@ -35,7 +37,9 @@ final class ImportExcelCTLLController extends AbstractController{
         $form = $this->createForm(UploadExcelCTLLType::class);
         $form->handleRequest($request);
 
-        $dureeImport = null; // Initialiser la variable pour le temps d'import
+        // Initialisation la variables envoyées a twig 
+        $dureeImport = null; 
+        $nonAttribues = 0;
 
         if ($form->isSubmitted() && $form->isValid()) {
             /** @var UploadedFile $FicExcel */
@@ -46,20 +50,23 @@ final class ImportExcelCTLLController extends AbstractController{
                 $startTime = microtime(true);
 
                 $this->importExcelVersTbImportCtll($FicExcel, $em, $authenticationUtils);
-
-
                 $this->nbDonneesInserees = $this->importVersSusarEu->importExcelVersTbSusarEu(
                     $this->idImportCtllFicExcel,
                     $em,
                     $authenticationUtils
                 );
-
+                
                 $this->nbDonneesInserees = array_merge(
                     ['nbOfExcelRow' => $this->importedRowsCount],
                     $this->nbDonneesInserees
                 );
-
-
+                $em->flush();
+                $em->clear();
+                // dump($this->idImportCtllFicExcel);
+                $nonAttribues = $em->getRepository(ImportCtll::class)->donneNonAttribue($this->idImportCtllFicExcel);
+                // dump($nonAttribues);
+                // $susarNonAttribues = $em->getRepository(SusarEU::class)->findSusarByEVSafetyReportIdentifier('EU-EC-10019020020');
+                // dump($susarNonAttribues);
                 // Arrêter le chronomètre
                 $endTime = microtime(true);
                 $dureeImport = $endTime - $startTime; // Calculer la durée en secondes
@@ -69,7 +76,23 @@ final class ImportExcelCTLLController extends AbstractController{
         return $this->render('import_excel_ctll/upload_excel_ctll.html.twig', [
             'form' => $form->createView(),
             'nbDonneesInserees' => $this->nbDonneesInserees,
-            'dureeImport' => $dureeImport, // Passer la durée à la vue
+            'dureeImport' => $dureeImport,
+            'nonAttribues' => $nonAttribues,
+        ]);
+    }
+
+    #[Route('/import_excel_ctll_test', name: 'app_import_excel_ctll_test')]
+    public function upload_excel_ctll_test(Request $request, ManagerRegistry $doctrine, EntityManagerInterface $em, AuthenticationUtils $authenticationUtils): Response
+    {
+        $form = $this->createForm(UploadExcelCTLLType::class);
+        $form->handleRequest($request);
+
+        $nonAttribues = $em->getRepository(ImportCtll::class)->donneNonAttribue(1);
+        // dump($nonAttribues);
+
+        return $this->render('import_excel_ctll/upload_excel_ctll_test.html.twig', [
+            'form' => $form->createView(),
+            'nonAttribues' => $nonAttribues,
         ]);
     }
 
@@ -79,11 +102,11 @@ final class ImportExcelCTLLController extends AbstractController{
         $spreadsheet = IOFactory::load($inputFileName);
         $activeWorksheet = $spreadsheet->getActiveSheet();
         $highestRow = $activeWorksheet->getHighestRow();
-        
+
         $importCtllFicExcel = $this->createImportCtllFicExcel($FicExcel, $inputFileName, $authenticationUtils);
-        
+
         $this->processWorksheetRows($activeWorksheet, $highestRow, $importCtllFicExcel, $em);
-        
+
         $this->finalizeImport($FicExcel, $importCtllFicExcel, $em);
     }
 
@@ -118,7 +141,7 @@ final class ImportExcelCTLLController extends AbstractController{
         $dateHeureUnique = date('Ymd_His');
         $fileName = 'CTLL_' . $dateHeureUnique . '.xlsx';
         $importCtllFicExcel->setFileName($fileName)
-                        ->setNbLignesDataFicExcel($this->importedRowsCount);
+            ->setNbLignesDataFicExcel($this->importedRowsCount);
         $em->persist($importCtllFicExcel);
         $em->flush();
         $this->idImportCtllFicExcel = $importCtllFicExcel->getId();
@@ -127,8 +150,8 @@ final class ImportExcelCTLLController extends AbstractController{
     }
 
     private function hydrateImportCtll(
-        ImportCtll $importCtll, 
-        Worksheet $activeWorksheet, 
+        ImportCtll $importCtll,
+        Worksheet $activeWorksheet,
         int $row,
         ImportCtllFicExcel $importCtllFicExcel
     ): ImportCtll {

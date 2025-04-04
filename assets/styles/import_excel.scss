@@ -1,0 +1,15 @@
+// @import '_variables.scss';
+@use '_variables' as *;
+
+.couleur-ligne-1 {
+    background-color: $Ctnr_tab_violet_clair;
+}
+
+.couleur-ligne-2 {
+    background-color: $Ctnr_tab_violet_fonce;
+}
+
+.table {
+    --bs-table-bg: initial; /* Permet à vos couleurs personnalisées de s'appliquer */
+    border-color: $ANSM_gris_fonce; /* Applique la couleur des bordures */
+}

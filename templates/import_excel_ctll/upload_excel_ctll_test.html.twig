@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ImportExcelCTLLController!
+{% endblock %}
+
+{% block body %}
+
+{{ encore_entry_link_tags('import_excel_css') }}
+
+{{ encore_entry_link_tags('int_sub_detail') }}
+
+	<div class="container-fluid p-5">
+		{{form_start(form)}}
+
+		{{form_end(form)}}
+
+
+		{% if nonAttribues is not empty %}
+			<table class="table table-bordered table-hover">
+				<thead>
+					<tr>
+						<th colspan="6" class="text-center fs-4 fw-bold text-primary">Susars non attribués</th>
+					</tr>
+					<tr>
+						<th colspan="4" style="text-align: center;">Susars</th>
+						<th colspan="2" style="text-align: center;">Médicament Suspect/Interaction</th>
+					</tr>
+					<tr>
+						<th>EV Safety report identifier</th>
+						<th>Case report number</th>
+						<th>Sponsor study number</th>
+						<th>id Susar</th>
+						<th>Produit</th>
+						<th>Substance</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% set rowClass = 'couleur-ligne-1' %}
+					{% for nonAttribue in nonAttribues %}
+						{% if nonAttribue.susarEU is not null %}
+							{% for medic in nonAttribue.susarEU.Medicament %}
+								{% if medic.productcharacterization == 'Suspect' %}
+									<tr class="{{ rowClass }}">
+										<td>{{ nonAttribue.EVSafetyReportIdentifier }}</td>
+										<td>{{ nonAttribue.CaseReportNumber }}</td>
+										<td>{{ nonAttribue.susarEU.Sponsorstudynumb }}</td>
+										<td>{{ nonAttribue.susarEU.id }}</td>
+										<td>{{ medic.productname }}</td>
+										<td>{{ medic.substancename }}</td>
+									</tr>
+								{% endif %}
+							{% endfor %}
+							{% set rowClass = rowClass == 'couleur-ligne-1' ? 'couleur-ligne-2' : 'couleur-ligne-1' %}
+						{% endif %}
+					{% endfor %}
+				</tbody>
+			</table>
+		{% endif %}
+
+
+		
+	</div>
+
+{% endblock %}

@@ -56,6 +56,18 @@ class SubstancePtRepository extends ServiceEntityRepository
             ->getOneOrNullResult() !== null;
     }
     
+    // public function isLinkedToSusarEU_2(SubstancePt $substancePt, int $susarEUId): bool
+    // {
+    //     return $this->createQueryBuilder('s')
+    //         ->where('s = :substance_pt')
+    //         ->andWhere(':susar_eu_id MEMBER OF s.susarEUs')
+    //         ->setParameter('substance_pt', $substancePt)
+    //         ->setParameter('susar_eu_id', $susarEUId)
+    //         ->getQuery()
+    //         ->getOneOrNullResult() !== null;
+    // }
+
+
     //    /**
     //     * @return SubstancePt[] Returns an array of SubstancePt objects
     //     */
