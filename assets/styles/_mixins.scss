@@ -1,0 +1,44 @@
+
+/////////////////////////////////////////////////////////////////////////////////////
+//                                                                    //
+/////////////////////////////////////////////////////////////////////////////////////
+
+// Libellés des différents champs grid de gauche
+@mixin lst-susar-grid-gauche-lib($grid-area) {
+    grid-area: $grid-area;
+    padding-left: 5%;
+}
+// Libellés des différents champs grid de droite
+@mixin lst-susar-grid-droite-lib($grid-area) {
+    grid-area: $grid-area;
+    text-align: right;
+    padding-right: 5%;
+    display: flex;
+    justify-content: end;
+    align-items: center;
+}
+
+// Contenu des différents champs sans border-right grid de gauche
+@mixin lst-susar-grid-gauche-contenu-tbl($grid-area) {
+    grid-area: $grid-area;
+    border-top: 1px solid;
+    border-bottom: 1px solid;
+    border-left: 1px solid;
+}
+
+// Contenu des différents champs avec border-right grid de gauche
+@mixin lst-susar-grid-gauche-contenu-trbl($grid-area) {
+    grid-area: $grid-area;
+    border-top: 1px solid;
+    border-right: 1px solid;
+    border-bottom: 1px solid;
+    border-left: 1px solid;
+}
+
+// Contenu des différents champs grid de droite
+@mixin lst-susar-grid-droite-contenu($grid-area) {
+    grid-area: $grid-area;
+    border: 1px solid;
+}
+
+

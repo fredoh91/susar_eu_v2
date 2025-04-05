@@ -1,9 +1,10 @@
 // @import '_variables.scss';
-@use '_variables' as *;
-
+@use "_variables" as *;
+// @import 'mixins';
+@use "mixins" as m;
 
 .page_liste_susar {
-    background-color: $Fond_liste_susar;
+  background-color: $Fond_liste_susar;
 }
 
 /******************************************/
@@ -12,17 +13,17 @@
 
 .chbx_niv_tableau {
   border-collapse: collapse;
-  border: 2px solid #CCC; /* Liseré autour du tableau */
+  border: 2px solid #ccc; /* Liseré autour du tableau */
 }
 .chbx_niv_header {
   font-weight: bold;
   text-align: center;
   padding: 5px;
-  border-bottom: 2px solid #CCC; /* Séparation entre l'en-tête et le corps du tableau */
+  border-bottom: 2px solid #ccc; /* Séparation entre l'en-tête et le corps du tableau */
 }
 .chbx_niv_cell {
   padding: 0;
-  border: 1px solid #CCC; /* Lignes internes du tableau */
+  border: 1px solid #ccc; /* Lignes internes du tableau */
   vertical-align: middle; /* Centre verticalement le contenu de la cellule */
   height: 40px; /* Hauteur fixe pour toutes les cellules, ajustez selon vos besoins */
 }
@@ -60,24 +61,39 @@
 
 // pour avoir une ligne colorée sur deux dans les tableaux
 
-// .container-tab > div:nth-child(even) {background: #f0f0f0}
-// .container-tab > div:nth-child(odd) {background: #ead6fa}
-// .container-tab > div:nth-child(even) {background: #D9C7FD}
-// .container-tab > div:nth-child(odd) {background: #EEE6FE}
-// .container-tab > div:nth-child(even) {background: $Ctnr_tab_violet_clair}
-// .container-tab > div:nth-child(odd) {background: $Ctnr_tab_violet_fonce}
-
 .container-tab {
-    > div {
-        &:nth-child(even) {
-            &.susar-v2 { background: $Ctnr_tab_violet_clair; }
-            &.susar-v1 { background: $Ctnr_tab_rouge_clair; }
-        }
-        &:nth-child(odd) {
-            &.susar-v2 { background: $Ctnr_tab_violet_fonce; }
-            &.susar-v1 { background: $Ctnr_tab_rouge_fonce; }
-        }
+  > div {
+    &:nth-child(even) {
+      &.susar-v2 {
+        background: $Ctnr_tab_violet_clair;
+      }
+      &.susar-v1 {
+        background: $Ctnr_tab_rouge_clair;
+      }
     }
+    &:nth-child(odd) {
+      &.susar-v2 {
+        background: $Ctnr_tab_violet_fonce;
+      }
+      &.susar-v1 {
+        background: $Ctnr_tab_rouge_fonce;
+      }
+    }
+  }
+}
+
+.ligne_susar {
+  display: flex;
+  padding: 2px;
+  border: 5px solid $Entourage_susar;
+  border-radius: 10px;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+
+.cell_tab {
+  padding: 2px;
+  border: 2px solid blue;
 }
 
 .container_flex_left > div,
@@ -85,36 +101,20 @@
   border-color: #aeb6bf;
   min-height: 25px;
   min-height: max-content;
-  // min-height: min-content;
 }
 
-// .container_flex_right > div {
-//   border-color: #aeb6bf;
-//   min-height: 25px;
-// }
 // flex de gauche
 
 .container_flex_left {
-
-
   flex: 1; /* Prend un espace égal pour chaque div */
   min-width: 300px; /* Largeur minimale pour chaque div */
-
   height: 100%;
   margin: 0;
-  // margin: auto;
   width: 40%;
   padding: 2px;
-  // border: 2px solid blue;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-  // grid-template-columns: minmax(2ch, 10ch) 1fr 1fr;
-  // grid-template-rows: 0.2fr 1fr 0.2fr 1fr 0.2fr 0.5fr 0.3fr 0.3fr 0.3fr;
-  // grid-template-rows: 1rem 4rem 1rem 4rem 1rem 3rem 2rem 2rem 2rem;
-  // grid-template-rows: 0.2fr minmax(1fr, 4rem) 0.2fr 4rem 0.2fr 3rem 2rem 2rem 2rem;
-  // grid-template-rows: 0.2fr minmax(1fr, 4rem) 0.2fr 1fr 0.2fr 0.5fr 0.3fr 0.3fr 0.3fr;
   grid-template-rows: minmax(1fr, 4rem);
-
   grid-auto-columns: 1fr;
   gap: 0px 0px;
   grid-auto-flow: row;
@@ -132,35 +132,18 @@
     "sex_lib sex medicalHistory medicalHistory medicalHistory .";
 }
 
+// flex de droite
 .container_flex_right {
-  
   flex: 1; /* Prend un espace égal pour chaque div */
   min-width: 300px; /* Largeur minimale pour chaque div */
-
   height: 100%;
   margin: 0;
-  // margin: auto;
   width: 60%;
   padding: 2px;
-  // border: 2px solid green;
   display: grid;
   grid-template-columns: 0.5fr 1fr 0.7fr 1fr;
-  // grid-template-rows: 1fr 0.2fr 1fr 0.2fr 1fr 0.2fr 1fr 0.2fr 1fr 0.2fr 1fr;
-  // grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr;
-  // grid-template-rows: minmax(1fr, 4rem) 1fr 1fr 1fr 1fr 1fr;
   grid-template-rows: minmax(1fr, 4rem);
-
-
-  // grid-template-rows: minmax(1fr, 4rem) 5px 1fr 0.2fr 1fr 0.2fr 1fr 0.2fr 1fr 0.2fr 1fr;
-  // grid-template-rows: minmax(1fr, 4rem) 0.2fr 1fr 0.2fr 1fr 0.2fr 1fr 0.2fr 1fr 0.2fr 1fr;
-  // grid-template-rows: minmax(1fr, 4rem) 0.2fr minmax(1fr, 4rem) 0.2fr minmax(1fr, 4rem) 0.2fr minmax(1fr, 4rem) 0.2fr minmax(1fr, 4rem);
-  
-  // grid-template-rows: 0.2fr minmax(1fr, 4rem) 0.2fr 1fr 0.2fr 0.5fr 0.3fr 0.3fr 0.3fr;
-
-
-  
   grid-auto-columns: 1fr;
-  // gap: 0px 0px;
   gap: 10px 0px;
   grid-auto-flow: row;
   justify-items: stretch;
@@ -176,20 +159,7 @@
     "DtEval_lib DtEval . . ."
     ". btn-FU btn-AWA . lienICSR"
     "narratif_lib narratif narratif narratif narratif"
-    ". narratif narratif narratif narratif"
-    ;
-  // grid-template-areas:
-  //   "numBNPV_lib numBNPV FU_BNPV_lib FU_BNPV"
-  //   ". . . ."
-  //   "StudyTittle_lib StudyTittle StudyTittle StudyTittle"
-  //   ". . . ."
-  //   "WW_id_lib WW_id WW_id WW_id"
-  //   ". . . ."
-  //   "NumEUDRA_CT_lib NumEUDRA_CT SponsStudyNum_lib SponsStudyNum"
-  //   ". . . ."
-  //   "DMM_Pole_lib DMM_Pole DtAiguil_lib DtAiguil"
-  //   ". . . ."
-  //   "MesureAction_lib MesureAction DtMesureAction_lib DtMesureAction";
+    ". narratif narratif narratif narratif";
 }
 
 #container_eval {
@@ -197,461 +167,416 @@
   margin-top: 20px; /* Optionnel : espace au-dessus de la div */
 }
 
+//////////////////////////////
+/////// grid de gauche ///////
+//////////////////////////////
 
 .suspectDrug_lib {
-  grid-area: suspectDrug_lib;
-  padding-left: 5%;
+  @include m.lst-susar-grid-gauche-lib(suspectDrug_lib);
+  // grid-area: suspectDrug_lib;
+  // padding-left: 5%;
 }
+
 .suspectDrug {
-  grid-area: suspectDrug;
-  border-top: 1px solid;
-  border-bottom: 1px solid;
-  border-left: 1px solid;
+  @include m.lst-susar-grid-gauche-contenu-tbl(suspectDrug);
+  // grid-area: suspectDrug;
+  // border-top: 1px solid;
+  // border-bottom: 1px solid;
+  // border-left: 1px solid;
 }
 
 .PT_outcome_lib {
-  grid-area: PT_outcome_lib;
-  padding-left: 5%;
+  @include m.lst-susar-grid-gauche-lib(PT_outcome_lib);
+  // grid-area: PT_outcome_lib;
+  // padding-left: 5%;
 }
 
 .PT_outcome {
-  grid-area: PT_outcome;
-  border-top: 1px solid;
-  border-right: 1px solid;
-  border-bottom: 1px solid;
-  border-left: 1px solid;
+  @include m.lst-susar-grid-gauche-contenu-trbl(PT_outcome);
+  // grid-area: PT_outcome;
+  // border-top: 1px solid;
+  // border-right: 1px solid;
+  // border-bottom: 1px solid;
+  // border-left: 1px solid;
 }
 
 .seriousness_lib {
-  grid-area: seriousness_lib;
-  padding-left: 5%;
+  @include m.lst-susar-grid-gauche-lib(seriousness_lib);
+  // grid-area: seriousness_lib;
+  // padding-left: 5%;
 }
 
 .seriousness {
-  grid-area: seriousness;
-  border-top: 1px solid;
-  border-bottom: 1px solid;
-  border-left: 1px solid;
+  @include m.lst-susar-grid-gauche-contenu-tbl(seriousness);
+  // grid-area: seriousness;
+  // border-top: 1px solid;
+  // border-bottom: 1px solid;
+  // border-left: 1px solid;
 }
 
 .indication_lib {
-  grid-area: indication_lib;
-  padding-left: 5%;
+  @include m.lst-susar-grid-gauche-lib(indication_lib);
+  // grid-area: indication_lib;
+  // padding-left: 5%;
 }
 
 .indication {
-  grid-area: indication;
-  border-top: 1px solid;
-  border-right: 1px solid;
-  border-bottom: 1px solid;
-  border-left: 1px solid;
+  @include m.lst-susar-grid-gauche-contenu-trbl(indication);
+  // grid-area: indication;
+  // border-top: 1px solid;
+  // border-right: 1px solid;
+  // border-bottom: 1px solid;
+  // border-left: 1px solid;
 }
 
 .medicalHistory_lib {
   grid-area: medicalHistory_lib;
-  // text-align: right;
   padding-right: 5%;
 }
 
 .medicalHistory {
-  grid-area: medicalHistory;
-  border-top: 1px solid;
-  border-right: 1px solid;
-  border-bottom: 1px solid;
-  border-left: 1px solid;
+  @include m.lst-susar-grid-gauche-contenu-trbl(medicalHistory);
+  // grid-area: medicalHistory;
+  // border-top: 1px solid;
+  // border-right: 1px solid;
+  // border-bottom: 1px solid;
+  // border-left: 1px solid;
 }
-
-.lienICSR {
-  grid-area: lienICSR;
-  border: 1px solid;
-}
-
-.lienICSR_lib {
-  grid-area: lienICSR_lib;
-  text-align: right;
-  padding-right: 5%;
-  display: flex;
-  justify-content: end;
-  align-items: center;
-}
-
-.narratif_lib {
-  grid-area: narratif_lib;
-  text-align: right;
-  padding-right: 5%;
-  display: flex;
-  justify-content: end;
-  align-items: center;
-}
-// .narratif_lib {
-//   grid-area: narratif_lib;
-//   // text-align: right;
-//   padding-right: 5%;
-// }
-
-.narratif {
-  grid-area: narratif;
-  border: 1px solid;
-  height: 6em; /* Fixer la hauteur à 5 fois la hauteur d'une ligne de texte */
-  overflow-y: auto; /* Afficher un ascenseur vertical si le contenu dépasse la hauteur */
-}
-// .narratif {
-//   grid-area: narratif;
-//   border-top: 1px solid;
-//   border-right: 1px solid;
-//   border-bottom: 1px solid;
-//   border-left: 1px solid;
-// }
 
 .population_lib {
-  grid-area: population_lib;
-  text-align: right;
-  padding-right: 5%;
-  display: flex;
-  justify-content: end;
-  align-items: center;
+  @include m.lst-susar-grid-gauche-lib(population_lib);
+  // grid-area: population_lib;
+  // text-align: right;
+  // padding-right: 5%;
+  // display: flex;
+  // justify-content: end;
+  // align-items: center;
 }
 
 .population {
-  grid-area: population;
-  border-top: 1px solid;
-  border-right: 1px solid;
-  border-bottom: 1px solid;
-  border-left: 1px solid;
+  @include m.lst-susar-grid-gauche-contenu-trbl(population);
+  // grid-area: population;
+  // border-top: 1px solid;
+  // border-right: 1px solid;
+  // border-bottom: 1px solid;
+  // border-left: 1px solid;
   margin: 1%;
   // max-height: 25px;
 }
 
 .age_lib {
-  grid-area: age_lib;
-  text-align: right;
-  padding-right: 5%;
-  display: flex;
-  justify-content: end;
-  align-items: center;
+  @include m.lst-susar-grid-gauche-lib(age_lib);
+  // grid-area: age_lib;
+  // text-align: right;
+  // padding-right: 5%;
+  // display: flex;
+  // justify-content: end;
+  // align-items: center;
 }
 
 .age {
-  grid-area: age;
-  border-top: 1px solid;
-  border-right: 1px solid;
-  border-bottom: 1px solid;
-  border-left: 1px solid;
+  @include m.lst-susar-grid-gauche-contenu-trbl(age);
+  // grid-area: age;
+  // border-top: 1px solid;
+  // border-right: 1px solid;
+  // border-bottom: 1px solid;
+  // border-left: 1px solid;
   margin: 1%;
 }
 
 .sex_lib {
-  grid-area: sex_lib;
-  text-align: right;
-  padding-right: 5%;
-  display: flex;
-  justify-content: end;
-  align-items: center;
+  @include m.lst-susar-grid-gauche-lib(sex_lib);
+  // grid-area: sex_lib;
+  // text-align: right;
+  // padding-right: 5%;
+  // display: flex;
+  // justify-content: end;
+  // align-items: center;
 }
 
 .sex {
-  grid-area: sex;
-  border-top: 1px solid;
-  border-right: 1px solid;
-  border-bottom: 1px solid;
-  border-left: 1px solid;
+  @include m.lst-susar-grid-gauche-contenu-trbl(sex);
+  // grid-area: sex;
+  // border-top: 1px solid;
+  // border-right: 1px solid;
+  // border-bottom: 1px solid;
+  // border-left: 1px solid;
   margin: 1%;
 }
 
-.ligne_susar {
-  display: flex;
-  padding: 2px;
-  // border: 5px solid #eac8c0;
-  // border: 5px solid #604C78;
-  border: 5px solid $Entourage_susar;
-  border-radius: 10px;
-  //justify-content: space-between;
-  justify-content: space-around;
-  //justify-content: space-evenly;
-
-  flex-wrap: wrap;
-
-
-}
-
-.cell_tab {
-  padding: 2px;
-  border: 2px solid blue;
-  //border-radius: 10px;
-}
-
-// .cell_tab {
-//   padding: 2px;
-//   border: 2px solid #eac8c0;
-//   border-radius: 10px;
-// }
-
-// flex de droite
-
-.numBNPV {
-  grid-area: numBNPV;
-  border: 1px solid;
-}
+//////////////////////////////
+/////// grid de droite ///////
+//////////////////////////////
 
 .numBNPV_lib {
-  grid-area: numBNPV_lib;
-  text-align: right;
-  padding-right: 5%;
-  display: flex;
-  justify-content: end;
-  align-items: center;
+  @include m.lst-susar-grid-droite-lib(numBNPV_lib);
+  // grid-area: numBNPV_lib;
+  // text-align: right;
+  // padding-right: 5%;
+  // display: flex;
+  // justify-content: end;
+  // align-items: center;
+}
+.numBNPV {
+  @include m.lst-susar-grid-droite-contenu(numBNPV);
+  // grid-area: numBNPV;
+  // border: 1px solid;
 }
 
 .idSusar {
   grid-area: idSusar;
-  // border: 1px solid;
   text-align: right;
-  color: gray; // color: #eac8c0;
+  color: gray;
   font-size: 0.8em;
-
-}
-
-.FU_BNPV {
-  grid-area: FU_BNPV;
-  border: 1px solid;
 }
 
 .FU_BNPV_lib {
-  grid-area: FU_BNPV_lib;
-  text-align: right;
-  padding-right: 5%;
-  display: flex;
-  justify-content: end;
-  align-items: center;
+  @include m.lst-susar-grid-droite-lib(FU_BNPV_lib);
+  // grid-area: FU_BNPV_lib;
+  // text-align: right;
+  // padding-right: 5%;
+  // display: flex;
+  // justify-content: end;
+  // align-items: center;
+}
+.FU_BNPV {
+  @include m.lst-susar-grid-droite-contenu(FU_BNPV);
+  // grid-area: FU_BNPV;
+  // border: 1px solid;
 }
 
 .DMM_Pole_lib {
-  grid-area: DMM_Pole_lib;
-  text-align: right;
-  padding-right: 5%;
-  display: flex;
-  justify-content: end;
-  align-items: center;
+  @include m.lst-susar-grid-droite-lib(DMM_Pole_lib);
+  // grid-area: DMM_Pole_lib;
+  // text-align: right;
+  // padding-right: 5%;
+  // display: flex;
+  // justify-content: end;
+  // align-items: center;
 }
-
 .DMM_Pole {
-  grid-area: DMM_Pole;
-  border: 1px solid;
+  @include m.lst-susar-grid-droite-contenu(DMM_Pole);
+  // grid-area: DMM_Pole;
+  // border: 1px solid;
 }
 
 .Prio_lib {
-  grid-area: Prio_lib;
-  text-align: right;
-  padding-right: 5%;
-  display: flex;
-  justify-content: end;
-  align-items: center;
+  @include m.lst-susar-grid-droite-lib(Prio_lib);
+  // grid-area: Prio_lib;
+  // text-align: right;
+  // padding-right: 5%;
+  // display: flex;
+  // justify-content: end;
+  // align-items: center;
 }
-
 .Prio {
-  grid-area: Prio;
-  border: 1px solid;
+  @include m.lst-susar-grid-droite-contenu(Prio);
+  // grid-area: Prio;
+  // border: 1px solid;
 }
 
 .DtAiguil_lib {
-  grid-area: DtAiguil_lib;
-  text-align: right;
-  padding-right: 5%;
-  display: flex;
-  justify-content: end;
-  align-items: center;
+  @include m.lst-susar-grid-droite-lib(DtAiguil_lib);
+  // grid-area: DtAiguil_lib;
+  // text-align: right;
+  // padding-right: 5%;
+  // display: flex;
+  // justify-content: end;
+  // align-items: center;
 }
-
 .DtAiguil {
-  grid-area: DtAiguil;
-  border: 1px solid;
+  @include m.lst-susar-grid-droite-contenu(DtAiguil);
+  // grid-area: DtAiguil;
+  // border: 1px solid;
 }
 
 .DtEval_lib {
-  grid-area: DtEval_lib;
-  text-align: right;
-  padding-right: 5%;
-  display: flex;
-  justify-content: end;
-  align-items: center;
+  @include m.lst-susar-grid-droite-lib(DtEval_lib);
+  // grid-area: DtEval_lib;
+  // text-align: right;
+  // padding-right: 5%;
+  // display: flex;
+  // justify-content: end;
+  // align-items: center;
 }
-
 .DtEval {
-  grid-area: DtEval;
-  border: 1px solid;
-}
-
-.SponsStudyNum {
-  grid-area: SponsStudyNum;
-  border: 1px solid;
+  @include m.lst-susar-grid-droite-contenu(DtEval);
+  // grid-area: DtEval;
+  // border: 1px solid;
 }
 
 .SponsStudyNum_lib {
-  grid-area: SponsStudyNum_lib;
-  text-align: right;
-  padding-right: 5%;
-  display: flex;
-  justify-content: end;
-  align-items: center;
+  @include m.lst-susar-grid-droite-lib(SponsStudyNum_lib);
+  // grid-area: SponsStudyNum_lib;
+  // text-align: right;
+  // padding-right: 5%;
+  // display: flex;
+  // justify-content: end;
+  // align-items: center;
 }
-
-.NumEUDRA_CT {
-  grid-area: NumEUDRA_CT;
-  border: 1px solid;
+.SponsStudyNum {
+  @include m.lst-susar-grid-droite-contenu(SponsStudyNum);
+  // grid-area: SponsStudyNum;
+  // border: 1px solid;
 }
 
 .NumEUDRA_CT_lib {
-  grid-area: NumEUDRA_CT_lib;
-  text-align: right;
-  padding-right: 5%;
-  display: flex;
-  justify-content: end;
-  align-items: center;
+  @include m.lst-susar-grid-droite-lib(NumEUDRA_CT_lib);
+  // grid-area: NumEUDRA_CT_lib;
+  // text-align: right;
+  // padding-right: 5%;
+  // display: flex;
+  // justify-content: end;
+  // align-items: center;
+}
+.NumEUDRA_CT {
+  @include m.lst-susar-grid-droite-contenu(NumEUDRA_CT);
+  // grid-area: NumEUDRA_CT;
+  // border: 1px solid;
 }
 
 .StudyTittle_lib {
-  grid-area: StudyTittle_lib;
-  text-align: right;
-  padding-right: 5%;
-  display: flex;
-  justify-content: end;
-  align-items: center;
+  @include m.lst-susar-grid-droite-lib(StudyTittle_lib);
+  // grid-area: StudyTittle_lib;
+  // text-align: right;
+  // padding-right: 5%;
+  // display: flex;
+  // justify-content: end;
+  // align-items: center;
 }
-
 .StudyTittle {
-  grid-area: StudyTittle;
-  border: 1px solid;
+  @include m.lst-susar-grid-droite-contenu(StudyTittle);
+  // grid-area: StudyTittle;
+  // border: 1px solid;
 }
 
 .WW_id_lib {
-  grid-area: WW_id_lib;
-  text-align: right;
-  padding-right: 5%;
-  display: flex;
-  justify-content: end;
-  align-items: center;
+  @include m.lst-susar-grid-droite-lib(WW_id_lib);
+  // grid-area: WW_id_lib;
+  // text-align: right;
+  // padding-right: 5%;
+  // display: flex;
+  // justify-content: end;
+  // align-items: center;
 }
-
 .WW_id {
-  grid-area: WW_id;
-  border: 1px solid;
-}
-
-// .MesureAction {
-//   grid-area: MesureAction;
-//   border: 1px solid;
-// }
-
-// .MesureAction_lib {
-//   grid-area: MesureAction_lib;
-//   text-align: right;
-//   padding-right: 5%;
-//   display: flex;
-//   justify-content: end;
-//   align-items: center;
-// }
-
-.ConcluCas {
-  grid-area: ConcluCas;
-  border: 1px solid;
+  @include m.lst-susar-grid-droite-contenu(WW_id);
+  // grid-area: WW_id;
+  // border: 1px solid;
 }
 
 .ConcluCas_lib {
-  grid-area: ConcluCas_lib;
-  text-align: right;
-  padding-right: 5%;
-  display: flex;
-  justify-content: end;
-  align-items: center;
+  @include m.lst-susar-grid-droite-lib(ConcluCas_lib);
+  // grid-area: ConcluCas_lib;
+  // text-align: right;
+  // padding-right: 5%;
+  // display: flex;
+  // justify-content: end;
+  // align-items: center;
 }
-
-// .DtMesureAction {
-//   grid-area: DtMesureAction;
-//   border: 1px solid;
-// }
-
-// .DtMesureAction_lib {
-//   grid-area: DtMesureAction_lib;
-//   text-align: right;
-//   padding-right: 5%;
-//   display: flex;
-//   justify-content: end;
-//   align-items: center;
-// }
-
-.CommentConclu {
-  grid-area: CommentConclu;
-  border: 1px solid;
+.ConcluCas {
+  @include m.lst-susar-grid-droite-contenu(ConcluCas);
+  // grid-area: ConcluCas;
+  // border: 1px solid;
 }
 
 .CommentConclu_lib {
-  grid-area: CommentConclu_lib;
-  text-align: right;
-  padding-right: 5%;
-  display: flex;
-  justify-content: end;
-  align-items: center;
+  @include m.lst-susar-grid-droite-lib(CommentConclu_lib);
+  // grid-area: CommentConclu_lib;
+  // text-align: right;
+  // padding-right: 5%;
+  // display: flex;
+  // justify-content: end;
+  // align-items: center;
+}
+.CommentConclu {
+  @include m.lst-susar-grid-droite-contenu(CommentConclu);
+  // grid-area: CommentConclu;
+  // border: 1px solid;
 }
 
-/*.cell_tab {
-    padding: 2px;
-    border: 2px solid #eac8c0;
-    border-radius: 10px;
-  }*/
+.lienICSR_lib {
+  @include m.lst-susar-grid-droite-lib(lienICSR_lib);
+  // grid-area: lienICSR_lib;
+  // text-align: right;
+  // padding-right: 5%;
+  // display: flex;
+  // justify-content: end;
+  // align-items: center;
+}
+.lienICSR {
+  @include m.lst-susar-grid-droite-contenu(lienICSR);
+  // grid-area: lienICSR;
+  // border: 1px solid;
+}
 
-  .btn-FU {
-    grid-area: btn-FU;
-    // border: 1px solid;
-  }
+.narratif_lib {
+  @include m.lst-susar-grid-droite-lib(narratif_lib);
+  // grid-area: narratif_lib;
+  // text-align: right;
+  // padding-right: 5%;
+  // display: flex;
+  // justify-content: end;
+  // align-items: center;
+}
+.narratif {
+  @include m.lst-susar-grid-droite-contenu(narratif);
+  // grid-area: narratif;
+  // border: 1px solid;
+  height: 6em; /* Fixer la hauteur à 5 fois la hauteur d'une ligne de texte */
+  overflow-y: auto; /* Afficher un ascenseur vertical si le contenu dépasse la hauteur */
+}
 
-  .btn-AWA {
-    grid-area: btn-AWA;
-    // border: 1px solid;
-  }
+///////////////////////
+/////// boutons ///////
+///////////////////////
+.btn-FU {
+  grid-area: btn-FU;
+}
 
+.btn-AWA {
+  grid-area: btn-AWA;
+}
 
-  .btn-gray {
-    background-color: #cccccc;
-    color: #333333;
-    border: none;
-    padding: 10px 20px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
-    cursor: pointer;
-    border-radius: 4px;
-  }
-  
-  .btn-gray:hover {
-    background-color: #aaaaaa;
-  }
-  
-  
-  .btn-access {
-    background-color: #d3d3d3;
-    color: #000000;
-    border: 1px solid #808080;
-    padding: 5px 10px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 14px;
-    font-family: Arial, sans-serif;
-    margin: 4px 2px;
-    cursor: pointer;
-    border-radius: 3px;
-    box-shadow: 1px 1px 1px #808080;
-  }
-  
-  .btn-access:hover {
-    background-color: #e3e3e3;
-  }
-  
-  .btn-access:active {
-    background-color: #c3c3c3;
-    box-shadow: 0px 0px 0px #808080;
-  }
-  
+.btn-gray {
+  background-color: #cccccc;
+  color: #333333;
+  border: none;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 4px;
+}
 
+.btn-gray:hover {
+  background-color: #aaaaaa;
+}
+
+.btn-access {
+  background-color: #d3d3d3;
+  color: #000000;
+  border: 1px solid #808080;
+  padding: 5px 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+  font-family: Arial, sans-serif;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 3px;
+  box-shadow: 1px 1px 1px #808080;
+}
+
+.btn-access:hover {
+  background-color: #e3e3e3;
+}
+
+.btn-access:active {
+  background-color: #c3c3c3;
+  box-shadow: 0px 0px 0px #808080;
+}
