@@ -60,7 +60,6 @@
 /******************** Fin du tableau des cases à cocher de niveau **********************/
 
 // pour avoir une ligne colorée sur deux dans les tableaux
-
 .container-tab {
   > div {
     &:nth-child(even) {
@@ -103,8 +102,9 @@
   min-height: max-content;
 }
 
-// flex de gauche
-
+/**********************/
+/*** flex de gauche ***/
+/**********************/
 .container_flex_left {
   flex: 1; /* Prend un espace égal pour chaque div */
   min-width: 300px; /* Largeur minimale pour chaque div */
@@ -132,7 +132,9 @@
     "sex_lib sex medicalHistory medicalHistory medicalHistory .";
 }
 
-// flex de droite
+/**********************/
+/*** flex de droite ***/
+/**********************/
 .container_flex_right {
   flex: 1; /* Prend un espace égal pour chaque div */
   min-width: 300px; /* Largeur minimale pour chaque div */
@@ -164,164 +166,74 @@
 
 #container_eval {
   width: 100%; /* Prend toute la largeur disponible */
-  margin-top: 20px; /* Optionnel : espace au-dessus de la div */
+  margin-top: 20px; /* Espace au-dessus de la div */
 }
 
-//////////////////////////////
-/////// grid de gauche ///////
-//////////////////////////////
-
+/**********************/
+/*** grid de gauche ***/
+/**********************/
 .suspectDrug_lib {
   @include m.lst-susar-grid-gauche-lib(suspectDrug_lib);
-  // grid-area: suspectDrug_lib;
-  // padding-left: 5%;
 }
-
 .suspectDrug {
   @include m.lst-susar-grid-gauche-contenu-tbl(suspectDrug);
-  // grid-area: suspectDrug;
-  // border-top: 1px solid;
-  // border-bottom: 1px solid;
-  // border-left: 1px solid;
 }
 
 .PT_outcome_lib {
   @include m.lst-susar-grid-gauche-lib(PT_outcome_lib);
-  // grid-area: PT_outcome_lib;
-  // padding-left: 5%;
 }
-
 .PT_outcome {
   @include m.lst-susar-grid-gauche-contenu-trbl(PT_outcome);
-  // grid-area: PT_outcome;
-  // border-top: 1px solid;
-  // border-right: 1px solid;
-  // border-bottom: 1px solid;
-  // border-left: 1px solid;
 }
 
 .seriousness_lib {
   @include m.lst-susar-grid-gauche-lib(seriousness_lib);
-  // grid-area: seriousness_lib;
-  // padding-left: 5%;
 }
-
 .seriousness {
   @include m.lst-susar-grid-gauche-contenu-tbl(seriousness);
-  // grid-area: seriousness;
-  // border-top: 1px solid;
-  // border-bottom: 1px solid;
-  // border-left: 1px solid;
 }
 
 .indication_lib {
   @include m.lst-susar-grid-gauche-lib(indication_lib);
-  // grid-area: indication_lib;
-  // padding-left: 5%;
 }
-
 .indication {
   @include m.lst-susar-grid-gauche-contenu-trbl(indication);
-  // grid-area: indication;
-  // border-top: 1px solid;
-  // border-right: 1px solid;
-  // border-bottom: 1px solid;
-  // border-left: 1px solid;
 }
 
 .medicalHistory_lib {
-  grid-area: medicalHistory_lib;
-  padding-right: 5%;
+  @include m.lst-susar-grid-gauche-lib(medicalHistory_lib);
 }
-
 .medicalHistory {
   @include m.lst-susar-grid-gauche-contenu-trbl(medicalHistory);
-  // grid-area: medicalHistory;
-  // border-top: 1px solid;
-  // border-right: 1px solid;
-  // border-bottom: 1px solid;
-  // border-left: 1px solid;
 }
 
 .population_lib {
-  @include m.lst-susar-grid-gauche-lib(population_lib);
-  // grid-area: population_lib;
-  // text-align: right;
-  // padding-right: 5%;
-  // display: flex;
-  // justify-content: end;
-  // align-items: center;
+  @include m.lst-susar-grid-droite-lib(population_lib);
 }
-
 .population {
   @include m.lst-susar-grid-gauche-contenu-trbl(population);
-  // grid-area: population;
-  // border-top: 1px solid;
-  // border-right: 1px solid;
-  // border-bottom: 1px solid;
-  // border-left: 1px solid;
   margin: 1%;
-  // max-height: 25px;
 }
 
 .age_lib {
-  @include m.lst-susar-grid-gauche-lib(age_lib);
-  // grid-area: age_lib;
-  // text-align: right;
-  // padding-right: 5%;
-  // display: flex;
-  // justify-content: end;
-  // align-items: center;
+  @include m.lst-susar-grid-droite-lib(age_lib);
 }
-
 .age {
   @include m.lst-susar-grid-gauche-contenu-trbl(age);
-  // grid-area: age;
-  // border-top: 1px solid;
-  // border-right: 1px solid;
-  // border-bottom: 1px solid;
-  // border-left: 1px solid;
   margin: 1%;
 }
 
 .sex_lib {
-  @include m.lst-susar-grid-gauche-lib(sex_lib);
-  // grid-area: sex_lib;
-  // text-align: right;
-  // padding-right: 5%;
-  // display: flex;
-  // justify-content: end;
-  // align-items: center;
+  @include m.lst-susar-grid-droite-lib(sex_lib);
 }
-
 .sex {
   @include m.lst-susar-grid-gauche-contenu-trbl(sex);
-  // grid-area: sex;
-  // border-top: 1px solid;
-  // border-right: 1px solid;
-  // border-bottom: 1px solid;
-  // border-left: 1px solid;
   margin: 1%;
 }
 
-//////////////////////////////
-/////// grid de droite ///////
-//////////////////////////////
-
-.numBNPV_lib {
-  @include m.lst-susar-grid-droite-lib(numBNPV_lib);
-  // grid-area: numBNPV_lib;
-  // text-align: right;
-  // padding-right: 5%;
-  // display: flex;
-  // justify-content: end;
-  // align-items: center;
-}
-.numBNPV {
-  @include m.lst-susar-grid-droite-contenu(numBNPV);
-  // grid-area: numBNPV;
-  // border: 1px solid;
-}
+/**********************/
+/*** grid de droite ***/
+/**********************/
 
 .idSusar {
   grid-area: idSusar;
@@ -330,206 +242,109 @@
   font-size: 0.8em;
 }
 
+.numBNPV_lib {
+  @include m.lst-susar-grid-droite-lib(numBNPV_lib);
+}
+.numBNPV {
+  @include m.lst-susar-grid-droite-contenu(numBNPV);
+}
+
 .FU_BNPV_lib {
   @include m.lst-susar-grid-droite-lib(FU_BNPV_lib);
-  // grid-area: FU_BNPV_lib;
-  // text-align: right;
-  // padding-right: 5%;
-  // display: flex;
-  // justify-content: end;
-  // align-items: center;
 }
 .FU_BNPV {
   @include m.lst-susar-grid-droite-contenu(FU_BNPV);
-  // grid-area: FU_BNPV;
-  // border: 1px solid;
 }
 
 .DMM_Pole_lib {
   @include m.lst-susar-grid-droite-lib(DMM_Pole_lib);
-  // grid-area: DMM_Pole_lib;
-  // text-align: right;
-  // padding-right: 5%;
-  // display: flex;
-  // justify-content: end;
-  // align-items: center;
 }
 .DMM_Pole {
   @include m.lst-susar-grid-droite-contenu(DMM_Pole);
-  // grid-area: DMM_Pole;
-  // border: 1px solid;
 }
 
 .Prio_lib {
   @include m.lst-susar-grid-droite-lib(Prio_lib);
-  // grid-area: Prio_lib;
-  // text-align: right;
-  // padding-right: 5%;
-  // display: flex;
-  // justify-content: end;
-  // align-items: center;
 }
 .Prio {
   @include m.lst-susar-grid-droite-contenu(Prio);
-  // grid-area: Prio;
-  // border: 1px solid;
 }
 
 .DtAiguil_lib {
   @include m.lst-susar-grid-droite-lib(DtAiguil_lib);
-  // grid-area: DtAiguil_lib;
-  // text-align: right;
-  // padding-right: 5%;
-  // display: flex;
-  // justify-content: end;
-  // align-items: center;
 }
 .DtAiguil {
   @include m.lst-susar-grid-droite-contenu(DtAiguil);
-  // grid-area: DtAiguil;
-  // border: 1px solid;
 }
 
 .DtEval_lib {
   @include m.lst-susar-grid-droite-lib(DtEval_lib);
-  // grid-area: DtEval_lib;
-  // text-align: right;
-  // padding-right: 5%;
-  // display: flex;
-  // justify-content: end;
-  // align-items: center;
 }
 .DtEval {
   @include m.lst-susar-grid-droite-contenu(DtEval);
-  // grid-area: DtEval;
-  // border: 1px solid;
 }
 
 .SponsStudyNum_lib {
   @include m.lst-susar-grid-droite-lib(SponsStudyNum_lib);
-  // grid-area: SponsStudyNum_lib;
-  // text-align: right;
-  // padding-right: 5%;
-  // display: flex;
-  // justify-content: end;
-  // align-items: center;
 }
 .SponsStudyNum {
   @include m.lst-susar-grid-droite-contenu(SponsStudyNum);
-  // grid-area: SponsStudyNum;
-  // border: 1px solid;
 }
 
 .NumEUDRA_CT_lib {
   @include m.lst-susar-grid-droite-lib(NumEUDRA_CT_lib);
-  // grid-area: NumEUDRA_CT_lib;
-  // text-align: right;
-  // padding-right: 5%;
-  // display: flex;
-  // justify-content: end;
-  // align-items: center;
 }
 .NumEUDRA_CT {
   @include m.lst-susar-grid-droite-contenu(NumEUDRA_CT);
-  // grid-area: NumEUDRA_CT;
-  // border: 1px solid;
 }
 
 .StudyTittle_lib {
   @include m.lst-susar-grid-droite-lib(StudyTittle_lib);
-  // grid-area: StudyTittle_lib;
-  // text-align: right;
-  // padding-right: 5%;
-  // display: flex;
-  // justify-content: end;
-  // align-items: center;
 }
 .StudyTittle {
   @include m.lst-susar-grid-droite-contenu(StudyTittle);
-  // grid-area: StudyTittle;
-  // border: 1px solid;
 }
 
 .WW_id_lib {
   @include m.lst-susar-grid-droite-lib(WW_id_lib);
-  // grid-area: WW_id_lib;
-  // text-align: right;
-  // padding-right: 5%;
-  // display: flex;
-  // justify-content: end;
-  // align-items: center;
 }
 .WW_id {
   @include m.lst-susar-grid-droite-contenu(WW_id);
-  // grid-area: WW_id;
-  // border: 1px solid;
 }
 
 .ConcluCas_lib {
   @include m.lst-susar-grid-droite-lib(ConcluCas_lib);
-  // grid-area: ConcluCas_lib;
-  // text-align: right;
-  // padding-right: 5%;
-  // display: flex;
-  // justify-content: end;
-  // align-items: center;
 }
 .ConcluCas {
   @include m.lst-susar-grid-droite-contenu(ConcluCas);
-  // grid-area: ConcluCas;
-  // border: 1px solid;
 }
 
 .CommentConclu_lib {
   @include m.lst-susar-grid-droite-lib(CommentConclu_lib);
-  // grid-area: CommentConclu_lib;
-  // text-align: right;
-  // padding-right: 5%;
-  // display: flex;
-  // justify-content: end;
-  // align-items: center;
 }
 .CommentConclu {
   @include m.lst-susar-grid-droite-contenu(CommentConclu);
-  // grid-area: CommentConclu;
-  // border: 1px solid;
 }
 
 .lienICSR_lib {
   @include m.lst-susar-grid-droite-lib(lienICSR_lib);
-  // grid-area: lienICSR_lib;
-  // text-align: right;
-  // padding-right: 5%;
-  // display: flex;
-  // justify-content: end;
-  // align-items: center;
 }
 .lienICSR {
   @include m.lst-susar-grid-droite-contenu(lienICSR);
-  // grid-area: lienICSR;
-  // border: 1px solid;
 }
 
 .narratif_lib {
   @include m.lst-susar-grid-droite-lib(narratif_lib);
-  // grid-area: narratif_lib;
-  // text-align: right;
-  // padding-right: 5%;
-  // display: flex;
-  // justify-content: end;
-  // align-items: center;
 }
 .narratif {
   @include m.lst-susar-grid-droite-contenu(narratif);
-  // grid-area: narratif;
-  // border: 1px solid;
-  height: 6em; /* Fixer la hauteur à 5 fois la hauteur d'une ligne de texte */
-  overflow-y: auto; /* Afficher un ascenseur vertical si le contenu dépasse la hauteur */
+  height: 6em; /* On fixe la hauteur à 5 fois la hauteur d'une ligne de texte */
+  overflow-y: auto; /* Affichage un ascenseur vertical si le contenu dépasse la hauteur */
 }
 
-///////////////////////
-/////// boutons ///////
-///////////////////////
+/**********************/
+/****** boutons *******/
+/**********************/
 .btn-FU {
   grid-area: btn-FU;
 }

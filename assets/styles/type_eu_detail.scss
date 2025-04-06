@@ -1,13 +1,6 @@
 // @import '_variables.scss';
 @use '_variables' as *;
 
-// html, body {
-//     background: $fond_susar_eu_detail
-//   }
-
-// .container_susar_eu_dtl{
-//     background: $fond_susar_eu_detail
-// }
 .bg-susar-v1 {
   background-color: $fond_susar_eu_detail_susar_v1;
 }
@@ -19,7 +12,6 @@
   border-collapse: collapse;
 
   & > * {
-    // border: 1px solid black;
     border: 1px solid #ccc;
     padding: 8px;
   }
@@ -45,16 +37,5 @@ overflow: auto;
 }
 
 .eval_lib {
-  // font-weight: bold;
-  // padding: 10px;
   margin: 10px;
-  // font-size: 14px;
 }
-
-// #med_concomitant {
-//     display: none;
-// }
-
-// .disp_none {
-//     display: none !important;
-// }

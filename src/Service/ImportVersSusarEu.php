@@ -95,7 +95,9 @@ class ImportVersSusarEu
                     $susarEU->setWorldWideId($importCtll->getCaseReportNumber());
                     $susarEU->setNumEudract($importCtll->getStudyRegistrationN());
                     $susarEU->setSponsorstudynumb($importCtll->getSponsorStudyNumber());
-                    $susarEU->setNarratif($importCtll->getNarrativeReportersCommentsAndSendersComments());
+                    // $susarEU->setNarratif($importCtll->getNarrativeReportersCommentsAndSendersComments());
+                    $susarEU->setNarratif(str_replace('<BR>', "\n", 
+                                            $importCtll->getNarrativeReportersCommentsAndSendersComments()));
                     $susarEU->setNarratifNbCaractere($this->donneNarratifNbCaractere($importCtll->getNarrativePresent()));
                     // $susarEU->setPaysEtude($importCtll->getCountry());
                     $susarEU->setPaysSurvenue($importCtll->getCountry());

@@ -89,17 +89,13 @@
 					{# </div> #}
 
 					{# flex de droite #}
-					{# <div class="cell_tab"> #}
-						<div
-						class="container_flex_right"> {# <div class="numBNPV_lib fw-bold">Num. BNPV :</div>
-																					                    <div class="numBNPV">
-																					                        <a href="{{ path('app_detail_susar_eu_nb_intsub',{'idsusar':Susar.id}) }}" target="_blank">{{ Susar.specificcaseid|e }}</a>
-																					                    </div> #}
-						<div class="numBNPV_lib fw-bold">EV Safety Report Identifier :</div>
+
+					<div class="container_flex_right">
+						<div class="numBNPV_lib fw-bold">EV Safety Rep. Id. :</div>
 						<div class="numBNPV">
 							<a href="{{ path('app_detail_susar_eu_nb_intsub',{'idsusar':Susar.id}) }}" target="_blank">{{ Susar.EVSafetyReportIdentifier|e }}</a>
 						</div>
-						<div class="FU_BNPV_lib fw-bold">F.U. EUDRA :</div>
+						<div class="FU_BNPV_lib fw-bold">Case version :</div>
 						<div class="FU_BNPV">{{ Susar.DLPVersion|e }}</div>
 						<div class="idSusar">idSusar :
 							{{ Susar.id|e }}</div>
@@ -130,21 +126,26 @@
 								---
 							{% endif %}
 						</div>
-						<div class="StudyTittle_lib fw-bold">Study tittle :</div>
-						<div class="StudyTittle">{{ Susar.studytitle|e }}</div>
+						{# <div class="StudyTittle_lib fw-bold">Study tittle :</div>
+																		<div class="StudyTittle">{{ Susar.studytitle|e }}</div> #}
 						<div class="SponsStudyNum_lib fw-bold">Sponsor study number :</div>
 						<div class="SponsStudyNum">{{ Susar.sponsorstudynumb|e }}</div>
 						<div class="NumEUDRA_CT_lib fw-bold">N° EudraCT :</div>
 						<div class="NumEUDRA_CT">{{ Susar.NumEudract|e }}</div>
 						<div class="WW_id_lib fw-bold">world wide id :</div>
 						<div class="WW_id">{{ Susar.WorldWideId|e }}</div>
-						<div class="ConcluCas_lib fw-bold">Conclusion cas :</div>
-						<div class="ConcluCas"></div>
-						<div class="CommentConclu_lib fw-bold">Commentaire :</div>
-						<div class="CommentConclu"></div>
-						<div class="ConcluCas_lib fw-bold">Conclusion cas :</div>
-						<div class="ConcluCas"></div>
 
+						{% set concluEvalCas = '' %}
+						{% set commentEvalCas = '' %}
+						{% for eval in Susar.SubstancePtEvals %}
+							{% set concluEvalCas = concluEvalCas ~ eval.AssessmentOutcome ~ '<br>' %}
+							{% set commentEvalCas = commentEvalCas ~ eval.Comments ~ '<br>' %}
+						{% endfor %}
+
+						<div class="ConcluCas_lib fw-bold">Conclusion cas :</div>
+						<div class="ConcluCas">{{ concluEvalCas|raw }}</div>
+						<div class="CommentConclu_lib fw-bold">Commentaire :</div>
+						<div class="CommentConclu">{{ commentEvalCas|raw }}</div>
 						<div class="DtEval_lib fw-bold">Date d'évaluation :</div>
 						<div class="DtEval">
 							{% if Susar.dateEvaluation != null %}
@@ -165,8 +166,8 @@
 						{% endif %}
 						{# <div class="btn-AWA"><a href="{{ path('app_awa_lst_SA_PT',{'idsusar':Susar.id}) }}" class="btn-access" target="_blank">Assessed without action</a></div> #}
 						{% if Susar.casSusarEuV1 == true %}
-							<div></div>
 							{# pas de bouton Assessed without action #}
+							<div></div>
 						{% else %}
 							<div class="btn-AWA">
 								<a href="{{ path('app_awa_lst_SA_PT',{'idsusar':Susar.id}) }}" class="btn-access">Assessed without action</a>
@@ -181,35 +182,8 @@
 							</div>
 						{% endif %}
 						<div class="narratif_lib fw-bold">Narratif partiel :</div>
-						<div class="narratif">{{ Susar.narratif|e }}</div>
+						<div class="narratif">{{ Susar.narratif|nl2br }}</div>
 					</div>
-					{# <div>
-															                    Status date : <br> {{ Susar.statusdate|date('d/m/Y')}} <br>
-															                    Sponsor study number : <br> {{ Susar.sponsorstudynumb|e }} <br>
-															                    world wide id : <br> {{ Susar.WorldWideId|e }} <br>
-															                </div> #}
-
-
-					{# <div>
-															                    {% if Susar.casSusarEuV1 %}
-															                        idCTLL : {{ Susar.idCTLL|e }} <br>
-															
-															                        {% if Susar.idCTLL == true %}
-															                            c'est un susar_V1 <br>
-															                        {% else %}
-															                            c'est un susar_V2 <br>
-															                        {% endif %}
-															                    
-															                        {% if Susar.dateRepriseSusarEuV1 != null %}
-															                            date de reprise : {{ Susar.dateRepriseSusarEuV1|format_datetime(dateFormat='full', timeFormat='none', locale='fr') }}
-															                        {% else %}
-															                            <br>
-															                        {% endif %}
-															
-															                    {% else %}
-															                        c'est un susar_V2 <br>
-															                    {% endif %}
-															                </div> #}
 
 					<div
 						id="container_eval">{# {% include "_partials/_eval_tab_2.html.twig" %} #}
