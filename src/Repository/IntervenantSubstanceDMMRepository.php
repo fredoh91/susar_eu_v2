@@ -255,6 +255,22 @@ class IntervenantSubstanceDMMRepository extends ServiceEntityRepository
     }
 
 
+    /**
+     * Undocumented function
+     *
+     * @return array
+     */
+    public function findEvaluateur_non_attribue_(): array
+    {
+        return $this->createQueryBuilder('i')
+            ->andWhere('i.evaluateur = :value')
+            ->setParameter('value', '_non attribué_')
+            ->getQuery()
+            ->getResult();
+
+    }
+
+
 
     //    /**
     //     * @return IntervenantSubstanceDMM[] Returns an array of IntervenantSubstanceDMM objects

@@ -334,6 +334,14 @@ class ImportVersSusarEu
                 $this->nbOfInsertedMedic++;
             }
         }
+        if ($nbMedicAttribue === 0) {
+            // pas d'évaluateur attribué a ce susar, on l'attribut à l'évaluateur '_non attribué_'
+            $IntervenantSubstanceDMM = $em->getRepository(IntervenantSubstanceDMM::class)->findEvaluateur_non_attribue_();
+            if ($IntervenantSubstanceDMM) {
+                // il faut lier l'intervenant-substance au susar passé en paramètre
+                $susarEU->addIntervenantSubstanceDMM($IntervenantSubstanceDMM[0]);
+            }
+        }
         return $lstMedSupInter;
     }
 

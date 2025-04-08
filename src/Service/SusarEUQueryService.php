@@ -35,6 +35,8 @@ class SusarEUQueryService
         $query->leftJoin('s.intervenantSubstanceDMMs', 'isd');        // Je mets un left join pour les cas où il n'y a pas d'intervenantSubstanceDMMs et ainsi pouvoir retrouver les susars de ce type
         $query->join('s.Medicament', 'med');
         $query->join('s.EffetsIndesirables', 'ei');
+        // $query->leftJoin('s.Medicament', 'med');
+        // $query->leftJoin('s.EffetsIndesirables', 'ei');
         $query->leftJoin('s.substancePtEvals', 'spe');
 
         if ($search->getSpecificcaseid()) {
@@ -67,14 +69,14 @@ class SusarEUQueryService
         if ($search->getevaluateurChoice()) {
             $Eval = $search->getevaluateurChoice();
 
-            if ($Eval === "_non attribué_") {
-                $query = $query
-                    ->andWhere($query->expr()->isNull('isd.evaluateur'));
-            } else {
+            // if ($Eval === "_non attribué_") {
+            //     $query = $query
+            //         ->andWhere($query->expr()->isNull('isd.evaluateur'));
+            // } else {
                 $query = $query
                     ->andWhere($query->expr()->eq('isd.evaluateur', ':eval'))
                     ->setParameter('eval', $Eval);
-            }
+            // }
         }
 
         if ($search->getTypeSaMSMono()) {

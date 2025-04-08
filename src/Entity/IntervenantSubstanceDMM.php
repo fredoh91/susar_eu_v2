@@ -79,6 +79,9 @@ class IntervenantSubstanceDMM
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $userModif = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?int $IdInter_Sub_DMM_susar_EU_v1 = null;
+
     // #[ORM\ManyToMany(targetEntity: SusarEU::class, mappedBy: 'IntervenantSubstanceDMM')]
     // private Collection $susarEUs;
 
@@ -404,6 +407,18 @@ class IntervenantSubstanceDMM
     public function setUserModif(?string $userModif): static
     {
         $this->userModif = $userModif;
+
+        return $this;
+    }
+
+    public function getIdInterSubDMMSusarEUV1(): ?int
+    {
+        return $this->IdInter_Sub_DMM_susar_EU_v1;
+    }
+
+    public function setIdInterSubDMMSusarEUV1(?int $IdInter_Sub_DMM_susar_EU_v1): static
+    {
+        $this->IdInter_Sub_DMM_susar_EU_v1 = $IdInter_Sub_DMM_susar_EU_v1;
 
         return $this;
     }
