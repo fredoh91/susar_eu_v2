@@ -19,6 +19,7 @@ use App\Repository\PaysEuropeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\MeddraMdHierarchyRepository;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class ImportVersSusarEu
 {
@@ -233,7 +234,7 @@ class ImportVersSusarEu
                     } else {
                         $medicament->setDateDerniereAdminFormatDate(null);
                     }
-
+                    
                     // $medicament->setDateDerniereAdminFormatDate($dateDerniereAdmin);
                     $medicament->setDelaiAdministrationSurvenue($parsingMedic['duration']);
                     $medicament->setDosage($parsingMedic['dose']);
@@ -245,23 +246,28 @@ class ImportVersSusarEu
                         // $IntervenantSubstanceDMM = $em->getRepository(IntervenantSubstanceDMM::class)->findByInHL_SA($parsingMedic['substance']);
                         $IntervenantSubstanceDMM = $em->getRepository(IntervenantSubstanceDMM::class)->findContainingHL_SA($substancePourRecherche);
                         if ($IntervenantSubstanceDMM) {
-                            if (count($IntervenantSubstanceDMM) === 1 ) {
-                                // il n'y a qu'un seul intervenant-substance, on l'attribue au médicament
+                            if (count($IntervenantSubstanceDMM) === 1) {
+                                // Il n'y a qu'un seul intervenant-substance, on l'attribue au médicament
                             } else {
-                                // il y a plusieurs intervenants-substance, on prend le premier de la liste
-                                dump('il y a plusieurs intervenants-substance pour la l\'id suivant de la table importCtll : ' . $importCtll->getId());
-                                dump('pour la substance suivante : ' . $substancePourRecherche);
-                                dd('le traitement est arreté, il faut voir avec Fred.');
+                                // Lever une exception Symfony à la place de dump et dd
+                                throw new HttpException(
+                                    500, // Code HTTP 500 pour une erreur interne du serveur
+                                    sprintf(
+                                        "Il y a plusieurs intervenants-substance pour l'ID suivant de la table importCtll : %d. Pour la substance suivante : %s. Le traitement est arrêté, veuillez vérifier.",
+                                        $importCtll->getId(),
+                                        $substancePourRecherche
+                                    )
+                                );
                             }
                             $nbMedicAttribue++;
-                            // on tag cette ligne comme "attribuée" dans la table d'import
+                            // On tag cette ligne comme "attribuée" dans la table d'import
                             $importCtll->setSusarAttribue(true);
                             $em->persist($importCtll);
-                            // il faut lier ce médicament à l'intervenant substance DMM
+                            // Il faut lier ce médicament à l'intervenant substance DMM
                             $medicament->setIntervenantSubstanceDMM($IntervenantSubstanceDMM[0]);
                             $medicament->setTypeSaMSMono($IntervenantSubstanceDMM[0]->getTypeSaMSMono());
 
-                            // il faut lier l'intervenant-substance au susar passé en paramètre
+                            // Il faut lier l'intervenant-substance au susar passé en paramètre
                             $susarEU->addIntervenantSubstanceDMM($IntervenantSubstanceDMM[0]);
                         }
                     }
