@@ -18,7 +18,7 @@ class SubstancePt
     #[ORM\Column(length: 1000)]
     private ?string $active_substance_high_level = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?int $codereactionmeddrapt = null;
 
     #[ORM\Column(length: 255)]

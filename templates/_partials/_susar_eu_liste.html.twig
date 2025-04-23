@@ -159,7 +159,7 @@
 						{% if app.request.attributes.get('_route') == 'app_liste_susar_eu' %}
 							{# <div class="btn-FU"><a href="{{ path('app_autres_FU',{'specificcaseid':Susar.specificcaseid}) }}" class="btn-access" target="_blank">Autres F.U.</a></div> #}
 							<div class="btn-FU">
-								<a href="{{ path('app_autres_FU',{'EVSafetyReportIdentifier':Susar.EVSafetyReportIdentifier}) }}" class="btn-access" target="_blank">Autres F.U.</a>
+								<a href="{{ path('app_autres_FU',{'idsusar':Susar.id}) }}" class="btn-access" target="_blank">Autres F.U.</a>
 							</div>
 						{% else %}
 							<div></div>

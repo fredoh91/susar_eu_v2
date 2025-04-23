@@ -108,6 +108,18 @@ class SusarEURepository extends ServiceEntityRepository
 
 
     /**
+     * 
+     */
+    public function findSusarByWorldWideId(string $worldWideId): ?array
+    {
+        return $this->createQueryBuilder('s')
+            ->andWhere('s.worldWide_id = :val')
+            ->setParameter('val', $worldWideId)
+            ->orderBy('s.DLPVersion', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+    /**
      * Undocumented function
      *
      * @param array $orderCriteria
