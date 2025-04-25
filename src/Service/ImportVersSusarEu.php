@@ -140,13 +140,14 @@ class ImportVersSusarEu
                     $susarEU->setUpdatedAt($dateImport);
                     $susarEU->setUtilisateurImport($authenticationUtils->getLastUsername());
                     $em->persist($susarEU);
-
+                    $em->flush();   // On flush ici pour que l'id du susar soit disponible pour les médicaments et effets indésirables
                     // Import des médicaments
                     $lstMedSupInter = $this->importMedicaments($importCtll, $susarEU, $em, $dateImport);
                     // Import des médicaments
                     $lstEffInd = $this->importEffetsIndesirables($importCtll, $susarEU, $em, $dateImport);
                     // Création des lignes dans la table substance_pt
-                    $this->creationSubstancePt($lstMedSupInter,$lstEffInd, $susarEU, $em, $dateImport);
+
+                    $this->creationSubstancePt($lstMedSupInter, $lstEffInd, $susarEU, $em, $dateImport);
                     // Import medical history
                     $this->importMedicalHistory($importCtll, $susarEU, $em, $dateImport);
                     // Import indications

@@ -18,10 +18,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 // #[IsGranted(new Expression('is_granted("ROLE_DMFR_REF") or is_granted("ROLE_SURV_PILOTEVEC")'))]
-#[IsGranted("ROLE_SURV_PILOTEVEC")]
+
 class IntervenantSubstanceController extends AbstractController
 {
     #[Route('/intervenant_substance', name: 'app_intervenant_substance')]
+    #[IsGranted("ROLE_SURV_PILOTEVEC")]
     public function liste_intervenant_substance(ManagerRegistry $doctrine): Response
     {
         $entityManager = $doctrine->getManager();
@@ -41,6 +42,7 @@ class IntervenantSubstanceController extends AbstractController
     }
 
     #[Route('/intervenant_substance/detail/{id}', name: 'app_intervenant_substance_detail')]
+    #[IsGranted("ROLE_SURV_PILOTEVEC")]
     public function liste_intervenant_substance_detail(ManagerRegistry $doctrine, int $id): Response
     {
         $entityManager = $doctrine->getManager();
@@ -54,6 +56,7 @@ class IntervenantSubstanceController extends AbstractController
     }
 
     #[Route('/intervenant_substance/modif/{id}', name: 'app_intervenant_substance_modif')]
+    #[IsGranted("ROLE_SURV_PILOTEVEC")]
     public function liste_intervenant_substance_modif(ManagerRegistry $doctrine, int $id, IntervenantsANSMRepository $intervenantsRepository, Request $request, AuthenticationUtils $authenticationUtils): Response
     {
         $entityManager = $doctrine->getManager();
@@ -163,6 +166,7 @@ class IntervenantSubstanceController extends AbstractController
     }
 
     #[Route('/intervenant_substance/creation', name: 'app_intervenant_substance_creation')]
+    #[IsGranted("ROLE_SURV_PILOTEVEC")]
     public function liste_intervenant_substance_crea(ManagerRegistry $doctrine, IntervenantsANSMRepository $intervenantsRepository, Request $request, AuthenticationUtils $authenticationUtils): Response
     {
         $entityManager = $doctrine->getManager();
@@ -254,6 +258,7 @@ class IntervenantSubstanceController extends AbstractController
      * @return Response
      */
     #[Route('/liste_HL_SA', name: 'app_liste_HL_SA')]
+    #[IsGranted("ROLE_DMFR_GEST")]
     public function liste_HL_SA(ManagerRegistry $doctrine): Response
     {
         $entityManager = $doctrine->getManager();
