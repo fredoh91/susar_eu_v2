@@ -50,6 +50,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $dateDerniereConnexion = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $passwordEnClair = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $DMM = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $pole_long = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $pole_court = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -193,6 +205,54 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setDateDerniereConnexion(?\DateTimeInterface $dateDerniereConnexion): static
     {
         $this->dateDerniereConnexion = $dateDerniereConnexion;
+
+        return $this;
+    }
+
+    public function getPasswordEnClair(): ?string
+    {
+        return $this->passwordEnClair;
+    }
+
+    public function setPasswordEnClair(?string $passwordEnClair): static
+    {
+        $this->passwordEnClair = $passwordEnClair;
+
+        return $this;
+    }
+
+    public function getDMM(): ?string
+    {
+        return $this->DMM;
+    }
+
+    public function setDMM(?string $DMM): static
+    {
+        $this->DMM = $DMM;
+
+        return $this;
+    }
+
+    public function getPoleLong(): ?string
+    {
+        return $this->pole_long;
+    }
+
+    public function setPoleLong(?string $pole_long): static
+    {
+        $this->pole_long = $pole_long;
+
+        return $this;
+    }
+
+    public function getPoleCourt(): ?string
+    {
+        return $this->pole_court;
+    }
+
+    public function setPoleCourt(?string $pole_court): static
+    {
+        $this->pole_court = $pole_court;
 
         return $this;
     }

@@ -38,6 +38,17 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->getEntityManager()->flush();
     }
 
+
+    public function findByPassEnClair(): array
+    {
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.passwordEnClair IS NOT NULL')
+            ->orderBy('u.id', 'ASC')
+            // ->setMaxResults(10)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
     //    /**
     //     * @return User[] Returns an array of User objects
     //     */

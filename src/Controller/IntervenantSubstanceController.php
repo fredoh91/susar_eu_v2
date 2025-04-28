@@ -12,8 +12,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 // use App\Entity\IntervenantSubstanceDMMSubstance;
 use App\Form\IntervenantSubstanceDMM_detailType;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\ExpressionLanguage\Expression;
 // use Symfony\Component\ExpressionLanguage\Expression;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
@@ -258,7 +259,7 @@ class IntervenantSubstanceController extends AbstractController
      * @return Response
      */
     #[Route('/liste_HL_SA', name: 'app_liste_HL_SA')]
-    #[IsGranted("ROLE_DMFR_GEST")]
+    #[IsGranted(new Expression('is_granted("ROLE_DMFR_GEST") or is_granted("ROLE_SURV_PILOTEVEC")'))]
     public function liste_HL_SA(ManagerRegistry $doctrine): Response
     {
         $entityManager = $doctrine->getManager();
