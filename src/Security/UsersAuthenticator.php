@@ -9,6 +9,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
+use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Http\Authenticator\AbstractLoginFormAuthenticator;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\CsrfTokenBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\RememberMeBadge;
@@ -24,22 +26,14 @@ class UsersAuthenticator extends AbstractLoginFormAuthenticator
 
     public const LOGIN_ROUTE = 'app_login';
 
-    public function __construct(private UrlGeneratorInterface $urlGenerator)
-    {
+    public function __construct(
+        private UrlGeneratorInterface $urlGenerator,
+        private UserProviderInterface $userProvider // Injection du UserProvider
+    ) {
     }
 
     public function authenticate(Request $request): Passport
     {
-        // $email = $request->getPayload()->getString('email');
-        // $password = $request->getPayload()->getString('password');
-        // $csrfToken = $request->getPayload()->getString('_csrf_token');
-
-        // $email = $request->request->get('email', '');
-
-        // $email = $request->request->get('toggle_password_form')['email'] ?? '';
-        // $password = $request->request->get('toggle_password_form')['password'] ?? '';
-        // $csrfToken = $request->request->get('toggle_password_form')['_csrf_token'] ?? '';
-
         $formData = $request->request->all('toggle_password_form');
         $email = $formData['email'] ?? '';
         $password = $formData['password'] ?? '';
@@ -48,7 +42,21 @@ class UsersAuthenticator extends AbstractLoginFormAuthenticator
         $request->getSession()->set(SecurityRequestAttributes::LAST_USERNAME, $email);
 
         return new Passport(
-            new UserBadge($email),
+            new UserBadge($email, function ($userIdentifier) {
+                // Récupérer l'utilisateur via le UserProvider
+                $user = $this->userProvider->loadUserByIdentifier($userIdentifier);
+
+                // Vérifier si l'utilisateur est désactivé
+                if ($user instanceof \App\Entity\User) {
+                    $dateDesactivation = $user->getDateDesactivation();
+
+                    if ($dateDesactivation !== null && $dateDesactivation <= new \DateTime()) {
+                        throw new CustomUserMessageAuthenticationException('Votre compte est désactivé.');
+                    }
+                }
+
+                return $user;
+            }),
             new PasswordCredentials($password),
             [
                 new CsrfTokenBadge('authenticate', $csrfToken),
@@ -63,9 +71,7 @@ class UsersAuthenticator extends AbstractLoginFormAuthenticator
             return new RedirectResponse($targetPath);
         }
 
-        // For example:
         return new RedirectResponse($this->urlGenerator->generate('app_home'));
-        // throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);
     }
 
     protected function getLoginUrl(Request $request): string
