@@ -35,6 +35,7 @@ class SubstancePtRepository extends ServiceEntityRepository
             ->andWhere('s.reactionmeddrapt = :reaction_meddra_pt')
             ->setParameter('active_substance', $activeSubstance)
             ->setParameter('reaction_meddra_pt', $reactionMeddraPt)
+            ->setMaxResults(1)
             ->getQuery()
             ->getOneOrNullResult();
     }

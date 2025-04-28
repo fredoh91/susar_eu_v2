@@ -65,7 +65,7 @@ class SubstancePt
         return $this->codereactionmeddrapt;
     }
 
-    public function setCodereactionmeddrapt(int $codereactionmeddrapt): static
+    public function setCodereactionmeddrapt(?int $codereactionmeddrapt): static
     {
         $this->codereactionmeddrapt = $codereactionmeddrapt;
 
