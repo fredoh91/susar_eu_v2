@@ -4,6 +4,7 @@
 
 namespace App\Security;
 
+use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -28,9 +29,9 @@ class UsersAuthenticator extends AbstractLoginFormAuthenticator
 
     public function __construct(
         private UrlGeneratorInterface $urlGenerator,
-        private UserProviderInterface $userProvider // Injection du UserProvider
-    ) {
-    }
+        private UserProviderInterface $userProvider, // Injection du UserProvider
+        private UserRepository $userRepository
+    ) {}
 
     public function authenticate(Request $request): Passport
     {
@@ -42,20 +43,8 @@ class UsersAuthenticator extends AbstractLoginFormAuthenticator
         $request->getSession()->set(SecurityRequestAttributes::LAST_USERNAME, $email);
 
         return new Passport(
-            new UserBadge($email, function ($userIdentifier) {
-                // Récupérer l'utilisateur via le UserProvider
-                $user = $this->userProvider->loadUserByIdentifier($userIdentifier);
-
-                // Vérifier si l'utilisateur est désactivé
-                if ($user instanceof \App\Entity\User) {
-                    $dateDesactivation = $user->getDateDesactivation();
-
-                    if ($dateDesactivation !== null && $dateDesactivation <= new \DateTime()) {
-                        throw new CustomUserMessageAuthenticationException('Votre compte est désactivé.');
-                    }
-                }
-
-                return $user;
+            new UserBadge($email, function ($email) {
+                return $this->userRepository->findUserActifByEmail($email);
             }),
             new PasswordCredentials($password),
             [
