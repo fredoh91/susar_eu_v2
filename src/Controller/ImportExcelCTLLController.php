@@ -19,6 +19,7 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+// use PhpOffice\PhpSpreadsheet\RichText\RichText;
 
 final class ImportExcelCTLLController extends AbstractController
 {
@@ -26,7 +27,7 @@ final class ImportExcelCTLLController extends AbstractController
     private int $idImportCtllFicExcel = -1;
     private ImportVersSusarEu $importVersSusarEu;
     private array $nbDonneesInserees;
-    private LoggerInterface $logger; 
+    private LoggerInterface $logger;
 
     public function __construct(ImportVersSusarEu $importVersSusarEu, LoggerInterface $logger,)
     {
@@ -42,7 +43,7 @@ final class ImportExcelCTLLController extends AbstractController
         $form->handleRequest($request);
 
         // Initialisation la variables envoyées a twig 
-        $dureeImport = null; 
+        $dureeImport = null;
         $nonAttribues = 0;
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -53,7 +54,7 @@ final class ImportExcelCTLLController extends AbstractController
                 // Démarrer le chronomètre
                 $startTime = microtime(true);
 
-
+                // dd($this->fichierExcelValide($FicExcel));
                 // On check si dans la cellule A1, on a bien la chaîne de caractère : "SafetyReport Key"
                 if (!$this->fichierExcelValide($FicExcel)) {
                     // dump('Fichier Excel en erreur');
@@ -73,7 +74,7 @@ final class ImportExcelCTLLController extends AbstractController
                     $em,
                     $authenticationUtils
                 );
-                
+
                 $this->nbDonneesInserees = array_merge(
                     ['nbOfExcelRow' => $this->importedRowsCount],
                     $this->nbDonneesInserees
@@ -138,18 +139,38 @@ final class ImportExcelCTLLController extends AbstractController
         $inputFileName = $FicExcel->getRealPath();
         $spreadsheet = IOFactory::load($inputFileName);
         $activeWorksheet = $spreadsheet->getActiveSheet();
-        $highestRow = $activeWorksheet->getHighestRow();
+        // $highestRow = $activeWorksheet->getHighestRow();
 
         // Vérifier si la première cellule contient "SafetyReport Key"
-        if ($activeWorksheet->getCell('A1')->getValue() !== 'SafetyReport Key') {
+
+        $cellValue =  $activeWorksheet->getCell('A1')->getValue();
+
+        if ($cellValue === null || $cellValue === '') {
+            $this->logger->warning('La cellule est vide.');
             return false;
         }
 
-        // Vérifier si le nombre de lignes est supérieur à 1
-        if ($highestRow <= 1) {
-            return false;
+        if ($cellValue instanceof \PhpOffice\PhpSpreadsheet\RichText\RichText) {
+            $texteCellule = $cellValue->getRichTextElements();
+            if (is_array($texteCellule) && isset($texteCellule[0])) {
+                // dump($texteCellule[0]->getText());
+                if ($texteCellule[0]->getText() !== 'SafetyReport Key') {
+                    $this->logger->warning('La cellule A1 contient une valeur différente de \'SafetyReport Key\' : ' . 
+                                            $texteCellule[0]->getText());
+                    return false;
+                }
+            } else {
+                $this->logger->warning('La cellule A1 contient du texte enrichi, mais aucun élément n\'est disponible.');
+                return false;
+            }
+        } else {
+            // $texteCellule = $cellValue; // Affiche la valeur brute si ce n'est pas du texte enrichi
+            if ($cellValue !== 'SafetyReport Key') {
+                    $this->logger->warning('La cellule A1 contient une valeur différente de \'SafetyReport Key\' : ' . 
+                                            $cellValue);
+                return false;
+            }
         }
-
         return true;
     }
 
@@ -204,13 +225,13 @@ final class ImportExcelCTLLController extends AbstractController
 
         $importCtllFicExcel->setFileName($fileName)
             ->setNbLignesDataFicExcel($this->importedRowsCount);
-            // ->setNbInsertedSusar($this->nbDonneesInserees['nbOfInsertedSusar'])
-            // ->setNbInsertedMedic($this->nbDonneesInserees['nbOfInsertedMedic'])
-            // ->setNbInsertedEffInd($this->nbDonneesInserees['nbOfInsertedEffInd'])
-            // ->setNbInsertedMedHist($this->nbDonneesInserees['nbOfInsertedMedHist'])  
-            // ->setNbInsertedIndic($this->nbDonneesInserees['nbOfInsertedIndic'])  
-            // ->setNbSusarAttribue($this->nbDonneesInserees['nbSusarAttribue'])  
-            // ->setNbMedicAttribue($this->nbDonneesInserees['nbMedicAttribue']);
+        // ->setNbInsertedSusar($this->nbDonneesInserees['nbOfInsertedSusar'])
+        // ->setNbInsertedMedic($this->nbDonneesInserees['nbOfInsertedMedic'])
+        // ->setNbInsertedEffInd($this->nbDonneesInserees['nbOfInsertedEffInd'])
+        // ->setNbInsertedMedHist($this->nbDonneesInserees['nbOfInsertedMedHist'])  
+        // ->setNbInsertedIndic($this->nbDonneesInserees['nbOfInsertedIndic'])  
+        // ->setNbSusarAttribue($this->nbDonneesInserees['nbSusarAttribue'])  
+        // ->setNbMedicAttribue($this->nbDonneesInserees['nbMedicAttribue']);
 
 
         $em->persist($importCtllFicExcel);

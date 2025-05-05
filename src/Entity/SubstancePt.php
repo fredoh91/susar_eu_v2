@@ -6,8 +6,12 @@ use App\Repository\SubstancePtRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\Index;
 
 #[ORM\Entity(repositoryClass: SubstancePtRepository::class)]
+#[Index(name: "idx_active_substance_pt", 
+        columns: ["active_substance_high_level", "reactionmeddrapt"], 
+        options: ["lengths" => [191,191]])]
 class SubstancePt
 {
     #[ORM\Id]

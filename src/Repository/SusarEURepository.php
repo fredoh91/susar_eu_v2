@@ -115,7 +115,7 @@ class SusarEURepository extends ServiceEntityRepository
         return $this->createQueryBuilder('s')
             ->andWhere('s.worldWide_id = :val')
             ->setParameter('val', $worldWideId)
-            ->orderBy('s.DLPVersion', 'ASC')
+            ->orderBy('s.DLPVersion', 'DESC')
             ->getQuery()
             ->getResult();
     }

@@ -7,8 +7,10 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\Index;
 
 #[ORM\Entity(repositoryClass: SusarEURepository::class)]
+#[Index(name: "idx_ev_safety_report_identifier", columns: ["ev_safety_report_identifier"])]
 class SusarEU
 {
     #[ORM\Id]
@@ -16,6 +18,9 @@ class SusarEU
     #[ORM\Column]
     private ?int $id = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $EV_SafetyReportIdentifier = null;
+    
     #[ORM\Column(nullable: true)]
     private ?int $master_id = null;
 
@@ -168,9 +173,6 @@ class SusarEU
 
     #[ORM\Column(nullable: true)]
     private ?int $idCTLL = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $EV_SafetyReportIdentifier = null;
 
     // #[ORM\Column(length: 1000, nullable: true)]
     // private ?string $StudyRegistrationN = null;

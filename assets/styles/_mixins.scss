@@ -1,3 +1,4 @@
+@use "_variables" as *;
 
 /////////////////////////////////////////////////////////////////////////////////////
 //                                                                    //
@@ -24,6 +25,7 @@
     border-top: 1px solid;
     border-bottom: 1px solid;
     border-left: 1px solid;
+    background-color: $Fond_chp_lst_eval_susar;
 }
 
 // Contenu des différents champs avec border-right grid de gauche
@@ -33,12 +35,14 @@
     border-right: 1px solid;
     border-bottom: 1px solid;
     border-left: 1px solid;
+    background-color: $Fond_chp_lst_eval_susar;
 }
 
 // Contenu des différents champs grid de droite
 @mixin lst-susar-grid-droite-contenu($grid-area) {
     grid-area: $grid-area;
     border: 1px solid;
+    background-color: $Fond_chp_lst_eval_susar;
 }
 
 
