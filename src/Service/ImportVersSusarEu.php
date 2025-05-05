@@ -69,11 +69,14 @@ class ImportVersSusarEu
     {
         $importCtll = $this->importCtllRepository->findByIdImport($idImportCtllFicExcel);
 
+
         if ($importCtll) {
 
             $em->beginTransaction();
             // time out a 10 minutes pour l'import excel
             set_time_limit(600); 
+
+
             foreach ($importCtll as $importCtll) {
                 $EVSafetyReportIdentifier = $importCtll->getEVSafetyReportIdentifier();
                 if (!$this->susarEURepository->existeEV_SafetyReportIdentifier($EVSafetyReportIdentifier)) {

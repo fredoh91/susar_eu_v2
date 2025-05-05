@@ -7,6 +7,21 @@
 
 {{ encore_entry_link_tags('import_excel_css') }}
 
+
+	{% for type, messages in app.flashes %}
+		{% for message in messages %}
+			{% if type == 'error' %}
+				<div class="alert alert-danger">{{ message }}</div>
+			{% elseif type == 'success' %}
+				<div class="alert alert-success">{{ message }}</div>
+			{% elseif type == 'warning' %}
+				<div class="alert alert-warning">{{ message }}</div>
+			{% else %}
+				<div class="alert alert-info">{{ message }}</div>
+			{% endif %}
+		{% endfor %}
+	{% endfor %}
+
 	<div class="container-fluid p-5">
 		{{form_start(form)}}
 

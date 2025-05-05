@@ -53,7 +53,21 @@ final class ImportExcelCTLLController extends AbstractController
                 // Démarrer le chronomètre
                 $startTime = microtime(true);
 
-                $this->importExcelVersTbImportCtll($FicExcel, $em, $authenticationUtils);
+
+                // On check si dans la cellule A1, on a bien la chaîne de caractère : "SafetyReport Key"
+                if (!$this->fichierExcelValide($FicExcel)) {
+                    // dump('Fichier Excel en erreur');
+                    $this->logger->warning('Le fichier Excel suivant n\'est pas valide. Vérifiez qu\'il s\'agit bien du fichier CTLL téléchargé via : Export/Data/Excel.', [
+                        'fileName' => $FicExcel->getClientOriginalName(),
+                        'user' => $authenticationUtils->getLastUsername(),
+                    ]);
+                    $this->addFlash('error', 'Le fichier Excel n\'est pas valide. Vérifiez qu\'il s\'agit bien du fichier CTLL téléchargé via : Export/Data/Excel.');
+
+
+                    return $this->redirectToRoute('app_import_excel_ctll');
+                }
+
+                $importCtllFicExcel = $this->importExcelVersTbImportCtll($FicExcel, $em, $authenticationUtils);
                 $this->nbDonneesInserees = $this->importVersSusarEu->importExcelVersTbSusarEu(
                     $this->idImportCtllFicExcel,
                     $em,
@@ -64,6 +78,17 @@ final class ImportExcelCTLLController extends AbstractController
                     ['nbOfExcelRow' => $this->importedRowsCount],
                     $this->nbDonneesInserees
                 );
+
+                // $this->finalizeImport($FicExcel, $importCtllFicExcel, $em);
+                // Ici on mettra a jour l'entité ImportCtllFicExcel avec le nombre de lignes insérées
+                $importCtllFicExcel->setNbInsertedSusar($this->nbDonneesInserees['nbOfInsertedSusar'])
+                    ->setNbInsertedMedic($this->nbDonneesInserees['nbOfInsertedMedic'])
+                    ->setNbInsertedEffInd($this->nbDonneesInserees['nbOfInsertedEffInd'])
+                    ->setNbInsertedMedHist($this->nbDonneesInserees['nbOfInsertedMedHist'])
+                    ->setNbInsertedIndic($this->nbDonneesInserees['nbOfInsertedIndic'])
+                    ->setNbSusarAttribue($this->nbDonneesInserees['nbSusarAttribue'])
+                    ->setNbMedicAttribue($this->nbDonneesInserees['nbMedicAttribue']);
+
                 $em->flush();
                 $em->clear();
                 // dump($this->idImportCtllFicExcel);
@@ -100,7 +125,36 @@ final class ImportExcelCTLLController extends AbstractController
         ]);
     }
 
-    private function importExcelVersTbImportCtll(UploadedFile $FicExcel, EntityManagerInterface $em, AuthenticationUtils $authenticationUtils): void
+
+    /**
+     * Permet de vérifier si le fichier Excel est valide.
+     * ex. il ne s'agit pas du fichier CTTL avec le cartouche de l'EMA
+     *
+     * @param UploadedFile $FicExcel
+     * @return Bool
+     */
+    private function fichierExcelValide(UploadedFile $FicExcel): Bool
+    {
+        $inputFileName = $FicExcel->getRealPath();
+        $spreadsheet = IOFactory::load($inputFileName);
+        $activeWorksheet = $spreadsheet->getActiveSheet();
+        $highestRow = $activeWorksheet->getHighestRow();
+
+        // Vérifier si la première cellule contient "SafetyReport Key"
+        if ($activeWorksheet->getCell('A1')->getValue() !== 'SafetyReport Key') {
+            return false;
+        }
+
+        // Vérifier si le nombre de lignes est supérieur à 1
+        if ($highestRow <= 1) {
+            return false;
+        }
+
+        return true;
+    }
+
+
+    private function importExcelVersTbImportCtll(UploadedFile $FicExcel, EntityManagerInterface $em, AuthenticationUtils $authenticationUtils): ImportCtllFicExcel
     {
         $inputFileName = $FicExcel->getRealPath();
         $spreadsheet = IOFactory::load($inputFileName);
@@ -112,6 +166,7 @@ final class ImportExcelCTLLController extends AbstractController
         $this->processWorksheetRows($activeWorksheet, $highestRow, $importCtllFicExcel, $em);
 
         $this->finalizeImport($FicExcel, $importCtllFicExcel, $em);
+        return $importCtllFicExcel;
     }
 
     private function createImportCtllFicExcel(UploadedFile $FicExcel, string $inputFileName, AuthenticationUtils $authenticationUtils): ImportCtllFicExcel
@@ -142,18 +197,22 @@ final class ImportExcelCTLLController extends AbstractController
 
     private function finalizeImport(UploadedFile $FicExcel, ImportCtllFicExcel $importCtllFicExcel, EntityManagerInterface $em): void
     {
-        dd($this->nbDonneesInserees);
+        // dd($this->nbDonneesInserees);
         $dateHeureUnique = date('Ymd_His');
         $fileName = 'CTLL_' . $dateHeureUnique . '.xlsx';
+
+
         $importCtllFicExcel->setFileName($fileName)
-            ->setNbLignesDataFicExcel($this->importedRowsCount)
-            ->setNbInsertedSusar($this->nbDonneesInserees['nbOfInsertedSusar'])
-            ->setNbInsertedMedic($this->nbDonneesInserees['nbOfInsertedMedic'])
-            ->setNbInsertedEffInd($this->nbDonneesInserees['nbOfInsertedEffInd'])
-            ->setNbInsertedMedHist($this->nbDonneesInserees['nbOfInsertedMedHist'])  
-            ->setNbInsertedIndic($this->nbDonneesInserees['nbOfInsertedIndic'])  
-            ->setNbSusarAttribue($this->nbDonneesInserees['nbSusarAttribue'])  
-            ->setNbMedicAttribue($this->nbDonneesInserees['nbMedicAttribue']);
+            ->setNbLignesDataFicExcel($this->importedRowsCount);
+            // ->setNbInsertedSusar($this->nbDonneesInserees['nbOfInsertedSusar'])
+            // ->setNbInsertedMedic($this->nbDonneesInserees['nbOfInsertedMedic'])
+            // ->setNbInsertedEffInd($this->nbDonneesInserees['nbOfInsertedEffInd'])
+            // ->setNbInsertedMedHist($this->nbDonneesInserees['nbOfInsertedMedHist'])  
+            // ->setNbInsertedIndic($this->nbDonneesInserees['nbOfInsertedIndic'])  
+            // ->setNbSusarAttribue($this->nbDonneesInserees['nbSusarAttribue'])  
+            // ->setNbMedicAttribue($this->nbDonneesInserees['nbMedicAttribue']);
+
+
         $em->persist($importCtllFicExcel);
         $em->flush();
         $this->idImportCtllFicExcel = $importCtllFicExcel->getId();
