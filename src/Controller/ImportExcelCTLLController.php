@@ -5,6 +5,7 @@ namespace App\Controller;
 use DateTimeImmutable;
 use App\Entity\SusarEU;
 use App\Entity\ImportCtll;
+use Psr\Log\LoggerInterface;
 use App\Form\UploadExcelCTLLType;
 use App\Entity\ImportCtllFicExcel;
 use App\Service\ImportVersSusarEu;
@@ -25,10 +26,13 @@ final class ImportExcelCTLLController extends AbstractController
     private int $idImportCtllFicExcel = -1;
     private ImportVersSusarEu $importVersSusarEu;
     private array $nbDonneesInserees;
-    public function __construct(ImportVersSusarEu $importVersSusarEu)
+    private LoggerInterface $logger; 
+
+    public function __construct(ImportVersSusarEu $importVersSusarEu, LoggerInterface $logger,)
     {
         $this->importVersSusarEu = $importVersSusarEu;
         $this->nbDonneesInserees = [];
+        $this->logger = $logger;
     }
 
     #[Route('/import_excel_ctll', name: 'app_import_excel_ctll')]

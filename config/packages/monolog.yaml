@@ -2,6 +2,14 @@ monolog:
     channels:
         - deprecation # Deprecations are logged in the dedicated "deprecation" channel when it exists
         - trace_dev   # Ajoutez cette ligne pour définir le canal personnalisé
+        - trace_import_CTLL # Ajout du nouveau canal
+
+    handlers:
+        handler_trace_import_CTLL:
+            type: stream
+            path: "%kernel.logs_dir%/trace_import_CTLL.log"
+            level: debug
+            channels: ['trace_import_CTLL']
         
 when@dev:
     monolog:

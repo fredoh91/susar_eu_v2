@@ -5,6 +5,8 @@ namespace App\Service;
 use App\Entity\SusarEU;
 use App\Entity\Indications;
 use App\Entity\Medicaments;
+use App\Entity\SubstancePt;
+use Psr\Log\LoggerInterface;
 use App\Service\Priorisation;
 use App\Entity\MedicalHistory;
 use App\Repository\DMERepository;
@@ -13,13 +15,12 @@ use App\Entity\EffetsIndesirables;
 use App\Service\ParsingMedicaments;
 use App\Repository\SusarEURepository;
 use App\Entity\IntervenantSubstanceDMM;
-use App\Entity\SubstancePt;
 use App\Repository\ImportCtllRepository;
 use App\Repository\PaysEuropeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\MeddraMdHierarchyRepository;
-use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class ImportVersSusarEu
 {
@@ -40,6 +41,7 @@ class ImportVersSusarEu
     private int $nbOfInsertedIndic = 0;
     private int $nbSusarAttribue = 0;
     private int $nbMedicAttribue = 0;
+    private LoggerInterface $logger;
 
     public function __construct(
         ImportCtllRepository $importCtllRepository,
@@ -50,6 +52,7 @@ class ImportVersSusarEu
         DMERepository $dmeRepository,
         IMERepository $imeRepository,
         MeddraMdHierarchyRepository $meddraMdHierarchyRepository,
+        LoggerInterface $logger,
     ) {
         $this->importCtllRepository = $importCtllRepository;
         $this->susarEURepository = $susarEURepository;
@@ -59,6 +62,7 @@ class ImportVersSusarEu
         $this->dmeRepository = $dmeRepository;
         $this->imeRepository = $imeRepository;
         $this->meddraMdHierarchyRepository = $meddraMdHierarchyRepository;
+        $this->logger = $logger;
     }
 
     public function importExcelVersTbSusarEu(int $idImportCtllFicExcel, EntityManagerInterface $em, AuthenticationUtils $authenticationUtils)
@@ -66,6 +70,8 @@ class ImportVersSusarEu
         $importCtll = $this->importCtllRepository->findByIdImport($idImportCtllFicExcel);
 
         if ($importCtll) {
+
+            $em->beginTransaction();
             // time out a 10 minutes pour l'import excel
             set_time_limit(600); 
             foreach ($importCtll as $importCtll) {
@@ -163,6 +169,7 @@ class ImportVersSusarEu
                 }
             }
             $em->flush();
+            $em->commit();
         }
 
         return [
@@ -246,20 +253,28 @@ class ImportVersSusarEu
                     // attribution de l'évaluateur a ce médicament
                     if ($substancePourRecherche) {
                         // $IntervenantSubstanceDMM = $em->getRepository(IntervenantSubstanceDMM::class)->findByInHL_SA($parsingMedic['substance']);
+
                         $IntervenantSubstanceDMM = $em->getRepository(IntervenantSubstanceDMM::class)->findContainingHL_SA($substancePourRecherche);
                         if ($IntervenantSubstanceDMM) {
                             if (count($IntervenantSubstanceDMM) === 1) {
                                 // Il n'y a qu'un seul intervenant-substance, on l'attribue au médicament
                             } else {
+
+                                $this->logger->warning('Il y a plusieurs intervenants-substance pour l\'ID suivant de la table importCtll : '
+                                                        . $importCtll->getId()
+                                                        . '. Pour la substance suivante : ' . $substancePourRecherche . '.');
                                 // Lever une exception Symfony à la place de dump et dd
-                                throw new HttpException(
-                                    500, // Code HTTP 500 pour une erreur interne du serveur
-                                    sprintf(
-                                        "Il y a plusieurs intervenants-substance pour l'ID suivant de la table importCtll : %d. Pour la substance suivante : %s. Le traitement est arrêté, veuillez vérifier.",
-                                        $importCtll->getId(),
-                                        $substancePourRecherche
-                                    )
-                                );
+                                // throw new HttpException(
+                                //     500, // Code HTTP 500 pour une erreur interne du serveur
+                                //     sprintf(
+                                //         "Il y a plusieurs intervenants-substance pour l'ID suivant de la table importCtll : %d. Pour la substance suivante : %s. Le traitement est arrêté, veuillez vérifier.",
+                                //         $importCtll->getId(),
+                                //         $substancePourRecherche
+                                //     )
+                                // );
+                                // // On annule la transaction
+                                // $em->rollback();
+
                             }
                             $nbMedicAttribue++;
                             // On tag cette ligne comme "attribuée" dans la table d'import

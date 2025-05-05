@@ -98,14 +98,18 @@ class IntervenantSubstanceDMMRepository extends ServiceEntityRepository
      */
     public function findContainingHL_SA(string $HL_SA): array
     {
-        return $this->createQueryBuilder('i')
+        $qb = $this->createQueryBuilder('i')
             ->andWhere('LOWER(:val) LIKE LOWER(CONCAT(\'%\', i.active_substance_high_level, \'%\'))')
             ->setParameter('val', $HL_SA) // La valeur passée en paramètre
             ->andWhere('i.inactif = :val_2')
             ->setParameter('val_2', false)
-            ->orderBy('i.id', 'ASC')
-            ->getQuery()
-            ->getResult();
+            // ->setMaxResults(1)
+            ->orderBy('i.id', 'ASC');
+
+        // Afficher le SQL généré
+        // dump($qb->getQuery()->getSQL());
+
+        return $qb->getQuery()->getResult();
     }
     /**
      * Permet de savoir si la substance qui est crée ou modifiée n'existe pas déjà (même substance avec un id différent)

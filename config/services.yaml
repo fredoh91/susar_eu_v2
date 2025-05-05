@@ -28,3 +28,11 @@ services:
     App\Controller\SusarEuListeController:
         arguments:
             $logger: '@monolog.logger.trace_dev'
+
+    App\Service\ImportVersSusarEu:
+        arguments:
+            $logger: '@monolog.logger.trace_import_CTLL'
+
+    App\Controller\ImportExcelCTLLController:
+        arguments:
+            $logger: '@monolog.logger.trace_import_CTLL'
