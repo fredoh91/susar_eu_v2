@@ -142,10 +142,18 @@ final class ImportExcelCTLLController extends AbstractController
 
     private function finalizeImport(UploadedFile $FicExcel, ImportCtllFicExcel $importCtllFicExcel, EntityManagerInterface $em): void
     {
+        dd($this->nbDonneesInserees);
         $dateHeureUnique = date('Ymd_His');
         $fileName = 'CTLL_' . $dateHeureUnique . '.xlsx';
         $importCtllFicExcel->setFileName($fileName)
-            ->setNbLignesDataFicExcel($this->importedRowsCount);
+            ->setNbLignesDataFicExcel($this->importedRowsCount)
+            ->setNbInsertedSusar($this->nbDonneesInserees['nbOfInsertedSusar'])
+            ->setNbInsertedMedic($this->nbDonneesInserees['nbOfInsertedMedic'])
+            ->setNbInsertedEffInd($this->nbDonneesInserees['nbOfInsertedEffInd'])
+            ->setNbInsertedMedHist($this->nbDonneesInserees['nbOfInsertedMedHist'])  
+            ->setNbInsertedIndic($this->nbDonneesInserees['nbOfInsertedIndic'])  
+            ->setNbSusarAttribue($this->nbDonneesInserees['nbSusarAttribue'])  
+            ->setNbMedicAttribue($this->nbDonneesInserees['nbMedicAttribue']);
         $em->persist($importCtllFicExcel);
         $em->flush();
         $this->idImportCtllFicExcel = $importCtllFicExcel->getId();

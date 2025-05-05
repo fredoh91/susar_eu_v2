@@ -34,8 +34,29 @@ class ImportCtllFicExcel
     #[ORM\OneToMany(targetEntity: ImportCtll::class, mappedBy: 'ImportCtllFicExcel')]
     private Collection $importCtlls;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?int $nbLignesDataFicExcel = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $nbInsertedSusar = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $nbInsertedMedic = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $nbInsertedEffInd = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $nbInsertedMedHist = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $nbInsertedIndic = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $nbSusarAttribue = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $nbMedicAttribue = null;
 
     public function __construct()
     {
@@ -130,9 +151,93 @@ class ImportCtllFicExcel
         return $this->nbLignesDataFicExcel;
     }
 
-    public function setNbLignesDataFicExcel(int $nbLignesDataFicExcel): static
+    public function setNbLignesDataFicExcel(?int $nbLignesDataFicExcel): static
     {
         $this->nbLignesDataFicExcel = $nbLignesDataFicExcel;
+
+        return $this;
+    }
+
+    public function getNbInsertedSusar(): ?int
+    {
+        return $this->nbInsertedSusar;
+    }
+
+    public function setNbInsertedSusar(?int $nbInsertedSusar): static
+    {
+        $this->nbInsertedSusar = $nbInsertedSusar;
+
+        return $this;
+    }
+
+    public function getNbInsertedMedic(): ?int
+    {
+        return $this->nbInsertedMedic;
+    }
+
+    public function setNbInsertedMedic(?int $nbInsertedMedic): static
+    {
+        $this->nbInsertedMedic = $nbInsertedMedic;
+
+        return $this;
+    }
+
+    public function getNbInsertedEffInd(): ?int
+    {
+        return $this->nbInsertedEffInd;
+    }
+
+    public function setNbInsertedEffInd(?int $nbInsertedEffInd): static
+    {
+        $this->nbInsertedEffInd = $nbInsertedEffInd;
+
+        return $this;
+    }
+
+    public function getNbInsertedMedHist(): ?int
+    {
+        return $this->nbInsertedMedHist;
+    }
+
+    public function setNbInsertedMedHist(?int $nbInsertedMedHist): static
+    {
+        $this->nbInsertedMedHist = $nbInsertedMedHist;
+
+        return $this;
+    }
+
+    public function getNbInsertedIndic(): ?int
+    {
+        return $this->nbInsertedIndic;
+    }
+
+    public function setNbInsertedIndic(?int $nbInsertedIndic): static
+    {
+        $this->nbInsertedIndic = $nbInsertedIndic;
+
+        return $this;
+    }
+
+    public function getNbSusarAttribue(): ?int
+    {
+        return $this->nbSusarAttribue;
+    }
+
+    public function setNbSusarAttribue(?int $nbSusarAttribue): static
+    {
+        $this->nbSusarAttribue = $nbSusarAttribue;
+
+        return $this;
+    }
+
+    public function getNbMedicAttribue(): ?int
+    {
+        return $this->nbMedicAttribue;
+    }
+
+    public function setNbMedicAttribue(?int $nbMedicAttribue): static
+    {
+        $this->nbMedicAttribue = $nbMedicAttribue;
 
         return $this;
     }
