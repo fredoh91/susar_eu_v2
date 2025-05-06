@@ -37,37 +37,6 @@ class SusarEuListeController extends AbstractController
         $this->kernel = $kernel;
         $this->susarEUQueryService = $susarEUQueryService;
     }
-    /**
-     * Route de test, pour afficher tous les susars
-     * cette route, ainsi que la vue associée ("affiche_susar_eu/susar_liste.html.twig"), sera à supprimer par la suite
-     *
-     * @param ManagerRegistry $doctrine
-     * @param Request $request
-     * @param PaginatorInterface $paginator
-     * @return Response
-     */
-    #[Route('/affiche_susar_eu', name: 'app_affiche_susar_eu')]
-    public function affiche_susar_eu(ManagerRegistry $doctrine, Request $request, PaginatorInterface $paginator): Response
-    {
-
-
-        $entityManager = $doctrine->getManager();
-        $TousSusars = $entityManager->getRepository(SusarEU::class)->findAll();
-        $NbSusar = count($TousSusars);
-        // dump(count($TousSusars));
-        $Susars = $paginator->paginate(
-            $TousSusars, // Requête contenant les données à paginer
-            $request->query->getInt('page', 1), // Numéro de la page en cours, passé dans l'URL, 1 si aucune page
-            50 // Nombre de résultats par page
-        );
-
-
-        return $this->render('affiche_susar_eu/susar_liste.html.twig', [
-            'Susars' => $Susars,
-            // 'TousSusars' => $TousSusars, // Requête contenant les données à paginer
-            'NbSusar' => $NbSusar,
-        ]);
-    }
 
     /**
      * Undocumented function

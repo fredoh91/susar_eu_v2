@@ -9,11 +9,11 @@
 		<div class="text-center">
 			<h1 class="text-center">SUSAR_EU_v2</h1>
 			<ul>
-				{% if is_granted('ROLE_SUPER_ADMIN') %}
+				{# {% if is_granted('ROLE_SUPER_ADMIN') %} #}
 					<li class="">
-						<a class="" href="{{ path ('app_affiche_susar_eu') }}">test : liste des SUSARs (master_id)</a>
+						<a class="" href="{{ asset('guide_utilisateur/guide_utilisateur.html') }}">Guide utilisateur</a>
 					</li>
-				{% endif %}
+				{# {% endif %} #}
 				{% if is_granted('ROLE_DMM_EVAL') or is_granted('ROLE_SURV_PILOTEVEC') %}
 				<li class="">
 					<a class="" href="{{ path ('app_liste_susar_eu_init') }}">Liste des SUSARs (type SUSAR_EU)</a>
