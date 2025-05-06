@@ -95,6 +95,24 @@
   border: 2px solid blue;
 }
 
+
+
+
+/***************************/
+/*** container principal ***/
+/***************************/
+
+
+.container_principal {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto;
+  grid-template-areas:
+      "container_flex_left container_flex_right"
+      "container_narr container_narr";
+}
+
+
 .container_flex_left > div,
 .container_flex_right > div {
   border-color: #aeb6bf;
@@ -106,6 +124,7 @@
 /*** flex de gauche ***/
 /**********************/
 .container_flex_left {
+  grid-area: container_flex_left;
   flex: 1; /* Prend un espace égal pour chaque div */
   min-width: 300px; /* Largeur minimale pour chaque div */
   height: 100%;
@@ -136,6 +155,7 @@
 /*** flex de droite ***/
 /**********************/
 .container_flex_right {
+  grid-area: container_flex_right;
   flex: 1; /* Prend un espace égal pour chaque div */
   min-width: 300px; /* Largeur minimale pour chaque div */
   height: 100%;
@@ -151,7 +171,7 @@
   justify-items: stretch;
   align-items: stretch;
   grid-template-areas:
-    "numBNPV_lib numBNPV FU_BNPV_lib FU_BNPV idSusar"
+    "btn-DetEval . FU_BNPV_lib FU_BNPV idSusar"
     "StudyTittle_lib StudyTittle StudyTittle StudyTittle ."
     "WW_id_lib WW_id WW_id WW_id ."
     "NumEUDRA_CT_lib NumEUDRA_CT SponsStudyNum_lib SponsStudyNum ."
@@ -159,9 +179,31 @@
     "Prio_lib Prio . . ."
     "ConcluCas_lib ConcluCas CommentConclu_lib CommentConclu ."
     "DtEval_lib DtEval . . ."
-    ". btn-FU btn-AWA . lienICSR"
-    "narratif_lib narratif narratif narratif narratif"
-    ". narratif narratif narratif narratif";
+    ". btn-FU btn-AWA . .";
+}
+
+/************************/
+/*** flex du narratif ***/
+/************************/
+.container_narr {
+  grid-area: container_narr;
+  flex: 1; /* Prend un espace égal pour chaque div */
+  min-width: 300px; /* Largeur minimale pour chaque div */
+  height: 100%;
+  margin: 0;
+  width: 60%;
+  padding: 2px;
+  display: grid;
+  grid-template-columns: 0.5fr 1fr 0.7fr 1fr;
+  grid-template-rows: minmax(1fr, 4rem);
+  grid-auto-columns: 1fr;
+  gap: 10px 0px;
+  grid-auto-flow: row;
+  justify-items: stretch;
+  align-items: stretch;
+  grid-template-areas:
+    "narratif_lib . lienICSR_lib lienICSR ."
+    "narratif narratif narratif narratif narratif";
 }
 
 #container_eval {
@@ -334,7 +376,7 @@
 }
 
 .narratif_lib {
-  @include m.lst-susar-grid-droite-lib(narratif_lib);
+  @include m.lst-susar-grid-gauche-lib(narratif_lib);
 }
 .narratif {
   @include m.lst-susar-grid-droite-contenu(narratif);
@@ -351,6 +393,10 @@
 
 .btn-AWA {
   grid-area: btn-AWA;
+}
+
+.btn-DetEval {
+  grid-area: btn-DetEval;
 }
 
 .btn-gray {

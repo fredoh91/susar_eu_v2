@@ -127,54 +127,7 @@
 						{% endfor %}
 					</tbody>
 				</table>
-{#  #}
-					{# <thead>
-						<tr>
-							<th>Lib. PT</th>
-							<th>Outcome</th>
-							<th>Start Date</th>
-							<th>Duration</th>
-						</tr>
-					</thead>
-					<tbody>
-						{% for EI in Susar.EffetsIndesirables %}
-							<tr>
-								<td>{{EI.Reactionmeddrapt}}</td>
-							</tr>
-						</th>
-						<td>{{EI.Reactionstartdate|format_datetime(dateFormat='short', timeFormat='none', locale='fr')}}</td>
-						<td>{{EI.Soc}}</td>
-						<td>{{EI.Reactionmeddrahlgt}}</td>
-						<td>{{EI.Reactionmeddrahlt}}</td>
-					</tbody> #}
-{#  #}
-				{# <table class="table table-bordered table-striped tab_susar_eu_dtl">
-					<thead>
-						<tr>
-							<th>Lib. PT</th>
-							<th>Date début</th>
-							<th>Lib. SOC</th>
-							<th>Lib. HLGT</th>
-							<th>Lib. HLT</th>
-						</tr>
-					</thead>
-					<tbody>
-						{% for EI in Susar.EffetsIndesirables %}
-							<tr>
-								<td>{{EI.Reactionmeddrapt}}</th>
-								<td>{{EI.Reactionstartdate|format_datetime(dateFormat='short', timeFormat='none', locale='fr')}}</td>
-								<td>{{EI.Soc}}</td>
-								<td>{{EI.Reactionmeddrahlgt}}</td>
-								<td>{{EI.Reactionmeddrahlt}}</td>
-							</tr>
-						{% endfor %}
-					</tbody>
-				</table> #}
-
-
-
 			</div>
-
 
 			<div class="row">
 				<div class="col-1">
@@ -220,21 +173,26 @@
 
 			<div class="row">
 				<div class="col-1">
-					<div>N° cas BNPV :</div>
-					<div class="chp_susar_eu_dtl">{{ Susar.specificcaseid }}</div>
+					<div>EV Safety Report Identifier :</div>
+					<div class="chp_susar_eu_dtl">{{ Susar.EVSafetyReportIdentifier }}</div>
 				</div>
-				<div class="col-1">
-					<div>DLP version :</div>
-					<div class="chp_susar_eu_dtl">{{ Susar.DLPVersion }}</div>
-				</div>
-				<div class="col-1">
-					<div>Master_id :</div>
-					<div class="chp_susar_eu_dtl">{{ Susar.MasterId }}</div>
-				</div>
+
 				<div class="col-1">
 					<div>idSusar :</div>
 					<div class="chp_susar_eu_dtl">{{ Susar.id }}</div>
 				</div>
+				
+				<div class="col-2">
+					<div>World wide id :</div>
+					<div class="chp_susar_eu_dtl">{{ Susar.WorldWideId }}</div>
+				</div>
+
+				<div class="col-1">
+					<div>Case Version :</div>
+					<div class="chp_susar_eu_dtl">{{ Susar.DLPVersion }}</div>
+				</div>
+
+
 				{% if Susar.casSusarEuV1 == true %}
 					<div class="col-1">
 						<div>idCTLL :</div>
@@ -250,9 +208,6 @@
 					<div class="chp_susar_eu_dtl">{{ Susar.PaysSurvenue }}</div>
 				</div>
 				<div class="col-7">
-
-
-
 				</div>
 			</div>
 			<div class="row">
@@ -260,14 +215,14 @@
 					<div>Study registration number (num EUDRA_CT) :</div>
 					<div class="chp_susar_eu_dtl">{{ Susar.NumEudract }}</div>
 				</div>
-				<div class="col-2">
+				{# <div class="col-2">
 					<div>World wide id :</div>
 					<div class="chp_susar_eu_dtl">{{ Susar.WorldWideId }}</div>
 				</div>
 				<div class="col-2">
 					<div>Nom de l'étude :</div>
 					<div class="chp_susar_eu_dtl">{{ Susar.studytitle }}</div>
-				</div>
+				</div> #}
 			</div>
 
 
