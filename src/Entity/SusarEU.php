@@ -213,6 +213,9 @@ class SusarEU
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $CompleteNarrativeLink = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $sender = null;
+
     // #[ORM\ManyToMany(targetEntity: IntervenantSubstanceDMM::class, inversedBy: 'susarEUs')]
     // private Collection $IntervenantSubstanceDMM;
 
@@ -1214,6 +1217,18 @@ class SusarEU
     public function setCompleteNarrativeLink(?string $CompleteNarrativeLink): static
     {
         $this->CompleteNarrativeLink = $CompleteNarrativeLink;
+
+        return $this;
+    }
+
+    public function getSender(): ?string
+    {
+        return $this->sender;
+    }
+
+    public function setSender(?string $sender): static
+    {
+        $this->sender = $sender;
 
         return $this;
     }

@@ -95,7 +95,34 @@
   border: 2px solid blue;
 }
 
+/********************************/
+/*** container liste susar_eu ***/
+/********************************/
 
+.container_susar_eu {  
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  // grid-template-rows: 1fr 1fr 3em 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  gap: 0px 0px;
+  grid-auto-flow: row;
+  grid-template-areas:
+    "NumEUDRA_CT_lib NumEUDRA_CT Sender_lib Sender PaysSurvenue_lib PaysSurvenue seriousness_lib Prio_lib Prio SamsMono_lib SamsMono id_susar_lib id_susar"
+    "population_lib population sex_lib sex age_lib age seriousness Eval_lib Eval DMM_lib DMM Pole_lib Pole"
+    "DtGateway_lib DtGateway CaseVersion_lib CaseVersion WW_id_lib WW_id . . . . . . ."
+    "tab_suspect_drug tab_suspect_drug tab_suspect_drug tab_suspect_drug tab_suspect_drug tab_suspect_drug . . . . . . ."
+    "tab_reaction_PT tab_reaction_PT tab_reaction_PT tab_reaction_PT tab_reaction_PT tab_reaction_PT . . . . . . ."
+    "tab_med_hist tab_med_hist tab_med_hist tab_med_hist tab_med_hist tab_med_hist . . . . . . ."
+    ". . . . . . . . . . . . ."
+    ". . . . . . . . . . . . ."
+    ". . . . . . . . . . . . ."
+    ". . . . . . . . . . . . ."
+    ". . . . . . . . . . . . ."
+    ". . . . . . . . . . . . ."
+    ". . . . . . . . . . . . ."
+    ". . . . . . . . . . . . ."
+    ". . . . . . . . . . . . .";
+}
 
 
 /***************************/
@@ -211,67 +238,213 @@
   margin-top: 20px; /* Espace au-dessus de la div */
 }
 
+
+
+
+
+
+
+
+
+
+
+
+.NumEUDRA_CT_lib {
+  @include m.lst-susar-lib(NumEUDRA_CT_lib);
+}
+.NumEUDRA_CT {
+  @include m.lst-susar-contenu(NumEUDRA_CT);
+}
+
+.Sender_lib {
+  @include m.lst-susar-lib(Sender_lib);
+}
+.Sender {
+  @include m.lst-susar-contenu(Sender);
+}
+
+.PaysSurvenue_lib {
+  @include m.lst-susar-lib(PaysSurvenue_lib);
+}
+.PaysSurvenue {
+  @include m.lst-susar-contenu(PaysSurvenue);
+}
+
+.seriousness_lib {
+  @include m.lst-susar-lib(seriousness_lib);
+}
+.seriousness {
+  @include m.lst-susar-contenu(seriousness);
+}
+
+.Prio_lib {
+  @include m.lst-susar-lib(Prio_lib);
+}
+.Prio {
+  @include m.lst-susar-contenu(Prio);
+}
+
+.SamsMono_lib {
+  @include m.lst-susar-lib(SamsMono_lib);
+}
+.SamsMono {
+  @include m.lst-susar-contenu(SamsMono);
+}
+
+.id_susar_lib {
+  @include m.lst-susar-lib(id_susar_lib);
+}
+.id_susar {
+  @include m.lst-susar-contenu(id_susar);
+}
+
+.population_lib {
+  @include m.lst-susar-lib(population_lib);
+}  
+.population {
+  @include m.lst-susar-contenu(population);
+}  
+
+.age_lib {
+  @include m.lst-susar-lib(age_lib);
+}  
+.age {
+  @include m.lst-susar-contenu(age);
+}  
+
+.sex_lib {
+  @include m.lst-susar-lib(sex_lib);
+}  
+.sex {
+  @include m.lst-susar-contenu(sex);
+}  
+
+.Eval_lib {
+  @include m.lst-susar-lib(Eval_lib);
+}
+.Eval {
+  @include m.lst-susar-contenu(Eval);
+}
+
+.DMM_lib {
+  @include m.lst-susar-lib(DMM_lib);
+}
+.DMM {
+  @include m.lst-susar-contenu(DMM);
+}
+
+.Pole_lib {
+  @include m.lst-susar-lib(Pole_lib);
+}
+.Pole {
+  @include m.lst-susar-contenu(Pole);
+}
+
+.DtGateway_lib {
+  @include m.lst-susar-lib(DtGateway_lib);
+}
+.DtGateway {
+  @include m.lst-susar-contenu(DtGateway);
+}
+
+.CaseVersion_lib {
+  @include m.lst-susar-lib(CaseVersion_lib);
+}
+.CaseVersion {
+  @include m.lst-susar-contenu(CaseVersion);
+}
+
+.WW_id_lib {
+  @include m.lst-susar-lib(WW_id_lib);
+}
+.WW_id {
+  // @include m.lst-susar-grid-droite-contenu(WW_id);
+  @include m.lst-susar-contenu-scroll(WW_id);
+}
+
+.tab_suspect_drug {
+  // @include m.lst-susar-contenu(tab_suspect_drug);
+  grid-area: tab_suspect_drug;
+  border: 1px solid;
+}
+
+.tab_reaction_PT {
+  // @include m.lst-susar-contenu(tab_suspect_drug);
+  grid-area: tab_reaction_PT;
+  border: 1px solid;
+}
+
+.tab_med_hist {
+  // @include m.lst-susar-contenu(tab_suspect_drug);
+  grid-area: tab_med_hist;
+  border: 1px solid;
+}
+
+
+/******************************************************************/
+/*** tables médicament, effet indésirable, antécédents médicaux ***/
+/******************************************************************/
+.table-sticky {
+    overflow-x: auto; /* Permet le défilement horizontal */
+    display: block; /* Nécessaire pour activer le scroll */
+    max-width: 100%; /* Limite la largeur du tableau */
+}
+
+.table-sticky th,
+.table-sticky td {
+    white-space: nowrap; /* Empêche le contenu de passer à la ligne */
+    // min-width: 150px;
+    padding: 8px 12px; /* Ajoute un espacement interne (padding) */
+    text-align: left; /* Aligne le texte à gauche (optionnel) */
+    border: 1px solid #ddd; /* Ajoute une bordure pour mieux séparer les colonnes */
+}
+
+.sticky-column {
+    position: sticky;
+    left: 0; /* Fixe la colonne à gauche */
+    z-index: 2; /* Assure que la colonne reste au-dessus des autres */
+    background: rgba(255, 255, 255, 0.95); /* Ajoute un fond pour la colonne sticky */
+    border-right: 1px solid #ddd; /* Ajoute une bordure pour séparer la colonne */
+}
+
+
+
+
+
+
+
+
+
 /**********************/
 /*** grid de gauche ***/
 /**********************/
 .suspectDrug_lib {
   @include m.lst-susar-grid-gauche-lib(suspectDrug_lib);
-}
+}  
 .suspectDrug {
   @include m.lst-susar-grid-gauche-contenu-tbl(suspectDrug);
-}
+}  
 
 .PT_outcome_lib {
   @include m.lst-susar-grid-gauche-lib(PT_outcome_lib);
-}
+}  
 .PT_outcome {
   @include m.lst-susar-grid-gauche-contenu-trbl(PT_outcome);
-}
-
-.seriousness_lib {
-  @include m.lst-susar-grid-gauche-lib(seriousness_lib);
-}
-.seriousness {
-  @include m.lst-susar-grid-gauche-contenu-tbl(seriousness);
-}
+}  
 
 .indication_lib {
   @include m.lst-susar-grid-gauche-lib(indication_lib);
-}
+}  
 .indication {
   @include m.lst-susar-grid-gauche-contenu-trbl(indication);
-}
+}  
 
 .medicalHistory_lib {
   @include m.lst-susar-grid-gauche-lib(medicalHistory_lib);
-}
+}  
 .medicalHistory {
   @include m.lst-susar-grid-gauche-contenu-trbl(medicalHistory);
-}
-
-.population_lib {
-  @include m.lst-susar-grid-droite-lib(population_lib);
-}
-.population {
-  @include m.lst-susar-grid-gauche-contenu-trbl(population);
-  margin: 1%;
-}
-
-.age_lib {
-  @include m.lst-susar-grid-droite-lib(age_lib);
-}
-.age {
-  @include m.lst-susar-grid-gauche-contenu-trbl(age);
-  margin: 1%;
-}
-
-.sex_lib {
-  @include m.lst-susar-grid-droite-lib(sex_lib);
-}
-.sex {
-  @include m.lst-susar-grid-gauche-contenu-trbl(sex);
-  margin: 1%;
-}
+}  
 
 /**********************/
 /*** grid de droite ***/
@@ -282,7 +455,12 @@
   text-align: right;
   color: gray;
   font-size: 0.8em;
-}
+}  
+
+
+
+
+
 
 .numBNPV_lib {
   @include m.lst-susar-grid-droite-lib(numBNPV_lib);
@@ -303,13 +481,6 @@
 }
 .DMM_Pole {
   @include m.lst-susar-grid-droite-contenu(DMM_Pole);
-}
-
-.Prio_lib {
-  @include m.lst-susar-grid-droite-lib(Prio_lib);
-}
-.Prio {
-  @include m.lst-susar-grid-droite-contenu(Prio);
 }
 
 .DtAiguil_lib {
@@ -333,13 +504,6 @@
   @include m.lst-susar-grid-droite-contenu(SponsStudyNum);
 }
 
-.NumEUDRA_CT_lib {
-  @include m.lst-susar-grid-droite-lib(NumEUDRA_CT_lib);
-}
-.NumEUDRA_CT {
-  @include m.lst-susar-grid-droite-contenu(NumEUDRA_CT);
-}
-
 .StudyTittle_lib {
   @include m.lst-susar-grid-droite-lib(StudyTittle_lib);
 }
@@ -347,12 +511,6 @@
   @include m.lst-susar-grid-droite-contenu(StudyTittle);
 }
 
-.WW_id_lib {
-  @include m.lst-susar-grid-droite-lib(WW_id_lib);
-}
-.WW_id {
-  @include m.lst-susar-grid-droite-contenu(WW_id);
-}
 
 .ConcluCas_lib {
   @include m.lst-susar-grid-droite-lib(ConcluCas_lib);

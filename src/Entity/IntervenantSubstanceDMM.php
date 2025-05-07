@@ -82,6 +82,9 @@ class IntervenantSubstanceDMM
     #[ORM\Column(nullable: true)]
     private ?int $IdInter_Sub_DMM_susar_EU_v1 = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $PoleTresCourt = null;
+
     // #[ORM\ManyToMany(targetEntity: SusarEU::class, mappedBy: 'IntervenantSubstanceDMM')]
     // private Collection $susarEUs;
 
@@ -419,6 +422,18 @@ class IntervenantSubstanceDMM
     public function setIdInterSubDMMSusarEUV1(?int $IdInter_Sub_DMM_susar_EU_v1): static
     {
         $this->IdInter_Sub_DMM_susar_EU_v1 = $IdInter_Sub_DMM_susar_EU_v1;
+
+        return $this;
+    }
+
+    public function getPoleTresCourt(): ?string
+    {
+        return $this->PoleTresCourt;
+    }
+
+    public function setPoleTresCourt(?string $PoleTresCourt): static
+    {
+        $this->PoleTresCourt = $PoleTresCourt;
 
         return $this;
     }

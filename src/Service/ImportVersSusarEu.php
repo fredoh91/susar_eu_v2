@@ -106,6 +106,7 @@ class ImportVersSusarEu
                     $susarEU->setWorldWideId($importCtll->getCaseReportNumber());
                     $susarEU->setNumEudract($importCtll->getStudyRegistrationN());
                     $susarEU->setSponsorstudynumb($importCtll->getSponsorStudyNumber());
+                    $susarEU->setSender($importCtll->getSender());
                     // $susarEU->setNarratif($importCtll->getNarrativeReportersCommentsAndSendersComments());
                     $susarEU->setNarratif(str_replace('<BR>', "\n", 
                                             $importCtll->getNarrativeReportersCommentsAndSendersComments()));
