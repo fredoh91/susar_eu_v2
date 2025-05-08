@@ -102,7 +102,7 @@
 .container_susar_eu {  
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-  grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  grid-template-rows: 4em 4em 4em 1fr 1fr 2em 1fr 2em 2em 1fr;
   // grid-template-rows: 1fr 1fr 3em 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
   gap: 0px 0px;
   grid-auto-flow: row;
@@ -110,18 +110,13 @@
     "NumEUDRA_CT_lib NumEUDRA_CT Sender_lib Sender PaysSurvenue_lib PaysSurvenue seriousness_lib Prio_lib Prio SamsMono_lib SamsMono id_susar_lib id_susar"
     "population_lib population sex_lib sex age_lib age seriousness Eval_lib Eval DMM_lib DMM Pole_lib Pole"
     "DtGateway_lib DtGateway CaseVersion_lib CaseVersion WW_id_lib WW_id . . . . . . ."
-    "tab_suspect_drug tab_suspect_drug tab_suspect_drug tab_suspect_drug tab_suspect_drug tab_suspect_drug . . . . . . ."
-    "tab_reaction_PT tab_reaction_PT tab_reaction_PT tab_reaction_PT tab_reaction_PT tab_reaction_PT . . . . . . ."
-    "tab_med_hist tab_med_hist tab_med_hist tab_med_hist tab_med_hist tab_med_hist . . . . . . ."
-    ". . . . . . . . . . . . ."
-    ". . . . . . . . . . . . ."
-    ". . . . . . . . . . . . ."
-    ". . . . . . . . . . . . ."
-    ". . . . . . . . . . . . ."
-    ". . . . . . . . . . . . ."
-    ". . . . . . . . . . . . ."
-    ". . . . . . . . . . . . ."
-    ". . . . . . . . . . . . .";
+    "tab_suspect_drug tab_suspect_drug tab_suspect_drug tab_suspect_drug tab_suspect_drug tab_suspect_drug . ConcluCas_lib ConcluCas ConcluCas ConcluCas btn-FU ."
+    "tab_reaction_PT tab_reaction_PT tab_reaction_PT tab_reaction_PT tab_reaction_PT tab_reaction_PT . CommentConclu_lib . EvaluateurCas_lib EvaluateurCas DtEval_lib DtEval"
+    ". . . . . . . CommentConclu CommentConclu CommentConclu CommentConclu CommentConclu CommentConclu"
+    "tab_med_hist tab_med_hist tab_med_hist tab_med_hist tab_med_hist tab_med_hist . CommentConclu CommentConclu CommentConclu CommentConclu CommentConclu CommentConclu"
+    ". . . . . . . . btn-DetEval . . btn-AWA ."
+    "narratif_lib . lienICSR_lib lienICSR . . . . . . . . ."
+    "narratif narratif narratif narratif narratif narratif narratif narratif narratif narratif narratif narratif narratif"
 }
 
 
@@ -253,7 +248,7 @@
   @include m.lst-susar-lib(NumEUDRA_CT_lib);
 }
 .NumEUDRA_CT {
-  @include m.lst-susar-contenu(NumEUDRA_CT);
+  @include m.lst-susar-contenu-scroll(NumEUDRA_CT);
 }
 
 .Sender_lib {
@@ -378,9 +373,41 @@
   // @include m.lst-susar-contenu(tab_suspect_drug);
   grid-area: tab_med_hist;
   border: 1px solid;
+  max-height: 10em; /* Hauteur maximale de 5 caractères */
+  overflow-y: auto; /* Scroller vertical si le contenu dépasse */
+  // line-height: 1em; /* Assure que chaque ligne occupe 1em */
 }
 
 
+.DtEval_lib {
+  @include m.lst-susar-grid-droite-lib(DtEval_lib);
+}
+.DtEval {
+  @include m.lst-susar-grid-droite-contenu(DtEval);
+}
+.EvaluateurCas_lib {
+  @include m.lst-susar-grid-droite-lib(EvaluateurCas_lib);
+}
+.EvaluateurCas {
+  @include m.lst-susar-grid-droite-contenu(EvaluateurCas);
+}
+
+.lienICSR_lib {
+  @include m.lst-susar-grid-droite-lib(lienICSR_lib);
+}
+.lienICSR {
+  @include m.lst-susar-grid-droite-contenu(lienICSR);
+}
+
+.narratif_lib {
+  @include m.lst-susar-grid-gauche-lib(narratif_lib);
+}
+
+.narratif_big {
+  @include m.lst-susar-grid-droite-contenu(narratif);
+  height: 20em; /* On fixe la hauteur à 5 fois la hauteur d'une ligne de texte */
+  overflow-y: auto; /* Affichage un ascenseur vertical si le contenu dépasse la hauteur */
+}
 /******************************************************************/
 /*** tables médicament, effet indésirable, antécédents médicaux ***/
 /******************************************************************/
@@ -490,13 +517,6 @@
   @include m.lst-susar-grid-droite-contenu(DtAiguil);
 }
 
-.DtEval_lib {
-  @include m.lst-susar-grid-droite-lib(DtEval_lib);
-}
-.DtEval {
-  @include m.lst-susar-grid-droite-contenu(DtEval);
-}
-
 .SponsStudyNum_lib {
   @include m.lst-susar-grid-droite-lib(SponsStudyNum_lib);
 }
@@ -526,16 +546,6 @@
   @include m.lst-susar-grid-droite-contenu(CommentConclu);
 }
 
-.lienICSR_lib {
-  @include m.lst-susar-grid-droite-lib(lienICSR_lib);
-}
-.lienICSR {
-  @include m.lst-susar-grid-droite-contenu(lienICSR);
-}
-
-.narratif_lib {
-  @include m.lst-susar-grid-gauche-lib(narratif_lib);
-}
 .narratif {
   @include m.lst-susar-grid-droite-contenu(narratif);
   height: 6em; /* On fixe la hauteur à 5 fois la hauteur d'une ligne de texte */

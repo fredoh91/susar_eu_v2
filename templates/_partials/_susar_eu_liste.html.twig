@@ -138,6 +138,27 @@
 								</div>
 							</div>
 
+							{% set concluEvalCas = '' %}
+							{% set commentEvalCas = '' %}
+							{% set evaluateurEvalCas = '' %}
+
+							{% for eval in Susar.SubstancePtEvals %}
+								{% set concluEvalCas = concluEvalCas ~ eval.AssessmentOutcome ~ '<br>' %}
+								{% set commentEvalCas = commentEvalCas ~ eval.Comments ~ '<br>' %}
+								{% set evaluateurEvalCas = evaluateurEvalCas ~ eval.userModif ~ '<br>' %}
+							{% endfor %}
+
+							<div class="ConcluCas_lib fw-bold">Conclusion cas</div>
+							<div class="ConcluCas">{{ concluEvalCas|raw }}</div>
+
+							{% if app.request.attributes.get('_route') == 'app_liste_susar_eu' %}
+								<div class="btn-FU">
+									<a href="{{ path('app_autres_FU',{'idsusar':Susar.id}) }}" class="btn-access" target="_blank">Autres F.U.</a>
+								</div>
+							{% else %}
+								<div></div>
+							{% endif %}
+
 							{# 5eme ligne #}
 							<div class="tab_reaction_PT">
 								<div class="table-responsive">
@@ -164,6 +185,20 @@
 								</div>
 							</div>
 
+							<div class="CommentConclu_lib fw-bold">Commentaire</div>
+
+
+							<div class="EvaluateurCas_lib fw-bold">Evalué par</div>
+							<div class="EvaluateurCas">{{ evaluateurEvalCas|raw }}</div>
+
+							<div class="DtEval_lib fw-bold">Date d'évaluation</div>
+							<div class="DtEval">
+								{% if Susar.dateEvaluation != null %}
+									{{ Susar.dateEvaluation|format_datetime(dateFormat='full', timeFormat='none', locale='fr') }}
+								{% else %}
+									Non-évalué
+								{% endif %}
+							</div>
 							{# 6eme ligne #}
 							<div class="tab_med_hist">
 								<div class="table-responsive">
@@ -189,6 +224,35 @@
 
 							</div>
 							
+							<div class="CommentConclu">{{ commentEvalCas|raw }}</div>
+
+
+
+							<div class="btn-DetEval">
+								<a href="{{ path('app_detail_susar_eu_nb_intsub',{'idsusar':Susar.id}) }}" class="btn-access" target="_blank">Détail / Évaluation</a>
+							</div>
+
+							{% if Susar.casSusarEuV1 == true %}
+								{# pas de bouton Assessed without action #}
+								<div></div>
+							{% else %}
+								<div class="btn-AWA">
+									<a href="{{ path('app_awa_lst_SA_PT',{'idsusar':Susar.id}) }}" class="btn-access">Assessed without action</a>
+								</div>
+							{% endif %}
+
+							{# 11eme ligne #}
+							<div class="lienICSR_lib fw-bold">Lien ICSR :</div>
+							{% if Susar.ICSRFormLink is not empty %}
+								<div class="lienICSR">
+									<a href="{{ Susar.ICSRFormLink }}" target="_blank">
+										lien ICSR
+									</a>
+								</div>
+							{% endif %}
+							<div class="narratif_lib fw-bold">Narratif partiel :</div>
+							{# 12eme ligne #}
+							<div class="narratif_big">{{ Susar.narratif|nl2br }}</div>							
 						</div>
 
 					</div>
