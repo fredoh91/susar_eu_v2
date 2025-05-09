@@ -67,7 +67,14 @@ class AWAController extends AbstractController
         // 1/ Recherche des SubstancePt pour ce susar
         $SubPTs = $Susar->getSubstancePts();
         $dateModif = new \DateTimeImmutable();
-        $lastUsername = $authenticationUtils->getLastUsername();
+        // $lastUsername = $authenticationUtils->getLastUsername();
+        $user = $this->getUser(); // Récupère l'utilisateur connecté
+        if ($user) {
+            $userName = $user->getUserName(); // Appelle la méthode getUserName() de l'entité User
+            // dd($userName); // Affiche le userName pour vérifier
+        } else {
+            throw $this->createAccessDeniedException('Utilisateur non connecté.');
+        }        
         $evalCree = false;
         // dump("un : " . $session->get('search_susar_eu'));
         // dump($Susar);
@@ -87,8 +94,8 @@ class AWAController extends AbstractController
                     $substancePtEval->setDateEval($dateModif);
                     $substancePtEval->setCreatedAt($dateModif);
                     $substancePtEval->setUpdatedAt($dateModif);
-                    $substancePtEval->setUserCreate($lastUsername);
-                    $substancePtEval->setUserModif($lastUsername);
+                    $substancePtEval->setUserCreate($userName);
+                    $substancePtEval->setUserModif($userName);
                     $substancePtEval->setAssessmentOutcome("Assessed without action");
                     $substancePtEval->setComments("Assessed without action (bouton AWA)");
                     // 3/ Création des liens SubstancePtEval vers SubstancePt

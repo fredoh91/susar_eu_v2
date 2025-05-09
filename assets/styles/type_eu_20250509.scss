@@ -99,195 +99,139 @@
 /*** container liste susar_eu ***/
 /********************************/
 
-
-.container_susar_eu {
-  display: grid; 
-  grid-template-columns: 1fr 1fr; 
-  grid-template-rows: auto auto auto; 
-  gap: 0px 0px; 
-  grid-template-areas: 
-    "container_susar_eu_haut container_susar_eu_haut"
-    "container_susar_eu_gauche container_susar_eu_droite"
-    "container_susar_eu_bas container_susar_eu_bas"; 
-}
-
-
-.container_susar_eu_haut {  
+.container_susar_eu {  
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-  grid-template-rows: 3em 3em 3em;
+  grid-template-rows: 4em 4em 4em 1fr 1fr 2em 1fr 2em 2em 1fr;
+  // grid-template-rows: 1fr 1fr 3em 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
   gap: 0px 0px;
   grid-auto-flow: row;
   grid-template-areas:
     "NumEUDRA_CT_lib NumEUDRA_CT Sender_lib Sender PaysSurvenue_lib PaysSurvenue seriousness_lib Prio_lib Prio SamsMono_lib SamsMono id_susar_lib id_susar"
     "population_lib population sex_lib sex age_lib age seriousness Eval_lib Eval DMM_lib DMM Pole_lib Pole"
-    "DtGateway_lib DtGateway CaseVersion_lib CaseVersion WW_id_lib WW_id . . . . . . .";
-  grid-area: container_susar_eu_haut;
-  border: 1px solid;
-  /* Centrage vertical */
-  align-items: center;
+    "DtGateway_lib DtGateway CaseVersion_lib CaseVersion WW_id_lib WW_id . . . . . . ."
+    "tab_suspect_drug tab_suspect_drug tab_suspect_drug tab_suspect_drug tab_suspect_drug tab_suspect_drug . ConcluCas_lib ConcluCas ConcluCas ConcluCas btn-FU ."
+    "tab_reaction_PT tab_reaction_PT tab_reaction_PT tab_reaction_PT tab_reaction_PT tab_reaction_PT . CommentConclu_lib . EvaluateurCas_lib EvaluateurCas DtEval_lib DtEval"
+    ". . . . . . . CommentConclu CommentConclu CommentConclu CommentConclu CommentConclu CommentConclu"
+    "tab_med_hist tab_med_hist tab_med_hist tab_med_hist tab_med_hist tab_med_hist . CommentConclu CommentConclu CommentConclu CommentConclu CommentConclu CommentConclu"
+    ". . . . . . . . btn-DetEval . . btn-AWA ."
+    "narratif_lib . lienICSR_lib lienICSR . . . . . . . . ."
+    "narratif narratif narratif narratif narratif narratif narratif narratif narratif narratif narratif narratif narratif"
 }
 
-.container_susar_eu_gauche {  
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
-  grid-template-rows: 1fr 1fr 2em 1fr;
-  gap: 0px 0px;
-  grid-auto-flow: row;
-  grid-template-areas:
-    "tab_suspect_drug tab_suspect_drug tab_suspect_drug tab_suspect_drug tab_suspect_drug tab_suspect_drug"
-    "tab_reaction_PT tab_reaction_PT tab_reaction_PT tab_reaction_PT tab_reaction_PT tab_reaction_PT"
-    ". . . . . ."
-    "tab_med_hist tab_med_hist tab_med_hist tab_med_hist tab_med_hist tab_med_hist";
-  grid-area: container_susar_eu_gauche;
-  border: 1px solid;
-}
-
-
-.container_susar_eu_droite {  
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
-  // grid-template-rows: 1fr 1fr 2em 1fr 2em 2em 1fr;
-  grid-template-rows: auto auto auto auto auto auto auto;
-  gap: 0px 0px;
-  grid-auto-flow: row;
-  grid-template-areas:
-    "ConcluCas_lib ConcluCas ConcluCas ConcluCas btn-FU ."
-    "CommentConclu_lib . EvaluateurCas_lib EvaluateurCas DtEval_lib DtEval"
-    "CommentConclu CommentConclu CommentConclu CommentConclu CommentConclu CommentConclu"
-    "CommentConclu CommentConclu CommentConclu CommentConclu CommentConclu CommentConclu"
-    ". btn-DetEval . . btn-AWA .";
-  grid-area: container_susar_eu_droite;
-  border: 1px solid;
-  align-items: center;
-}
-
-
-.container_susar_eu_bas {  
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-  grid-template-rows: 2em 1fr;
-  gap: 0px 0px;
-  grid-auto-flow: row;
-  grid-template-areas:
-    "narratif_lib narratif_lib . lienICSR_lib lienICSR . . . . . . . ."
-    "narratif narratif narratif narratif narratif narratif narratif narratif narratif narratif narratif narratif narratif";
-  grid-area: container_susar_eu_bas;
-  border: 1px solid;
-}
 
 /***************************/
 /*** container principal ***/
 /***************************/
 
 
-// .container_principal {
-//   display: grid;
-//   grid-template-columns: 1fr 1fr;
-//   grid-template-rows: auto;
-//   grid-template-areas:
-//       "container_flex_left container_flex_right"
-//       "container_narr container_narr";
-// }
+.container_principal {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto;
+  grid-template-areas:
+      "container_flex_left container_flex_right"
+      "container_narr container_narr";
+}
 
 
-// .container_flex_left > div,
-// .container_flex_right > div {
-//   border-color: #aeb6bf;
-//   min-height: 25px;
-//   min-height: max-content;
-// }
+.container_flex_left > div,
+.container_flex_right > div {
+  border-color: #aeb6bf;
+  min-height: 25px;
+  min-height: max-content;
+}
 
-// /**********************/
-// /*** flex de gauche ***/
-// /**********************/
-// .container_flex_left {
-//   grid-area: container_flex_left;
-//   flex: 1; /* Prend un espace égal pour chaque div */
-//   min-width: 300px; /* Largeur minimale pour chaque div */
-//   height: 100%;
-//   margin: 0;
-//   width: 40%;
-//   padding: 2px;
-//   display: grid;
-//   grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-//   grid-template-rows: minmax(1fr, 4rem);
-//   grid-auto-columns: 1fr;
-//   gap: 0px 0px;
-//   grid-auto-flow: row;
-//   justify-items: stretch;
-//   align-items: stretch;
-//   grid-template-areas:
-//     "suspectDrug_lib . PT_outcome_lib . . ."
-//     "suspectDrug suspectDrug PT_outcome PT_outcome PT_outcome ."
-//     "seriousness_lib . indication_lib . . ."
-//     "seriousness seriousness indication indication indication ."
-//     ". . medicalHistory_lib . . ."
-//     ". . medicalHistory medicalHistory medicalHistory ."
-//     "population_lib population medicalHistory medicalHistory medicalHistory ."
-//     "age_lib age medicalHistory medicalHistory medicalHistory ."
-//     "sex_lib sex medicalHistory medicalHistory medicalHistory .";
-// }
+/**********************/
+/*** flex de gauche ***/
+/**********************/
+.container_flex_left {
+  grid-area: container_flex_left;
+  flex: 1; /* Prend un espace égal pour chaque div */
+  min-width: 300px; /* Largeur minimale pour chaque div */
+  height: 100%;
+  margin: 0;
+  width: 40%;
+  padding: 2px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  grid-template-rows: minmax(1fr, 4rem);
+  grid-auto-columns: 1fr;
+  gap: 0px 0px;
+  grid-auto-flow: row;
+  justify-items: stretch;
+  align-items: stretch;
+  grid-template-areas:
+    "suspectDrug_lib . PT_outcome_lib . . ."
+    "suspectDrug suspectDrug PT_outcome PT_outcome PT_outcome ."
+    "seriousness_lib . indication_lib . . ."
+    "seriousness seriousness indication indication indication ."
+    ". . medicalHistory_lib . . ."
+    ". . medicalHistory medicalHistory medicalHistory ."
+    "population_lib population medicalHistory medicalHistory medicalHistory ."
+    "age_lib age medicalHistory medicalHistory medicalHistory ."
+    "sex_lib sex medicalHistory medicalHistory medicalHistory .";
+}
 
-// /**********************/
-// /*** flex de droite ***/
-// /**********************/
-// .container_flex_right {
-//   grid-area: container_flex_right;
-//   flex: 1; /* Prend un espace égal pour chaque div */
-//   min-width: 300px; /* Largeur minimale pour chaque div */
-//   height: 100%;
-//   margin: 0;
-//   width: 60%;
-//   padding: 2px;
-//   display: grid;
-//   grid-template-columns: 0.5fr 1fr 0.7fr 1fr;
-//   grid-template-rows: minmax(1fr, 4rem);
-//   grid-auto-columns: 1fr;
-//   gap: 10px 0px;
-//   grid-auto-flow: row;
-//   justify-items: stretch;
-//   align-items: stretch;
-//   grid-template-areas:
-//     "btn-DetEval . FU_BNPV_lib FU_BNPV idSusar"
-//     "StudyTittle_lib StudyTittle StudyTittle StudyTittle ."
-//     "WW_id_lib WW_id WW_id WW_id ."
-//     "NumEUDRA_CT_lib NumEUDRA_CT SponsStudyNum_lib SponsStudyNum ."
-//     "DMM_Pole_lib DMM_Pole DMM_Pole DtAiguil_lib DtAiguil"
-//     "Prio_lib Prio . . ."
-//     "ConcluCas_lib ConcluCas CommentConclu_lib CommentConclu ."
-//     "DtEval_lib DtEval . . ."
-//     ". btn-FU btn-AWA . .";
-// }
+/**********************/
+/*** flex de droite ***/
+/**********************/
+.container_flex_right {
+  grid-area: container_flex_right;
+  flex: 1; /* Prend un espace égal pour chaque div */
+  min-width: 300px; /* Largeur minimale pour chaque div */
+  height: 100%;
+  margin: 0;
+  width: 60%;
+  padding: 2px;
+  display: grid;
+  grid-template-columns: 0.5fr 1fr 0.7fr 1fr;
+  grid-template-rows: minmax(1fr, 4rem);
+  grid-auto-columns: 1fr;
+  gap: 10px 0px;
+  grid-auto-flow: row;
+  justify-items: stretch;
+  align-items: stretch;
+  grid-template-areas:
+    "btn-DetEval . FU_BNPV_lib FU_BNPV idSusar"
+    "StudyTittle_lib StudyTittle StudyTittle StudyTittle ."
+    "WW_id_lib WW_id WW_id WW_id ."
+    "NumEUDRA_CT_lib NumEUDRA_CT SponsStudyNum_lib SponsStudyNum ."
+    "DMM_Pole_lib DMM_Pole DMM_Pole DtAiguil_lib DtAiguil"
+    "Prio_lib Prio . . ."
+    "ConcluCas_lib ConcluCas CommentConclu_lib CommentConclu ."
+    "DtEval_lib DtEval . . ."
+    ". btn-FU btn-AWA . .";
+}
 
-// /************************/
-// /*** flex du narratif ***/
-// /************************/
-// .container_narr {
-//   grid-area: container_narr;
-//   flex: 1; /* Prend un espace égal pour chaque div */
-//   min-width: 300px; /* Largeur minimale pour chaque div */
-//   height: 100%;
-//   margin: 0;
-//   width: 60%;
-//   padding: 2px;
-//   display: grid;
-//   grid-template-columns: 0.5fr 1fr 0.7fr 1fr;
-//   grid-template-rows: minmax(1fr, 4rem);
-//   grid-auto-columns: 1fr;
-//   gap: 10px 0px;
-//   grid-auto-flow: row;
-//   justify-items: stretch;
-//   align-items: stretch;
-//   grid-template-areas:
-//     "narratif_lib . lienICSR_lib lienICSR ."
-//     "narratif narratif narratif narratif narratif";
-// }
+/************************/
+/*** flex du narratif ***/
+/************************/
+.container_narr {
+  grid-area: container_narr;
+  flex: 1; /* Prend un espace égal pour chaque div */
+  min-width: 300px; /* Largeur minimale pour chaque div */
+  height: 100%;
+  margin: 0;
+  width: 60%;
+  padding: 2px;
+  display: grid;
+  grid-template-columns: 0.5fr 1fr 0.7fr 1fr;
+  grid-template-rows: minmax(1fr, 4rem);
+  grid-auto-columns: 1fr;
+  gap: 10px 0px;
+  grid-auto-flow: row;
+  justify-items: stretch;
+  align-items: stretch;
+  grid-template-areas:
+    "narratif_lib . lienICSR_lib lienICSR ."
+    "narratif narratif narratif narratif narratif";
+}
 
-// #container_eval {
-//   width: 100%; /* Prend toute la largeur disponible */
-//   margin-top: 20px; /* Espace au-dessus de la div */
-// }
+#container_eval {
+  width: 100%; /* Prend toute la largeur disponible */
+  margin-top: 20px; /* Espace au-dessus de la div */
+}
 
 
 
@@ -304,55 +248,49 @@
   @include m.lst-susar-lib(NumEUDRA_CT_lib);
 }
 .NumEUDRA_CT {
-  @include m.lst-susar-contenu-scroll(NumEUDRA_CT, 3em);
+  @include m.lst-susar-contenu-scroll(NumEUDRA_CT);
 }
 
 .Sender_lib {
   @include m.lst-susar-lib(Sender_lib);
 }
 .Sender {
-  // @include m.lst-susar-contenu(Sender);
-  @include m.lst-susar-contenu-scroll(Sender, 3em);
+  @include m.lst-susar-contenu(Sender);
 }
 
 .PaysSurvenue_lib {
   @include m.lst-susar-lib(PaysSurvenue_lib);
 }
 .PaysSurvenue {
-  // @include m.lst-susar-contenu(PaysSurvenue);
-  @include m.lst-susar-contenu-scroll(PaysSurvenue, 3em);
+  @include m.lst-susar-contenu(PaysSurvenue);
 }
 
 .seriousness_lib {
   @include m.lst-susar-lib(seriousness_lib);
 }
 .seriousness {
-  // @include m.lst-susar-contenu(seriousness);
-  @include m.lst-susar-contenu-scroll(seriousness, 3em);
+  @include m.lst-susar-contenu(seriousness);
 }
 
 .Prio_lib {
   @include m.lst-susar-lib(Prio_lib);
 }
 .Prio {
-  // @include m.lst-susar-contenu(Prio);
-  @include m.lst-susar-contenu-scroll(Prio, 3em);
+  @include m.lst-susar-contenu(Prio);
 }
 
 .SamsMono_lib {
   @include m.lst-susar-lib(SamsMono_lib);
 }
 .SamsMono {
-  // @include m.lst-susar-contenu(SamsMono);
-  @include m.lst-susar-contenu-scroll(SamsMono, 3em);
+  @include m.lst-susar-contenu(SamsMono);
 }
 
 .id_susar_lib {
   @include m.lst-susar-lib(id_susar_lib);
 }
 .id_susar {
-  // @include m.lst-susar-contenu(id_susar);
-  @include m.lst-susar-contenu-scroll(id_susar, 3em);
+  @include m.lst-susar-contenu(id_susar);
 }
 
 .population_lib {
@@ -401,16 +339,14 @@
   @include m.lst-susar-lib(DtGateway_lib);
 }
 .DtGateway {
-  // @include m.lst-susar-contenu(DtGateway);
-  @include m.lst-susar-contenu-scroll(DtGateway, 3em);
+  @include m.lst-susar-contenu(DtGateway);
 }
 
 .CaseVersion_lib {
   @include m.lst-susar-lib(CaseVersion_lib);
 }
 .CaseVersion {
-  // @include m.lst-susar-contenu(CaseVersion);
-  @include m.lst-susar-contenu-scroll(CaseVersion, 3em);
+  @include m.lst-susar-contenu(CaseVersion);
 }
 
 .WW_id_lib {
@@ -418,7 +354,7 @@
 }
 .WW_id {
   // @include m.lst-susar-grid-droite-contenu(WW_id);
-  @include m.lst-susar-contenu-scroll(WW_id, 3em);
+  @include m.lst-susar-contenu-scroll(WW_id);
 }
 
 .tab_suspect_drug {
@@ -443,34 +379,17 @@
 }
 
 
-.ConcluCas_lib {
-  @include m.lst-susar-grid-droite-lib(ConcluCas_lib);
-}
-.ConcluCas {
-  // @include m.lst-susar-grid-droite-contenu(ConcluCas);
-  @include m.lst-susar-contenu-scroll(ConcluCas, 3em);
-}
-
 .DtEval_lib {
   @include m.lst-susar-grid-droite-lib(DtEval_lib);
 }
 .DtEval {
-  // @include m.lst-susar-grid-droite-contenu(DtEval);
-  @include m.lst-susar-contenu-scroll(DtEval, 3em);
+  @include m.lst-susar-grid-droite-contenu(DtEval);
 }
 .EvaluateurCas_lib {
   @include m.lst-susar-grid-droite-lib(EvaluateurCas_lib);
 }
 .EvaluateurCas {
-  // @include m.lst-susar-grid-droite-contenu(EvaluateurCas);
-  @include m.lst-susar-contenu-scroll(EvaluateurCas, 3em);
-}
-
-.CommentConclu_lib {
-  @include m.lst-susar-grid-droite-lib(CommentConclu_lib);
-}
-.CommentConclu {
-  @include m.lst-susar-grid-droite-contenu(CommentConclu);
+  @include m.lst-susar-grid-droite-contenu(EvaluateurCas);
 }
 
 .lienICSR_lib {
@@ -610,6 +529,21 @@
 }
 .StudyTittle {
   @include m.lst-susar-grid-droite-contenu(StudyTittle);
+}
+
+
+.ConcluCas_lib {
+  @include m.lst-susar-grid-droite-lib(ConcluCas_lib);
+}
+.ConcluCas {
+  @include m.lst-susar-grid-droite-contenu(ConcluCas);
+}
+
+.CommentConclu_lib {
+  @include m.lst-susar-grid-droite-lib(CommentConclu_lib);
+}
+.CommentConclu {
+  @include m.lst-susar-grid-droite-contenu(CommentConclu);
 }
 
 .narratif {

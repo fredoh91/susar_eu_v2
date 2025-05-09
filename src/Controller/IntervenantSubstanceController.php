@@ -95,8 +95,14 @@ class IntervenantSubstanceController extends AbstractController
             
             $dateNow = new DateTimeImmutable();
             // $dateModif = new \DateTimeImmutable();
-            $lastUsername = $authenticationUtils->getLastUsername();
-
+            // $lastUsername = $authenticationUtils->getLastUsername();
+            $user = $this->getUser(); // Récupère l'utilisateur connecté
+            if ($user) {
+                $userName = $user->getUserName(); // Appelle la méthode getUserName() de l'entité User
+                // dd($userName); // Affiche le userName pour vérifier
+            } else {
+                throw $this->createAccessDeniedException('Utilisateur non connecté.');
+            }
             // On récupère les données des substances liées si elles existent depuis le formulaire
             $substancesData = $formData['intervenant_substance_dmm_substances']['intervenantSubstanceDMMSubstances'] ?? [];
 
@@ -133,7 +139,7 @@ class IntervenantSubstanceController extends AbstractController
             $IntSub->setPoleCourt($newIntervenant->getPoleCourt());
             $IntSub->setPoleLong($newIntervenant->getPoleLong());
             $IntSub->setUpdatedAt($dateNow);
-            $IntSub->setUserModif($lastUsername);
+            $IntSub->setUserModif($userName);
 
             // On traite manuellement les entités IntervenantSubstanceDMMSubstance liées
             foreach ($IntSub->getIntervenantSubstanceDMMSubstances() as $index => $substance) {
@@ -204,8 +210,15 @@ class IntervenantSubstanceController extends AbstractController
 
             $dateNow = new DateTimeImmutable();
             // $dateModif = new \DateTimeImmutable();
-            $lastUsername = $authenticationUtils->getLastUsername();
+            // $lastUsername = $authenticationUtils->getLastUsername();
 
+            $user = $this->getUser(); // Récupère l'utilisateur connecté
+            if ($user) {
+                $userName = $user->getUserName(); // Appelle la méthode getUserName() de l'entité User
+                // dd($userName); // Affiche le userName pour vérifier
+            } else {
+                throw $this->createAccessDeniedException('Utilisateur non connecté.');
+            }
             $newEvalua = explode("|", $formData["intervenant_substance_dmm_substances"]["evaluateur"])[0];
             
             $newIntervenant = $intervenantsRepository->findOneBy(['evaluateur' => $newEvalua]);
@@ -216,8 +229,8 @@ class IntervenantSubstanceController extends AbstractController
             $IntSub->setPoleLong($newIntervenant->getPoleLong());
             $IntSub->setCreatedAt($dateNow);
             $IntSub->setUpdatedAt($dateNow);
-            $IntSub->setUserCreate($lastUsername);
-            $IntSub->setUserModif($lastUsername);
+            $IntSub->setUserCreate($userName);
+            $IntSub->setUserModif($userName);
 
             // dd($IntSub);
 

@@ -69,15 +69,18 @@
 }
 
 // test scroll horizontal contenu des différents champs
-@mixin lst-susar-contenu-scroll($grid-area) {
+@mixin lst-susar-contenu-scroll($grid-area, $height) {
     grid-area: $grid-area;
     border: 1px solid;
     background-color: $Fond_chp_lst_eval_susar;
     margin: 1%;
     padding-left: 3%;
-    height: 4em; /* Fixe la hauteur à 3 caractères */
+    height: $height; /* Fixe la hauteur à 3 caractères */
+    // min-height: 2em; /* Définit une hauteur minimale de 2 caractères */
     overflow-x: auto; /* Ajoute un scroller horizontal si le contenu dépasse */
     overflow-y: hidden; /* Désactive le scroller vertical */
     white-space: nowrap; /* Empêche le contenu de passer à la ligne */
+    
+
 }
 

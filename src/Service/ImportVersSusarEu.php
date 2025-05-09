@@ -65,13 +65,18 @@ class ImportVersSusarEu
         $this->logger = $logger;
     }
 
-    public function importExcelVersTbSusarEu(int $idImportCtllFicExcel, EntityManagerInterface $em, AuthenticationUtils $authenticationUtils)
+    public function importExcelVersTbSusarEu(int $idImportCtllFicExcel, EntityManagerInterface $em, AuthenticationUtils $authenticationUtils, $user )
     {
         $importCtll = $this->importCtllRepository->findByIdImport($idImportCtllFicExcel);
 
 
         if ($importCtll) {
-
+            if ($user) {
+                $userName = $user->getUserName(); // Appelle la méthode getUserName() de l'entité User
+                // dd($userName); // Affiche le userName pour vérifier
+            } else {
+                throw $this->createAccessDeniedException('Utilisateur non connecté.');
+            }
             $em->beginTransaction();
             // time out a 10 minutes pour l'import excel
             set_time_limit(600); 
@@ -149,7 +154,7 @@ class ImportVersSusarEu
                     $susarEU->setImportCtll($importCtll);
                     $susarEU->setCreatedAt($dateImport);
                     $susarEU->setUpdatedAt($dateImport);
-                    $susarEU->setUtilisateurImport($authenticationUtils->getLastUsername());
+                    $susarEU->setUtilisateurImport($userName);
                     $em->persist($susarEU);
                     $em->flush();   // On flush ici pour que l'id du susar soit disponible pour les médicaments et effets indésirables
                     // Import des médicaments

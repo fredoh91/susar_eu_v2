@@ -88,8 +88,14 @@ class EvalSusarController extends AbstractController
                     $assessment_outcome = $formData['eval_susar']['assessment_outcome'];
                     $comments = $formData['eval_susar']['comments'];
                     $dateModif = new \DateTimeImmutable();
-                    $lastUsername = $authenticationUtils->getLastUsername();
-
+                    // $lastUsername = $authenticationUtils->getLastUsername();
+                    $user = $this->getUser(); // Récupère l'utilisateur connecté
+                    if ($user) {
+                        $userName = $user->getUserName(); // Appelle la méthode getUserName() de l'entité User
+                        // dd($userName); // Affiche le userName pour vérifier
+                    } else {
+                        throw $this->createAccessDeniedException('Utilisateur non connecté.');
+                    }
                     $hasLinkedEval = $entityManager
                                         ->getRepository(SusarEU::class)
                                         ->hasLinkedSubstancePtEval($idsusar, $sub, $PT);
@@ -137,8 +143,10 @@ class EvalSusarController extends AbstractController
                         $substancePtEval->setDateEval($dateModif);
                         $substancePtEval->setCreatedAt($dateModif);
                         $substancePtEval->setUpdatedAt($dateModif);
-                        $substancePtEval->setUserCreate($lastUsername);
-                        $substancePtEval->setUserModif($lastUsername);
+                        // $substancePtEval->setUserCreate($lastUsername);
+                        // $substancePtEval->setUserModif($lastUsername);
+                        $substancePtEval->setUserCreate($userName);
+                        $substancePtEval->setUserModif($userName);
                         
                         // Création des liens SubstancePtEval vers SubstancePt
                         $substancePtEval->addSubstancePt($substancePt);
@@ -212,8 +220,10 @@ class EvalSusarController extends AbstractController
                                         $substancePtEval_iter->setDateEval($dateModif);
                                         $substancePtEval_iter->setCreatedAt($dateModif);
                                         $substancePtEval_iter->setUpdatedAt($dateModif);
-                                        $substancePtEval_iter->setUserCreate($lastUsername);
-                                        $substancePtEval_iter->setUserModif($lastUsername);
+                                        // $substancePtEval_iter->setUserCreate($lastUsername);
+                                        // $substancePtEval_iter->setUserModif($lastUsername);
+                                        $substancePtEval_iter->setUserCreate($userName);
+                                        $substancePtEval_iter->setUserModif($userName);
                                         
                                         // Création des liens SubstancePtEval vers SubstancePt
                                         $substancePtEval_iter->addSubstancePt($substancePt_iter);
@@ -299,8 +309,16 @@ class EvalSusarController extends AbstractController
         $Susar = $entityManager->getRepository(SusarEU::class)->findOneById($idsusar);
         $SubstancePt = $entityManager->getRepository(SubstancePt::class)->findOneById($idSubstancePt);
         $SubstancePtEval = $entityManager->getRepository(SubstancePtEval::class)->findOneById($idSubstancePtEval);
-        $lastUsername = $authenticationUtils->getLastUsername();
+        // $lastUsername = $authenticationUtils->getLastUsername();
+        $user = $this->getUser(); // Récupère l'utilisateur connecté
+        if ($user) {
+            $userName = $user->getUserName(); // Appelle la méthode getUserName() de l'entité User
+            // dd($userName); // Affiche le userName pour vérifier
+        } else {
+            throw $this->createAccessDeniedException('Utilisateur non connecté.');
+        }
 
+        // dd($authenticationUtils->getLastUsername());
         $form = $this->createForm(ModifEvalSusarType::class, null, [
             'substance' => $SubstancePt->getActiveSubstanceHighLevel() ,
             'pt' => $SubstancePt->getReactionmeddrapt(),
@@ -330,7 +348,8 @@ class EvalSusarController extends AbstractController
                     $SubstancePtEval->setComments($comments);
                     $SubstancePtEval->setDateEval($dateModif);
                     $SubstancePtEval->setUpdatedAt($dateModif);
-                    $SubstancePtEval->setUserModif($lastUsername);
+                    // $SubstancePtEval->setUserModif($lastUsername);
+                    $SubstancePtEval->setUserModif($userName);
                     
                     $entityManager->flush();
                     $this->addFlash('success', 'La modification de l\'évaluation pour le couple ' . 

@@ -53,14 +53,20 @@ final class ImportExcelCTLLController extends AbstractController
             if ($FicExcel) {
                 // Démarrer le chronomètre
                 $startTime = microtime(true);
-
+                $user = $this->getUser(); // Récupère l'utilisateur connecté
+                if ($user) {
+                    $userName = $user->getUserName(); // Appelle la méthode getUserName() de l'entité User
+                    // dd($userName); // Affiche le userName pour vérifier
+                } else {
+                    throw $this->createAccessDeniedException('Utilisateur non connecté.');
+                }
                 // dd($this->fichierExcelValide($FicExcel));
                 // On check si dans la cellule A1, on a bien la chaîne de caractère : "SafetyReport Key"
                 if (!$this->fichierExcelValide($FicExcel)) {
                     // dump('Fichier Excel en erreur');
                     $this->logger->warning('Le fichier Excel suivant n\'est pas valide. Vérifiez qu\'il s\'agit bien du fichier CTLL téléchargé via : Export/Data/Excel.', [
                         'fileName' => $FicExcel->getClientOriginalName(),
-                        'user' => $authenticationUtils->getLastUsername(),
+                        'user' => $userName,
                     ]);
                     $this->addFlash('error', 'Le fichier Excel n\'est pas valide. Vérifiez qu\'il s\'agit bien du fichier CTLL téléchargé via : Export/Data/Excel.');
 
@@ -72,7 +78,8 @@ final class ImportExcelCTLLController extends AbstractController
                 $this->nbDonneesInserees = $this->importVersSusarEu->importExcelVersTbSusarEu(
                     $this->idImportCtllFicExcel,
                     $em,
-                    $authenticationUtils
+                    $authenticationUtils,
+                    $user
                 );
 
                 $this->nbDonneesInserees = array_merge(
@@ -194,11 +201,17 @@ final class ImportExcelCTLLController extends AbstractController
     {
         $creation_time = DateTimeImmutable::createFromFormat('U', filectime($inputFileName));
         $import_date = new DateTimeImmutable();
-        $lastUsername = $authenticationUtils->getLastUsername();
-
+        // $lastUsername = $authenticationUtils->getLastUsername();
+        $user = $this->getUser(); // Récupère l'utilisateur connecté
+        if ($user) {
+            $userName = $user->getUserName(); // Appelle la méthode getUserName() de l'entité User
+            // dd($userName); // Affiche le userName pour vérifier
+        } else {
+            throw $this->createAccessDeniedException('Utilisateur non connecté.');
+        }
         $importCtllFicExcel = new ImportCtllFicExcel();
         $importCtllFicExcel->setDateFichier($creation_time)
-            ->setUtilisateurImport($lastUsername)
+            ->setUtilisateurImport($userName)
             ->setFileName($FicExcel->getClientOriginalName())
             ->setDateImport($import_date);
 
