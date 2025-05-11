@@ -87,7 +87,8 @@ class SusarEuListeController extends AbstractController
         // $searchSusarEU = $session->get('search_susar_eu', $defaultSearchSusarEU);
 
         $defaultTriSearchSusarEU = [
-            ['field' => 'statusdate', 'direction' => 'DESC'],
+            // ['field' => 'statusdate', 'direction' => 'DESC'],
+            ['field' => 'createdAt', 'direction' => 'DESC'],
             ['field' => 'sponsorstudynumb', 'direction' => 'ASC'],
             ['field' => 'worldWide_id', 'direction' => 'ASC']
         ];

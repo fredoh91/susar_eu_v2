@@ -172,7 +172,7 @@ class SearchSusarEUType extends AbstractType
                 ],
                 'required' => false,
                 'placeholder' => false, // Ceci empêche Symfony d'ajouter une option vide supplémentaire,
-                'data' => 'non_archive', // Spécifie 'non_archive' comme valeur par défaut
+                // 'data' => 'non_archive', // Spécifie 'non_archive' comme valeur par défaut
             ])
             ->add('assessment_outcome', ChoiceType::class, [
                 'choices' => [

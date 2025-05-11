@@ -4,23 +4,20 @@
 
 {% block body %}
 
-
 	{{ encore_entry_link_tags('type_eu_css') }}
-
-
-    {# {{dump(NbSusar)}}
-    {{dump(Susars)}} #}
-
 
 	<div class="container-fluid p-5">
 
 		<div class="container-fluid container-tab">
+			<div class="row">
+				<div class="col-12">
+					<button id="BtnCloseTab" class="btn btn-primary float-end my-3">Fermer cet onglet</button>
+				</div>
+			</div>
 			{% if Susars %}
 			
 				Nombre de lignes : {{ NbSusar }}
 				<h3>Liste des SUSARs</h3>
-				{# {{dump(Susars)}} #}
-
 
 				{% include "_partials/_susar_eu_liste.html.twig" %}
 				
@@ -28,4 +25,10 @@
 		</div>
 	</div>
 
+{% endblock %}
+
+
+{% block javascripts %}
+	{{ parent() }}
+	{{ encore_entry_script_tags('SusarEuDetailAutreFU') }}
 {% endblock %}

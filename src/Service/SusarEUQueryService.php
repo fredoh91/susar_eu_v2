@@ -84,16 +84,6 @@ class SusarEUQueryService
             $query = $query
                 ->andWhere($query->expr()->eq('isd.type_saMS_Mono', ':typeSaMSMono'))
                 ->setParameter('typeSaMSMono', $search->getTypeSaMSMono());
-            // $Eval = $search->getTypeSaMSMono();
-            // if ($Eval === "_non attribué_") {
-            //     $query = $query
-            //         ->andWhere($query->expr()->isNull('isd.evaluateur'));
-            // } else {
-            //     $query = $query
-            //         ->andWhere($query->expr()->eq('isd.evaluateur', ':eval'))
-            //         ->setParameter('eval', $Eval);
-            // }
-
         }
 
         if ($search->getDebutDateImport()) {

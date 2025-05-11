@@ -1,4 +1,4 @@
-console.log("Test Fredoh");
+// console.log("Test Fredoh");
 
 
 // Pour ouvrir l'onglet détail/évaluation
@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // Ouvre l'URL dans un nouvel onglet
             if (url) {
-                window.open(url, '_blank');
+                window.open(url, '_blank', 'noopener=false');
             } else {
                 console.error('URL non définie pour ce bouton.');
             }
@@ -28,10 +28,10 @@ document.addEventListener('DOMContentLoaded', function () {
 // Pour ouvrir l'onglet autre FU
 document.addEventListener('DOMContentLoaded', function () {
     // Sélectionne tous les boutons avec la classe "btn-open-autre-fu"
-    const detailButtons = document.querySelectorAll('.btn-open-autre-fu');
+    const autresFUButtons = document.querySelectorAll('.btn-open-autre-fu');
 
     // Ajoute un gestionnaire d'événements à chaque bouton
-    detailButtons.forEach(button => {
+    autresFUButtons.forEach(button => {
         button.addEventListener('click', function (event) {
             event.preventDefault(); // Empêche le comportement par défaut du bouton
 
@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // Ouvre l'URL dans un nouvel onglet
             if (url) {
-                window.open(url, '_blank');
+                window.open(url, '_blank', 'noopener=false');
             } else {
                 console.error('URL non définie pour ce bouton.');
             }
