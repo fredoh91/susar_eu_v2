@@ -10,11 +10,11 @@
 			<h1 class="text-center">SUSAR_EU_v2</h1>
 			<ul>
 				<li class="">
-					<a class="" href="{{ asset('guide_utilisateur/guide_utilisateur.html') }}">Guide utilisateur</a>
+					<a class="" href="{{ asset('guide_utilisateur/guide_utilisateur.html') }}" target="_blank">Guide utilisateur</a>
 				</li>
 				{% if is_granted('ROLE_SUPER_ADMIN') %}
 					<li class="">
-						<a class="" href="{{ asset('guide_utilisateur/guide_utilisateur_administrateur.html') }}">Guide utilisateur administrateur</a>
+						<a class="" href="{{ asset('guide_utilisateur/guide_utilisateur_administrateur.html') }}" target="_blank">Guide utilisateur administrateur</a>
 					</li>
 				{% endif %}
 				{% if is_granted('ROLE_DMM_EVAL') or is_granted('ROLE_SURV_PILOTEVEC') %}
