@@ -6,6 +6,14 @@
 
 	{{ encore_entry_link_tags('type_eu_css') }}
 
+	<div class="p-3">
+		{% for message in app.flashes('success') %}
+			<div class="alert alert-success">
+				{{ message }}
+			</div>
+		{% endfor %}
+	</div>
+
 	<div class="container-fluid p-5">
 
 		<div class="container-fluid container-tab">
@@ -14,6 +22,9 @@
 					<button id="BtnCloseTab" class="btn btn-primary float-end my-3">Fermer cet onglet</button>
 				</div>
 			</div>
+
+			<div class="display-4 text-center my-4">Liste des follow-up pour le SUSAR {{ WW_id }}</div>
+
 			{% if Susars %}
 			
 				Nombre de lignes : {{ NbSusar }}

@@ -27,11 +27,12 @@ class AutresFUController extends AbstractController
             
             $Susars = $entityManager->getRepository(SusarEU::class)->findSusarByWorldWideId($susarSelect->getWorldWideId());
             $NbSusar = count($Susars);
-    
+            $WW_id = $susarSelect->getWorldWideId();
             return $this->render('autres_fu/liste_autres_fu.html.twig', [
                 'Susars' => $Susars,
                 // 'TousSusars' => $TousSusars, // Requête contenant les données à paginer
                 'NbSusar' => $NbSusar,
+                'WW_id' => $WW_id,
             ]);
         }
     }

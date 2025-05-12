@@ -295,8 +295,16 @@
 									{# pas de bouton Assessed without action #}
 									<div></div>
 								{% else %}
+									{% if app.request.attributes.get('_route') == 'app_liste_susar_eu' %}
+										{% set type_page_origine = 'PAGE_RECHERCHE_SUSARS' %}
+									{% elseif app.request.attributes.get('_route') == 'app_autres_FU' %}
+										{% set type_page_origine = 'PAGE_AUTRES_FU' %}
+									{% else %}
+										{% set type_page_origine = 'PAGE_RECHERCHE_SUSARS' %}
+									{% endif %}
+{# <a href="{{ path('app_awa_lst_SA_PT', {'idsusar': Susar.id, 'type_page_origine': type_page_origine}) }}" class="btn-access">Assessed without action</a> #}
 									<div class="btn-AWA">
-										<a href="{{ path('app_awa_lst_SA_PT',{'idsusar':Susar.id}) }}" class="btn-access">Assessed without action</a>
+										<a href="{{ path('app_awa_lst_SA_PT',{'idsusar':Susar.id, 'type_page_origine': type_page_origine}) }}" class="btn-access">Assessed without action</a>
 									</div>
 									{# <div class="btn-AWA">
 										<button class="btn-access btn-open-autre-fu" data-url="{{ path('app_awa_lst_SA_PT', {'idsusar': Susar.id}) }}">

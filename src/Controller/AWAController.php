@@ -24,8 +24,8 @@ class AWAController extends AbstractController
     // {
     //     $this->logger = $logger;
     // }
-    #[Route('/awa_lst_SA_PT/{idsusar}', name: 'app_awa_lst_SA_PT')]
-    public function lst_SA_PT(int $idsusar, ManagerRegistry $doctrine, Request $request): Response
+    #[Route('/awa_lst_SA_PT/{idsusar}/{type_page_origine}', name: 'app_awa_lst_SA_PT')]
+    public function lst_SA_PT(int $idsusar, string $type_page_origine, ManagerRegistry $doctrine, Request $request): Response
     {
         $entityManager = $doctrine->getManager();
         $Susar = $entityManager->getRepository(SusarEU::class)->findOneById($idsusar);
@@ -47,6 +47,7 @@ class AWAController extends AbstractController
             // on crée les évaluations
             return $this->redirectToRoute('app_awa_crea_eval', [
                 'idsusar' => $idsusar,
+                'type_page_origine' => $type_page_origine,
             ]);
         }
 
@@ -57,8 +58,8 @@ class AWAController extends AbstractController
             'nbIntSub' => $nbIntSub,
         ]);
     }
-    #[Route('/awa_crea_eval/{idsusar}', name: 'app_awa_crea_eval')]
-    public function Crea_AWA(int $idsusar, ManagerRegistry $doctrine, Request $request, LoggerInterface $logger, AuthenticationUtils $authenticationUtils): Response
+    #[Route('/awa_crea_eval/{idsusar}/{type_page_origine}', name: 'app_awa_crea_eval')]
+    public function Crea_AWA(int $idsusar, string $type_page_origine, ManagerRegistry $doctrine, Request $request, LoggerInterface $logger, AuthenticationUtils $authenticationUtils): Response
     {
         // $session = $request->getSession();
         $this->logger = $logger;
@@ -120,7 +121,15 @@ class AWAController extends AbstractController
             if ($evalCree) {
                 $entityManager->flush();
                 $this->addFlash('success', 'Votre évaluation a bien été prise en compte pour le susar ayant l\'idSusar ' . $idsusar . '.');
-                return $this->redirectToRoute('app_liste_susar_eu');
+                if ($type_page_origine === 'PAGE_RECHERCHE_SUSARS') {
+                    return $this->redirectToRoute('app_liste_susar_eu');
+                } elseif ($type_page_origine === 'PAGE_AUTRES_FU') {
+                    return $this->redirectToRoute('app_autres_FU', [
+                        'idsusar' => $idsusar,
+                    ]);
+                } else {
+                    return $this->redirectToRoute('app_liste_susar_eu');
+                }
             }
 
         } else {
@@ -129,8 +138,16 @@ class AWAController extends AbstractController
             $this->logger->error('Le susar ayant l\'idSusar suivant ' . $idsusar . ' n\'a pas de SubstancePt.');
         }
 
-
-        return $this->redirectToRoute('app_liste_susar_eu');
+        if ($type_page_origine === 'PAGE_RECHERCHE_SUSARS') {
+            return $this->redirectToRoute('app_liste_susar_eu');
+        } elseif ($type_page_origine === 'PAGE_AUTRES_FU') {
+            return $this->redirectToRoute('app_autres_FU', [
+                'idsusar' => $idsusar,
+            ]);
+        } else {
+            return $this->redirectToRoute('app_liste_susar_eu');
+        }
+        // return $this->redirectToRoute('app_liste_susar_eu');
         // return $this->render('awa/ok_pour_creation_eval.html.twig', [
         //     'idsusar' => $idsusar,
         //     'Susar' => $Susar,

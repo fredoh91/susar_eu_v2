@@ -15,6 +15,8 @@
 
 		<div class="container-fluid p-5">
 
+			<div class="display-4 text-center my-4">Liste des SUSARs</div>
+
 			{{form_start(form)}}
 			
 			<div class="row">
@@ -193,8 +195,6 @@
 				
 					Nombre de lignes : {{ NbSusar }}
 					<h3>Liste des SUSARs</h3>
-					{# {{dump(Susars)}} #}
-
 
 					{% include "_partials/_susar_eu_liste.html.twig" %}
 					
