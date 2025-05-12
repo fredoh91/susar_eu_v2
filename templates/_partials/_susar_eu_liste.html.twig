@@ -168,8 +168,12 @@
 										</table>
 									</div>
 								</div>
+
 								{# 6eme ligne #}
-								<div class="tab_med_hist">
+								<button class="btn btn-primary btn-toggle-MedHist" data-id="{{ Susar.id }}">Afficher les antécédents médicaux</button>
+
+								{# 7eme ligne #}
+								<div id="tab_med_hist_{{ Susar.id }}" class="tab_med_hist d-none">
 									<div class="table-responsive">
 										<table class="table-sticky">
 											<thead>
@@ -302,7 +306,7 @@
 									{% else %}
 										{% set type_page_origine = 'PAGE_RECHERCHE_SUSARS' %}
 									{% endif %}
-{# <a href="{{ path('app_awa_lst_SA_PT', {'idsusar': Susar.id, 'type_page_origine': type_page_origine}) }}" class="btn-access">Assessed without action</a> #}
+									{# <a href="{{ path('app_awa_lst_SA_PT', {'idsusar': Susar.id, 'type_page_origine': type_page_origine}) }}" class="btn-access">Assessed without action</a> #}
 									<div class="btn-AWA">
 										<a href="{{ path('app_awa_lst_SA_PT',{'idsusar':Susar.id, 'type_page_origine': type_page_origine}) }}" class="btn-access">Assessed without action</a>
 									</div>
@@ -311,10 +315,6 @@
 											Assessed without action
 										</button>
 									</div> #}
-
-
-
-
 								{% endif %}
 							</div>
 
