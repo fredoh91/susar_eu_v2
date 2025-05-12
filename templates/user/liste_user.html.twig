@@ -16,12 +16,14 @@
 					<tr>
 						<th scope="col">id_utilisateur</th>
 						<th scope="col">Nom</th>
-						<th scope="col">Prenom</th>
+						<th scope="col">Prénom</th>
 						<th scope="col">UserName</th>
-						<th scope="col">email</th>
-						<th scope="col">roles</th>
+						<th scope="col">e-mail</th>
+						<th scope="col">rôle(s)</th>
 						<th scope="col-2">password</th>
-						<th scope="col">DateCreation</th>
+						<th scope="col">Date création</th>
+						<th scope="col">Date désactivation</th>
+						<th scope="col">Date de dernière connexion</th>
 						<th scope="col">Affichage/modification</th>
 						<th scope="col">Modification du mot de passe</th>
 					</tr>
@@ -36,14 +38,23 @@
 							<td>{{ User.email|e }}</td>
 							<td>
 								<ul>
-								{% for role in User.roles %}
-									<li>{{ role|e }}</li>
-								{% endfor %}
-								
+									{% for role in User.roles %}
+										<li>{{ role|e }}</li>
+									{% endfor %}
 								</ul>
 							</td>
 							<td>{{ User.password|e }}</td>
 							<td>{{ User.DateCreation|format_datetime(locale='fr') }}</td>
+							{% if User.DateDesactivation is not null %}
+								<td>{{ User.DateDesactivation|format_datetime(locale='fr') }}</td>
+							{% else %}
+								<td>Actif</td>
+							{% endif %}
+							{% if User.DateDerniereConnexion is not null %}
+								<td>{{ User.DateDerniereConnexion|format_datetime(locale='fr') }}</td>
+							{% else %}
+								<td>Ne s'est jamais connecté</td>
+							{% endif %}
 							<td>
 								<a href="{{ path('app_modif_user', {'id': User.id}) }}" class="btn btn-warning">Modifier</a>
 							</td>
