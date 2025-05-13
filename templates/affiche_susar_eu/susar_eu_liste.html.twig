@@ -15,17 +15,17 @@
 
 		<div class="container-fluid p-5">
 
-			<div class="display-4 text-center my-4">Liste des SUSARs</div>
+			<div class="display-4 text-center mt-0 mb-4">Liste des SUSARs</div>
 
 			{{form_start(form)}}
 			
 			<div class="row">
 				<div class="col-2">
-					{{ form_label(form.dmmPoleChoice, 'DMM/Pôle :') }}
+					{{ form_label(form.dmmPoleChoice, 'DMM/Pôle') }}
 					{{ form_widget(form.dmmPoleChoice) }}
 				</div>
 				<div class="col-1">
-					{{ form_label(form.evaluateurChoice, 'Évaluateur :') }}
+					{{ form_label(form.evaluateurChoice, 'Évaluateur') }}
 					{{ form_widget(form.evaluateurChoice) }}
 				</div>
 				<div class="col-2">
@@ -35,23 +35,23 @@
 				<div class="col-2">
 				</div>
 				<div class="col-2">
-					{{ form_label(form.casArchive, 'Cas archivés (traités dans SUSAR_EU_v1) :') }}
+					{{ form_label(form.casArchive, 'Cas archivés (traités dans SUSAR_EU_v1)') }}
 					{{ form_widget(form.casArchive) }}
 				</div>
 			</div>
 
 			<div class="row">
 				<div class="col-2">
-					{{ form_label(form.specificcaseid, 'Num. BNPV :') }}
+					{{ form_label(form.specificcaseid, 'Num. BNPV') }}
 					{{ form_widget(form.specificcaseid) }}
 				</div>
 				<div class="col-2">
-					{{ form_label(form.idSusar, 'IdSUSAR :') }}
+					{{ form_label(form.idSusar, 'IdSUSAR') }}
 					{{ form_widget(form.idSusar) }}
 				</div>
 				<div class="col-1">
 				</div>
-				<div class="col-2">
+				<div class="col-3">
 					<div class="chbx_niv_grille">
 						<table class="chbx_niv_tableau">
 							<thead>
@@ -89,62 +89,60 @@
 					</div>
 				</div>
 
-				<div class="col-2">
-				</div>
-				<div class="col-2">
+				<div class="col-4">
 				</div>
 			</div>
 
 			<div class="row">
 				<div class="col-2">
-					{{ form_label(form.worldWide_id, 'world Wide id :') }}
+					{{ form_label(form.worldWide_id, 'world Wide id') }}
 					{{ form_widget(form.worldWide_id) }}
 				</div>
 				<div class="col-2">
-					{{ form_label(form.num_eudract, 'Num. EudraCT :') }}
+					{{ form_label(form.num_eudract, 'Num. EudraCT') }}
 					{{ form_widget(form.num_eudract) }}
 				</div>
 				<div class="col-2">
-					{{ form_label(form.sponsorstudynumb, 'Sponsor study num. :') }}
+					{{ form_label(form.sponsorstudynumb, 'Sponsor study num.') }}
 					{{ form_widget(form.sponsorstudynumb) }}
 				</div>
 				<div class="col-1">
-					{{ form_label(form.caseVersion, 'Case version :') }}
+					{{ form_label(form.caseVersion, 'Case version') }}
 					{{ form_widget(form.caseVersion) }}
 				</div>
 				<div class="col-2">
-					{{ form_label(form.debutDateImport, 'Début date import :') }}
+					{{ form_label(form.debutDateImport, 'Début date import') }}
 					{{ form_widget(form.debutDateImport) }}
 				</div>
 				<div class="col-2">
-					{{ form_label(form.finDateImport, 'Fin date import :') }}
+					{{ form_label(form.finDateImport, 'Fin date import') }}
 					{{ form_widget(form.finDateImport) }}
 				</div>
 			</div>
 
 			<div class="row">
 				<div class="col-2">
-					{{ form_label(form.substanceName, 'Substance :') }}
+					{{ form_label(form.substanceName, 'Substance') }}
 					{{ form_widget(form.substanceName) }}
 				</div>
 				<div class="col-1">
 				</div>
 				<div class="col-2">
-					{{ form_label(form.effetIndesirable, 'EI (Meddra PT) :') }}
+					{{ form_label(form.effetIndesirable, 'EI (Meddra PT)') }}
 					{{ form_widget(form.effetIndesirable) }}
 				</div>
 				<div class="col-1">
 				</div>
 				<div class="col-2">
-					{{ form_label(form.narratif, 'Narratif :') }}
+					{{ form_label(form.narratif, 'Narratif') }}
 					{{ form_widget(form.narratif) }}
 				</div>
 				<div class="col-1">
-					{{ form_label(form.casTraite, 'Cas traité :') }}
+					{{ form_label(form.casTraite, 'Cas traité') }}
 					{{ form_widget(form.casTraite) }}
 				</div>
 				<div class="col-2">
-					{{ form_label(form.assessment_outcome, 'Assessment outcome :') }}
+					{{ form_label(form.assessment_outcome, 'Assessment outcome') }}
 					{{ form_widget(form.assessment_outcome) }}
 				</div>
 				<div class="col-1">
@@ -154,19 +152,19 @@
 			<div class="row">
 
 				<div class="col-1">
-					{{ form_label(form.casIME, 'Cas IME : ') }}
+					{{ form_label(form.casIME, 'Cas IME') }}
 					{{ form_widget(form.casIME) }}
 				</div>
 				<div class="col-1">
-					{{ form_label(form.casDME, 'Cas DME : ') }}
+					{{ form_label(form.casDME, 'Cas DME') }}
 					{{ form_widget(form.casDME) }}
 				</div>
 				<div class="col-1">
-					{{ form_label(form.casEurope, 'Cas Europe : ') }}
+					{{ form_label(form.casEurope, 'Cas Europe') }}
 					{{ form_widget(form.casEurope) }}
 				</div>
 				<div class="col-1">
-					{{ form_label(form.type_saMS_Mono, 'saMS/Mono. : ') }}
+					{{ form_label(form.type_saMS_Mono, 'saMS/Mono.') }}
 					{{ form_widget(form.type_saMS_Mono) }}
 				</div>
 				<div class="col-5">

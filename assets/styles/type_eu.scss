@@ -4,6 +4,7 @@
 @use "mixins" as m;
 
 .page_liste_susar {
+  font-size: 0.8rem; /* Réduit la taille de la police à 90% de la taille par défaut */
   background-color: $Fond_liste_susar;
 }
 
@@ -22,7 +23,7 @@
   border-bottom: 2px solid #ccc; /* Séparation entre l'en-tête et le corps du tableau */
 }
 .chbx_niv_cell {
-  padding: 0;
+  padding: 8px;
   border: 1px solid #ccc; /* Lignes internes du tableau */
   vertical-align: middle; /* Centre verticalement le contenu de la cellule */
   height: 40px; /* Hauteur fixe pour toutes les cellules, ajustez selon vos besoins */
@@ -41,8 +42,10 @@
 .chbx_niv_contenu {
   display: flex;
   align-items: center;
-  height: 100%;
-  padding: 5px;
+    justify-content: space-between; /* Ajoute un espacement entre les éléments */
+    gap: 5px; /* Ajoute un espacement entre le label et la case à cocher */
+  // height: 100%;
+  // padding: 5px;
 }
 /* Ajoutez ces styles pour réinitialiser les marges et paddings des éléments du formulaire */
 .chbx_niv_contenu .form-group {
@@ -301,31 +304,31 @@
 }
 
 .tab_suspect_drug {
-  // @include m.lst-susar-contenu(tab_suspect_drug);
-  grid-area: tab_suspect_drug;
-  border: 1px solid #8f8f8f;
-  min-height: 5em; /* Hauteur minimale de 5em */
-  max-height: 10em; /* Hauteur maximale de 5 caractères */
-  overflow-y: auto; /* Scroller vertical si le contenu dépasse */
+  @include m.tab_PT_medHist(tab_suspect_drug);
+  // grid-area: tab_suspect_drug;
+  // border: 1px solid #8f8f8f;
+  // min-height: 5em; /* Hauteur minimale de 5em */
+  // max-height: 10em; /* Hauteur maximale de 5 caractères */
+  // overflow-y: auto; /* Scroller vertical si le contenu dépasse */
 }
 
 .tab_reaction_PT {
-  // @include m.lst-susar-contenu(tab_suspect_drug);
-  grid-area: tab_reaction_PT;
-  border: 1px solid #8f8f8f;
-  min-height: 5em; /* Hauteur minimale de 5em */
-  max-height: 10em; /* Hauteur maximale de 5 caractères */
-  overflow-y: auto; /* Scroller vertical si le contenu dépasse */
+  @include m.tab_PT_medHist(tab_reaction_PT);
+  // grid-area: tab_reaction_PT;
+  // border: 1px solid #8f8f8f;
+  // min-height: 5em; /* Hauteur minimale de 5em */
+  // max-height: 10em; /* Hauteur maximale de 5 caractères */
+  // overflow-y: auto; /* Scroller vertical si le contenu dépasse */
 }
 
 .tab_med_hist {
-  // @include m.lst-susar-contenu(tab_suspect_drug);
-  grid-area: tab_med_hist;
-  border: 1px solid #8f8f8f;
-  min-height: 5em; /* Hauteur minimale de 5em */
-  max-height: 10em; /* Hauteur maximale de 5 caractères */
-  overflow-y: auto; /* Scroller vertical si le contenu dépasse */
-  // line-height: 1em; /* Assure que chaque ligne occupe 1em */
+  @include m.tab_PT_medHist(tab_med_hist);
+  // grid-area: tab_med_hist;
+  // border: 1px solid #8f8f8f;
+  // min-height: 5em; /* Hauteur minimale de 5em */
+  // max-height: 10em; /* Hauteur maximale de 5 caractères */
+  // overflow-y: auto; /* Scroller vertical si le contenu dépasse */
+  // // line-height: 1em; /* Assure que chaque ligne occupe 1em */
 }
 
 .ConcluCas_lib {
@@ -399,15 +402,20 @@
     word-wrap: break-word; /* Coupe les mots trop longs pour éviter qu'ils débordent */
     padding: 8px 12px; /* Ajoute un espacement interne (padding) */
     text-align: left; /* Aligne le texte à gauche (optionnel) */
-    border: 1px solid #ddd; /* Ajoute une bordure pour mieux séparer les colonnes */
+    border: 1px solid #868686; /* Ajoute une bordure pour mieux séparer les colonnes */
+    padding: 4px 8px; /* Réduit le padding interne (haut/bas : 4px, gauche/droite : 8px) */
+    font-size: 0.85rem; /* Réduit la taille de la police */
+    line-height: 1.2; /* Ajuste l'espacement vertical du texte */
 }
-
+.table-sticky tr {
+    min-height: 1.5rem; /* Définit une hauteur minimale pour les lignes */
+}
 .sticky-column {
     position: sticky;
     left: 0; /* Fixe la colonne à gauche */
     z-index: 2; /* Assure que la colonne reste au-dessus des autres */
     background: rgba(255, 255, 255, 0.95); /* Ajoute un fond pour la colonne sticky */
-    border-right: 1px solid #ddd; /* Ajoute une bordure pour séparer la colonne */
+    border-right: 1px solid #868686; /* Ajoute une bordure pour séparer la colonne */
 }
 
 
@@ -530,6 +538,10 @@
 
 .btn-toggle-MedHist {
   grid-area: btn-toggle-MedHist;
+  display: flex; /* Active Flexbox */
+  align-items: center; /* Centre verticalement le contenu */
+  justify-content: center; /* Centre horizontalement le contenu (optionnel) */
+  height: 100%; /* Assure que le bouton occupe toute la hauteur disponible */
 }
 
 .btn-gray {

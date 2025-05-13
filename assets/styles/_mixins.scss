@@ -6,82 +6,87 @@
 
 // Libellés des différents champs grid de gauche
 @mixin lst-susar-grid-gauche-lib($grid-area) {
-    grid-area: $grid-area;
-    padding-left: 5%;
+  grid-area: $grid-area;
+  padding-left: 5%;
 }
 
 // Libellés des différents champs grid de droite
 @mixin lst-susar-grid-droite-lib($grid-area) {
-    grid-area: $grid-area;
-    text-align: right;
-    padding-right: 5%;
-    display: flex;
-    justify-content: end;
-    align-items: center;
+  grid-area: $grid-area;
+  text-align: right;
+  padding-right: 5%;
+  display: flex;
+  justify-content: end;
+  align-items: center;
 }
-
 
 // Contenu des différents champs sans border-right grid de gauche
 @mixin lst-susar-grid-gauche-contenu-tbl($grid-area) {
-    grid-area: $grid-area;
-    border-top: 1px solid;
-    border-bottom: 1px solid;
-    border-left: 1px solid;
-    background-color: $Fond_chp_lst_eval_susar;
+  grid-area: $grid-area;
+  border-top: 1px solid;
+  border-bottom: 1px solid;
+  border-left: 1px solid;
+  background-color: $Fond_chp_lst_eval_susar;
 }
 
 // Contenu des différents champs avec border-right grid de gauche
 @mixin lst-susar-grid-gauche-contenu-trbl($grid-area) {
-    grid-area: $grid-area;
-    border-top: 1px solid;
-    border-right: 1px solid;
-    border-bottom: 1px solid;
-    border-left: 1px solid;
-    background-color: $Fond_chp_lst_eval_susar;
+  grid-area: $grid-area;
+  border-top: 1px solid;
+  border-right: 1px solid;
+  border-bottom: 1px solid;
+  border-left: 1px solid;
+  background-color: $Fond_chp_lst_eval_susar;
 }
 
 // Contenu des différents champs grid de droite
 @mixin lst-susar-grid-droite-contenu($grid-area) {
-    grid-area: $grid-area;
-    border: 1px solid;
-    background-color: $Fond_chp_lst_eval_susar;
+  grid-area: $grid-area;
+  border: 1px solid;
+  background-color: $Fond_chp_lst_eval_susar;
 }
-
-
 
 // Libellés des différents champs grid de droite
 @mixin lst-susar-lib($grid-area) {
-    grid-area: $grid-area;
-    text-align: right;
-    padding-right: 5%;
-    display: flex;
-    justify-content: end;
-    align-items: center;
+  grid-area: $grid-area;
+  text-align: right;
+  padding-right: 5%;
+  display: flex;
+  justify-content: end;
+  align-items: center;
 }
 
 // Contenu des différents champs grid
 @mixin lst-susar-contenu($grid-area) {
-    grid-area: $grid-area;
-    border: 1px solid;
-    background-color: $Fond_chp_lst_eval_susar;
-    margin: 1%;
-    padding-left: 3%;
+  grid-area: $grid-area;
+  border: 1px solid;
+  background-color: $Fond_chp_lst_eval_susar;
+  margin: 1%;
+  padding-left: 3%;
 }
 
 // test scroll horizontal contenu des différents champs
 @mixin lst-susar-contenu-scroll($grid-area, $height) {
-    grid-area: $grid-area;
-    border: 1px solid;
-    background-color: $Fond_chp_lst_eval_susar;
-    margin: 1%;
-    // padding-left: 3%;
-    padding-inline-start: 3%;
-    height: $height; /* Fixe la hauteur à 3 caractères */
-    // min-height: 2em; /* Définit une hauteur minimale de 2 caractères */
-    overflow-x: auto; /* Ajoute un scroller horizontal si le contenu dépasse */
-    overflow-y: hidden; /* Désactive le scroller vertical */
-    white-space: nowrap; /* Empêche le contenu de passer à la ligne */
-    
+  grid-area: $grid-area;
+  border: 1px solid;
+  background-color: $Fond_chp_lst_eval_susar;
+  margin: 1%;
+  // padding-left: 3%;
+  padding-inline-start: 3%;
+  height: $height; /* Fixe la hauteur à 3 caractères */
+  // min-height: 2em; /* Définit une hauteur minimale de 2 caractères */
+  overflow-x: auto; /* Ajoute un scroller horizontal si le contenu dépasse */
+  overflow-y: hidden; /* Désactive le scroller vertical */
+  white-space: nowrap; /* Empêche le contenu de passer à la ligne */
+}
 
+// Contenu des différents champs grid
+@mixin tab_PT_medHist($grid-area) {
+  grid-area: $grid-area;
+  border: 1px solid #8f8f8f;
+  min-height: 5em; /* Hauteur minimale de 5em */
+  max-height: 10em; /* Hauteur maximale de 5 caractères */
+  overflow-y: auto; /* Scroller vertical si le contenu dépasse */
+  // line-height: 1em; /* Assure que chaque ligne occupe 1em */
 }
 
