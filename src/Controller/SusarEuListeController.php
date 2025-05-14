@@ -182,6 +182,26 @@ class SusarEuListeController extends AbstractController
                     $this->logger->info('liste_susar_eu - cas 7 - Export Excel');
                 }
 
+
+
+                // if (!$session->has('search_susar_eu')) {
+                //     // Il n'y a pas de variable 'search_susar_eu' dans la session
+                //     // - On l'initialise avec les valeurs par défaut
+                //     $session->set('search_susar_eu', $defaultSearchSusarEU);
+                //     // - On initialise la variable 'tri_search_susar_eu' avec les valeurs par défaut
+                //     $searchSusarEU = $defaultSearchSusarEU;
+                // } else {
+                //     $searchSusarEU = $session->get('search_susar_eu');
+                // }
+
+                // if (!$session->has('tri_search_susar_eu')) {
+                //     $session->set('tri_search_susar_eu', $defaultTriSearchSusarEU);
+                //     $triSearchSusarEU = $defaultTriSearchSusarEU;
+                // } else {
+                //     $triSearchSusarEU = $session->get('tri_search_susar_eu');
+                // }
+
+
                 return $this->redirectToRoute('app_export_excel_susar_eu_liste');
             }
 

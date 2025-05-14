@@ -5,6 +5,7 @@ namespace App\Controller;
 use DateTime;
 use DateTimeImmutable;
 use App\Entity\SusarEU;
+use App\Service\SusarEUQueryService;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
@@ -12,14 +13,20 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\ResponseHeaderBag;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\ExpressionLanguage\Expression;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[IsGranted(new Expression('is_granted("ROLE_DMM_EVAL") or is_granted("ROLE_SURV_PILOTEVEC")'))]
 class ExportExcelController extends AbstractController
 {
+
+    private $susarEUQueryService;
+
+    public function __construct(SusarEUQueryService $susarEUQueryService){
+        $this->susarEUQueryService = $susarEUQueryService;
+    }
 
     // #[Route('/export_excel_susar_eu_liste', name: 'app_export_excel_susar_eu_liste', methods: ['POST'])]
     #[Route('/export_excel_susar_eu_liste', name: 'app_export_excel_susar_eu_liste')]
@@ -33,14 +40,17 @@ class ExportExcelController extends AbstractController
 
 
         $session = $request->getSession();
-        
+        // dump($session);
         $searchSusarEU = $session->get('search_susar_eu');
         $triSearchSusarEU = $session->get('tri_search_susar_eu');
 
         // Retrieve the data
         if ($searchSusarEU) {
-            $susars = $entityManager->getRepository(SusarEU::class)
-                ->findBySearchSusarEuListe($searchSusarEU, $triSearchSusarEU);
+
+            // dd($this->susarEUQueryService)  ;
+            $susars = $this->susarEUQueryService->findBySearchSusarEuListe($searchSusarEU, $triSearchSusarEU);
+            // $susars = $entityManager->getRepository(SusarEU::class)
+            //     ->findBySearchSusarEuListe($searchSusarEU, $triSearchSusarEU);
         } else {
             $susars = $entityManager->getRepository(SusarEU::class)
                 ->findAllOrder($triSearchSusarEU);
@@ -59,13 +69,13 @@ class ExportExcelController extends AbstractController
         // }
         $sheet->setCellValue('A1', 'ID Susar_EU');
         $sheet->setCellValue('B1', 'WorldWide id');
-        $sheet->setCellValue('C1', 'Num. BNPV');
-        $sheet->setCellValue('D1', 'FU BNPV');
+        $sheet->setCellValue('C1', 'Case version');
+        $sheet->setCellValue('D1', 'EV_SafetyReportIdentifier');
         $sheet->setCellValue('E1', 'N° EudraCT');
         $sheet->setCellValue('F1', 'Sender');
         $sheet->setCellValue('G1', 'Pays survenue');
-        $sheet->setCellValue('H1', 'Status date');
-        $sheet->setCellValue('I1', 'Creation date');
+        $sheet->setCellValue('H1', 'Gateway date');
+        $sheet->setCellValue('I1', 'Date d\'import');
         $sheet->setCellValue('J1', 'Substance');
         $sheet->setCellValue('K1', 'Effet(s) indésirable(s)');
         $sheet->setCellValue('L1', 'Gravité');
@@ -77,29 +87,31 @@ class ExportExcelController extends AbstractController
         $sheet->setCellValue('R1', 'Évaluateur');
         $sheet->setCellValue('S1', 'Assessment outcome');
         $sheet->setCellValue('T1', 'Commentaire évaluation');
+        $sheet->setCellValue('U1', 'Lien ICSR');
 
         // Largeurs des colonnes
         $columnWidths = [
             'A' => 13,  // ID Susar_EU
             'B' => 40,  // WorldWide id
-            'C' => 17,  // Num. BNPV
-            'D' => 11,  // FU BNPV
+            'C' => 14,  // Case version
+            'D' => 27,  // EV_SafetyReportIdentifier
             'E' => 20,  // N° EudraCT
             'F' => 30,  // Sender
-            'G' => 18,  // Pays survenue
-            'H' => 16,  // Status date
-            'I' => 16,  // Creation date
+            'G' => 16,  // Pays survenue
+            'H' => 16,  // Gateway date
+            'I' => 16,  // Date d'import
             'J' => 50,  // Substance
             'K' => 50,  // Effet(s) indésirable(s)
             'L' => 55,  // Gravité
             'M' => 22,  // Niveau Classification
             'N' => 10,  // Évalué
-            'O' => 24,  // Type_saMS_Mono
-            'P' => 15,  // DMM
-            'Q' => 20,  // Pôle Court
-            'R' => 25,  // Évaluateur
+            'O' => 19,  // Type_saMS_Mono
+            'P' => 8,   // DMM
+            'Q' => 14,  // Pôle Court
+            'R' => 13,  // Évaluateur
             'S' => 85,  // Assessment outcome
             'T' => 70,  // Commentaire évaluation
+            'U' => 121,  // Lien ICSR
         ];
 
         foreach ($columnWidths as $column => $width) {
@@ -134,36 +146,36 @@ class ExportExcelController extends AbstractController
             $PT = '';
             $eiCount = 0;
             foreach ($EIs as $EI) {
-                // $PT .= $EI->getReactionmeddrapt() . ' (' . $EI->getCodereactionmeddrapt() . ')' . "\n";
+                // $PT .= $EI->getReactionListPT() . ' (' . $EI->getCodereactionmeddrapt() . ')' . "\n";
                 if ($PT !== '') {
                     $PT .= "\n";
                 }
-                $PT .= $EI->getReactionmeddrapt() . ' (' . $EI->getCodereactionmeddrapt() . ')';
+                $PT .= $EI->getReactionListPT() . ' (' . $EI->getCodereactionmeddrapt() . ')';
                 $eiCount++;
             }
 
 
             $sheet->setCellValue('A' . $row, $susar->getId());
             $sheet->setCellValue('B' . $row, $susar->getWorldWideId());
+            $sheet->setCellValue('C' . $row, $susar->getDLPVersion());
             // $sheet->setCellValue('B' . $row, $susar->getMasterId());
             // $sheet->setCellValue('C' . $row, $susar->getCaseid());
-            $sheet->setCellValue('C' . $row, $susar->getSpecificcaseid());
-            $sheet->setCellValue('D' . $row, $susar->getDLPVersion());
+            $sheet->setCellValue('D' . $row, $susar->getEVSafetyReportIdentifier());
             $sheet->setCellValue('E' . $row, $susar->getNumEudract());
-            $sheet->setCellValue('F' . $row, '');
+            $sheet->setCellValue('F' . $row, $susar->getSender());
             $sheet->setCellValue('G' . $row, $susar->getPaysSurvenue());
 
-            // Status date
-            if ($susar->getStatusdate() !== null) {
+            // Gateway date
+            if ($susar->getGatewayDate() !== null) {
                 // Create a DateTime object from the 'dd/mm/yyyy' format
-                $statusDate = $susar->getStatusdate();
+                $gatewayDate = $susar->getGatewayDate();
     
-                if ($statusDate) {
+                if ($gatewayDate) {
                     // Convert the DateTime object to Excel's serial date format
-                    $excelStatusDate = \PhpOffice\PhpSpreadsheet\Shared\Date::PHPToExcel($statusDate);
+                    $excelgatewayDate = \PhpOffice\PhpSpreadsheet\Shared\Date::PHPToExcel($gatewayDate);
     
                     // Set the cell value with the Excel date serial number
-                    $sheet->setCellValue('H' . $row, $excelStatusDate);
+                    $sheet->setCellValue('H' . $row, $excelgatewayDate);
     
                     // Apply the date format to the cell
                     $sheet->getStyle('H' . $row)
@@ -176,10 +188,10 @@ class ExportExcelController extends AbstractController
             }
 
 
-            // Creation date
-            if ($susar->getStatusdate() !== null) {
+            // Date d'import = date de creation
+            if ($susar->getCreatedAt() !== null) {
                 // Create a DateTime object from the 'dd/mm/yyyy' format
-                $creationDate = $susar->getCreationdate();
+                $creationDate = $susar->getCreatedAt();
     
                 if ($creationDate) {
                     // Convert the DateTime object to Excel's serial date format
@@ -290,6 +302,9 @@ class ExportExcelController extends AbstractController
             $sheet->setCellValue('T' . $row, $evalComm);
 
 
+            $sheet->setCellValue('U' . $row, $susar->getICSRFormLink());
+            // $sheet->setCellValue('U' . $row, 'Lien ICSR');
+            $sheet->getCell('U' . $row)->getHyperlink()->setUrl($susar->getICSRFormLink()); // Ajoute le lien hypertexte
 
             // Réglage de la hauteur de ligne
             // $maxValue = max($medicCount, $eiCount, $autreCount, $encoreUnAutreCount);
@@ -306,7 +321,7 @@ class ExportExcelController extends AbstractController
         ////////////////////////////////////
         
         // On met la premier ligne en gris
-        for($col = 'A'; $col != 'U'; $col++) {
+        for($col = 'A'; $col != 'V'; $col++) {
             $sheet->getStyle($col . '1')->getFill()
             ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
             ->getStartColor()->setARGB('D6DCE1');
