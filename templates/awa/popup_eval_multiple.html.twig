@@ -14,11 +14,21 @@
 
 
 
+{% set eval = '' %}
+{% for intAnsm in Susar.IntervenantSubstanceDMMs %}
+    {% if intAnsm.Evaluateur != null %}
+        {% set eval = eval ~ (eval != '' ? ' / ' : '') ~ intAnsm.Evaluateur %}
+    {% else %}
+        Non-attribué
+    {% endif %}
+{% endfor %}
+
 
 <div class="container">
     <p class="text-center text-warning fw-bold">SUSAR affecté à plusieurs évaluateurs</p>
     <p>Attention, ce SUSAR est affecté à plusieurs évaluateurs car la France est saMS pour plusieurs produits :</p>
-    <p><strong>évaluateur</strong></p>
+    {# <p><strong>évaluateur</strong></p> #}
+    <p><strong>{{ eval }}</strong></p>
     <p>Merci de :</p>
     <p>
         1) Réaliser votre évaluation pour votre substance active.<br><br>
