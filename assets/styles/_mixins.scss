@@ -65,10 +65,10 @@
   padding-left: 3%;
 }
 
-// test scroll horizontal contenu des différents champs
+
 @mixin lst-susar-contenu-scroll($grid-area, $height) {
   grid-area: $grid-area;
-  border: 1px solid;
+  border: 1px solid #000;
   background-color: $Fond_chp_lst_eval_susar;
   margin: 1%;
   // padding-left: 3%;
@@ -84,9 +84,14 @@
 @mixin tab_PT_medHist($grid-area) {
   grid-area: $grid-area;
   border: 1px solid #8f8f8f;
-  min-height: 5em; /* Hauteur minimale de 5em */
-  max-height: 10em; /* Hauteur maximale de 5 caractères */
-  overflow-y: auto; /* Scroller vertical si le contenu dépasse */
+  min-height: 9em; /* Hauteur minimale de 5em */
+  max-height: 9em; /* Hauteur maximale de 5 caractères */
+  // overflow-y: auto; /* Scroller vertical si le contenu dépasse */
   // line-height: 1em; /* Assure que chaque ligne occupe 1em */
+  // min-height: 200px; // ou la valeur souhaitée
+  // max-height: 250px;
+  // overflow-y: auto;
+  display: flex; // pour que le contenu prenne toute la hauteur
+  flex-direction: column;
 }
 

@@ -13,8 +13,6 @@
 
 								<div class="PaysSurvenue_lib fw-bold">Country</div>
 								<div class="PaysSurvenue">{{ Susar.PaysSurvenue|e }}</div>
-							
-								<div class="seriousness_lib fw-bold">Seriousness</div>
 
 								<div class="Prio_lib fw-bold">Classification</div>
 								<div class="Prio">{{ Susar.Priorisation|e }}</div>
@@ -50,16 +48,6 @@
 
 								<div class="age_lib fw-bold">age</div>
 								<div class="age">{{Susar.patientAge}}</div>
-
-								{# <div class="seriousness">{{Susar.seriousnessCriteria|raw}}</div> #}
-								<div class="seriousness">
-									{{ Susar.seriousnessCriteria|replace({
-										'Hospitalisation or prolongation of existing Hospitalisation': 'Hospitalisation',
-										'Persistent or significant Disability / Incapacity': 'Handicap',
-										'Congenital Anomaly / Birth defect': 'Congenital',
-										'Other medically important condition': 'Other'
-									})|raw }}
-								</div>
 
 								{% set eval = '' %}
 								{% for intAnsm in Susar.IntervenantSubstanceDMMs %}
@@ -109,6 +97,19 @@
 
 								<div class="WW_id_lib fw-bold">world wide id</div>
 								<div class="WW_id">{{ Susar.WorldWideId|e }}</div>
+							
+								<div class="seriousness_lib fw-bold">Seriousness</div>
+
+								{# <div class="seriousness">{{Susar.seriousnessCriteria|raw}}</div> #}
+								<div class="seriousness">
+									{{ Susar.seriousnessCriteria|replace({
+										'Hospitalisation or prolongation of existing Hospitalisation': 'Hospitalisation',
+										'Persistent or significant Disability / Incapacity': 'Handicap',
+										'Congenital Anomaly / Birth defect': 'Congenital',
+										'Other medically important condition': 'Other',
+										'<BR>': ' - '
+									})|e }}
+								</div>
 							</div>
 
 
@@ -133,9 +134,9 @@
 													{% if med.productcharacterization == 'Suspect' %}
 														<tr>
 															<td class="sticky-column">{{med.substancename}}</td>
-															<td>{{med.Maladie}}</td>
-															<td>{{med.DateDerniereAdminFormatDate|format_datetime(dateFormat='short', timeFormat='none', locale='fr')}}</td>
-															<td>{{med.StatutMedicApresEffet}}</td>
+															<td class="slidy-column">{{med.Maladie}}</td>
+															<td class="slidy-column">{{med.DateDerniereAdminFormatDate|format_datetime(dateFormat='short', timeFormat='none', locale='fr')}}</td>
+															<td class="slidy-column">{{med.StatutMedicApresEffet}}</td>
 														</tr>
 													{% endif %}
 												{% endfor %}
@@ -159,9 +160,9 @@
 												{% for PT in Susar.EffetsIndesirables %}
 													<tr>
 														<td class="sticky-column">{{PT.ReactionListPT}}</td>
-														<td>{{PT.DateFormatDate|format_datetime(dateFormat='short', timeFormat='none', locale='fr')}}</td>
-														<td>{{PT.Duration}}</td>
-														<td>{{PT.Outcome}}</td>
+														<td class="slidy-column">{{PT.DateFormatDate|format_datetime(dateFormat='short', timeFormat='none', locale='fr')}}</td>
+														<td class="slidy-column">{{PT.Duration}}</td>
+														<td class="slidy-column">{{PT.Outcome}}</td>
 													</tr>
 												{% endfor %}
 											</tbody>
@@ -187,8 +188,8 @@
 												{% for MedHist in Susar.medicalHistories %}
 														<tr>
 															<td class="sticky-column">{{MedHist.Disease}}</td>
-															<td>{{MedHist.Continuing}}</td>
-															<td>{{MedHist.Comment}}</td>
+															<td class="slidy-column">{{MedHist.Continuing}}</td>
+															<td class="slidy-column">{{MedHist.Comment}}</td>
 														</tr>
 												{% endfor %}
 											</tbody>
@@ -251,21 +252,6 @@
 								{# <div class="ConcluCas">{{ concluEvalCas|raw }}</div> #}
 								<div class="ConcluCas">{{ concluMaxEvalCas }}</div>
 
-								{% if app.request.attributes.get('_route') == 'app_liste_susar_eu' %}
-									{# <div class="btn-FU">
-										<a href="{{ path('app_autres_FU',{'idsusar':Susar.id}) }}" class="btn-access" target="_blank">Autres F.U.</a>
-									</div> #}
-
-									<div class="btn-FU">
-										<button class="btn-access btn-open-autre-fu" data-url="{{ path('app_autres_FU',{'idsusar':Susar.id}) }}">
-											Autres F.U.
-										</button>
-									</div>
-
-
-								{% else %}
-									<div></div>
-								{% endif %}
 								{# 5eme ligne #}
 								<div class="CommentConclu_lib fw-bold">Commentaire</div>
 
@@ -284,17 +270,25 @@
 								{# 6eme ligne #}
 								<div class="CommentConclu">{{ commentEvalCas|raw }}</div>
 
+								{# Bouton Autres FU #}
+								{% if app.request.attributes.get('_route') == 'app_liste_susar_eu' %}
+									{# <div class="btn-FU">
+										<a href="{{ path('app_autres_FU',{'idsusar':Susar.id}) }}" class="btn-access" target="_blank">Autres F.U.</a>
+									</div> #}
+
+									<div class="btn-FU">
+										{# <button class="btn-access btn-open-autre-fu" data-url="{{ path('app_autres_FU',{'idsusar':Susar.id}) }}"> #}
+										<button class="btn btn-primary btn-open-autre-fu" data-url="{{ path('app_autres_FU',{'idsusar':Susar.id}) }}">
+											Autres F.U.
+										</button>
+									</div>
 
 
-								{# <div class="btn-DetEval">
-									<a href="{{ path('app_detail_susar_eu_nb_intsub',{'idsusar':Susar.id}) }}" class="btn-access" target="_blank">Détail / Évaluation</a>
-								</div> #}
-								{# Ouverture de l'onglet détail/évaluation en JS #}
-								<div class="btn-DetEval">
-									<button class="btn-access btn-open-detail" data-url="{{ path('app_detail_susar_eu_nb_intsub', {'idsusar': Susar.id}) }}">
-										Détail / Évaluation
-									</button>
-								</div>
+								{% else %}
+									<div></div>
+								{% endif %}
+
+								{# Bouton AWA #}
 								{% if Susar.casSusarEuV1 == true %}
 									{# pas de bouton Assessed without action #}
 									<div></div>
@@ -308,7 +302,8 @@
 									{% endif %}
 									{# <a href="{{ path('app_awa_lst_SA_PT', {'idsusar': Susar.id, 'type_page_origine': type_page_origine}) }}" class="btn-access">Assessed without action</a> #}
 									<div class="btn-AWA">
-										<a href="{{ path('app_awa_lst_SA_PT',{'idsusar':Susar.id, 'type_page_origine': type_page_origine}) }}" class="btn-access">Assessed without action</a>
+										{# <a href="{{ path('app_awa_lst_SA_PT',{'idsusar':Susar.id, 'type_page_origine': type_page_origine}) }}" class="btn-access">Assessed without action</a> #}
+										<a href="{{ path('app_awa_lst_SA_PT',{'idsusar':Susar.id, 'type_page_origine': type_page_origine}) }}" class="btn btn-primary">Assessed without action</a>
 									</div>
 									{# <div class="btn-AWA">
 										<button class="btn-access btn-open-autre-fu" data-url="{{ path('app_awa_lst_SA_PT', {'idsusar': Susar.id}) }}">
@@ -316,6 +311,23 @@
 										</button>
 									</div> #}
 								{% endif %}
+
+
+								{# Bouton détail/évaluation #}
+								<div class="btn-DetEval">
+									{# <button class="btn-access btn-open-detail" data-url="{{ path('app_detail_susar_eu_nb_intsub', {'idsusar': Susar.id}) }}"> #}
+									<button class="btn btn-primary btn-open-detail" data-url="{{ path('app_detail_susar_eu_nb_intsub', {'idsusar': Susar.id}) }}">
+										Détail/Éval.
+									</button>
+								</div>
+								{# <div class="btn-DetEval">
+									<a href="{{ path('app_detail_susar_eu_nb_intsub',{'idsusar':Susar.id}) }}" class="btn-access" target="_blank">Détail / Évaluation</a>
+								</div> #}
+
+
+
+
+
 							</div>
 
 							<div class="container_susar_eu_bas">

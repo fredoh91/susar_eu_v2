@@ -42,8 +42,8 @@
 .chbx_niv_contenu {
   display: flex;
   align-items: center;
-    justify-content: space-between; /* Ajoute un espacement entre les éléments */
-    gap: 5px; /* Ajoute un espacement entre le label et la case à cocher */
+  justify-content: space-between; /* Ajoute un espacement entre les éléments */
+  gap: 5px; /* Ajoute un espacement entre le label et la case à cocher */
   // height: 100%;
   // padding: 5px;
 }
@@ -102,37 +102,35 @@
 /*** container liste susar_eu ***/
 /********************************/
 
-
 .container_susar_eu {
-  display: grid; 
-  grid-template-columns: 1fr 1fr; 
-  grid-template-rows: auto auto auto; 
-  gap: 0px 0px; 
-  grid-template-areas: 
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto auto auto;
+  gap: 0px 0px;
+  grid-template-areas:
     "container_susar_eu_haut container_susar_eu_haut"
     "container_susar_eu_gauche container_susar_eu_droite"
-    "container_susar_eu_bas container_susar_eu_bas"; 
+    "container_susar_eu_bas container_susar_eu_bas";
 }
 
-
-.container_susar_eu_haut {  
+.container_susar_eu_haut {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
   grid-template-rows: 3em 3em 3em;
   gap: 0px 0px;
   grid-auto-flow: row;
   grid-template-areas:
-    "NumEUDRA_CT_lib NumEUDRA_CT Sender_lib Sender PaysSurvenue_lib PaysSurvenue seriousness_lib Prio_lib Prio SamsMono_lib SamsMono id_susar_lib id_susar"
-    "population_lib population sex_lib sex age_lib age seriousness Eval_lib Eval DMM_lib DMM Pole_lib Pole"
-    "DtGateway_lib DtGateway CaseVersion_lib CaseVersion WW_id_lib WW_id . . . . . . .";
+    "NumEUDRA_CT_lib NumEUDRA_CT Sender_lib Sender PaysSurvenue_lib PaysSurvenue . Prio_lib Prio SamsMono_lib SamsMono id_susar_lib id_susar"
+    "population_lib population sex_lib sex age_lib age . Eval_lib Eval DMM_lib DMM Pole_lib Pole"
+    "DtGateway_lib DtGateway CaseVersion_lib CaseVersion WW_id_lib WW_id . seriousness_lib seriousness seriousness seriousness . .";
   grid-area: container_susar_eu_haut;
   border: 1px solid #8f8f8f;
-  
+
   /* Centrage vertical */
   align-items: center;
 }
 
-.container_susar_eu_gauche {  
+.container_susar_eu_gauche {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
   grid-template-rows: 1fr 1fr 2em 1fr;
@@ -147,28 +145,28 @@
   border: 1px solid #8f8f8f;
 }
 
-
-.container_susar_eu_droite {  
+.container_susar_eu_droite {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
   // grid-template-rows: 1fr 1fr 2em 1fr 2em 2em 1fr;
   grid-template-rows: auto auto auto auto auto auto auto;
   gap: 0px 0px;
   grid-auto-flow: row;
   grid-template-areas:
-    "ConcluCas_lib ConcluCas ConcluCas ConcluCas btn-FU ."
-    "CommentConclu_lib . EvaluateurCas_lib EvaluateurCas DtEval_lib DtEval"
-    "CommentConclu CommentConclu CommentConclu CommentConclu CommentConclu CommentConclu"
-    "CommentConclu CommentConclu CommentConclu CommentConclu CommentConclu CommentConclu"
-    ". btn-DetEval . . btn-AWA .";
+    "ConcluCas_lib ConcluCas_lib ConcluCas ConcluCas ConcluCas ConcluCas ConcluCas ConcluCas"
+    "CommentConclu_lib . EvaluateurCas_lib EvaluateurCas DtEval_lib DtEval_lib DtEval DtEval"
+    "CommentConclu CommentConclu CommentConclu CommentConclu CommentConclu CommentConclu CommentConclu CommentConclu"
+    "CommentConclu CommentConclu CommentConclu CommentConclu CommentConclu CommentConclu CommentConclu CommentConclu"
+    "CommentConclu CommentConclu CommentConclu CommentConclu CommentConclu CommentConclu CommentConclu CommentConclu"
+    "CommentConclu CommentConclu CommentConclu CommentConclu CommentConclu CommentConclu CommentConclu CommentConclu"
+    ". btn-FU . btn-AWA btn-AWA . btn-DetEval .";
   grid-area: container_susar_eu_droite;
   border: 1px solid #8f8f8f;
   align-items: center;
   padding: 10px;
 }
 
-
-.container_susar_eu_bas {  
+.container_susar_eu_bas {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
   grid-template-rows: 2em 1fr;
@@ -181,6 +179,10 @@
   border: 1px solid #8f8f8f;
 }
 
+/************************************/
+/*** champs dans le pavé de susar ***/
+/***        Grid supérieure       ***/
+/************************************/
 
 .NumEUDRA_CT_lib {
   @include m.lst-susar-lib(NumEUDRA_CT_lib);
@@ -210,8 +212,14 @@
 }
 .seriousness {
   // @include m.lst-susar-contenu(seriousness);
+  // grid-area: seriousness;
   @include m.lst-susar-contenu-scroll(seriousness, 3em);
 }
+
+// .seriousness-inside {
+//   // @include m.lst-susar-contenu(seriousness);
+//   @include m.lst-susar-contenu-scroll-sans-grid-area(3em);
+// }
 
 .Prio_lib {
   @include m.lst-susar-lib(Prio_lib);
@@ -239,44 +247,47 @@
 
 .population_lib {
   @include m.lst-susar-lib(population_lib);
-}  
+}
 .population {
   @include m.lst-susar-contenu(population);
-}  
+}
 
 .age_lib {
   @include m.lst-susar-lib(age_lib);
-}  
+}
 .age {
   @include m.lst-susar-contenu(age);
-}  
+}
 
 .sex_lib {
   @include m.lst-susar-lib(sex_lib);
-}  
+}
 .sex {
   @include m.lst-susar-contenu(sex);
-}  
+}
 
 .Eval_lib {
   @include m.lst-susar-lib(Eval_lib);
 }
 .Eval {
-  @include m.lst-susar-contenu(Eval);
+  // @include m.lst-susar-contenu(Eval);
+  @include m.lst-susar-contenu-scroll(Eval, 3em);
 }
 
 .DMM_lib {
   @include m.lst-susar-lib(DMM_lib);
 }
 .DMM {
-  @include m.lst-susar-contenu(DMM);
+  // @include m.lst-susar-contenu(DMM);
+  @include m.lst-susar-contenu-scroll(DMM, 3em);
 }
 
 .Pole_lib {
   @include m.lst-susar-lib(Pole_lib);
 }
 .Pole {
-  @include m.lst-susar-contenu(Pole);
+  // @include m.lst-susar-contenu(Pole);
+  @include m.lst-susar-contenu-scroll(Pole, 3em);
 }
 
 .DtGateway_lib {
@@ -303,40 +314,107 @@
   @include m.lst-susar-contenu-scroll(WW_id, 3em);
 }
 
+/************************************/
+/*** champs dans le pavé de susar ***/
+/***          Grid gauche         ***/
+/************************************/
+
+/******************************************************/
+/*** Tableaux : substance, PT, antécedants médicaux ***/
+/******************************************************/
+
 .tab_suspect_drug {
   @include m.tab_PT_medHist(tab_suspect_drug);
-  // grid-area: tab_suspect_drug;
-  // border: 1px solid #8f8f8f;
-  // min-height: 5em; /* Hauteur minimale de 5em */
-  // max-height: 10em; /* Hauteur maximale de 5 caractères */
-  // overflow-y: auto; /* Scroller vertical si le contenu dépasse */
 }
 
 .tab_reaction_PT {
   @include m.tab_PT_medHist(tab_reaction_PT);
-  // grid-area: tab_reaction_PT;
-  // border: 1px solid #8f8f8f;
-  // min-height: 5em; /* Hauteur minimale de 5em */
-  // max-height: 10em; /* Hauteur maximale de 5 caractères */
-  // overflow-y: auto; /* Scroller vertical si le contenu dépasse */
 }
 
 .tab_med_hist {
   @include m.tab_PT_medHist(tab_med_hist);
-  // grid-area: tab_med_hist;
-  // border: 1px solid #8f8f8f;
-  // min-height: 5em; /* Hauteur minimale de 5em */
-  // max-height: 10em; /* Hauteur maximale de 5 caractères */
-  // overflow-y: auto; /* Scroller vertical si le contenu dépasse */
-  // // line-height: 1em; /* Assure que chaque ligne occupe 1em */
 }
 
+/******************************************************************/
+/*** tables médicament, effet indésirable, antécédents médicaux ***/
+/******************************************************************/
+
+.table-responsive {
+  // min-height: 120px; // Hauteur minimale (à ajuster selon ton besoin)
+  // max-height: 350px; // Hauteur maximale (à ajuster selon ton besoin)
+  // min-height: 200px; // Hauteur minimale (à ajuster selon ton besoin)
+  // max-height: 250px; // Hauteur maximale (à ajuster selon ton besoin)
+  // overflow-y: auto;
+}
+
+.table-sticky {
+  // overflow-x: auto; /* Permet le défilement horizontal */
+  // display: block; /* Nécessaire pour activer le scroll */
+  max-width: 100%; /* Limite la largeur du tableau */
+  table-layout: fixed; /* Force les colonnes à avoir une largeur fixe */
+
+  // border-collapse: separate;
+  // border-spacing: 0;
+}
+
+.table-sticky th,
+.table-sticky td {
+  white-space: nowrap; /* Empêche le contenu de passer à la ligne */
+  // white-space: normal; /* Permet le retour à la ligne pour éviter les débordements */
+  // min-width: 150px;
+  overflow: hidden; /* Masque le contenu qui dépasse */
+  text-overflow: ellipsis; /* Ajoute "..." pour indiquer que le texte est tronqué */
+  max-width: 40ch; /* Limite la largeur à environ 40 caractères */
+  word-wrap: break-word; /* Coupe les mots trop longs pour éviter qu'ils débordent */
+  // padding: 8px 12px; /* Ajoute un espacement interne (padding) */
+  text-align: left; /* Aligne le texte à gauche (optionnel) */
+  border: 1px solid $Tab_lst_susar_bordure; /* Ajoute une bordure pour mieux séparer les colonnes */
+  padding: 4px 8px; /* Réduit le padding interne (haut/bas : 4px, gauche/droite : 8px) */
+  font-size: 0.85rem; /* Réduit la taille de la police */
+  line-height: 1.2; /* Ajuste l'espacement vertical du texte */
+}
+.table-sticky tr {
+  min-height: 1.5rem; /* Définit une hauteur minimale pour les lignes */
+}
+.sticky-column {
+  position: sticky;
+  left: 0; /* Fixe la colonne à gauche */
+  z-index: 2; /* Assure que la colonne reste au-dessus des autres */
+  background: $Tab_lst_susar_bckgrd_sticky_col; /* Ajoute un fond pour la colonne sticky */
+  border-right: 1px solid $Tab_lst_susar_bordure; /* Ajoute une bordure pour séparer la colonne */
+}
+.slidy-column {
+  background: $Tab_lst_susar_bckgrd_slidy_col; /* Ajoute un fond pour la colonne sticky */
+}
+.table-sticky thead tr {
+  background-color: #245682; // Couleur "primary" Bootstrap
+}
+
+.table-sticky th {
+  color: #fff; // Texte en blanc
+  background-color: #245682; // Fond bleu "primary"
+  font-weight: bold;
+}
+.table-sticky thead th {
+  position: sticky;
+  top: 0;
+  z-index: 3; // Plus élevé que les colonnes sticky pour éviter les recouvrements
+  background-color: #245682; // Pour garder le fond bleu même en sticky
+  color: #fff;
+}
+
+/************************************/
+/*** champs dans le pavé de susar ***/
+/***          Grid droite         ***/
+/************************************/
 .ConcluCas_lib {
   @include m.lst-susar-grid-droite-lib(ConcluCas_lib);
 }
 .ConcluCas {
   // @include m.lst-susar-grid-droite-contenu(ConcluCas);
   @include m.lst-susar-contenu-scroll(ConcluCas, 3em);
+  color: red;
+  font-weight: bold;
 }
 
 .DtEval_lib {
@@ -364,6 +442,10 @@
   // padding-inline-start: 3%;
 }
 
+/************************************/
+/*** champs dans le pavé de susar ***/
+/***        Grid inférieure       ***/
+/************************************/
 .lienICSR_lib {
   @include m.lst-susar-grid-droite-lib(lienICSR_lib);
 }
@@ -381,159 +463,29 @@
   overflow-y: auto; /* Affichage un ascenseur vertical si le contenu dépasse la hauteur */
   padding: 1%;
 }
-/******************************************************************/
-/*** tables médicament, effet indésirable, antécédents médicaux ***/
-/******************************************************************/
-.table-sticky {
-    overflow-x: auto; /* Permet le défilement horizontal */
-    display: block; /* Nécessaire pour activer le scroll */
-    max-width: 100%; /* Limite la largeur du tableau */
-    table-layout: fixed; /* Force les colonnes à avoir une largeur fixe */
-}
-
-.table-sticky th,
-.table-sticky td {
-    white-space: nowrap; /* Empêche le contenu de passer à la ligne */
-    // white-space: normal; /* Permet le retour à la ligne pour éviter les débordements */
-    // min-width: 150px;
-    overflow: hidden; /* Masque le contenu qui dépasse */
-    text-overflow: ellipsis; /* Ajoute "..." pour indiquer que le texte est tronqué */
-    max-width: 40ch; /* Limite la largeur à environ 40 caractères */
-    word-wrap: break-word; /* Coupe les mots trop longs pour éviter qu'ils débordent */
-    padding: 8px 12px; /* Ajoute un espacement interne (padding) */
-    text-align: left; /* Aligne le texte à gauche (optionnel) */
-    border: 1px solid #868686; /* Ajoute une bordure pour mieux séparer les colonnes */
-    padding: 4px 8px; /* Réduit le padding interne (haut/bas : 4px, gauche/droite : 8px) */
-    font-size: 0.85rem; /* Réduit la taille de la police */
-    line-height: 1.2; /* Ajuste l'espacement vertical du texte */
-}
-.table-sticky tr {
-    min-height: 1.5rem; /* Définit une hauteur minimale pour les lignes */
-}
-.sticky-column {
-    position: sticky;
-    left: 0; /* Fixe la colonne à gauche */
-    z-index: 2; /* Assure que la colonne reste au-dessus des autres */
-    background: rgba(255, 255, 255, 0.95); /* Ajoute un fond pour la colonne sticky */
-    border-right: 1px solid #868686; /* Ajoute une bordure pour séparer la colonne */
-}
-
-
-
-
-
-
-
-
-
-/**********************/
-/*** grid de gauche ***/
-/**********************/
-.suspectDrug_lib {
-  @include m.lst-susar-grid-gauche-lib(suspectDrug_lib);
-}  
-.suspectDrug {
-  @include m.lst-susar-grid-gauche-contenu-tbl(suspectDrug);
-}  
-
-.PT_outcome_lib {
-  @include m.lst-susar-grid-gauche-lib(PT_outcome_lib);
-}  
-.PT_outcome {
-  @include m.lst-susar-grid-gauche-contenu-trbl(PT_outcome);
-}  
-
-.indication_lib {
-  @include m.lst-susar-grid-gauche-lib(indication_lib);
-}  
-.indication {
-  @include m.lst-susar-grid-gauche-contenu-trbl(indication);
-}  
-
-.medicalHistory_lib {
-  @include m.lst-susar-grid-gauche-lib(medicalHistory_lib);
-}  
-.medicalHistory {
-  @include m.lst-susar-grid-gauche-contenu-trbl(medicalHistory);
-}  
-
-/**********************/
-/*** grid de droite ***/
-/**********************/
-
-.idSusar {
-  grid-area: idSusar;
-  text-align: right;
-  color: gray;
-  font-size: 0.8em;
-}  
-
-
-
-
-
-
-.numBNPV_lib {
-  @include m.lst-susar-grid-droite-lib(numBNPV_lib);
-}
-.numBNPV {
-  @include m.lst-susar-grid-droite-contenu(numBNPV);
-}
-
-.FU_BNPV_lib {
-  @include m.lst-susar-grid-droite-lib(FU_BNPV_lib);
-}
-.FU_BNPV {
-  @include m.lst-susar-grid-droite-contenu(FU_BNPV);
-}
-
-.DMM_Pole_lib {
-  @include m.lst-susar-grid-droite-lib(DMM_Pole_lib);
-}
-.DMM_Pole {
-  @include m.lst-susar-grid-droite-contenu(DMM_Pole);
-}
-
-.DtAiguil_lib {
-  @include m.lst-susar-grid-droite-lib(DtAiguil_lib);
-}
-.DtAiguil {
-  @include m.lst-susar-grid-droite-contenu(DtAiguil);
-}
-
-.SponsStudyNum_lib {
-  @include m.lst-susar-grid-droite-lib(SponsStudyNum_lib);
-}
-.SponsStudyNum {
-  @include m.lst-susar-grid-droite-contenu(SponsStudyNum);
-}
-
-.StudyTittle_lib {
-  @include m.lst-susar-grid-droite-lib(StudyTittle_lib);
-}
-.StudyTittle {
-  @include m.lst-susar-grid-droite-contenu(StudyTittle);
-}
-
-.narratif {
-  @include m.lst-susar-grid-droite-contenu(narratif);
-  height: 6em; /* On fixe la hauteur à 5 fois la hauteur d'une ligne de texte */
-  overflow-y: auto; /* Affichage un ascenseur vertical si le contenu dépasse la hauteur */
-}
 
 /**********************/
 /****** boutons *******/
 /**********************/
 .btn-FU {
   grid-area: btn-FU;
+  .btn {
+    font-size: 0.8rem; // ou 12px, selon ton besoin
+  }
 }
 
 .btn-AWA {
   grid-area: btn-AWA;
+  .btn {
+    font-size: 0.8rem; // ou 12px, selon ton besoin
+  }
 }
 
 .btn-DetEval {
   grid-area: btn-DetEval;
+  .btn {
+    font-size: 0.8rem; // ou 12px, selon ton besoin
+  }
 }
 
 .btn-toggle-MedHist {
@@ -542,21 +494,22 @@
   align-items: center; /* Centre verticalement le contenu */
   justify-content: center; /* Centre horizontalement le contenu (optionnel) */
   height: 100%; /* Assure que le bouton occupe toute la hauteur disponible */
+  font-size: 0.8rem; // ou 12px, selon ton besoin
 }
 
-.btn-gray {
-  background-color: #cccccc;
-  color: #333333;
-  border: none;
-  padding: 10px 20px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  margin: 4px 2px;
-  cursor: pointer;
-  border-radius: 4px;
-}
+// .btn-gray {
+//   background-color: #cccccc;
+//   color: #333333;
+//   border: none;
+//   padding: 10px 20px;
+//   text-align: center;
+//   text-decoration: none;
+//   display: inline-block;
+//   font-size: 16px;
+//   margin: 4px 2px;
+//   cursor: pointer;
+//   border-radius: 4px;
+// }
 
 .btn-gray:hover {
   background-color: #aaaaaa;
