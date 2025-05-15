@@ -4,21 +4,16 @@ namespace App\Controller;
 
 use DateTimeImmutable;
 use App\Entity\IntervenantSubstanceDMM;
-use App\Form\IntervenantSubstanceDMMType;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use App\Repository\IntervenantsANSMRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-// use App\Entity\IntervenantSubstanceDMMSubstance;
 use App\Form\IntervenantSubstanceDMM_detailType;
 use Symfony\Component\ExpressionLanguage\Expression;
-// use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
-
-// #[IsGranted(new Expression('is_granted("ROLE_DMFR_REF") or is_granted("ROLE_SURV_PILOTEVEC")'))]
 
 class IntervenantSubstanceController extends AbstractController
 {
@@ -28,7 +23,8 @@ class IntervenantSubstanceController extends AbstractController
     {
         $entityManager = $doctrine->getManager();
         $repos = $entityManager->getRepository(IntervenantSubstanceDMM::class);
-        $TousIntSub = $repos->findAllSortHL_SA();
+        // $TousIntSub = $repos->findAllSortHL_SA();
+        $TousIntSub = $repos->findAllSortHL_SA_sans_non_attribue();
         $nbActif = $repos->nbIntSub(false);
         $nbInactif = $repos->nbIntSub(true);
 
@@ -48,11 +44,9 @@ class IntervenantSubstanceController extends AbstractController
     {
         $entityManager = $doctrine->getManager();
         $IntSub = $entityManager->getRepository(IntervenantSubstanceDMM::class)->findIntSubById($id);
-        // $form = $this->createForm(IntervenantSubstanceDMMType::class, $IntSub);
-        
+
         return $this->render('intervenant_substance/liste_intervenant_substance_detail.html.twig', [
             'IntSub' => $IntSub,
-            // 'form' => $form->createView(),
         ]);
     }
 
@@ -62,44 +56,33 @@ class IntervenantSubstanceController extends AbstractController
     {
         $entityManager = $doctrine->getManager();
         $IntSub = $entityManager->getRepository(IntervenantSubstanceDMM::class)->findIntSubById($id);
-
-        $evaluateur = $IntSub->getEvaluateur();
-        $intervenant = $intervenantsRepository->findOneBy(['evaluateur' => $evaluateur]);
+        if (!$IntSub) {
+            $this->addFlash('error', "L'entité IntervenantSubstanceDMM avec l'ID {$id} n'existe pas.");
+            return $this->redirectToRoute('app_intervenant_substance');
+        }
         $idIntSub= $IntSub->getId();
-        if ($intervenant === null) {
+        // Récupère l'Intervenant ANSM lié à l'entité
+        $intervenant = $IntSub->getIntervenantANSM();
+
+        if (!$intervenant) {
             $this->addFlash(
-                        'error', 
-                        "Il y a un problème sur le nom de l'évaluateur ({$evaluateur}), contacter l'administrateur de BDD"
-                    );
+                'error',
+                "Aucun Intervenant ANSM n'est lié à cet intervenant/substance. Veuillez vérifier les données."
+            );
             return $this->redirectToRoute('app_intervenant_substance');
         }
 
-        // $form = $this->createForm(IntervenantSubstanceDMM_detailType::class, $IntSub);
-
-        // dump('Evaluateur : ',$evaluateur);
-        // dump('Intervenant : ', $intervenant);
-        // dump($intervenant->getPoleCourt(), 'Pole Court');
-
-
-
-        $form = $this->createForm(IntervenantSubstanceDMM_detailType::class, $IntSub, [
-            'evaluateur_choice' => $evaluateur ? "$evaluateur|{$intervenant->getDmm()}|{$intervenant->getPoleCourt()}" : null,
-            'dmm' => $intervenant ? $intervenant->getDmm() : '',
-            'pole_court' => $intervenant ? $intervenant->getPoleCourt() : '',
-            // 'idIntSub' => $idIntSub,
-        ]);
+        $form = $this->createForm(IntervenantSubstanceDMM_detailType::class, $IntSub);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             
             $dateNow = new DateTimeImmutable();
-            // $dateModif = new \DateTimeImmutable();
-            // $lastUsername = $authenticationUtils->getLastUsername();
+
             $user = $this->getUser(); // Récupère l'utilisateur connecté
             if ($user) {
                 $userName = $user->getUserName(); // Appelle la méthode getUserName() de l'entité User
-                // dd($userName); // Affiche le userName pour vérifier
             } else {
                 throw $this->createAccessDeniedException('Utilisateur non connecté.');
             }
@@ -121,23 +104,27 @@ class IntervenantSubstanceController extends AbstractController
 
             if($isExist && $inactif === false){
                 // cette substance existe déjà
-
                 $this->addFlash('error', 'La substance suivante existe déjà avec un statut "actif" : ' . $HL_SA);
 
                 return $this->render('intervenant_substance/liste_intervenant_substance_creation.html.twig', [
                     'IntSub' => $IntSub,
                     'form' => $form->createView(),
                 ]);
+            }  
+            // Récupère l'entité IntervenantANSM sélectionnée dans le formulaire
+            $intervenantANSM = $IntSub->getIntervenantANSM();
+
+            if ($intervenantANSM) {
+                $IntSub->setEvaluateur($intervenantANSM->getEvaluateur());
+                $IntSub->setDMM($intervenantANSM->getDMM());
+                $IntSub->setPoleCourt($intervenantANSM->getPoleCourt());
+                $IntSub->setPoleLong($intervenantANSM->getPoleLong());
+                $IntSub->setPoleTresCourt($intervenantANSM->getPoleTresCourt());
+            } else {
+                $this->addFlash('error', "Aucun Intervenant ANSM n'a été sélectionné.");
+                return $this->redirectToRoute('app_intervenant_substance');
             }
 
-            $newEvalua = explode("|", $formData["intervenant_substance_dmm_substances"]["evaluateur"])[0];
-
-            $newIntervenant = $intervenantsRepository->findOneBy(['evaluateur' => $newEvalua]);
-
-            $IntSub->setEvaluateur($newEvalua);
-            $IntSub->setDMM($newIntervenant->getDMM());
-            $IntSub->setPoleCourt($newIntervenant->getPoleCourt());
-            $IntSub->setPoleLong($newIntervenant->getPoleLong());
             $IntSub->setUpdatedAt($dateNow);
             $IntSub->setUserModif($userName);
 
@@ -159,11 +146,8 @@ class IntervenantSubstanceController extends AbstractController
                     $entityManager->persist($substance);
                 }
             }
-
             $entityManager->flush();
-
             return $this->redirectToRoute('app_intervenant_substance');
-        
         }
 
         return $this->render('intervenant_substance/liste_intervenant_substance_modif.html.twig', [
@@ -177,14 +161,9 @@ class IntervenantSubstanceController extends AbstractController
     public function liste_intervenant_substance_crea(ManagerRegistry $doctrine, IntervenantsANSMRepository $intervenantsRepository, Request $request, AuthenticationUtils $authenticationUtils): Response
     {
         $entityManager = $doctrine->getManager();
-        // $IntSub = $entityManager->getRepository(IntervenantSubstanceDMM::class)->findIntSubById($id);
         $IntSub = new IntervenantSubstanceDMM();
-        
-        $evaluateur = $IntSub->getEvaluateur();
-        // $intervenant = $intervenantsRepository->findOneBy(['evaluateur' => $evaluateur]);
 
         $form = $this->createForm(IntervenantSubstanceDMM_detailType::class, $IntSub);
-
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -192,10 +171,22 @@ class IntervenantSubstanceController extends AbstractController
             $formData = $request->request->all();
 
             $HL_SA = $formData['intervenant_substance_dmm_substances']['ActiveSubstanceHighLevel'];
-            $idIntSub = -1;
 
-            // dump($formData["intervenant_substance_dmm_substances"]);
-            // est ce que il n'existe pas déjà cette même substance dans la table IntervenantSubstanceDMMSubstance avec un status "actif" ?
+            // dd($formData['intervenant_substance_dmm_substances']['IntervenantANSM']);
+
+            $intervenantANSMId = $formData['intervenant_substance_dmm_substances']['IntervenantANSM'] ?? null;
+            $intervenantANSM = null;
+            if ($intervenantANSMId) {
+                $intervenantANSM = $intervenantsRepository->find($intervenantANSMId);
+            }
+
+            if (!$intervenantANSM) {
+                $this->addFlash('error', "L'intervenant ANSM sélectionné est introuvable.");
+                return $this->redirectToRoute('app_intervenant_substance');
+            }
+
+            $idIntSub = $intervenantANSM->getId();
+
             $isExist = $entityManager->getRepository(IntervenantSubstanceDMM::class)->isSubstanceExistActiv($HL_SA,$idIntSub);
 
             if($isExist){
@@ -209,30 +200,24 @@ class IntervenantSubstanceController extends AbstractController
             }
 
             $dateNow = new DateTimeImmutable();
-            // $dateModif = new \DateTimeImmutable();
-            // $lastUsername = $authenticationUtils->getLastUsername();
 
             $user = $this->getUser(); // Récupère l'utilisateur connecté
             if ($user) {
                 $userName = $user->getUserName(); // Appelle la méthode getUserName() de l'entité User
-                // dd($userName); // Affiche le userName pour vérifier
             } else {
                 throw $this->createAccessDeniedException('Utilisateur non connecté.');
             }
-            $newEvalua = explode("|", $formData["intervenant_substance_dmm_substances"]["evaluateur"])[0];
+
+            $IntSub->setEvaluateur($intervenantANSM->getEvaluateur());
+            $IntSub->setDMM($intervenantANSM->getDMM());
+            $IntSub->setPoleCourt($intervenantANSM->getPoleCourt());
+            $IntSub->setPoleLong($intervenantANSM->getPoleLong());
+            $IntSub->setPoleTresCourt($intervenantANSM->getPoleTresCourt());
             
-            $newIntervenant = $intervenantsRepository->findOneBy(['evaluateur' => $newEvalua]);
-            
-            $IntSub->setEvaluateur($newEvalua);
-            $IntSub->setDMM($newIntervenant->getDMM());
-            $IntSub->setPoleCourt($newIntervenant->getPoleCourt());
-            $IntSub->setPoleLong($newIntervenant->getPoleLong());
             $IntSub->setCreatedAt($dateNow);
             $IntSub->setUpdatedAt($dateNow);
             $IntSub->setUserCreate($userName);
             $IntSub->setUserModif($userName);
-
-            // dd($IntSub);
 
             // On traite manuellement les entités IntervenantSubstanceDMMSubstance liées
             foreach ($IntSub->getIntervenantSubstanceDMMSubstances() as $index => $substance) {

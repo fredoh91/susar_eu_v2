@@ -32,6 +32,19 @@ class IntervenantSubstanceDMMRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
+    /**
+     * @return IntervenantSubstanceDMM[] Returns an array of IntervenantSubstanceDMM objects
+     */
+    public function findAllSortHL_SA_sans_non_attribue(): array
+    {
+        return $this->createQueryBuilder('i')
+            ->andWhere('i.evaluateur != :val')
+            ->setParameter('val', '_non attribué_')
+            ->orderBy('i.active_substance_high_level', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 
     /**
      * @return IntervenantSubstanceDMM[] Returns an array of IntervenantSubstanceDMM objects

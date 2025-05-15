@@ -2,21 +2,15 @@
 // src/Form/IntervenantSubstanceDMM_detailType.php
 namespace App\Form;
 
-use App\Entity\SusarEU;
 use App\Entity\IntervenantsANSM;
-use App\Entity\ActiveSubstanceGrouping;
 use App\Entity\IntervenantSubstanceDMM;
 use Symfony\Component\Form\AbstractType;
 use App\Repository\IntervenantsANSMRepository;
-use App\Entity\IntervenantSubstanceDMMSubstance;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
-use Symfony\Component\Form\Extension\Core\Type\NumberType;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
 class IntervenantSubstanceDMM_detailType extends AbstractType
@@ -34,10 +28,6 @@ class IntervenantSubstanceDMM_detailType extends AbstractType
         $intervenantsChoices = $this->intervenantsRepository->getFormattedChoices();
         
         $builder
-            ->add('evaluateur', TextType::class,
-            [
-                'label' => 'Évaluateur : ',
-            ])
             ->add('ActiveSubstanceHighLevel', TextType::class,
             [
                 'label' => 'Substance active (High level) : ',
@@ -64,22 +54,20 @@ class IntervenantSubstanceDMM_detailType extends AbstractType
                 'placeholder' => false, // Ceci empêche Symfony d'ajouter une option vide supplémentaire   
             ])            
             ->add('AssociationDeSubstances')
-            ->add('evaluateur', ChoiceType::class, [
-                'choices' => $intervenantsChoices,
-                'choice_label' => function($choice, $key, $value) {
-                    return explode('|', $value)[0]; // Afficher seulement la première colonne
+            ->add('IntervenantANSM', EntityType::class, [
+                'class' => IntervenantsANSM::class, // L'entité liée
+                'choice_label' => function (IntervenantsANSM $intervenant) {
+                    return  $intervenant->getPrenom() . ' ' . 
+                            $intervenant->getNom() . ' (' . 
+                            $intervenant->getDMM() . '/' . 
+                            $intervenant->getPoleCourt() . ')'; // Affiche le nom et le prénom
                 },
-                'placeholder' => '',
-                'mapped' => false, // Ne pas mapper ce champ directement à l'entité
-                'data' => $options['evaluateur_choice'] // Définir la valeur initiale
-            ])
-            ->add('dmm', TextType::class, [
-                'attr' => ['readonly' => true], // Rend ce champ en lecture seule
-                'data' => $options['dmm'] // Définir la valeur initiale
-            ])
-            ->add('pole_court', TextType::class, [
-                'attr' => ['readonly' => true], // Rend ce champ en lecture seule
-                'data' => $options['pole_court'] // Définir la valeur initiale
+                'query_builder' => function (IntervenantsANSMRepository $repo) {
+                    return $repo->findActifsQryBld();
+                },
+                'label' => 'Intervenant ANSM :',
+                'attr' => ['readonly' => true], // Rend le champ en lecture seule
+                'required' => false, // Permet de ne pas rendre ce champ obligatoire
             ])
         ;
     }

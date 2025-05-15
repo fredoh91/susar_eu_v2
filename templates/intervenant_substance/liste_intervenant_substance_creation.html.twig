@@ -31,8 +31,6 @@
         <div class="no-asso-sub" id="no_asso_sub">
             {{ form_label(form.ActiveSubstanceHighLevel, 'High level substance name :') }}
             {{ form_widget(form.ActiveSubstanceHighLevel) }}
-            {# {{ form_label(form.ActiveSubstanceLowLevel, 'Low level substance name :') }}
-            {{ form_widget(form.ActiveSubstanceLowLevel) }} #}
         </div>
 
         {{ form_label(form.AssociationDeSubstances, 'Association de substance :') }}
@@ -52,30 +50,12 @@
 
         </div>
             <div class="row mb-3 mt-3">
-                <div class="col-1 text-end">
-                    {{ form_label(form.evaluateur, 'Éval. :') }}
+                <div class="col-2 text-end">
+                    {{ form_label(form.IntervenantANSM, 'Intervenant :') }}
                 </div>
-                <div class="col-2">
-                    {{ form_widget(form.evaluateur) }}
+                <div class="col-4">
+                    {{ form_widget(form.IntervenantANSM) }}
                 </div>
-                <div class="col-1"></div>
-                <div class="col-1 text-end">
-                    {{ form_label(form.dmm, 'DMM :') }}
-                </div>
-                <div class="col-2">
-                    {{ form_widget(form.dmm) }}
-                </div>
-                <div class="col-1"></div>
-                <div class="col-1 text-end">
-                    {{ form_label(form.pole_court, 'Pôle :') }}
-                </div>
-                <div class="col-2">
-                    {{ form_widget(form.pole_court) }}
-                </div>
-
-            </div>
-
-            <div class="row">
                 <div class="col-2 text-end">
                     {{ form_label(form.type_saMS_Mono, 'Type (saMS/Mono) :') }}
                 </div>
@@ -83,10 +63,9 @@
                     {{ form_widget(form.type_saMS_Mono) }}
                 </div>
 
-
-                <div class="col-7">
-
+                <div class="col-1">
                 </div>
+
                 <div class="col-1">
                     <button type="submit" class="btn btn-success" id="btn-enregistrer">Enregistrer</button>
                 </div>

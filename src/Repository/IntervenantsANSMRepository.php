@@ -2,9 +2,10 @@
 
 namespace App\Repository;
 
+use Doctrine\ORM\QueryBuilder;
 use App\Entity\IntervenantsANSM;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @extends ServiceEntityRepository<IntervenantsANSM>
@@ -24,21 +25,28 @@ class IntervenantsANSMRepository extends ServiceEntityRepository
     public function getFormattedChoices(): array
     {
         $qb = $this->createQueryBuilder('i')
-            ->select('i.evaluateur, i.DMM, i.pole_court')
-            ->orderBy('i.evaluateur', 'ASC')
+            ->select('i.id, i.evaluateur, i.DMM, i.pole_court, i.nom, i.prenom')
+            ->where('i.inactif = 0')
+            ->orderBy('i.OrdreTri', 'ASC')
             ->getQuery();
-
-        $results = $qb->getResult();
+        // dump($qb->getSQL());
+        $results = $qb->getArrayResult();
 
         $choices = [];
         foreach ($results as $result) {
+
+            // dump($result['prenom']);
+
             $evaluateur = $result['evaluateur'];
             $dmm = $result['DMM'];
             $poleCourt = $result['pole_court'];
+            $affichage = $result['prenom'] . ' ' . $result['nom'] . ' (' . $result['DMM'] . '/' . $result['pole_court'] . ')';
+            $id = $result['id'];
 
-            $choices[$evaluateur] = "$evaluateur|$dmm|$poleCourt";
+            // $choices[$evaluateur] = "$evaluateur|$dmm|$poleCourt|$affichage";
+            $choices[$id] = "$evaluateur|$dmm|$poleCourt|$affichage|$id";
         }
-
+        // dump($choices);
         return $choices;
     }
 
@@ -51,6 +59,18 @@ class IntervenantsANSMRepository extends ServiceEntityRepository
             ->getQuery()
             ->getOneOrNullResult();
     }
+    /**
+     * Permet de ne retourner que les intervenants actifs, nottamment pour le choix d'un intervenant a affecter a un IntervenantSubstanceDMM
+     *
+     * @return QueryBuilder
+     */
+    public function findActifsQryBld(): QueryBuilder
+    {
+        return $this->createQueryBuilder('i')
+            ->where('i.inactif = 0')
+            ->orderBy('i.OrdreTri', 'ASC');
+    }
+
 
     //    /**
     //     * @return IntervenantsANSM[] Returns an array of IntervenantsANSM objects

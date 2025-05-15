@@ -4,97 +4,110 @@
 
 {% block body %}
 
+{{ encore_entry_link_tags('int_sub_liste') }}
+
+<div class="page_liste_int-sub-dmm">
+    {% for message in app.flashes('error') %}
+        <div class="alert alert-danger">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    <div class="container-fluid p-5">
+
+            <div class="container-fluid">
+                {% if TousIntSub %}
+                    <p>
+                    Nombre de lignes totales : {{ NbIntSub }}
+                    </p>
+                    <p>
+                    Nombre de lignes "actives" : {{ NbActif }}
+                    </p>
+                    <p>
+                    Nombre de lignes "inactives" : {{ NbInactif }}
+                    </p>
+                    <h3>Liste des intervenants/substances</h3>
+                    <a href="{{ path('app_intervenant_substance_creation')}}" class="btn btn-primary me-2">Ajout d'une substance (ou association de sub.)</a>
+                    {# <table class="table table-dark table-striped"> #}
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">HL_SN</th>
+                                <th scope="col">Association</th>
+                                <th scope="col">LL_SA</th>
+                                <th scope="col">Type</th>
+                                <th scope="col">DMM/Pôle</th>
+                                <th scope="col">Eval.</th>
+                                <th scope="col">Inactif</th>
+                                <th scope="col">Modif.</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for IntSub in TousIntSub %}
+                                
+                                {% if IntSub.Inactif == true %}
+                                    {# <tr class="tab-bg-rouge-clair"> #}
+                                    <tr class="table-danger">
+                                {% else %}
+                                    {# <tr class="tab-bg-vert-clair"> #}
+                                    <tr class="table-success">
+                                {% endif %}
+                                {# <tr> #}
+                                    <th scope="row" style="width:20%;">
+                                        {# {{IntSub.ActiveSubstanceHighLevel}} #}
+                                        <a href="{{ path('app_intervenant_substance_detail',{'id':IntSub.Id}) }}" target="_blank">{{ IntSub.ActiveSubstanceHighLevel|e }}</a>
+                                    
+                                    </th>
+
+                                    {% if IntSub.AssociationDeSubstances == true %}
+                                        <td>Oui</td>
+                                        <td style="width:15%;">
+                                            <ul>
+                                                {% for LL_SA in IntSub.IntervenantSubstanceDMMSubstances %}
+                                                    <li>{{ LL_SA.ActiveSubstanceLowLevel }}</li>
+                                                {% endfor %}
+                                            </ul>
+                                        </td>
+                                    {% else %}
+                                        <td>Non</td>
+                                        <td></td>
+                                    {% endif %}
+                                    <td>{{IntSub.TypeSaMSMono}}</td>
+                                    <td style="width:25%;">{{IntSub.DMM}}-{{IntSub.PoleCourt}}</td>
+
+                                    <td style="width:15%;">
+                                        {% if IntSub.IntervenantANSM %}
+                                            {{ IntSub.IntervenantANSM.Prenom }} {{ IntSub.IntervenantANSM.Nom }} ({{ IntSub.evaluateur }})
+                                        {% else %}
+                                            <span class="text-danger">Aucun intervenant</span>
+                                        {% endif %}
+                                    </td>
+
+                                    <td>
+                                        {% if IntSub.Inactif == true %}
+                                            Inactif
+                                        {% else %}
+                                            Actif
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if IntSub.ActiveSubstanceHighLevel %}
+                                            <a href="{{ path('app_intervenant_substance_modif',{'id':IntSub.Id}) }}" class="btn btn-primary">Modifier</a>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% endif %}
+            </div>
+    </div>
+
+
+
+</div>
+    {# <div class="container-fluid p-5"> #}
 {# {{ encore_entry_link_tags('intervenant_substance_css') }} #}
 
-{% for message in app.flashes('error') %}
-    <div class="alert alert-danger">
-        {{ message }}
-    </div>
-{% endfor %}
-
-<div class="container-fluid p-5">
-
-		<div class="container-fluid">
-			{% if TousIntSub %}
-                <p>
-				Nombre de lignes totales : {{ NbIntSub }}
-                </p>
-                <p>
-				Nombre de lignes "actives" : {{ NbActif }}
-                </p>
-                <p>
-				Nombre de lignes "inactives" : {{ NbInactif }}
-                </p>
-				<h3>Liste des intervenants/substances</h3>
-				<a href="{{ path('app_intervenant_substance_creation')}}" class="btn btn-primary me-2">Ajout d'une substance (ou association de sub.)</a>
-                {# <table class="table table-dark table-striped"> #}
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th scope="col">HL_SN</th>
-                            <th scope="col">Association</th>
-                            <th scope="col">LL_SA</th>
-                            <th scope="col">Type</th>
-                            <th scope="col">DMM/Pôle</th>
-                            <th scope="col">Eval.</th>
-                            <th scope="col">Inactif</th>
-                            <th scope="col">Modif.</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-					    {% for IntSub in TousIntSub %}
-                            
-                            {% if IntSub.Inactif == true %}
-                                {# <tr class="tab-bg-rouge-clair"> #}
-                                <tr class="table-danger">
-                            {% else %}
-                                {# <tr class="tab-bg-vert-clair"> #}
-                                <tr class="table-success">
-                            {% endif %}
-                            {# <tr> #}
-                                <th scope="row">
-                                    {# {{IntSub.ActiveSubstanceHighLevel}} #}
-								    <a href="{{ path('app_intervenant_substance_detail',{'id':IntSub.Id}) }}" target="_blank">{{ IntSub.ActiveSubstanceHighLevel|e }}</a>
-                                
-                                </th>
-
-
-                                
-                                {# <th>{{IntSub.ActiveSubstanceHighLevel}}</th> #}
-                                {% if IntSub.AssociationDeSubstances == true %}
-                                    <td>Oui</td>
-                                    <td>
-                                        <ul>
-                                            {% for LL_SA in IntSub.IntervenantSubstanceDMMSubstances %}
-                                                <li>{{ LL_SA.ActiveSubstanceLowLevel }}</li>
-                                            {% endfor %}
-                                        </ul>
-                                    </td>
-                                {% else %}
-                                    <td>Non</td>
-                                    <td></td>
-                                {% endif %}
-                                <td>{{IntSub.TypeSaMSMono}}</td>
-                                <td>{{IntSub.DMM}} - {{IntSub.PoleCourt}}</td>
-                                <td>{{IntSub.Evaluateur}}</td>
-                                <td>
-                                    {% if IntSub.Inactif == true %}
-                                        Inactif
-                                    {% else %}
-                                        Actif
-                                    {% endif %}
-                                </td>
-                                <td>
-                                    {% if IntSub.ActiveSubstanceHighLevel %}
-                                        <a href="{{ path('app_intervenant_substance_modif',{'id':IntSub.Id}) }}" class="btn btn-primary">Modifier</a>
-                                    {% endif %}
-                                </td>
-                            </tr>
-					    {% endfor %}
-                    </tbody>
-                </table>
-			{% endif %}
-        </div>
-</div>
 
 {% endblock %}

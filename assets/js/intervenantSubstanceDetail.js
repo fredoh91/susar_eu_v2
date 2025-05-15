@@ -23,24 +23,27 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 // Gestion du menu déroulant évaluateur/DMM/pôle
-document.addEventListener('DOMContentLoaded', function() {
-    const evaluateurSelect = document.querySelector('#intervenant_substance_dmm_substances_evaluateur');
-    const dmmField = document.querySelector('#intervenant_substance_dmm_substances_dmm');
-    const poleCourtField = document.querySelector('#intervenant_substance_dmm_substances_pole_court');
+// document.addEventListener('DOMContentLoaded', function() {
+//     const evaluateurSelect = document.querySelector('#intervenant_substance_dmm_substances_evaluateur');
+//     const dmmField = document.querySelector('#intervenant_substance_dmm_substances_dmm');
+//     const poleCourtField = document.querySelector('#intervenant_substance_dmm_substances_pole_court');
+//     const idField = document.querySelector('#intervenant_substance_dmm_substances_id');
 
-    evaluateurSelect.addEventListener('change', function() {
-        const selectedOption = evaluateurSelect.options[evaluateurSelect.selectedIndex].value;
-        const columns = selectedOption.split('|');
-        
-        if (columns.length === 3) {
-            dmmField.value = columns[1];
-            poleCourtField.value = columns[2];
-        } else {
-            dmmField.value = '';
-            poleCourtField.value = '';
-        }
-    });
-});
+//     evaluateurSelect.addEventListener('change', function() {
+//         const selectedOption = evaluateurSelect.options[evaluateurSelect.selectedIndex].value;
+//         const columns = selectedOption.split('|');
+
+//         if (columns.length === 5) {
+//             dmmField.value = columns[1];
+//             poleCourtField.value = columns[2];
+//             idField.value = columns[4];
+//         } else {
+//             dmmField.value = '';
+//             poleCourtField.value = '';
+//             idField.value = '';
+//         }
+//     });
+// });
 
 
 // // Couleur du fond du formulaire selon que la case à cocher "Inactif" est cochée ou pas

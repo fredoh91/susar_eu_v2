@@ -12,12 +12,17 @@
 {% block body %}
 
 
-
-
 {% set eval = '' %}
 {% for intAnsm in Susar.IntervenantSubstanceDMMs %}
     {% if intAnsm.Evaluateur != null %}
-        {% set eval = eval ~ (eval != '' ? ' / ' : '') ~ intAnsm.Evaluateur %}
+        {# {% set eval = eval ~ (eval != '' ? ' / ' : '') ~ intAnsm.Evaluateur %} #}
+        {% set eval = eval ~ (eval != '' ? ' <BR> ' : '') ~ '&nbsp;- ' ~ 
+                                                            intAnsm.IntervenantANSM.Prenom  ~ ' ' ~ 
+                                                            intAnsm.IntervenantANSM.Nom ~ ' (' ~ 
+                                                            intAnsm.IntervenantANSM.evaluateur ~ ') / ' ~ 
+                                                            intAnsm.IntervenantANSM.DMM  ~ '-' ~ 
+                                                            intAnsm.IntervenantANSM.PoleCourt 
+                                                            %}        
     {% else %}
         Non-attribué
     {% endif %}
