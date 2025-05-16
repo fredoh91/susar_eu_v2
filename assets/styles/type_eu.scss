@@ -147,19 +147,19 @@
 
 .container_susar_eu_droite {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
   // grid-template-rows: 1fr 1fr 2em 1fr 2em 2em 1fr;
   grid-template-rows: auto auto auto auto auto auto auto;
   gap: 0px 0px;
   grid-auto-flow: row;
   grid-template-areas:
-    "ConcluCas_lib ConcluCas_lib ConcluCas ConcluCas ConcluCas ConcluCas ConcluCas ConcluCas"
-    "CommentConclu_lib . EvaluateurCas_lib EvaluateurCas DtEval_lib DtEval_lib DtEval DtEval"
-    "CommentConclu CommentConclu CommentConclu CommentConclu CommentConclu CommentConclu CommentConclu CommentConclu"
-    "CommentConclu CommentConclu CommentConclu CommentConclu CommentConclu CommentConclu CommentConclu CommentConclu"
-    "CommentConclu CommentConclu CommentConclu CommentConclu CommentConclu CommentConclu CommentConclu CommentConclu"
-    "CommentConclu CommentConclu CommentConclu CommentConclu CommentConclu CommentConclu CommentConclu CommentConclu"
-    ". btn-FU . btn-AWA btn-AWA . btn-DetEval .";
+    "ConcluCas_lib ConcluCas_lib ConcluCas ConcluCas ConcluCas ConcluCas ConcluCas ConcluCas ConcluCas"
+    "CommentConclu_lib . EvaluateurCas_lib EvaluateurCas DtEval_lib DtEval_lib DtEval DtEval ."
+    "CommentConclu CommentConclu CommentConclu CommentConclu CommentConclu CommentConclu CommentConclu CommentConclu CommentConclu"
+    "CommentConclu CommentConclu CommentConclu CommentConclu CommentConclu CommentConclu CommentConclu CommentConclu CommentConclu"
+    "CommentConclu CommentConclu CommentConclu CommentConclu CommentConclu CommentConclu CommentConclu CommentConclu CommentConclu"
+    "CommentConclu CommentConclu CommentConclu CommentConclu CommentConclu CommentConclu CommentConclu CommentConclu CommentConclu"
+    ". btn-FU . btn-AWA btn-AWA . btn-DetEval . .";
   grid-area: container_susar_eu_droite;
   border: 1px solid #8f8f8f;
   align-items: center;
@@ -295,7 +295,7 @@
 }
 .DtGateway {
   // @include m.lst-susar-contenu(DtGateway);
-  @include m.lst-susar-contenu-scroll(DtGateway, 3em);
+  @include m.lst-susar-contenu-centre(DtGateway, 3em);
 }
 
 .CaseVersion_lib {
@@ -303,7 +303,7 @@
 }
 .CaseVersion {
   // @include m.lst-susar-contenu(CaseVersion);
-  @include m.lst-susar-contenu-scroll(CaseVersion, 3em);
+  @include m.lst-susar-contenu-centre(CaseVersion, 3em);
 }
 
 .WW_id_lib {
@@ -339,13 +339,13 @@
 /*** tables médicament, effet indésirable, antécédents médicaux ***/
 /******************************************************************/
 
-.table-responsive {
+// .table-responsive {
   // min-height: 120px; // Hauteur minimale (à ajuster selon ton besoin)
   // max-height: 350px; // Hauteur maximale (à ajuster selon ton besoin)
   // min-height: 200px; // Hauteur minimale (à ajuster selon ton besoin)
   // max-height: 250px; // Hauteur maximale (à ajuster selon ton besoin)
   // overflow-y: auto;
-}
+// }
 
 .table-sticky {
   // overflow-x: auto; /* Permet le défilement horizontal */
@@ -437,8 +437,10 @@
 }
 .CommentConclu {
   @include m.lst-susar-grid-droite-contenu(CommentConclu);
-  min-height: 3em;
+  min-height: 6em;
   padding-left: 1%;
+  // height: 20em; /* On fixe la hauteur à 5 fois la hauteur d'une ligne de texte */
+  // overflow-y: auto; /* Affichage un ascenseur vertical si le contenu dépasse la hauteur */
   // padding-inline-start: 3%;
 }
 

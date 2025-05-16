@@ -80,6 +80,22 @@
   white-space: nowrap; /* Empêche le contenu de passer à la ligne */
 }
 
+@mixin lst-susar-contenu-centre($grid-area, $height) {
+  grid-area: $grid-area;
+  border: 1px solid #000;
+  background-color: $Fond_chp_lst_eval_susar;
+  margin: 1%;
+  // padding-left: 3%;
+  padding-inline-start: 3%;
+  height: $height; /* Fixe la hauteur à 3 caractères */
+  // min-height: 2em; /* Définit une hauteur minimale de 2 caractères */
+  // overflow-x: auto; /* Ajoute un scroller horizontal si le contenu dépasse */
+  overflow-y: hidden; /* Désactive le scroller vertical */
+  white-space: nowrap; /* Empêche le contenu de passer à la ligne */
+  display: flex;
+  align-items: center; // Centre verticalement le contenu
+}
+
 // Contenu des différents champs grid
 @mixin tab_PT_medHist($grid-area) {
   grid-area: $grid-area;

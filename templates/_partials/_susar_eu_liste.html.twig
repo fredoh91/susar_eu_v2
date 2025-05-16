@@ -124,8 +124,8 @@
 											<thead>
 												<tr>
 													<th class="sticky-column">Suspects/interacting</th>
-													<th>Indication</th>
 													<th>Start date</th>
+													<th>Indication</th>
 													<th>Action taken</th>
 												</tr>
 											</thead>
@@ -134,8 +134,8 @@
 													{% if med.productcharacterization == 'Suspect' %}
 														<tr>
 															<td class="sticky-column">{{med.substancename}}</td>
-															<td class="slidy-column">{{med.Maladie}}</td>
 															<td class="slidy-column">{{med.DateDerniereAdminFormatDate|format_datetime(dateFormat='short', timeFormat='none', locale='fr')}}</td>
+															<td class="slidy-column">{{med.Maladie}}</td>
 															<td class="slidy-column">{{med.StatutMedicApresEffet}}</td>
 														</tr>
 													{% endif %}
