@@ -192,14 +192,14 @@
 /************************************/
 
 .NumEUDRA_CT_lib {
-  @include m.lst-susar-lib(NumEUDRA_CT_lib);
+  @include m.lst-susar-lib(NumEUDRA_CT_lib, 3em);
 }
 .NumEUDRA_CT {
   @include m.lst-susar-contenu-scroll(NumEUDRA_CT, 3em);
 }
 
 .Sender_lib {
-  @include m.lst-susar-lib(Sender_lib);
+  @include m.lst-susar-lib(Sender_lib, 3em);
 }
 .Sender {
   // @include m.lst-susar-contenu(Sender);
@@ -207,7 +207,7 @@
 }
 
 .PaysSurvenue_lib {
-  @include m.lst-susar-lib(PaysSurvenue_lib);
+  @include m.lst-susar-lib(PaysSurvenue_lib, 3em);
 }
 .PaysSurvenue {
   // @include m.lst-susar-contenu(PaysSurvenue);
@@ -215,7 +215,7 @@
 }
 
 .seriousness_lib {
-  @include m.lst-susar-lib(seriousness_lib);
+  @include m.lst-susar-lib(seriousness_lib, 3em);
 }
 .seriousness {
   // @include m.lst-susar-contenu(seriousness);
@@ -229,7 +229,7 @@
 // }
 
 .Prio_lib {
-  @include m.lst-susar-lib(Prio_lib);
+  @include m.lst-susar-lib(Prio_lib, 3em);
 }
 .Prio {
   // @include m.lst-susar-contenu(Prio);
@@ -237,7 +237,7 @@
 }
 
 .SamsMono_lib {
-  @include m.lst-susar-lib(SamsMono_lib);
+  @include m.lst-susar-lib(SamsMono_lib, 3em);
 }
 .SamsMono {
   // @include m.lst-susar-contenu(SamsMono);
@@ -245,7 +245,7 @@
 }
 
 .id_susar_lib {
-  @include m.lst-susar-lib(id_susar_lib);
+  @include m.lst-susar-lib(id_susar_lib, 3em);
 }
 .id_susar {
   // @include m.lst-susar-contenu(id_susar);
@@ -253,28 +253,28 @@
 }
 
 .population_lib {
-  @include m.lst-susar-lib(population_lib);
+  @include m.lst-susar-lib(population_lib, 2em);
 }
 .population {
   @include m.lst-susar-contenu(population);
 }
 
-.age_lib {
-  @include m.lst-susar-lib(age_lib);
-}
-.age {
-  @include m.lst-susar-contenu(age);
-}
-
 .sex_lib {
-  @include m.lst-susar-lib(sex_lib);
+  @include m.lst-susar-lib(sex_lib, 2em);
 }
 .sex {
   @include m.lst-susar-contenu(sex);
 }
 
+.age_lib {
+  @include m.lst-susar-lib(age_lib, 2em);
+}
+.age {
+  @include m.lst-susar-contenu(age);
+}
+
 .Eval_lib {
-  @include m.lst-susar-lib(Eval_lib);
+  @include m.lst-susar-lib(Eval_lib, 3em);
 }
 .Eval {
   // @include m.lst-susar-contenu(Eval);
@@ -282,7 +282,7 @@
 }
 
 .DMM_lib {
-  @include m.lst-susar-lib(DMM_lib);
+  @include m.lst-susar-lib(DMM_lib, 3em);
 }
 .DMM {
   // @include m.lst-susar-contenu(DMM);
@@ -290,7 +290,7 @@
 }
 
 .Pole_lib {
-  @include m.lst-susar-lib(Pole_lib);
+  @include m.lst-susar-lib(Pole_lib, 3em);
 }
 .Pole {
   // @include m.lst-susar-contenu(Pole);
@@ -298,7 +298,7 @@
 }
 
 .DtGateway_lib {
-  @include m.lst-susar-lib(DtGateway_lib);
+  @include m.lst-susar-lib(DtGateway_lib, 2em);
 }
 .DtGateway {
   // @include m.lst-susar-contenu(DtGateway);
@@ -306,7 +306,7 @@
 }
 
 .CaseVersion_lib {
-  @include m.lst-susar-lib(CaseVersion_lib);
+  @include m.lst-susar-lib(CaseVersion_lib, 2em);
 }
 .CaseVersion {
   // @include m.lst-susar-contenu(CaseVersion);
@@ -314,7 +314,7 @@
 }
 
 .WW_id_lib {
-  @include m.lst-susar-lib(WW_id_lib);
+  @include m.lst-susar-lib(WW_id_lib, 3em);
 }
 .WW_id {
   // @include m.lst-susar-grid-droite-contenu(WW_id);
@@ -415,7 +415,7 @@
 /***          Grid droite         ***/
 /************************************/
 .ConcluCas_lib {
-  @include m.lst-susar-grid-droite-lib(ConcluCas_lib);
+  @include m.lst-susar-grid-droite-lib(ConcluCas_lib, 3em);
 }
 .ConcluCas {
   // @include m.lst-susar-grid-droite-contenu(ConcluCas);
@@ -425,14 +425,14 @@
 }
 
 .DtEval_lib {
-  @include m.lst-susar-grid-droite-lib(DtEval_lib);
+  @include m.lst-susar-grid-droite-lib(DtEval_lib, 3em);
 }
 .DtEval {
   // @include m.lst-susar-grid-droite-contenu(DtEval);
   @include m.lst-susar-contenu-scroll(DtEval, 3em);
 }
 .EvaluateurCas_lib {
-  @include m.lst-susar-grid-droite-lib(EvaluateurCas_lib);
+  @include m.lst-susar-grid-droite-lib(EvaluateurCas_lib, 3em);
 }
 .EvaluateurCas {
   // @include m.lst-susar-grid-droite-contenu(EvaluateurCas);
@@ -476,7 +476,7 @@
 /***        Grid inférieure       ***/
 /************************************/
 .lienICSR_lib {
-  @include m.lst-susar-grid-droite-lib(lienICSR_lib);
+  @include m.lst-susar-grid-droite-lib(lienICSR_lib, 3em);
 }
 .lienICSR {
   @include m.lst-susar-grid-droite-contenu(lienICSR);

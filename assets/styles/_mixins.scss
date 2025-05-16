@@ -11,13 +11,15 @@
 }
 
 // Libellés des différents champs grid de droite
-@mixin lst-susar-grid-droite-lib($grid-area) {
+@mixin lst-susar-grid-droite-lib($grid-area, $height) {
   grid-area: $grid-area;
   text-align: right;
   padding-right: 5%;
   display: flex;
   justify-content: end;
-  align-items: center;
+  // align-items: center;
+  align-items: flex-start;
+  height: $height;
 }
 
 
@@ -48,14 +50,27 @@
 }
 
 // Libellés des différents champs grid de droite
-@mixin lst-susar-lib($grid-area) {
+@mixin lst-susar-lib($grid-area, $height) {
   grid-area: $grid-area;
   text-align: right;
   padding-right: 5%;
   display: flex;
   justify-content: end;
-  align-items: center;
+  // align-items: center;
+  align-items: flex-start;
+  // border: 1px solid red;
+  height: $height;
 }
+
+// // Libellés des différents champs grid de droite
+// @mixin lst-susar-lib($grid-area) {
+//   grid-area: $grid-area;
+//   display: flex;
+//   justify-content: end;
+//   align-items: flex-start;
+//   height: 100px;
+//   border: 1px solid red;
+// }
 
 // Contenu des différents champs grid
 @mixin lst-susar-contenu($grid-area) {
@@ -74,7 +89,7 @@
   margin: 1%;
   // padding-left: 3%;
   padding-inline-start: 3%;
-  height: $height; /* Fixe la hauteur à 3 caractères */
+  height: $height;
   // min-height: 2em; /* Définit une hauteur minimale de 2 caractères */
   overflow-x: auto; /* Ajoute un scroller horizontal si le contenu dépasse */
   overflow-y: hidden; /* Désactive le scroller vertical */

@@ -35,7 +35,7 @@
 								<div class="population_lib fw-bold">Population</div>
 								<div class="population">{{Susar.patientagegroup}}</div>
 
-								<div class="sex_lib fw-bold">sexe</div>
+								<div class="sex_lib fw-bold">Sexe</div>
 								<div class="sex">
 									{% if Susar.patientSex == 'F' %}
 										Femme
@@ -46,7 +46,7 @@
 									{% endif %}
 								</div>
 
-								<div class="age_lib fw-bold">age</div>
+								<div class="age_lib fw-bold">Age</div>
 								<div class="age">{{Susar.patientAge}}</div>
 
 								{% set eval = '' %}
@@ -240,7 +240,9 @@
 										{% set commentEvalCas = commentEvalCas ~ eval.Comments ~ '<br>' %}
 									{% endif %}
 
-									{% set evaluateurEvalCas = evaluateurEvalCas ~ eval.userModif ~ '<br>' %}
+									{% if eval.userModif not in evaluateurEvalCas %}
+										{% set evaluateurEvalCas = evaluateurEvalCas ~ eval.userModif ~ '<br>' %}
+									{% endif %}									
 								{% endfor %}
 
 								{# Si tous les commentaires sont "Assessed without action automatic" et qu'il n'y a pas de commentaires non vides, on met uniquement ce texte dans commentEvalCas #}
@@ -255,7 +257,7 @@
 								{# 5eme ligne #}
 
 
-								<div class="EvaluateurCas_lib fw-bold">Evalué par</div>
+								<div class="EvaluateurCas_lib fw-bold">Évalué par</div>
 								<div class="EvaluateurCas">{{ evaluateurEvalCas|raw }}</div>
 
 								<div class="DtEval_lib fw-bold">Date d'évaluation</div>
@@ -266,13 +268,13 @@
 										{# Non-évalué #}
 									{% endif %}
 								</div>
-								{# 6eme ligne #}
 
+								{# 6eme ligne #}
 								<div class="CommentConclu_bloc">
 									<div class="CommentConclu_lib fw-bold">Commentaire</div>
-
 									<div class="CommentConclu">{{ commentEvalCas|raw }}</div>
 								</div>
+
 								{# 7eme ligne #}
 								{# Bouton Autres FU #}
 								{% if app.request.attributes.get('_route') == 'app_liste_susar_eu' %}
@@ -327,11 +329,6 @@
 								{# <div class="btn-DetEval">
 									<a href="{{ path('app_detail_susar_eu_nb_intsub',{'idsusar':Susar.id}) }}" class="btn-access" target="_blank">Détail / Évaluation</a>
 								</div> #}
-
-
-
-
-
 							</div>
 
 							<div class="container_susar_eu_bas">
