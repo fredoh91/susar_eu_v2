@@ -447,6 +447,7 @@
   display: flex;
   justify-content: flex-start;
   align-items: center;
+  margin-bottom: 0.3em; // Pour ne pas coller le texte du libellé au bord
 }
 .CommentConclu {
   // @include m.lst-susar-grid-droite-contenu(CommentConclu);
