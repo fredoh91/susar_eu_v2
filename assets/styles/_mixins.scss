@@ -20,6 +20,7 @@
   align-items: center;
 }
 
+
 // Contenu des différents champs sans border-right grid de gauche
 @mixin lst-susar-grid-gauche-contenu-tbl($grid-area) {
   grid-area: $grid-area;

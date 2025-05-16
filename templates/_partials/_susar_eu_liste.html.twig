@@ -253,7 +253,6 @@
 								<div class="ConcluCas">{{ concluMaxEvalCas }}</div>
 
 								{# 5eme ligne #}
-								<div class="CommentConclu_lib fw-bold">Commentaire</div>
 
 
 								<div class="EvaluateurCas_lib fw-bold">Evalué par</div>
@@ -268,8 +267,13 @@
 									{% endif %}
 								</div>
 								{# 6eme ligne #}
-								<div class="CommentConclu">{{ commentEvalCas|raw }}</div>
 
+								<div class="CommentConclu_bloc">
+									<div class="CommentConclu_lib fw-bold">Commentaire</div>
+
+									<div class="CommentConclu">{{ commentEvalCas|raw }}</div>
+								</div>
+								{# 7eme ligne #}
 								{# Bouton Autres FU #}
 								{% if app.request.attributes.get('_route') == 'app_liste_susar_eu' %}
 									{# <div class="btn-FU">
