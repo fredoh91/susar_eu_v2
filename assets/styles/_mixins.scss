@@ -73,12 +73,13 @@
 // }
 
 // Contenu des différents champs grid
-@mixin lst-susar-contenu($grid-area) {
+@mixin lst-susar-contenu($grid-area, $height) {
   grid-area: $grid-area;
   border: 1px solid;
   background-color: $Fond_chp_lst_eval_susar;
   margin: 1%;
   padding-left: 3%;
+  height: $height;
 }
 
 

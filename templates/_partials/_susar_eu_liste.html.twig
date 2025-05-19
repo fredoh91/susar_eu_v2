@@ -5,7 +5,7 @@
 						<div class="container_susar_eu">
 							<div class="container_susar_eu_haut">
 								{# 1ere ligne #}
-								<div class="NumEUDRA_CT_lib fw-bold">N° EudraCT</div>
+								<div class="NumEUDRA_CT_lib fw-bold">N° EUCT</div>
 								<div class="NumEUDRA_CT">{{ Susar.NumEudract|e }}</div>
 
 								<div class="Sender_lib fw-bold">Sender</div>
@@ -83,10 +83,10 @@
 								<div class="Pole">{{ pole }}</div>
 
 								{# 3eme ligne #}
-								<div class="DtGateway_lib fw-bold">Gateway date</div>
+								<div class="DtGateway_lib fw-bold">Date</div>
 								<div class="DtGateway">
 									{% if Susar.GatewayDate != null %}
-										{{ Susar.GatewayDate|format_datetime(dateFormat='medium', timeFormat='none', locale='fr') }}
+										{{ Susar.GatewayDate|format_datetime(dateFormat='short', timeFormat='none', locale='fr') }}
 									{% else %}
 										---
 									{% endif %}
@@ -95,7 +95,7 @@
 								<div class="CaseVersion_lib fw-bold">Case version</div>
 								<div class="CaseVersion">{{ Susar.DLPVersion|e }}</div>
 
-								<div class="WW_id_lib fw-bold">world wide id</div>
+								<div class="WW_id_lib fw-bold">ID cas</div>
 								<div class="WW_id">{{ Susar.WorldWideId|e }}</div>
 							
 								<div class="seriousness_lib fw-bold">Seriousness</div>
@@ -263,7 +263,7 @@
 								<div class="DtEval_lib fw-bold">Date d'évaluation</div>
 								<div class="DtEval">
 									{% if Susar.dateEvaluation != null %}
-										{{ Susar.dateEvaluation|format_datetime(dateFormat='medium', timeFormat='none', locale='fr') }}
+										{{ Susar.dateEvaluation|format_datetime(dateFormat='short', timeFormat='none', locale='fr') }}
 									{% else %}
 										{# Non-évalué #}
 									{% endif %}
@@ -272,7 +272,7 @@
 								{# 6eme ligne #}
 								<div class="CommentConclu_bloc">
 									<div class="CommentConclu_lib fw-bold">Commentaire</div>
-									<div class="CommentConclu">{{ commentEvalCas|raw }}</div>
+									<div class="CommentConclu">{{ commentEvalCas|raw|nl2br }}</div>
 								</div>
 
 								{# 7eme ligne #}

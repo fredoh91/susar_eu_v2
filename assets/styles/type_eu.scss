@@ -162,7 +162,7 @@
   //   ". btn-FU . btn-AWA btn-AWA . btn-DetEval .";
   grid-template-areas:
     "ConcluCas_lib ConcluCas_lib ConcluCas ConcluCas ConcluCas ConcluCas ConcluCas ConcluCas"
-    "EvaluateurCas_lib EvaluateurCas DtEval_lib DtEval_lib DtEval DtEval . ."
+    "EvaluateurCas_lib EvaluateurCas_lib EvaluateurCas . DtEval_lib DtEval_lib DtEval DtEval"
     "CommentConclu_bloc CommentConclu_bloc CommentConclu_bloc CommentConclu_bloc CommentConclu_bloc CommentConclu_bloc CommentConclu_bloc CommentConclu_bloc"
     "CommentConclu_bloc CommentConclu_bloc CommentConclu_bloc CommentConclu_bloc CommentConclu_bloc CommentConclu_bloc CommentConclu_bloc CommentConclu_bloc"
     "CommentConclu_bloc CommentConclu_bloc CommentConclu_bloc CommentConclu_bloc CommentConclu_bloc CommentConclu_bloc CommentConclu_bloc CommentConclu_bloc"
@@ -253,24 +253,24 @@
 }
 
 .population_lib {
-  @include m.lst-susar-lib(population_lib, 2em);
+  @include m.lst-susar-lib(population_lib, 3em);
 }
 .population {
-  @include m.lst-susar-contenu(population);
+  @include m.lst-susar-contenu(population, 3em);
 }
 
 .sex_lib {
-  @include m.lst-susar-lib(sex_lib, 2em);
+  @include m.lst-susar-lib(sex_lib, 3em);
 }
 .sex {
-  @include m.lst-susar-contenu(sex);
+  @include m.lst-susar-contenu(sex, 3em);
 }
 
 .age_lib {
-  @include m.lst-susar-lib(age_lib, 2em);
+  @include m.lst-susar-lib(age_lib, 3em);
 }
 .age {
-  @include m.lst-susar-contenu(age);
+  @include m.lst-susar-contenu(age, 3em);
 }
 
 .Eval_lib {
@@ -298,19 +298,19 @@
 }
 
 .DtGateway_lib {
-  @include m.lst-susar-lib(DtGateway_lib, 2em);
+  @include m.lst-susar-lib(DtGateway_lib, 3em);
 }
 .DtGateway {
   // @include m.lst-susar-contenu(DtGateway);
-  @include m.lst-susar-contenu-centre(DtGateway, 3em);
+  @include m.lst-susar-contenu(DtGateway, 3em);
 }
 
 .CaseVersion_lib {
-  @include m.lst-susar-lib(CaseVersion_lib, 2em);
+  @include m.lst-susar-lib(CaseVersion_lib, 3em);
 }
 .CaseVersion {
   // @include m.lst-susar-contenu(CaseVersion);
-  @include m.lst-susar-contenu-centre(CaseVersion, 3em);
+  @include m.lst-susar-contenu(CaseVersion, 3em);
 }
 
 .WW_id_lib {
@@ -454,6 +454,8 @@
   border: 1px solid;
   background-color: $Fond_chp_lst_eval_susar;
   min-height: 6em;
+  max-height: 10em;         // Hauteur maximale à 10em
+  overflow-y: auto;         // Scroller vertical si le contenu dépasse
   padding-left: 1%;
   width: 100%; // pour que le texte prenne toute la largeur si besoin
   // height: 20em; /* On fixe la hauteur à 5 fois la hauteur d'une ligne de texte */
