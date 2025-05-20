@@ -31,7 +31,12 @@ class SearchSusarEU
     private ?string $narratif = null;
     private ?string $pays_survenue = null;
     private ?\DateTimeInterface $dateAiguillage = null;
+    private ?\DateTimeInterface $GatewayDate = null;
+    private ?\DateTimeInterface $debutGatewayDate = null;
+    private ?\DateTimeInterface $finGatewayDate = null;
     private ?\DateTimeInterface $dateImport = null;
+    private ?\DateTimeInterface $debutDateImport = null;
+    private ?\DateTimeInterface $finDateImport = null;
     private ?int $NbMedicSuspect = null;
     private ?string $patientAgeGroup = null;
     private ?float $patientAge = null;
@@ -49,11 +54,11 @@ class SearchSusarEU
     private ?\DateTimeImmutable $createdAt = null;
     private ?\DateTimeImmutable $updatedAt = null;
     private ?IntervenantSubstanceDMM $intervenantSubstanceDMMs = null;
+    private ?string $IntervenantANSM = null;
     private ?string $dmmPoleChoice = null;
-    private ?string $evaluateurChoice = null;
+    private ?string $evaluateurAttribue = null;
+    private ?string $evaluateurEvaluation = null;
     private ?SubstancePt $substancePts = null;
-    private ?\DateTimeInterface $debutDateImport = null;
-    private ?\DateTimeInterface $finDateImport = null;
     // private ?SubstancePtEval $substancePtEvals = null;
     private ?bool $niveau1 = true;
     private ?bool $niveau2a = true;
@@ -808,7 +813,7 @@ class SearchSusarEU
 
     /**
      * Get the value of dmmPoleChoice
-     */ 
+     */
     public function getDmmPoleChoice()
     {
         return $this->dmmPoleChoice;
@@ -818,7 +823,7 @@ class SearchSusarEU
      * Set the value of dmmPoleChoice
      *
      * @return  self
-     */ 
+     */
     public function setDmmPoleChoice($dmmPoleChoice)
     {
         $this->dmmPoleChoice = $dmmPoleChoice;
@@ -827,21 +832,21 @@ class SearchSusarEU
     }
 
     /**
-     * Get the value of evaluateurChoice
-     */ 
-    public function getEvaluateurChoice()
+     * Get the value of evaluateurAttribue
+     */
+    public function getEvaluateurAttribue()
     {
-        return $this->evaluateurChoice;
+        return $this->evaluateurAttribue;
     }
 
     /**
-     * Set the value of evaluateurChoice
+     * Set the value of evaluateurAttribue
      *
      * @return  self
-     */ 
-    public function setEvaluateurChoice($evaluateurChoice)
+     */
+    public function setEvaluateurAttribue($evaluateurAttribue)
     {
-        $this->evaluateurChoice = $evaluateurChoice;
+        $this->evaluateurAttribue = $evaluateurAttribue;
 
         return $this;
     }
@@ -857,7 +862,7 @@ class SearchSusarEU
 
         return $this;
     }
-    
+
     public function getFinDateImport(): ?\DateTimeInterface
     {
         return $this->finDateImport;
@@ -869,11 +874,11 @@ class SearchSusarEU
 
         return $this;
     }
-        
+
 
     /**
      * Get the value of effetIndesirable
-     */ 
+     */
     public function getEffetIndesirable()
     {
         return $this->effetIndesirable;
@@ -883,14 +888,14 @@ class SearchSusarEU
      * Set the value of effetIndesirable
      *
      * @return  self
-     */ 
+     */
     public function setEffetIndesirable($effetIndesirable)
     {
         $this->effetIndesirable = $effetIndesirable;
 
         return $this;
     }
-    
+
     /**
      * permet d'afficher un objet SearchSusarEU avec un dump()
      *
@@ -901,14 +906,17 @@ class SearchSusarEU
         $properties = get_object_vars($this);
         $string = '';
         foreach ($properties as $key => $value) {
+            if ($value instanceof \DateTimeInterface) {
+                $value = $value->format('Y-m-d H:i:s');
+            }
             $string .= sprintf('%s=%s, ', $key, $value);
         }
         return sprintf('SearchSusarEU(%s)', rtrim($string, ', '));
-    } 
+    }
 
     /**
      * Get the value of niveau1
-     */ 
+     */
     public function getNiveau1()
     {
         return $this->niveau1;
@@ -918,7 +926,7 @@ class SearchSusarEU
      * Set the value of niveau1
      *
      * @return  self
-     */ 
+     */
     public function setNiveau1($niveau1)
     {
         $this->niveau1 = $niveau1;
@@ -928,7 +936,7 @@ class SearchSusarEU
 
     /**
      * Get the value of niveau2a
-     */ 
+     */
     public function getNiveau2a()
     {
         return $this->niveau2a;
@@ -938,7 +946,7 @@ class SearchSusarEU
      * Set the value of niveau2a
      *
      * @return  self
-     */ 
+     */
     public function setNiveau2a($niveau2a)
     {
         $this->niveau2a = $niveau2a;
@@ -948,7 +956,7 @@ class SearchSusarEU
 
     /**
      * Get the value of niveau2b
-     */ 
+     */
     public function getNiveau2b()
     {
         return $this->niveau2b;
@@ -958,7 +966,7 @@ class SearchSusarEU
      * Set the value of niveau2b
      *
      * @return  self
-     */ 
+     */
     public function setNiveau2b($niveau2b)
     {
         $this->niveau2b = $niveau2b;
@@ -968,7 +976,7 @@ class SearchSusarEU
 
     /**
      * Get the value of niveau2c
-     */ 
+     */
     public function getNiveau2c()
     {
         return $this->niveau2c;
@@ -978,7 +986,7 @@ class SearchSusarEU
      * Set the value of niveau2c
      *
      * @return  self
-     */ 
+     */
     public function setNiveau2c($niveau2c)
     {
         $this->niveau2c = $niveau2c;
@@ -989,7 +997,7 @@ class SearchSusarEU
 
     /**
      * Get the value of casTraite
-     */ 
+     */
     public function getCasTraite(): ?string
     {
         return $this->casTraite;
@@ -999,17 +1007,17 @@ class SearchSusarEU
      * Set the value of casTraite
      *
      * @return  self
-     */ 
+     */
     public function setCasTraite(?string $casTraite)
     {
         $this->casTraite = $casTraite;
-        
+
         return $this;
     }
-    
+
     /**
      * Get the value of casArchive
-     */ 
+     */
     public function getCasArchive()
     {
         return $this->casArchive;
@@ -1019,17 +1027,17 @@ class SearchSusarEU
      * Set the value of casArchive
      *
      * @return  self
-     */ 
+     */
     public function setCasArchive($casArchive)
     {
         $this->casArchive = $casArchive;
 
         return $this;
     }
-    
+
     /**
      * Get the value of assessment_outcome
-     */ 
+     */
     public function getAssessmentOutcome(): ?string
     {
         return $this->assessment_outcome;
@@ -1039,7 +1047,7 @@ class SearchSusarEU
      * Set the value of assessment_outcome
      *
      * @return  self
-     */ 
+     */
     public function setAssessmentOutcome(?string $assessment_outcome)
     {
         $this->assessment_outcome = $assessment_outcome;
@@ -1049,7 +1057,7 @@ class SearchSusarEU
 
     /**
      * Get the value of caseVersion
-     */ 
+     */
     public function getCaseVersion(): ?string
     {
         return $this->caseVersion;
@@ -1059,7 +1067,7 @@ class SearchSusarEU
      * Set the value of caseVersion
      *
      * @return  self
-     */ 
+     */
     public function setCaseVersion(?string $caseVersion)
     {
         $this->caseVersion = $caseVersion;
@@ -1069,7 +1077,7 @@ class SearchSusarEU
 
     /**
      * Get the value of casIME
-     */ 
+     */
     public function getCasIME(): ?string
     {
         return $this->casIME;
@@ -1079,7 +1087,7 @@ class SearchSusarEU
      * Set the value of casIME
      *
      * @return  self
-     */ 
+     */
     public function setCasIME(?string $casIME)
     {
         $this->casIME = $casIME;
@@ -1089,7 +1097,7 @@ class SearchSusarEU
 
     /**
      * Get the value of casDME
-     */ 
+     */
     public function getCasDME(): ?string
     {
         return $this->casDME;
@@ -1099,7 +1107,7 @@ class SearchSusarEU
      * Set the value of casDME
      *
      * @return  self
-     */ 
+     */
     public function setCasDME(?string $casDME)
     {
         $this->casDME = $casDME;
@@ -1109,7 +1117,7 @@ class SearchSusarEU
 
     /**
      * Get the value of casEurope
-     */ 
+     */
     public function getCasEurope(): ?string
     {
         return $this->casEurope;
@@ -1119,7 +1127,7 @@ class SearchSusarEU
      * Set the value of casEurope
      *
      * @return  self
-     */ 
+     */
     public function setCasEurope(?string $casEurope)
     {
         $this->casEurope = $casEurope;
@@ -1141,4 +1149,104 @@ class SearchSusarEU
         return $this;
     }
 
+
+    /**
+     * Get the value of IntervenantANSM
+     */
+    public function getIntervenantANSM()
+    {
+        return $this->IntervenantANSM;
+    }
+
+    /**
+     * Set the value of IntervenantANSM
+     *
+     * @return  self
+     */
+    public function setIntervenantANSM($IntervenantANSM)
+    {
+        $this->IntervenantANSM = $IntervenantANSM;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of evaluateurEvaluation
+     */
+    public function getEvaluateurEvaluation()
+    {
+        return $this->evaluateurEvaluation;
+    }
+
+    /**
+     * Set the value of evaluateurEvaluation
+     *
+     * @return  self
+     */
+    public function setEvaluateurEvaluation($evaluateurEvaluation)
+    {
+        $this->evaluateurEvaluation = $evaluateurEvaluation;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of GatewayDate
+     */
+    public function getGatewayDate()
+    {
+        return $this->GatewayDate;
+    }
+
+    /**
+     * Set the value of GatewayDate
+     *
+     * @return  self
+     */
+    public function setGatewayDate($GatewayDate)
+    {
+        $this->GatewayDate = $GatewayDate;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of debutGatewayDate
+     */
+    public function getDebutGatewayDate()
+    {
+        return $this->debutGatewayDate;
+    }
+
+    /**
+     * Set the value of debutGatewayDate
+     *
+     * @return  self
+     */
+    public function setDebutGatewayDate($debutGatewayDate)
+    {
+        $this->debutGatewayDate = $debutGatewayDate;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of finGatewayDate
+     */
+    public function getFinGatewayDate()
+    {
+        return $this->finGatewayDate;
+    }
+
+    /**
+     * Set the value of finGatewayDate
+     *
+     * @return  self
+     */
+    public function setFinGatewayDate($finGatewayDate)
+    {
+        $this->finGatewayDate = $finGatewayDate;
+
+        return $this;
+    }
 }

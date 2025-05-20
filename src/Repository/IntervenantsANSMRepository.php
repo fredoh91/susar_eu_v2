@@ -71,6 +71,46 @@ class IntervenantsANSMRepository extends ServiceEntityRepository
             ->orderBy('i.OrdreTri', 'ASC');
     }
 
+    // /**
+    //  * Undocumented function
+    //  *
+    //  * @return \Doctrine\ORM\QueryBuilder
+    //  */
+    // public function findAllGroupByIdentityQryBld(): QueryBuilder
+    // {
+    //     return $this->createQueryBuilder('i')
+    //         ->select('i.prenom, i.nom, i.evaluateur')
+    //         ->groupBy('i.prenom, i.nom, i.evaluateur')
+    //         ->orderBy('i.nom', 'ASC')
+    //         ->addOrderBy('i.prenom', 'ASC')
+    //         ->addOrderBy('i.evaluateur', 'ASC');
+    // }
+
+    /**
+     * Undocumented function
+     *
+     * @return array
+     */
+    public function getAllUserChoices(): array
+    {
+        $qb = $this->createQueryBuilder('i')
+            ->select('i.prenom, i.nom, i.evaluateur')
+            ->groupBy('i.prenom, i.nom, i.evaluateur')
+            // ->orderBy('i.nom', 'ASC')
+            // ->addOrderBy('i.prenom', 'ASC')
+            ->addOrderBy('i.evaluateur', 'ASC');
+        $results = $qb->getQuery()->getArrayResult();
+
+        $choices = [];
+        foreach ($results as $row) {
+            // $label = $row['prenom'] . ' ' . $row['nom'] . ' / ' . $row['evaluateur'];
+            // $choices[$label] = $row['evaluateur']; // username
+            $choices[$row['evaluateur']] = $row['evaluateur'];
+        }
+
+        return $choices;
+    }
+
 
     //    /**
     //     * @return IntervenantsANSM[] Returns an array of IntervenantsANSM objects

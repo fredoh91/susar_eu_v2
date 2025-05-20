@@ -66,19 +66,38 @@ class SusarEUQueryService
             }
         }
 
-        if ($search->getevaluateurChoice()) {
-            $Eval = $search->getevaluateurChoice();
+        if ($search->getevaluateurAttribue()) {
+            $EvalAttrib = $search->getevaluateurAttribue();
 
             // if ($Eval === "_non attribué_") {
             //     $query = $query
             //         ->andWhere($query->expr()->isNull('isd.evaluateur'));
             // } else {
                 $query = $query
-                    ->andWhere($query->expr()->eq('isd.evaluateur', ':eval'))
-                    ->setParameter('eval', $Eval);
+                    ->andWhere($query->expr()->eq('isd.evaluateur', ':evalAttrib'))
+                    ->setParameter('evalAttrib', $EvalAttrib);
             // }
         }
 
+        if ($search->getevaluateurEvaluation()) {
+            $EvalEvaluation = $search->getevaluateurEvaluation();
+
+            // if ($Eval === "_non attribué_") {
+            //     $query = $query
+            //         ->andWhere($query->expr()->isNull('isd.evaluateur'));
+            // } else {
+                $query = $query
+                    ->andWhere($query->expr()->eq('spe.userCreate', ':evalEval'))
+                    ->setParameter('evalEval', $EvalEvaluation);
+            // }
+        }
+
+        if ($search->getPaysSurvenue()) {
+            $pays = $search->getPaysSurvenue();
+            $query = $query
+                ->andWhere($query->expr()->like('s.pays_survenue', ':pays'))
+                ->setParameter('pays', '%' . $pays . '%');
+        }
         if ($search->getTypeSaMSMono()) {
             // dd($search->getTypeSaMSMono());
             $query = $query
@@ -96,6 +115,17 @@ class SusarEUQueryService
             $query = $query
                 ->andWhere('s.dateImport <= :fdi')
                 ->setParameter('fdi', $search->getFinDateImport()->modify('+1 day'));
+        }
+        if ($search->getDebutGatewayDate()) {
+            $query = $query
+                ->andWhere('s.GatewayDate >= :dgd')
+                ->setParameter('dgd', $search->getDebutGatewayDate());
+        }
+
+        if ($search->getFinGatewayDate()) {
+            $query = $query
+                ->andWhere('s.GatewayDate <= :fgd')
+                ->setParameter('fgd', $search->getFinGatewayDate()->modify('+1 day'));
         }
         if ($search->getsubstanceName()) {
             $sub = $search->getsubstanceName();
@@ -264,6 +294,21 @@ class SusarEUQueryService
                 $query = $query
                     ->andWhere('s.CasEurope = FALSE');
             }
+        }
+
+        if ($search->getPatientAgeGroup()) {
+
+            // $patientAgeGroup = $search->getPatientAgeGroup();
+            $query = $query
+                ->andWhere($query->expr()->like('s.patientAgeGroup', ':pag'))
+                ->setParameter('pag', '%' . $search->getPatientAgeGroup() . '%');
+            // if ($patientAgeGroup === 'oui') {
+            //     $query = $query
+            //         ->andWhere('s.patientAgeGroup = TRUE');
+            // } elseif ($casEurope === 'non') {
+            //     $query = $query
+            //         ->andWhere('s.patientAgeGroup = FALSE');
+            // }
         }
 
         // // Ajout du tri par statusdate
