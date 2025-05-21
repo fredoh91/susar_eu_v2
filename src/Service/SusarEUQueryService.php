@@ -10,6 +10,16 @@ class SusarEUQueryService
 {
     private SusarEURepository $susarEURepository;
 
+    private const ASSESSMENT_OUTCOME_LEVELS = [
+        'Concern in CT' => 7,
+        'Monitor' => 6,
+        'À garder en mémoire' => 5,
+        'Under assessment' => 4,
+        'Other' => 3,
+        'Assessed without action' => 2,
+        'Screened without action' => 1,
+    ];
+
     public function __construct(SusarEURepository $susarEURepository)
     {
         $this->susarEURepository = $susarEURepository;
@@ -73,9 +83,9 @@ class SusarEUQueryService
             //     $query = $query
             //         ->andWhere($query->expr()->isNull('isd.evaluateur'));
             // } else {
-                $query = $query
-                    ->andWhere($query->expr()->eq('isd.evaluateur', ':evalAttrib'))
-                    ->setParameter('evalAttrib', $EvalAttrib);
+            $query = $query
+                ->andWhere($query->expr()->eq('isd.evaluateur', ':evalAttrib'))
+                ->setParameter('evalAttrib', $EvalAttrib);
             // }
         }
 
@@ -86,9 +96,9 @@ class SusarEUQueryService
             //     $query = $query
             //         ->andWhere($query->expr()->isNull('isd.evaluateur'));
             // } else {
-                $query = $query
-                    ->andWhere($query->expr()->eq('spe.userCreate', ':evalEval'))
-                    ->setParameter('evalEval', $EvalEvaluation);
+            $query = $query
+                ->andWhere($query->expr()->eq('spe.userCreate', ':evalEval'))
+                ->setParameter('evalEval', $EvalEvaluation);
             // }
         }
 
@@ -220,12 +230,35 @@ class SusarEUQueryService
             }
         }
 
-        if ($search->getAssessmentOutcome()) {
-            $query = $query
-                ->andWhere('spe.AssessmentOutcome = :aso')
-                ->setParameter('aso', $search->getAssessmentOutcome());
-        }
+        // if ($search->getAssessmentOutcome()) {
+        //     $query = $query
+        //         ->andWhere('spe.AssessmentOutcome = :aso')
+        //         ->setParameter('aso', $search->getAssessmentOutcome());
+        // }
 
+        if ($search->getAssessmentOutcome()) {
+            $selectedAssessmentOutcome = $search->getAssessmentOutcome();
+            $selectedLevel = self::ASSESSMENT_OUTCOME_LEVELS[$selectedAssessmentOutcome];
+
+            // Sous-requête pour trouver le niveau max par SUSAR
+            $sub = $this->susarEURepository->createQueryBuilder('s2')
+                ->select('MAX(CASE
+            WHEN spe2.AssessmentOutcome = \'Concern in CT\' THEN 7
+            WHEN spe2.AssessmentOutcome = \'Monitor\' THEN 6
+            WHEN spe2.AssessmentOutcome = \'À garder en mémoire\' THEN 5
+            WHEN spe2.AssessmentOutcome = \'Under assessment\' THEN 4
+            WHEN spe2.AssessmentOutcome = \'Other\' THEN 3
+            WHEN spe2.AssessmentOutcome = \'Assessed without action\' THEN 2
+            WHEN spe2.AssessmentOutcome = \'Screened without action\' THEN 1
+            ELSE 0 END)')
+                ->leftJoin('s2.substancePtEvals', 'spe2')
+                ->where('s2.id = s.id')
+                ->getDQL();
+
+            $query = $query
+                ->andWhere("($sub) = :selectedLevel")
+                ->setParameter('selectedLevel', $selectedLevel);
+        }
         if ($search->getWorldWideId()) {
             $query = $query
                 ->andWhere($query->expr()->like('s.worldWide_id', ':wwi'))

@@ -75,13 +75,29 @@ class SearchSusarEUType extends AbstractType
                 // 'placeholder' => '',
             ])
             ->add('assessment_outcome', ChoiceType::class, [
+                // 'choices' => [
+                //     'Screened without action' => 'Screened without action',
+                //     'Assessed without action' => 'Assessed without action',
+                //     'Under assessment' => 'Under assessment',
+                //     'Monitor' => 'Monitor',
+                //     'Concern in CT' => 'Concern in CT',
+                //     'À garder en mémoire' => 'À garder en mémoire',
+                // ],
+                // 'choices' => [
+                //     '7 - Concern in CT' => 'Concern in CT',
+                //     '6 - Monitor' => 'Monitor',
+                //     '5 - À garder en mémoire' => 'À garder en mémoire',
+                //     '4 - Under assessment' => 'Under assessment',
+                //     '2 - Assessed without action' => 'Assessed without action',
+                //     '1 - Screened without action' => 'Screened without action',
+                // ],
                 'choices' => [
-                    'Screened without action' => 'Screened without action',
-                    'Assessed without action' => 'Assessed without action',
-                    'Under assessment' => 'Under assessment',
-                    'Monitor' => 'Monitor',
                     'Concern in CT' => 'Concern in CT',
+                    'Monitor' => 'Monitor',
                     'À garder en mémoire' => 'À garder en mémoire',
+                    'Under assessment' => 'Under assessment',
+                    'Assessed without action' => 'Assessed without action',
+                    'Screened without action' => 'Screened without action',
                 ],
                 'required' => false,
                 // 'placeholder' => false, // Ceci empêche Symfony d'ajouter une option vide supplémentaire
