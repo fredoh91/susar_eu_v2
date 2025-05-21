@@ -39,6 +39,7 @@ Encore
     .addStyleEntry('int_sub_detail', './assets/styles/int_sub_detail.scss')
     .addStyleEntry('int_sub_liste', './assets/styles/int_sub_liste.scss')
     .addStyleEntry('import_excel_css', './assets/styles/import_excel.scss')
+    .addStyleEntry('rech_susar_css', './assets/styles/rech_susar.scss')
     
     // .addStyleEntry('intervenant_substance_css', './assets/styles/intervenant_substance.scss')
 

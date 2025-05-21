@@ -40,7 +40,7 @@ class SearchSusarEUType extends AbstractType
         $EvaluateurEvaluation = $this->intervenantANSMRepository->getAllUserChoices();
 
         $builder
-
+            // Attribution
             ->add(
                 'evaluateurAttribue',
                 ChoiceType::class,
@@ -58,6 +58,7 @@ class SearchSusarEUType extends AbstractType
                 ]
             )
 
+            // Evaluation
             ->add('casTraite', ChoiceType::class, [
                 'label' => 'Cas traité',
                 'choices' => [
@@ -102,10 +103,13 @@ class SearchSusarEUType extends AbstractType
                 'required' => false,
                 // 'placeholder' => false, // Ceci empêche Symfony d'ajouter une option vide supplémentaire
             ])
+
+            // Essai concerné
             ->add(
                 'num_eudract',
                 TextType::class,
                 [
+                    'label' => 'N° EUCT',
                     'required' => false,
                     // 'attr' => ['class' => 'chpRq'],
                 ]
@@ -114,6 +118,7 @@ class SearchSusarEUType extends AbstractType
                 'sponsorstudynumb',
                 TextType::class,
                 [
+                    'label' => 'Sponsor',
                     'required' => false,
                     // 'attr' => ['class' => 'chpRq'],
                 ]
@@ -122,17 +127,36 @@ class SearchSusarEUType extends AbstractType
                 'paysSurvenue',
                 TextType::class,
                 [
+                    'label' => 'Pays',
                     'required' => false,
                     // 'attr' => ['class' => 'chpRq'],
                 ]
             )
 
+            // Niveau de classification
+            ->add('niveau1', CheckboxType::class, [
+                'label' => 'Niveau 1',
+                'required' => false,
+            ])
+            ->add('niveau2a', CheckboxType::class, [
+                'label' => 'Niveau 2a',
+                'required' => false,
+            ])
+            ->add('niveau2b', CheckboxType::class, [
+                'label' => 'Niveau 2b',
+                'required' => false,
+            ])
+            ->add('niveau2c', CheckboxType::class, [
+                'label' => 'Niveau 2c',
+                'required' => false,
+            ])
 
-
+            // Caractéristiques
             ->add(
                 'substanceName',
                 TextType::class,
                 [
+                    'label' => 'Substance active',
                     'required' => false,
                     // 'attr' => ['class' => 'chpRq'],
                 ]
@@ -141,6 +165,7 @@ class SearchSusarEUType extends AbstractType
                 'effetIndesirable',
                 TextType::class,
                 [
+                    'label' => 'PT',
                     'required' => false,
                     // 'attr' => ['class' => 'chpRq'],
                 ]
@@ -149,20 +174,22 @@ class SearchSusarEUType extends AbstractType
                 'idSusar',
                 IntegerType::class,
                 [
+                    'label' => 'idSUSAR',
                     'required' => false,
                     // 'attr' => ['class' => 'chpRq'],
                 ]
             )
-
             ->add(
                 'worldWide_id',
                 TextType::class,
                 [
+                    'label' => 'ID cas',
                     'required' => false,
                     // 'attr' => ['class' => 'chpRq'],
                 ]
             )
 
+            // Période
             ->add(
                 'debutGatewayDate',
                 DateType::class,
@@ -212,56 +239,8 @@ class SearchSusarEUType extends AbstractType
                     // 'attr' => ['class' => 'chpRq'],
                 ]
             )
-            // ->add('productName', TextType::class, [
-            //     'required' => false,
-            //     // 'attr' => ['class' => 'chpRq'],
-            // ])
-            ->add(
-                'narratif',
-                TextType::class,
-                [
-                    'required' => false,
-                    // 'attr' => ['class' => 'chpRq'],
-                ]
-            )
-            // ->add('intervenantANSM', EntityType::class, [
-            //     'class' => IntervenantSubstanceDMM::class,
-            //     'query_builder' => function (EntityRepository $er) {
-            //         return $er->createQueryBuilder('int')
-            //             ->where('int.inactif = 0')
-            //             ->orderBy('int.evaluateur', 'ASC');
-            //     },
-            //     'choice_label' => 'DMM_pole_court',
-            //     'required' => false,
-            //     'attr' => ['class' => 'chpRq'],
-            // ])
-            ->add('niveau1', CheckboxType::class, [
-                'label' => 'Niveau 1',
-                'required' => false,
-            ])
-            ->add('niveau2a', CheckboxType::class, [
-                'label' => 'Niveau 2a',
-                'required' => false,
-            ])
-            ->add('niveau2b', CheckboxType::class, [
-                'label' => 'Niveau 2b',
-                'required' => false,
-            ])
-            ->add('niveau2c', CheckboxType::class, [
-                'label' => 'Niveau 2c',
-                'required' => false,
-            ])
-            ->add('casArchive', ChoiceType::class, [
-                'label' => 'Cas archivé',
-                'choices' => [
-                    'Uniquement les cas archivés' => 'archive',
-                    'Uniquement les cas non-archivés' => 'non_archive',
-                    'Tous les cas' => 'tous',
-                ],
-                'required' => false,
-                'placeholder' => false, // Ceci empêche Symfony d'ajouter une option vide supplémentaire,
-                // 'data' => 'non_archive', // Spécifie 'non_archive' comme valeur par défaut
-            ])
+
+            // Spécificités
             ->add('type_saMS_Mono', ChoiceType::class, [
                 'label' => 'saMS/Mono.',
                 'choices' => [
@@ -314,6 +293,27 @@ class SearchSusarEUType extends AbstractType
                 'required' => false,
                 'placeholder' => false, // Ceci empêche Symfony d'ajouter une option vide supplémentaire
             ])
+            ->add(
+                'narratif',
+                TextType::class,
+                [
+                    'required' => false,
+                    // 'attr' => ['class' => 'chpRq'],
+                ]
+            )
+
+            // Cas archivés
+            ->add('casArchive', ChoiceType::class, [
+                'label' => 'Cas archivé',
+                'choices' => [
+                    'Uniquement les cas archivés' => 'archive',
+                    'Uniquement les cas non-archivés' => 'non_archive',
+                    'Tous les cas' => 'tous',
+                ],
+                'required' => false,
+                'placeholder' => false, // Ceci empêche Symfony d'ajouter une option vide supplémentaire,
+                // 'data' => 'non_archive', // Spécifie 'non_archive' comme valeur par défaut
+            ])
             // ->add('caseVersion', ChoiceType::class, [
             //     'label' => 'Case version',
             //     'choices' => [
@@ -322,11 +322,13 @@ class SearchSusarEUType extends AbstractType
             //     ],
             //     'required' => false,
             // ])
+
+            // Boutons
             ->add(
                 'recherche',
                 SubmitType::class,
                 [
-                    'attr' => ['class' => 'btn btn-primary m-2'],
+                    'attr' => ['class' => 'btn btn-primary btn-sm m-1'],
                     'label' => 'Rechercher',
                     'row_attr' => ['id' => 'recherche'],
                 ]
@@ -335,7 +337,7 @@ class SearchSusarEUType extends AbstractType
                 'reset',
                 SubmitType::class,
                 [
-                    'attr' => ['class' => 'btn btn-primary m-2'],
+                    'attr' => ['class' => 'btn btn-primary btn-sm m-1'],
                     'label' => 'Reset',
                     'row_attr' => ['id' => 'reset'],
                 ]
@@ -344,7 +346,7 @@ class SearchSusarEUType extends AbstractType
                 'exportExcel',
                 SubmitType::class,
                 [
-                    'attr' => ['class' => 'btn btn-primary m-2'],
+                    'attr' => ['class' => 'btn btn-primary btn-sm m-1'],
                     'label' => 'Export Excel',
                     'row_attr' => ['id' => 'exportExcel'],
                 ]

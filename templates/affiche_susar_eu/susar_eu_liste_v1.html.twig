@@ -1,0 +1,289 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+	{{ encore_entry_link_tags('type_eu_css') }}
+
+	<div class="page_liste_susar">
+		<div class="p-3">
+			{% for message in app.flashes('success') %}
+				<div class="alert alert-success">
+					{{ message }}
+				</div>
+			{% endfor %}
+		</div>
+
+		<div class="display-4 text-center mt-0 mb-4">Liste des SUSARs</div>
+
+		<div class="container-fluid p-5">
+
+
+			{{form_start(form)}}
+			
+			<div class="row">
+				<div class="col-1 fw-bold">
+					Attribution
+				</div>
+				<div class="col-1">
+					{{ form_label(form.evaluateurAttribue, 'Référent') }}
+					{{ form_widget(form.evaluateurAttribue) }}
+				</div>
+				<div class="col-2">
+					{{ form_label(form.dmmPoleChoice, 'DMM/Pôle') }}
+					{{ form_widget(form.dmmPoleChoice) }}
+				</div>
+				<div class="col-8">
+				</div>
+			</div>
+
+
+			
+			<div class="row">
+				<div class="col-1 fw-bold">
+					Évaluation
+				</div>
+				<div class="col-1">
+					{{ form_label(form.casTraite, 'Cas traité') }}
+					{{ form_widget(form.casTraite) }}
+
+				</div>
+				<div class="col-2">
+					{{ form_label(form.evaluateurEvaluation, 'Évalué par') }}
+					{{ form_widget(form.evaluateurEvaluation) }}
+				</div>
+				<div class="col-2">
+					{{ form_label(form.assessment_outcome, 'Conclusion évaluation') }}
+					{{ form_widget(form.assessment_outcome) }}
+				</div>
+				<div class="col-6">
+
+				</div>
+			</div>
+
+
+
+			<div class="row">
+
+				<div class="col-1 fw-bold">
+					Essai concerné
+				</div>
+				<div class="col-2">
+					{{ form_label(form.num_eudract, 'N° EUCT') }}
+					{{ form_widget(form.num_eudract) }}
+				</div>
+				<div class="col-2">
+					{{ form_label(form.sponsorstudynumb, 'Sponsor study num.') }}
+					{{ form_widget(form.sponsorstudynumb) }}
+				</div>
+				<div class="col-2">
+					{{ form_label(form.paysSurvenue, 'Pays') }}
+					{{ form_widget(form.paysSurvenue) }}
+				</div>
+				<div class="col-5">
+
+				</div>
+			</div>
+
+
+			<div class="row">
+			
+				<div class="col-1 fw-bold">
+					Niveau de classification
+				</div>
+				<div class="col-3">
+					<div class="chbx_niv_grille">
+						<table class="chbx_niv_tableau">
+							<thead>
+								<tr>
+									<th colspan="2" class="chbx_niv_header">Niveau de classification</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td class="chbx_niv_cell">
+										<div class="chbx_niv_contenu">
+											{{ form_row(form.niveau1, {'label': 'Niveau 1', 'row_attr': {'class': 'chbx_niv_form_row'}}) }}
+										</div>
+									</td>
+									<td class="chbx_niv_cell">
+										<div class="chbx_niv_contenu">
+											{{ form_row(form.niveau2a, {'label': 'Niveau 2a', 'row_attr': {'class': 'chbx_niv_form_row'}}) }}
+										</div>
+									</td>
+								</tr>
+								<tr>
+									<td class="chbx_niv_cell">
+										<div class="chbx_niv_contenu">
+											{{ form_row(form.niveau2b, {'label': 'Niveau 2b', 'row_attr': {'class': 'chbx_niv_form_row'}}) }}
+										</div>
+									</td>
+									<td class="chbx_niv_cell">
+										<div class="chbx_niv_contenu">
+											{{ form_row(form.niveau2c, {'label': 'Niveau 2c', 'row_attr': {'class': 'chbx_niv_form_row'}}) }}
+										</div>
+									</td>
+								</tr>
+							</tbody>			
+						</table>
+					</div>
+				</div>
+
+				<div class="col-7">
+				</div>
+			</div>
+
+			<div class="row">
+			
+				<div class="col-1 fw-bold">
+					Caractéristiques
+				</div>
+				<div class="col-2">
+					{{ form_label(form.substanceName, 'Substance active') }}
+					{{ form_widget(form.substanceName) }}
+				</div>
+				<div class="col-2">
+					{{ form_label(form.effetIndesirable, 'PT') }}
+					{{ form_widget(form.effetIndesirable) }}
+				</div>
+				<div class="col-2">
+					{{ form_label(form.idSusar, 'IdSUSAR') }}
+					{{ form_widget(form.idSusar) }}
+				</div>
+				<div class="col-2">
+					{{ form_label(form.worldWide_id, 'ID cas (worldwide)') }}
+					{{ form_widget(form.worldWide_id) }}
+				</div>
+				<div class="col-3">
+				</div>
+			</div>
+
+
+
+			<div class="row">
+				<div class="col-1 fw-bold">
+					Période
+				</div>
+				<div class="col-2">
+					{{ form_label(form.debutGatewayDate, 'Date début (cas)') }}
+					{{ form_widget(form.debutGatewayDate) }}
+				</div>
+				<div class="col-2">
+					{{ form_label(form.finGatewayDate, 'Date fin (cas)') }}
+					{{ form_widget(form.finGatewayDate) }}
+				</div>
+				<div class="col-2">
+					{{ form_label(form.debutDateImport, 'Date début (import)') }}
+					{{ form_widget(form.debutDateImport) }}
+				</div>
+				<div class="col-2">
+					{{ form_label(form.finDateImport, 'Date fin (import)') }}
+					{{ form_widget(form.finDateImport) }}
+				</div>
+				<div class="col-3">
+				</div>
+			</div>
+
+
+
+
+
+			<div class="row">
+				<div class="col-1 fw-bold">
+					Spécificités
+				</div>
+				<div class="col-2">
+					{{ form_label(form.type_saMS_Mono, 'saMS/Mono.') }}
+					{{ form_widget(form.type_saMS_Mono) }}
+				</div>
+				<div class="col-2">
+					{{ form_label(form.patientAgeGroup, 'Population') }}
+					{{ form_widget(form.patientAgeGroup) }}
+				</div>
+				<div class="col-1">
+					{{ form_label(form.casEurope, 'Cas Europe') }}
+					{{ form_widget(form.casEurope) }}
+				</div>
+				<div class="col-1">
+					{{ form_label(form.casDME, 'Cas DME') }}
+					{{ form_widget(form.casDME) }}
+				</div>
+				<div class="col-1">
+					{{ form_label(form.casIME, 'Cas IME') }}
+					{{ form_widget(form.casIME) }}
+				</div>
+				<div class="col-3">
+
+					{{ form_label(form.narratif, 'Narratif') }}
+					{{ form_widget(form.narratif) }}
+				</div>
+				<div class="col-1">
+					
+				</div>
+
+			</div>
+
+			<div class="row">
+
+				<div class="col-1 fw-bold">
+					Boutons
+				</div>
+				<div class="col-1">
+				</div>
+				<div class="col-1">
+				</div>
+				<div class="col-1">
+					{# {{ form_label(form.type_saMS_Mono, 'saMS/Mono.') }}
+					{{ form_widget(form.type_saMS_Mono) }} #}
+				</div>
+				<div class="col-2">
+				</div>
+				<div class="col-2">
+					{{ form_label(form.recherche, 'Recherche') }}
+					{{ form_widget(form.recherche) }}
+				</div>
+				<div class="col-2">
+					{{ form_label(form.exportExcel, 'Export Excel') }}
+					{{ form_widget(form.exportExcel) }}
+				</div>
+				<div class="col-2">
+					{{ form_label(form.reset, 'Reset') }}
+					{{ form_widget(form.reset) }}
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-8">
+				</div>
+				<div class="col-3">
+					{{ form_label(form.casArchive, 'Cas archivés (traités dans SUSAR_EU_v1)') }}
+					{{ form_widget(form.casArchive) }}
+				</div>
+				<div class="col-1">
+				</div>
+			</div>
+
+			{{form_end(form)}}
+		</div>
+
+		<div class="container-fluid p-5">
+
+			<div class="container-fluid container-tab">
+				{% if Susars %}
+				
+					Nombre de lignes : {{ NbSusar }}
+					<h3>Liste des SUSARs</h3>
+
+					{% include "_partials/_susar_eu_liste.html.twig" %}
+					
+					{# {% include "_partials/_susar_eu_liste_v1.html.twig" %} #}
+					{{ knp_pagination_render(Susars) }}
+				{% endif %}
+			</div>
+		</div>
+	</div>
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+	{{ encore_entry_script_tags('listeEvalSusar') }}
+{% endblock %}

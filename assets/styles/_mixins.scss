@@ -128,3 +128,43 @@
   flex-direction: column;
 }
 
+// Champs de recherche
+
+@mixin rech-susar-titre($grid-area) {
+  grid-area: $grid-area;
+  // text-align: right;
+  // padding-right: 5%;
+  // padding-top: 0.5em;
+  // padding-bottom: 0.5em;
+  padding-top: 8%;
+  padding-bottom: 3%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  // align-items: flex-start;
+  // // border: 1px solid red;
+  // height: $height;
+}
+
+@mixin rech-susar-lib($grid-area) {
+  grid-area: $grid-area;
+  // text-align: right;
+  // padding-right: 5%;
+  // display: flex;
+  // justify-content: end;
+  // // align-items: center;
+  // align-items: flex-start;
+  // // border: 1px solid red;
+  // height: $height;
+}
+@mixin rech-susar-chp($grid-area) {
+  grid-area: $grid-area;
+  // text-align: right;
+  // padding-right: 5%;
+  // display: flex;
+  // justify-content: end;
+  // // align-items: center;
+  // align-items: flex-start;
+  // // border: 1px solid red;
+  // height: $height;
+}

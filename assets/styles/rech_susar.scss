@@ -1,0 +1,840 @@
+// @import '_variables.scss';
+@use "_variables" as *;
+// @import 'mixins';
+@use "mixins" as m;
+
+// .rech_susar {
+//   font-size: 0.8rem; /* Réduit la taille de la police à 90% de la taille par défaut */
+//   background-color: $Fond_liste_susar;
+// }
+
+// /******************************************/
+// /* Tableau des cases à cocher des niveaux */
+// /******************************************/
+
+// .chbx_niv_tableau {
+//   border-collapse: collapse;
+//   border: 2px solid #ccc; /* Liseré autour du tableau */
+// }
+// .chbx_niv_header {
+//   font-weight: bold;
+//   text-align: center;
+//   padding: 5px;
+//   border-bottom: 2px solid #ccc; /* Séparation entre l'en-tête et le corps du tableau */
+// }
+// .chbx_niv_cell {
+//   padding: 8px;
+//   border: 1px solid #ccc; /* Lignes internes du tableau */
+//   vertical-align: middle; /* Centre verticalement le contenu de la cellule */
+//   height: 40px; /* Hauteur fixe pour toutes les cellules, ajustez selon vos besoins */
+// }
+// .chbx_niv_cell label {
+//   display: inline-block;
+//   margin: 0 0 0 5px;
+//   vertical-align: middle; /* Aligne verticalement le label avec la case à cocher */
+// }
+// /* Style pour aligner la case à cocher avec le label */
+// .chbx_niv_cell input[type="checkbox"] {
+//   vertical-align: middle;
+//   margin: 0;
+// }
+// /* Wrapper pour le contenu de la cellule */
+// .chbx_niv_contenu {
+//   display: flex;
+//   align-items: center;
+//   justify-content: space-between; /* Ajoute un espacement entre les éléments */
+//   gap: 5px; /* Ajoute un espacement entre le label et la case à cocher */
+//   // height: 100%;
+//   // padding: 5px;
+// }
+// /* Ajoutez ces styles pour réinitialiser les marges et paddings des éléments du formulaire */
+// .chbx_niv_contenu .form-group {
+//   margin: 0;
+//   padding: 0;
+// }
+// .chbx_niv_form_row {
+//   margin: 0;
+//   padding: 0;
+// }
+// .chbx_niv_form_row .form-check {
+//   margin: 0;
+//   padding: 0;
+// }
+// /******************** Fin du tableau des cases à cocher de niveau **********************/
+
+// // pour avoir une ligne colorée sur deux dans les tableaux
+// .container-tab {
+//   > div {
+//     &:nth-child(even) {
+//       &.susar-v2 {
+//         background: $Ctnr_tab_violet_clair;
+//       }
+//       &.susar-v1 {
+//         background: $Ctnr_tab_rouge_clair;
+//       }
+//     }
+//     &:nth-child(odd) {
+//       &.susar-v2 {
+//         background: $Ctnr_tab_violet_fonce;
+//       }
+//       &.susar-v1 {
+//         background: $Ctnr_tab_rouge_fonce;
+//       }
+//     }
+//   }
+// }
+
+// .ligne_susar {
+//   display: flex;
+//   padding: 2px;
+//   border: 5px solid $Entourage_susar;
+//   border-radius: 10px;
+//   justify-content: space-around;
+//   flex-wrap: wrap;
+// }
+
+// .cell_tab {
+//   padding: 2px;
+//   border: 2px solid blue;
+// }
+
+/********************************/
+/*** container liste susar_eu ***/
+/********************************/
+
+.container_rech_susar_eu {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  grid-template-rows: auto auto auto auto auto auto auto auto auto auto auto auto auto auto;
+  gap: 0px 0px;
+  grid-template-areas:
+    "rech-titre_att rech-titre_att . rech-titre_eva rech-titre_eva . rech-titre_ess rech-titre_ess"
+    "rech-lib_ref rech-chp_ref . rech-lib_castrt rech-chp_castrt . rech-lib_euct rech-chp_euct"
+    "rech-lib_dmm rech-chp_dmm . rech-lib_evalpar rech-chp_evalpar . rech-lib_ssn rech-chp_ssn"
+    ". . . rech-lib_concl rech-chp_concl . rech-lib_pays rech-chp_pays"
+    "rech-titre_niv rech-titre_niv . rech-titre_car rech-titre_car . rech-titre_per rech-titre_per"
+    "rech-susar-niv1 rech-susar-niv1 . rech-lib_sa rech-chp_sa . rech-lib_dgd rech-chp_dgd"
+    "rech-susar-niv2a rech-susar-niv2a . rech-lib_pt rech-chp_pt . rech-lib_fgd rech-chp_fgd"
+    "rech-susar-niv2b rech-susar-niv2b . rech-lib_idsusar rech-chp_idsusar . rech-lib_ddi rech-chp_ddi"
+    "rech-susar-niv2c rech-susar-niv2c . rech-lib_wwid rech-chp_wwid . rech-lib_fdi rech-chp_fdi"
+    "rech-titre_spe rech-titre_spe . . . . . ."
+    "rech-lib_sams rech-chp_sams . . rech-chp_rech . . ."
+    "rech-lib_pop rech-chp_pop . . . . rech-chp_reset ."
+    "rech-lib_euro rech-chp_euro . . rech-chp_excel . . ."
+    "rech-lib_dme rech-chp_dme . . . . . ."
+    "rech-lib_ime rech-chp_ime . . . . . ."
+    "rech-lib_narr rech-chp_narr . . . rech-lib_arch rech-chp_arch rech-chp_arch"
+  ;
+}
+
+
+// Attribution
+.rech-titre_att {
+  @include m.rech-susar-titre(rech-titre_att);
+}
+
+.rech-lib_ref {
+  @include m.rech-susar-lib(rech-lib_ref);
+}
+
+.rech-chp_ref {
+  @include m.rech-susar-chp(rech-chp_ref);
+}
+
+.rech-lib_dmm {
+  @include m.rech-susar-lib(rech-lib_dmm);
+}
+
+.rech-chp_dmm {
+  @include m.rech-susar-chp(rech-chp_dmm);
+}
+
+
+// Evaluation
+.rech-titre_eva {
+  @include m.rech-susar-titre(rech-titre_eva);
+}
+
+.rech-lib_castrt {
+  @include m.rech-susar-lib(rech-lib_castrt);
+}
+.rech-chp_castrt {
+  @include m.rech-susar-chp(rech-chp_castrt);
+}
+
+.rech-lib_evalpar {
+  @include m.rech-susar-lib(rech-lib_evalpar);
+}
+.rech-chp_evalpar {
+  @include m.rech-susar-chp(rech-chp_evalpar);
+}
+
+.rech-lib_concl {
+  @include m.rech-susar-lib(rech-lib_concl);
+}
+.rech-chp_concl {
+  @include m.rech-susar-chp(rech-chp_concl);
+}
+
+// Essai concerné
+.rech-titre_ess {
+  @include m.rech-susar-titre(rech-titre_ess);
+}
+
+.rech-lib_euct {
+  @include m.rech-susar-lib(rech-lib_euct);
+}
+.rech-chp_euct {
+  @include m.rech-susar-chp(rech-chp_euct);
+}
+
+.rech-lib_ssn {
+  @include m.rech-susar-lib(rech-lib_ssn);
+}
+.rech-chp_ssn {
+  @include m.rech-susar-chp(rech-chp_ssn);
+}
+
+.rech-lib_pays {
+  @include m.rech-susar-lib(rech-lib_pays);
+}
+.rech-chp_pays {
+  @include m.rech-susar-chp(rech-chp_pays);
+}
+
+// Niveau de classification
+.rech-titre_niv {
+  @include m.rech-susar-titre(rech-titre_niv);
+}
+.rech-susar-niv1 {
+  grid-area: rech-susar-niv1;
+  // background: #ffe;
+}
+.rech-susar-niv2a {
+  grid-area: rech-susar-niv2a;
+  // background: #efe;
+}
+.rech-susar-niv2b {
+    grid-area: rech-susar-niv2b;
+    // background: #eef;
+}
+.rech-susar-niv2c {
+    grid-area: rech-susar-niv2c;
+    // background: #fee;
+}
+
+
+// Caractéristiques
+.rech-titre_car {
+  @include m.rech-susar-titre(rech-titre_car);
+}
+
+
+.rech-lib_sa {
+  @include m.rech-susar-lib(rech-lib_sa);
+}
+.rech-chp_sa {
+  @include m.rech-susar-chp(rech-chp_sa);
+}
+
+.rech-lib_pt {
+  @include m.rech-susar-lib(rech-lib_pt);
+}
+.rech-chp_pt {
+  @include m.rech-susar-chp(rech-chp_pt);
+}
+
+.rech-lib_idsusar {
+  @include m.rech-susar-lib(rech-lib_idsusar);
+}
+.rech-chp_idsusar {
+  @include m.rech-susar-chp(rech-chp_idsusar);
+}
+
+.rech-lib_wwid {
+  @include m.rech-susar-lib(rech-lib_wwid);
+}
+.rech-chp_wwid {
+  @include m.rech-susar-chp(rech-chp_wwid);
+}
+
+
+
+
+
+
+
+
+// Période
+.rech-titre_per {
+  @include m.rech-susar-titre(rech-titre_per);
+}
+
+
+.rech-lib_dgd {
+  @include m.rech-susar-lib(rech-lib_dgd);
+}
+.rech-chp_dgd {
+  @include m.rech-susar-chp(rech-chp_dgd);
+}
+
+.rech-lib_fgd {
+  @include m.rech-susar-lib(rech-lib_fgd);
+}
+.rech-chp_fgd {
+  @include m.rech-susar-chp(rech-chp_fgd);
+}
+
+.rech-lib_ddi {
+  @include m.rech-susar-lib(rech-lib_ddi);
+}
+.rech-chp_ddi {
+  @include m.rech-susar-chp(rech-chp_ddi);
+}
+
+.rech-lib_fdi {
+  @include m.rech-susar-lib(rech-lib_fdi);
+}
+.rech-chp_fdi {
+  @include m.rech-susar-chp(rech-chp_fdi);
+}
+
+
+
+
+
+
+
+
+
+// Spécificités
+.rech-titre_spe {
+  @include m.rech-susar-titre(rech-titre_spe);
+}
+
+
+.rech-lib_sams {
+  @include m.rech-susar-lib(rech-lib_sams);
+}
+.rech-chp_sams {
+  @include m.rech-susar-chp(rech-chp_sams);
+}
+
+.rech-lib_pop {
+  @include m.rech-susar-lib(rech-lib_pop);
+}
+.rech-chp_pop {
+  @include m.rech-susar-chp(rech-chp_pop);
+}
+
+.rech-lib_euro {
+  @include m.rech-susar-lib(rech-lib_euro);
+}
+.rech-chp_euro {
+  @include m.rech-susar-chp(rech-chp_euro);
+}
+
+.rech-lib_dme {
+  @include m.rech-susar-lib(rech-lib_dme);
+}
+.rech-chp_dme {
+  @include m.rech-susar-chp(rech-chp_dme);
+}
+
+.rech-lib_ime {
+  @include m.rech-susar-lib(rech-lib_ime);
+}
+.rech-chp_ime {
+  @include m.rech-susar-chp(rech-chp_ime);
+}
+
+.rech-lib_narr {
+  @include m.rech-susar-lib(rech-lib_narr);
+}
+.rech-chp_narr {
+  @include m.rech-susar-chp(rech-chp_narr);
+}
+
+
+
+
+// Boutons
+
+.rech-chp_rech {
+  grid-area: rech-chp_rech;
+}
+.rech-chp_excel {
+  grid-area: rech-chp_excel;
+}
+.rech-chp_reset {
+  grid-area: rech-chp_reset;
+}
+
+// Cas archivés
+
+.rech-lib_arch {
+  @include m.rech-susar-lib(rech-lib_arch);
+}
+.rech-chp_arch {
+  @include m.rech-susar-chp(rech-chp_arch);
+}
+
+
+
+// .container_susar_eu_haut {
+//   display: grid;
+//   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+//   grid-template-rows: 3em 3em 3em;
+//   gap: 0px 0px;
+//   grid-auto-flow: row;
+//   grid-template-areas:
+//     "NumEUDRA_CT_lib NumEUDRA_CT Sender_lib Sender PaysSurvenue_lib PaysSurvenue . Prio_lib Prio SamsMono_lib SamsMono id_susar_lib id_susar"
+//     "population_lib population sex_lib sex age_lib age . Eval_lib Eval DMM_lib DMM Pole_lib Pole"
+//     "DtGateway_lib DtGateway CaseVersion_lib CaseVersion WW_id_lib WW_id . seriousness_lib seriousness seriousness seriousness . .";
+//   grid-area: container_susar_eu_haut;
+//   border: 1px solid #8f8f8f;
+
+//   /* Centrage vertical */
+//   align-items: center;
+// }
+
+// .container_susar_eu_gauche {
+//   display: grid;
+//   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+//   grid-template-rows: 1fr 1fr 2em 1fr;
+//   gap: 0px 0px;
+//   grid-auto-flow: row;
+//   grid-template-areas:
+//     "tab_suspect_drug tab_suspect_drug tab_suspect_drug tab_suspect_drug tab_suspect_drug tab_suspect_drug"
+//     "tab_reaction_PT tab_reaction_PT tab_reaction_PT tab_reaction_PT tab_reaction_PT tab_reaction_PT"
+//     ". btn-toggle-MedHist btn-toggle-MedHist btn-toggle-MedHist btn-toggle-MedHist ."
+//     "tab_med_hist tab_med_hist tab_med_hist tab_med_hist tab_med_hist tab_med_hist";
+//   grid-area: container_susar_eu_gauche;
+//   border: 1px solid #8f8f8f;
+// }
+
+// .container_susar_eu_droite {
+//   display: grid;
+//   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+//   // grid-template-rows: 1fr 1fr 2em 1fr 2em 2em 1fr;
+//   grid-template-rows: auto auto auto auto auto auto;
+//   gap: 0px 0px;
+//   grid-auto-flow: row;
+//   // grid-template-areas:
+//   //   "ConcluCas_lib ConcluCas_lib ConcluCas ConcluCas ConcluCas ConcluCas ConcluCas ConcluCas"
+//   //   "EvaluateurCas_lib EvaluateurCas DtEval_lib DtEval_lib DtEval DtEval . ."
+//   //   "CommentConclu_lib . . . . . . ."
+//   //   "CommentConclu CommentConclu CommentConclu CommentConclu CommentConclu CommentConclu CommentConclu CommentConclu"
+//   //   "CommentConclu CommentConclu CommentConclu CommentConclu CommentConclu CommentConclu CommentConclu CommentConclu"
+//   //   "CommentConclu CommentConclu CommentConclu CommentConclu CommentConclu CommentConclu CommentConclu CommentConclu"
+//   //   ". btn-FU . btn-AWA btn-AWA . btn-DetEval .";
+//   grid-template-areas:
+//     "ConcluCas_lib ConcluCas_lib ConcluCas ConcluCas ConcluCas ConcluCas ConcluCas ConcluCas"
+//     "EvaluateurCas_lib EvaluateurCas_lib EvaluateurCas EvaluateurCas DtEval_lib DtEval_lib DtEval DtEval"
+//     "CommentConclu_bloc CommentConclu_bloc CommentConclu_bloc CommentConclu_bloc CommentConclu_bloc CommentConclu_bloc CommentConclu_bloc CommentConclu_bloc"
+//     "CommentConclu_bloc CommentConclu_bloc CommentConclu_bloc CommentConclu_bloc CommentConclu_bloc CommentConclu_bloc CommentConclu_bloc CommentConclu_bloc"
+//     "CommentConclu_bloc CommentConclu_bloc CommentConclu_bloc CommentConclu_bloc CommentConclu_bloc CommentConclu_bloc CommentConclu_bloc CommentConclu_bloc"
+//     ". btn-FU . btn-AWA btn-AWA . btn-DetEval .";
+//   grid-area: container_susar_eu_droite;
+//   border: 1px solid #8f8f8f;
+//   align-items: center;
+//   padding: 10px;
+// }
+
+// .container_susar_eu_bas {
+//   display: grid;
+//   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+//   grid-template-rows: 2em 1fr;
+//   gap: 0px 0px;
+//   grid-auto-flow: row;
+//   grid-template-areas:
+//     "narratif_lib narratif_lib . lienICSR_lib lienICSR . . . . . . . ."
+//     "narratif narratif narratif narratif narratif narratif narratif narratif narratif narratif narratif narratif narratif";
+//   grid-area: container_susar_eu_bas;
+//   border: 1px solid #8f8f8f;
+// }
+
+// /************************************/
+// /*** champs dans le pavé de susar ***/
+// /***        Grid supérieure       ***/
+// /************************************/
+
+// .NumEUDRA_CT_lib {
+//   @include m.lst-susar-lib(NumEUDRA_CT_lib, 3em);
+// }
+// .NumEUDRA_CT {
+//   @include m.lst-susar-contenu-scroll(NumEUDRA_CT, 3em);
+// }
+
+// .Sender_lib {
+//   @include m.lst-susar-lib(Sender_lib, 3em);
+// }
+// .Sender {
+//   // @include m.lst-susar-contenu(Sender);
+//   @include m.lst-susar-contenu-scroll(Sender, 3em);
+// }
+
+// .PaysSurvenue_lib {
+//   @include m.lst-susar-lib(PaysSurvenue_lib, 3em);
+// }
+// .PaysSurvenue {
+//   // @include m.lst-susar-contenu(PaysSurvenue);
+//   @include m.lst-susar-contenu-scroll(PaysSurvenue, 3em);
+// }
+
+// .seriousness_lib {
+//   @include m.lst-susar-lib(seriousness_lib, 3em);
+// }
+// .seriousness {
+//   // @include m.lst-susar-contenu(seriousness);
+//   // grid-area: seriousness;
+//   @include m.lst-susar-contenu-scroll(seriousness, 3em);
+// }
+
+// // .seriousness-inside {
+// //   // @include m.lst-susar-contenu(seriousness);
+// //   @include m.lst-susar-contenu-scroll-sans-grid-area(3em);
+// // }
+
+// .Prio_lib {
+//   @include m.lst-susar-lib(Prio_lib, 3em);
+// }
+// .Prio {
+//   // @include m.lst-susar-contenu(Prio);
+//   @include m.lst-susar-contenu-scroll(Prio, 3em);
+// }
+
+// .SamsMono_lib {
+//   @include m.lst-susar-lib(SamsMono_lib, 3em);
+// }
+// .SamsMono {
+//   // @include m.lst-susar-contenu(SamsMono);
+//   @include m.lst-susar-contenu-scroll(SamsMono, 3em);
+// }
+
+// .id_susar_lib {
+//   @include m.lst-susar-lib(id_susar_lib, 3em);
+// }
+// .id_susar {
+//   // @include m.lst-susar-contenu(id_susar);
+//   @include m.lst-susar-contenu-scroll(id_susar, 3em);
+// }
+
+// .population_lib {
+//   @include m.lst-susar-lib(population_lib, 3em);
+// }
+// .population {
+//   @include m.lst-susar-contenu(population, 3em);
+// }
+
+// .sex_lib {
+//   @include m.lst-susar-lib(sex_lib, 3em);
+// }
+// .sex {
+//   @include m.lst-susar-contenu(sex, 3em);
+// }
+
+// .age_lib {
+//   @include m.lst-susar-lib(age_lib, 3em);
+// }
+// .age {
+//   @include m.lst-susar-contenu(age, 3em);
+// }
+
+// .Eval_lib {
+//   @include m.lst-susar-lib(Eval_lib, 3em);
+// }
+// .Eval {
+//   // @include m.lst-susar-contenu(Eval);
+//   @include m.lst-susar-contenu-scroll(Eval, 3em);
+// }
+
+// .DMM_lib {
+//   @include m.lst-susar-lib(DMM_lib, 3em);
+// }
+// .DMM {
+//   // @include m.lst-susar-contenu(DMM);
+//   @include m.lst-susar-contenu-scroll(DMM, 3em);
+// }
+
+// .Pole_lib {
+//   @include m.lst-susar-lib(Pole_lib, 3em);
+// }
+// .Pole {
+//   // @include m.lst-susar-contenu(Pole);
+//   @include m.lst-susar-contenu-scroll(Pole, 3em);
+// }
+
+// .DtGateway_lib {
+//   @include m.lst-susar-lib(DtGateway_lib, 3em);
+// }
+// .DtGateway {
+//   // @include m.lst-susar-contenu(DtGateway);
+//   @include m.lst-susar-contenu(DtGateway, 3em);
+// }
+
+// .CaseVersion_lib {
+//   @include m.lst-susar-lib(CaseVersion_lib, 3em);
+// }
+// .CaseVersion {
+//   // @include m.lst-susar-contenu(CaseVersion);
+//   @include m.lst-susar-contenu(CaseVersion, 3em);
+// }
+
+// .WW_id_lib {
+//   @include m.lst-susar-lib(WW_id_lib, 3em);
+// }
+// .WW_id {
+//   // @include m.lst-susar-grid-droite-contenu(WW_id);
+//   @include m.lst-susar-contenu-scroll(WW_id, 3em);
+// }
+
+// /************************************/
+// /*** champs dans le pavé de susar ***/
+// /***          Grid gauche         ***/
+// /************************************/
+
+// /******************************************************/
+// /*** Tableaux : substance, PT, antécedants médicaux ***/
+// /******************************************************/
+
+// .tab_suspect_drug {
+//   @include m.tab_PT_medHist(tab_suspect_drug);
+// }
+
+// .tab_reaction_PT {
+//   @include m.tab_PT_medHist(tab_reaction_PT);
+// }
+
+// .tab_med_hist {
+//   @include m.tab_PT_medHist(tab_med_hist);
+// }
+
+// /******************************************************************/
+// /*** tables médicament, effet indésirable, antécédents médicaux ***/
+// /******************************************************************/
+
+// // .table-responsive {
+//   // min-height: 120px; // Hauteur minimale (à ajuster selon ton besoin)
+//   // max-height: 350px; // Hauteur maximale (à ajuster selon ton besoin)
+//   // min-height: 200px; // Hauteur minimale (à ajuster selon ton besoin)
+//   // max-height: 250px; // Hauteur maximale (à ajuster selon ton besoin)
+//   // overflow-y: auto;
+// // }
+
+// .table-sticky {
+//   // overflow-x: auto; /* Permet le défilement horizontal */
+//   // display: block; /* Nécessaire pour activer le scroll */
+//   max-width: 100%; /* Limite la largeur du tableau */
+//   table-layout: fixed; /* Force les colonnes à avoir une largeur fixe */
+
+//   // border-collapse: separate;
+//   // border-spacing: 0;
+// }
+
+// .table-sticky th,
+// .table-sticky td {
+//   white-space: nowrap; /* Empêche le contenu de passer à la ligne */
+//   // white-space: normal; /* Permet le retour à la ligne pour éviter les débordements */
+//   // min-width: 150px;
+//   overflow: hidden; /* Masque le contenu qui dépasse */
+//   text-overflow: ellipsis; /* Ajoute "..." pour indiquer que le texte est tronqué */
+//   max-width: 40ch; /* Limite la largeur à environ 40 caractères */
+//   word-wrap: break-word; /* Coupe les mots trop longs pour éviter qu'ils débordent */
+//   // padding: 8px 12px; /* Ajoute un espacement interne (padding) */
+//   text-align: left; /* Aligne le texte à gauche (optionnel) */
+//   border: 1px solid $Tab_lst_susar_bordure; /* Ajoute une bordure pour mieux séparer les colonnes */
+//   padding: 4px 8px; /* Réduit le padding interne (haut/bas : 4px, gauche/droite : 8px) */
+//   font-size: 0.85rem; /* Réduit la taille de la police */
+//   line-height: 1.2; /* Ajuste l'espacement vertical du texte */
+// }
+// .table-sticky tr {
+//   min-height: 1.5rem; /* Définit une hauteur minimale pour les lignes */
+// }
+// .sticky-column {
+//   position: sticky;
+//   left: 0; /* Fixe la colonne à gauche */
+//   z-index: 2; /* Assure que la colonne reste au-dessus des autres */
+//   background: $Tab_lst_susar_bckgrd_sticky_col; /* Ajoute un fond pour la colonne sticky */
+//   border-right: 1px solid $Tab_lst_susar_bordure; /* Ajoute une bordure pour séparer la colonne */
+// }
+// .slidy-column {
+//   background: $Tab_lst_susar_bckgrd_slidy_col; /* Ajoute un fond pour la colonne sticky */
+// }
+// .table-sticky thead tr {
+//   background-color: #245682; // Couleur "primary" Bootstrap
+// }
+
+// .table-sticky th {
+//   color: #fff; // Texte en blanc
+//   background-color: #245682; // Fond bleu "primary"
+//   font-weight: bold;
+// }
+// .table-sticky thead th {
+//   position: sticky;
+//   top: 0;
+//   z-index: 3; // Plus élevé que les colonnes sticky pour éviter les recouvrements
+//   background-color: #245682; // Pour garder le fond bleu même en sticky
+//   color: #fff;
+// }
+
+// /************************************/
+// /*** champs dans le pavé de susar ***/
+// /***          Grid droite         ***/
+// /************************************/
+// .ConcluCas_lib {
+//   @include m.lst-susar-grid-droite-lib(ConcluCas_lib, 3em);
+// }
+// .ConcluCas {
+//   // @include m.lst-susar-grid-droite-contenu(ConcluCas);
+//   @include m.lst-susar-contenu-scroll(ConcluCas, 3em);
+//   color: red;
+//   font-weight: bold;
+// }
+
+// .DtEval_lib {
+//   @include m.lst-susar-grid-droite-lib(DtEval_lib, 3em);
+// }
+// .DtEval {
+//   // @include m.lst-susar-grid-droite-contenu(DtEval);
+//   @include m.lst-susar-contenu-scroll(DtEval, 3em);
+// }
+// .EvaluateurCas_lib {
+//   @include m.lst-susar-grid-droite-lib(EvaluateurCas_lib, 3em);
+// }
+// .EvaluateurCas {
+//   // @include m.lst-susar-grid-droite-contenu(EvaluateurCas);
+//   @include m.lst-susar-contenu-scroll(EvaluateurCas, 3em);
+// }
+
+// .CommentConclu_lib {
+//   // @include m.lst-susar-grid-droite-lib(CommentConclu_lib);
+//   // @include m.lst-susar-grid-droite-lib-bas(CommentConclu_lib);
+//   text-align: left;
+//   padding-left: 0;
+//   display: flex;
+//   justify-content: flex-start;
+//   align-items: center;
+//   margin-bottom: 0.3em; // Pour ne pas coller le texte du libellé au bord
+// }
+// .CommentConclu {
+//   // @include m.lst-susar-grid-droite-contenu(CommentConclu);
+//   border: 1px solid;
+//   background-color: $Fond_chp_lst_eval_susar;
+//   min-height: 6em;
+//   max-height: 10em;         // Hauteur maximale à 10em
+//   overflow-y: auto;         // Scroller vertical si le contenu dépasse
+//   padding-left: 1%;
+//   width: 100%; // pour que le texte prenne toute la largeur si besoin
+//   // height: 20em; /* On fixe la hauteur à 5 fois la hauteur d'une ligne de texte */
+//   // overflow-y: auto; /* Affichage un ascenseur vertical si le contenu dépasse la hauteur */
+//   // padding-inline-start: 3%;
+// }
+
+// .CommentConclu_bloc {
+//   grid-area: CommentConclu_bloc; // ou la zone de ta grid
+//   display: flex;
+//   flex-direction: column;
+//   align-items: flex-start; // colle à gauche
+// }
+
+
+
+
+// /************************************/
+// /*** champs dans le pavé de susar ***/
+// /***        Grid inférieure       ***/
+// /************************************/
+// .lienICSR_lib {
+//   @include m.lst-susar-grid-droite-lib(lienICSR_lib, 3em);
+// }
+// .lienICSR {
+//   @include m.lst-susar-grid-droite-contenu(lienICSR);
+// }
+
+// .narratif_lib {
+//   @include m.lst-susar-grid-gauche-lib(narratif_lib);
+// }
+
+// .narratif_big {
+//   @include m.lst-susar-grid-droite-contenu(narratif);
+//   height: 20em; /* On fixe la hauteur à 5 fois la hauteur d'une ligne de texte */
+//   overflow-y: auto; /* Affichage un ascenseur vertical si le contenu dépasse la hauteur */
+//   padding: 1%;
+// }
+
+// /**********************/
+// /****** boutons *******/
+// /**********************/
+// .btn-FU {
+//   grid-area: btn-FU;
+//   .btn {
+//     font-size: 0.8rem; // ou 12px, selon ton besoin
+//   }
+// }
+
+// .btn-AWA {
+//   grid-area: btn-AWA;
+//   .btn {
+//     font-size: 0.8rem; // ou 12px, selon ton besoin
+//   }
+// }
+
+// .btn-DetEval {
+//   grid-area: btn-DetEval;
+//   .btn {
+//     font-size: 0.8rem; // ou 12px, selon ton besoin
+//   }
+// }
+
+// .btn-toggle-MedHist {
+//   grid-area: btn-toggle-MedHist;
+//   display: flex; /* Active Flexbox */
+//   align-items: center; /* Centre verticalement le contenu */
+//   justify-content: center; /* Centre horizontalement le contenu (optionnel) */
+//   height: 100%; /* Assure que le bouton occupe toute la hauteur disponible */
+//   font-size: 0.8rem; // ou 12px, selon ton besoin
+// }
+
+// // .btn-gray {
+// //   background-color: #cccccc;
+// //   color: #333333;
+// //   border: none;
+// //   padding: 10px 20px;
+// //   text-align: center;
+// //   text-decoration: none;
+// //   display: inline-block;
+// //   font-size: 16px;
+// //   margin: 4px 2px;
+// //   cursor: pointer;
+// //   border-radius: 4px;
+// // }
+
+// .btn-gray:hover {
+//   background-color: #aaaaaa;
+// }
+
+// .btn-access {
+//   background-color: #d3d3d3;
+//   color: #000000;
+//   border: 1px solid #808080;
+//   padding: 5px 10px;
+//   text-align: center;
+//   text-decoration: none;
+//   display: inline-block;
+//   font-size: 14px;
+//   font-family: Arial, sans-serif;
+//   margin: 4px 2px;
+//   cursor: pointer;
+//   border-radius: 3px;
+//   box-shadow: 1px 1px 1px #808080;
+// }
+
+// .btn-access:hover {
+//   background-color: #e3e3e3;
+// }
+
+// .btn-access:active {
+//   background-color: #c3c3c3;
+//   box-shadow: 0px 0px 0px #808080;
+// }
