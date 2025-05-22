@@ -199,7 +199,8 @@
 				</div>
 
 
-				{% if Susar.casSusarEuV1 == true %}
+				{# {% if Susar.casSusarEuV1 == true %} #}
+				{% if Susar.idCTLL is not null %}
 					<div class="col-1">
 						<div>idCTLL :</div>
 						<div class="chp_susar_eu_dtl">{{ Susar.idCTLL }}</div>

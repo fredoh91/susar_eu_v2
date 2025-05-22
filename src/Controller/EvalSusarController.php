@@ -28,8 +28,12 @@ class EvalSusarController extends AbstractController
         $this->logger = $logger;
         $entityManager = $doctrine->getManager();
         $Susar = $entityManager->getRepository(SusarEU::class)->findOneById($idsusar);
+
+        
         // 1/ Recherche des SubstancePt pour ce susar
         $SubPTs = $Susar->getSubstancePts();
+
+        // dump($SubPTs);
         $substances = [];
         $PTs = [];
         
@@ -38,6 +42,7 @@ class EvalSusarController extends AbstractController
             $PTs[] = $SubPT->getReactionmeddrapt();
         }
         
+        // dd($Susar);
         // Éliminer les doublons
         $substances = array_unique($substances);
         $PTs = array_unique($PTs);
