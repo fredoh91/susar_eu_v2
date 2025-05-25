@@ -95,7 +95,8 @@ final class ImportExcelCTLLController extends AbstractController
                     ->setNbInsertedMedHist($this->nbDonneesInserees['nbOfInsertedMedHist'])
                     ->setNbInsertedIndic($this->nbDonneesInserees['nbOfInsertedIndic'])
                     ->setNbSusarAttribue($this->nbDonneesInserees['nbSusarAttribue'])
-                    ->setNbMedicAttribue($this->nbDonneesInserees['nbMedicAttribue']);
+                    ->setNbMedicAttribue($this->nbDonneesInserees['nbMedicAttribue'])
+                    ->setGatewayDate($this->nbDonneesInserees['gatewayDate']);
 
                 $em->flush();
                 $em->clear();

@@ -41,6 +41,7 @@ class ImportVersSusarEu
     private int $nbOfInsertedIndic = 0;
     private int $nbSusarAttribue = 0;
     private int $nbMedicAttribue = 0;
+    private $gatewayDate = [];
     private LoggerInterface $logger;
 
     public function __construct(
@@ -136,6 +137,22 @@ class ImportVersSusarEu
                     $susarEU->setReceiveDate($importCtll->getReceiveDate());
                     $susarEU->setReceiptDate($importCtll->getReceiptDate());
                     $susarEU->setGatewayDate($importCtll->getGatewayDate());
+
+                    $gatewayDate = $importCtll->getGatewayDate();
+                    if ($gatewayDate instanceof \DateTimeInterface) {
+                        $gatewayDateStr = $gatewayDate->format('d/m/Y');
+                    } elseif (!empty($gatewayDate)) {
+                        // Si c'est une chaîne, essayez de la convertir
+                        $dateObj = \DateTime::createFromFormat('Y-m-d', $gatewayDate);
+                        $gatewayDateStr = $dateObj ? $dateObj->format('d/m/Y') : $gatewayDate;
+                    } else {
+                        $gatewayDateStr = null;
+                    }
+                    
+                    if ($gatewayDateStr && !in_array($gatewayDateStr, $this->gatewayDate, true)) {
+                        $this->gatewayDate[] = $gatewayDateStr;
+                    }
+
                     $susarEU->setInitialsHeightWeight($importCtll->getInitialsHeightWeight());
                     $susarEU->setPrimarySourceQualification($importCtll->getPrimarySourceQualification());
                     $susarEU->setCasSusarEuV1(false);
@@ -189,6 +206,7 @@ class ImportVersSusarEu
             'nbOfInsertedIndic' => $this->nbOfInsertedIndic,
             'nbSusarAttribue' => $this->nbSusarAttribue,
             'nbMedicAttribue' => $this->nbMedicAttribue,
+            'gatewayDate' => $this->gatewayDate,
         ];
     }
 

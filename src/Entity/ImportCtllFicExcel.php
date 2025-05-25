@@ -58,6 +58,9 @@ class ImportCtllFicExcel
     #[ORM\Column(nullable: true)]
     private ?int $nbMedicAttribue = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?array $gatewayDate = null;
+
     public function __construct()
     {
         $this->importCtlls = new ArrayCollection();
@@ -238,6 +241,18 @@ class ImportCtllFicExcel
     public function setNbMedicAttribue(?int $nbMedicAttribue): static
     {
         $this->nbMedicAttribue = $nbMedicAttribue;
+
+        return $this;
+    }
+
+    public function getGatewayDate(): ?array
+    {
+        return $this->gatewayDate;
+    }
+
+    public function setGatewayDate(?array $gatewayDate): static
+    {
+        $this->gatewayDate = $gatewayDate;
 
         return $this;
     }

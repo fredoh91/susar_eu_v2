@@ -5,7 +5,7 @@
 
 {% block body %}
 
-{{ encore_entry_link_tags('import_excel_css') }}
+	{{ encore_entry_link_tags('import_excel_css') }}
 
 
 	{% for type, messages in app.flashes %}
@@ -37,6 +37,7 @@
 			'nbOfInsertedIndic': 'Nombre d\'indications insérées',
 			'nbSusarAttribue': 'Nombre de susars attribués',
 			'nbMedicAttribue': 'Nombre de substances attribuées',
+			'gatewayDate': 'Gateway date(s)',
 			} %}
 
 			<table class="table table-bordered">
@@ -50,7 +51,20 @@
 					{% for key, value in nbDonneesInserees %}
 						<tr>
 							<td><strong>{{ labels[key] is defined ? labels[key] : key }}</strong></td>
-							<td>{{ value }}</td>
+							{# <td>{{ value }}</td> #}
+
+							<td>
+								{% if key == 'gatewayDate' and value is iterable %}
+									<ul>
+										{% for date in value %}
+											<li>{{ date }}</li>
+										{% endfor %}
+									</ul>
+								{% else %}
+									{{ value }}
+								{% endif %}
+							</td>
+
 						</tr>
 					{% endfor %}
 				</tbody>
@@ -66,7 +80,9 @@
 				<table class="table table-bordered table-hover">
 					<thead>
 						<tr>
-							<th colspan="7" class="text-center fs-4 fw-bold text-primary">{{ nonAttribues|length }} susars non attribués</th>
+							<th colspan="7" class="text-center fs-4 fw-bold text-danger">{{ nonAttribues|length }}
+								susars non attribués
+							</th>
 						</tr>
 						<tr>
 							<th colspan="5" style="text-align: center;">Susars</th>
@@ -108,12 +124,11 @@
 				<p class="text-center fs-4 fw-bold text-primary">Aucune donnée non attribuée.</p>
 			{% endif %}
 
-		{% else %}
+			{% else %}
 			{# <p>Aucune donnée insérée.</p> #}
 		{% endif %}
 
 
-		
 	</div>
 
-	{% endblock %}
+{% endblock %}
