@@ -122,7 +122,7 @@
   grid-template-areas:
     "NumEUDRA_CT_lib NumEUDRA_CT Sender_lib Sender PaysSurvenue_lib PaysSurvenue . Prio_lib Prio SamsMono_lib SamsMono id_susar_lib id_susar"
     "population_lib population sex_lib sex age_lib age . Eval_lib Eval DMM_lib DMM Pole_lib Pole"
-    "DtGateway_lib DtGateway CaseVersion_lib CaseVersion WW_id_lib WW_id . seriousness_lib seriousness seriousness seriousness . .";
+    "DtGateway_lib DtGateway CaseVersion_lib CaseVersion WW_id_lib WW_id . seriousness_lib seriousness seriousness seriousness IdCTLL_lib IdCTLL";
   grid-area: container_susar_eu_haut;
   border: 1px solid #8f8f8f;
 
@@ -319,6 +319,15 @@
 .WW_id {
   // @include m.lst-susar-grid-droite-contenu(WW_id);
   @include m.lst-susar-contenu-scroll(WW_id, 3em);
+}
+
+
+.IdCTLL_lib {
+  @include m.lst-susar-lib(IdCTLL_lib, 3em);
+}
+.IdCTLL {
+  // @include m.lst-susar-contenu(Pole);
+  @include m.lst-susar-contenu-scroll(IdCTLL, 3em);
 }
 
 /************************************/

@@ -26,6 +26,17 @@
 				<li class="">
 					<a class="" href="{{ path ('app_intervenant_substance') }}">Intervenants/substances</a>
 				</li>
+				<li class="">
+					<a class="" href="{{ path ('app_bilan_imports_ctll') }}">Bilan des imports des fichiers CTLL</a>
+				</li>
+				{% endif %}
+				{% if is_granted('ROLE_DMFR_GEST') %}
+				<li class="">
+					<a class="" href="{{ path ('app_liste_HL_SA') }}">Liste des substances (pour requête EVDAS)</a>
+				</li>
+				<li class="">
+					<a class="" href="{{ path ('app_import_excel_ctll') }}">Import d'un fichier CTLL</a>
+				</li>
 				{% endif %}
 			</ul>
 		</div>

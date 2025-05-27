@@ -22,7 +22,8 @@
 					{% if intAnsm.TypeSaMSMono != null %}
 						{% set sams_mono = sams_mono ~ (sams_mono != '' ? ' / ' : '') ~ intAnsm.TypeSaMSMono %}
 					{% else %}
-						Non-attribué
+						{# Non-attribué #}
+						{% set sams_mono = 'Non-attribué' %}
 					{% endif %}
 				{% endfor %}
 				<div class="SamsMono_lib fw-bold">saMS/Mono</div>
@@ -54,7 +55,8 @@
 					{% if intAnsm.Evaluateur != null %}
 						{% set eval = eval ~ (eval != '' ? ' / ' : '') ~ intAnsm.Evaluateur %}
 					{% else %}
-						Non-attribué
+						{# Non-attribué #}
+						{% set eval = 'Non-attribué' %}
 					{% endif %}
 				{% endfor %}
 				<div class="Eval_lib fw-bold">Référent(s)</div>
@@ -65,7 +67,8 @@
 					{% if intAnsm.DMM != null %}
 						{% set dmm = dmm ~ (dmm != '' ? ' / ' : '') ~ intAnsm.DMM %}
 					{% else %}
-						Non-attribué
+						{# Non-attribué #}
+						{% set dmm = 'Non-attribué' %}
 					{% endif %}
 				{% endfor %}
 				<div class="DMM_lib fw-bold">DMM</div>
@@ -76,7 +79,8 @@
 					{% if intAnsm.PoleTresCourt != null %}
 						{% set pole = pole ~ (pole != '' ? ' / ' : '') ~ intAnsm.PoleTresCourt %}
 					{% else %}
-						Non-attribué
+						{# Non-attribué #}
+						{% set pole = 'Non-attribué' %}
 					{% endif %}
 				{% endfor %}
 				<div class="Pole_lib fw-bold">Pôle</div>
@@ -110,6 +114,14 @@
 						'<BR>': ' - '
 					})|e }}
 				</div>
+
+				{% if Susar.IdCTLL != null %}
+					<div class="IdCTLL_lib fw-bold">idCTLL</div>
+					<div class="IdCTLL">{{ Susar.IdCTLL|e }}</div>
+				{% else %}
+
+				{% endif %}
+
 			</div>
 
 

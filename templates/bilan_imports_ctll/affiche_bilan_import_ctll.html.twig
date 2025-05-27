@@ -1,0 +1,69 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Bilan import des fichiers CTLL
+{% endblock %}
+
+{% block body %}
+
+	<div class="container-fluid p-5">
+
+		<div class="container-fluid">
+
+			{% if bilanImportsCtll is not empty %}
+
+				<table class="table">
+					<thead>
+						<tr>
+							<th scope="col">Date du fichier</th>
+							<th scope="col">Date d'import</th>
+							<th scope="col">Utilisateur import</th>
+							<th scope="col">Date(s) de gateway</th>
+							<th scope="col">Nombre de lignes Excel</th>
+							<th scope="col">Nombre de SUSAR insérés</th>
+							<th scope="col">Nombre de susars attribués</th>
+							<th scope="col">Nombre de susars non-attribués</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for bilan in bilanImportsCtll %}
+
+							{% if bilan.nbInsertedSusar - bilan.nbSusarAttribue > 0 %}
+								<tr class="table-danger">
+							{% else %}
+								<tr class="table-success">
+							{% endif %}
+
+									<td scope="row" style="width:20%;">
+										{{ bilan.dateFichier|format_datetime(dateFormat='short', timeFormat='short', locale='fr') }}
+									</td>
+
+									<td scope="row" style="width:20%;">
+										{{ bilan.dateImport|format_datetime(dateFormat='short', timeFormat='medium', locale='fr') }}
+									</td>
+
+									<td>{{ bilan.UtilisateurImport }}</td>
+
+									<td style="width:15%;">
+										<ul>
+											{% for gateway in bilan.gatewayDate %}
+												<li>{{ gateway }}</li>
+											{% endfor %}
+										</ul>
+									</td>
+
+									<td>{{ bilan.nbLignesDataFicExcel }}</td>
+
+									<td>{{ bilan.nbInsertedSusar }}</td>
+
+									<td>{{ bilan.nbSusarAttribue }}</td>
+
+									<td>{{ bilan.nbInsertedSusar - bilan.nbSusarAttribue }}</td>
+								</tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+			{% endif %}
+		</div>
+	</div>
+
+{% endblock %}
