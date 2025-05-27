@@ -117,13 +117,13 @@ class SusarEUQueryService
 
         if ($search->getDebutDateImport()) {
             $query = $query
-                ->andWhere('s.dateImport >= :ddi')
+                ->andWhere('s.createdAt >= :ddi')
                 ->setParameter('ddi', $search->getDebutDateImport());
         }
 
         if ($search->getFinDateImport()) {
             $query = $query
-                ->andWhere('s.dateImport <= :fdi')
+                ->andWhere('s.createdAt <= :fdi')
                 ->setParameter('fdi', $search->getFinDateImport()->modify('+1 day'));
         }
         if ($search->getDebutGatewayDate()) {
