@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\SusarEU;
-// use App\Form\DetailSusarEuType;
 use Psr\Log\LoggerInterface;
 use App\Entity\SearchSusarEU;
 use App\Form\SearchSusarEUType;
@@ -16,8 +15,6 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-// use PhpOffice\PhpSpreadsheet\Spreadsheet;
-// use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Validator\Constraints\Length;
 use App\Service\SusarEUQueryService;
@@ -74,7 +71,6 @@ class SusarEuListeController extends AbstractController
 
         $nbResuPage = 50;
         $session = $request->getSession();
-
 
         $defaultSearchSusarEU = new SearchSusarEU();
         // Set default values for SearchSusarEU properties
@@ -181,26 +177,6 @@ class SusarEuListeController extends AbstractController
                     dump('liste_susar_eu - cas 7 - Export Excel');
                     $this->logger->info('liste_susar_eu - cas 7 - Export Excel');
                 }
-
-
-
-                // if (!$session->has('search_susar_eu')) {
-                //     // Il n'y a pas de variable 'search_susar_eu' dans la session
-                //     // - On l'initialise avec les valeurs par défaut
-                //     $session->set('search_susar_eu', $defaultSearchSusarEU);
-                //     // - On initialise la variable 'tri_search_susar_eu' avec les valeurs par défaut
-                //     $searchSusarEU = $defaultSearchSusarEU;
-                // } else {
-                //     $searchSusarEU = $session->get('search_susar_eu');
-                // }
-
-                // if (!$session->has('tri_search_susar_eu')) {
-                //     $session->set('tri_search_susar_eu', $defaultTriSearchSusarEU);
-                //     $triSearchSusarEU = $defaultTriSearchSusarEU;
-                // } else {
-                //     $triSearchSusarEU = $session->get('tri_search_susar_eu');
-                // }
-
 
                 return $this->redirectToRoute('app_export_excel_susar_eu_liste');
             }

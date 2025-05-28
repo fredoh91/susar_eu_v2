@@ -17,42 +17,18 @@ idsusar : {{idsusar}} <BR>
 
 Nb intervenants liés : {{nbIntSub}} <BR>
 
-{# {{dump(Susar)}} #}
-{# {{dump(SubPTs)}} #}
-
-					{# {% for SubPT in Susar.SubstancePt %}
-
-{{dump(SubPT)}}
-
-
-					{% endfor %} #}
 {{Susar.WorldWideId}}
-        {% for substancePt in Susar.substancePts %}
-            <li>
-                {{ substancePt.id }} - 
-                {{ substancePt.activeSubstanceHighLevel }} - 
-                {{ substancePt.reactionMeddraPt }}
-            </li>
-        {% else %}
-            <li>No SubstancePts found.</li>
-        {% endfor %}
-
-        {# {% for intSubDmm in intSubDmms %}
-
-                {{ intSubDmm.id }} - 
-                {{ intSubDmm.DMM }} / 
-                {{ intSubDmm.PoleCourt }} / 
-                {{ intSubDmm.Evaluateur }}
-            </li>
-        {% else %}
-            <li>Pas d'intervenant trouvé.</li>
-        {% endfor %} #}
+{% for substancePt in Susar.substancePts %}
+    <li>
+        {{ substancePt.id }} - 
+        {{ substancePt.activeSubstanceHighLevel }} - 
+        {{ substancePt.reactionMeddraPt }}
+    </li>
+{% else %}
+    <li>No SubstancePts found.</li>
+{% endfor %}
 
 
-<!-- Button trigger modal -->
-{# <a href="#" data-bs-toggle="modal" data-bs-target="#exampleModal">
-  Open modal
-</a> #}
 
 <!-- Modal -->
 <div class="modal fade" id="modal-msg-AWA" tabindex="-1" aria-labelledby="SUSAR affecté à plusieurs évaluateurs" aria-hidden="true" data-bs-backdrop="static">

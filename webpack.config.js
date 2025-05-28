@@ -30,6 +30,7 @@ Encore
     .addEntry('intervenanSubstanceDetail', './assets/js/intervenantSubstanceDetail.js')
     .addEntry('SusarEuDetail', './assets/js/SusarEuDetail.js')
     .addEntry('SusarEuDetailAutreFU', './assets/js/SusarEuDetailAutreFU.js')
+    .addEntry('popUpMultiEval', './assets/js/popUpMultiEval.js')
 
     // .addEntry('popUpAWA', './assets/js/popUpAWA.js')
 

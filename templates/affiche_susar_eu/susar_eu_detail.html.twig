@@ -60,7 +60,12 @@
 									<td>{{med.productcharacterization}}</td>
 									<td>{{med.Maladie}}</td>
 									<td>{{med.StatutMedicApresEffet}}</td>
-									<td>{{med.DateDerniereAdminFormatDate|format_datetime(dateFormat='short', timeFormat='none', locale='fr')}}</td>
+									<td>
+										{% if med.DateDerniereAdminFormatDate is not null %}
+											{{ med.DateDerniereAdminFormatDate|format_datetime(dateFormat='short', timeFormat='none', locale='fr') }}
+										{% endif %}									
+										{# {{med.DateDerniereAdminFormatDate|format_datetime(dateFormat='short', timeFormat='none', locale='fr')}} #}
+									</td>
 									<td>{{med.DelaiAdministrationSurvenue}}</td>
 									<td>{{med.Dosage}}</td>
 									<td>{{med.VoieAdmin}}</td>
@@ -76,38 +81,55 @@
 			<div id="med_concomitant" class="d-none">
 				<div class="suspectDrug_lib fw-bold">Médicament(s) concomitant(s) :</div>
 				<div class="suspectDrug">
-					<table class="table table-bordered table-striped tab_susar_eu_dtl">
-						<thead>
-							<tr>
-								<th>Product name</th>
-								<th>Substance name</th>
-								<th>Characterization</th>
-								<th>Indication</th>
-								<th>Action taken with drug</th>
-								<th>Start Date</th>
-								<th>Duration</th>
-								<th>Dose</th>
-								<th>Route</th>
-							</tr>
-						</thead>
-						<tbody>
-							{% for med in Susar.Medicament %}
-								{% if med.productcharacterization == 'Concomitant' or med.productcharacterization == 'Drug Not Administered' %}
-									<tr>
-										<td>{{med.Productname}}</td>
-										<td>{{med.Substancename}}</td>
-										<td>{{med.productcharacterization}}</td>
-										<td>{{med.Maladie}}</td>
-										<td>{{med.StatutMedicApresEffet}}</td>
-										<td>{{med.DateDerniereAdminFormatDate|format_datetime(dateFormat='short', timeFormat='none', locale='fr')}}</td>
-										<td>{{med.DelaiAdministrationSurvenue}}</td>
-										<td>{{med.Dosage}}</td>
-										<td>{{med.VoieAdmin}}</td>
-									</tr>
-								{% endif %}
-							{% endfor %}
-						</tbody>
-					</table>
+
+					{% set hasConcomitant = false %}
+					{% for med in Susar.Medicament %}
+						{% if med.productcharacterization == 'Concomitant' or med.productcharacterization == 'Drug Not Administered' %}
+							{% set hasConcomitant = true %}
+						{% endif %}
+					{% endfor %}
+
+					{% if hasConcomitant %}
+						<table class="table table-bordered table-striped tab_susar_eu_dtl">
+							<thead>
+								<tr>
+									<th>Product name</th>
+									<th>Substance name</th>
+									<th>Characterization</th>
+									<th>Indication</th>
+									<th>Action taken with drug</th>
+									<th>Start Date</th>
+									<th>Duration</th>
+									<th>Dose</th>
+									<th>Route</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for med in Susar.Medicament %}
+									{% if med.productcharacterization == 'Concomitant' or med.productcharacterization == 'Drug Not Administered' %}
+										<tr>
+											<td>{{med.Productname}}</td>
+											<td>{{med.Substancename}}</td>
+											<td>{{med.productcharacterization}}</td>
+											<td>{{med.Maladie}}</td>
+											<td>{{med.StatutMedicApresEffet}}</td>
+											<td>
+												{% if med.DateDerniereAdminFormatDate is not null %}
+													{{ med.DateDerniereAdminFormatDate|format_datetime(dateFormat='short', timeFormat='none', locale='fr') }}
+												{% endif %}
+												{# {{med.DateDerniereAdminFormatDate|format_datetime(dateFormat='short', timeFormat='none', locale='fr')}} #}
+											</td>
+											<td>{{med.DelaiAdministrationSurvenue}}</td>
+											<td>{{med.Dosage}}</td>
+											<td>{{med.VoieAdmin}}</td>
+										</tr>
+									{% endif %}
+								{% endfor %}
+							</tbody>
+						</table>
+					{% else %}
+						<div class="alert alert-info my-2">Pas de médicaments concomitant</div>
+					{% endif %}
 				</div>
 			</div>
 
@@ -237,7 +259,11 @@
 				<div class="col-12">
 					<div>Narratif partiel
 					{% if Susar.NarratifNbCaractere > 0 %}
-						({{ Susar.NarratifNbCaractere }} premiers caractères - voir fiche ICSR)
+						({{ Susar.NarratifNbCaractere }} premiers caractères - Pour l'intégralité du narratif, voir fiche ICSR
+						<a href="{{ Susar.ICSRFormLink }}" target="_blank">
+							voir fiche ICSR
+						</a>
+						)
 					{% endif %}
 					:</div>
 					<div class="chp_susar_eu_dtl chp_narr_dtl">{{ Susar.narratif }}</div>

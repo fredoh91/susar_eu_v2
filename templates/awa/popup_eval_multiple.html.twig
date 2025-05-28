@@ -33,7 +33,7 @@
     <p class="text-center text-warning fw-bold">SUSAR affecté à plusieurs évaluateurs</p>
     <p>Attention, ce SUSAR est affecté à plusieurs évaluateurs car la France est saMS pour plusieurs produits :</p>
     {# <p><strong>évaluateur</strong></p> #}
-    <p><strong>{{ eval }}</strong></p>
+    <p><strong>{{ eval|raw }}</strong></p>
     <p>Merci de :</p>
     <p>
         1) Réaliser votre évaluation pour votre substance active.<br><br>
@@ -53,7 +53,7 @@
 
     <div class="d-flex justify-content-center">
         {# <a href="{{ path('app_autres_FU',{'specificcaseid':Susar.specificcaseid}) }}" class="btn btn-primary me-2">Continuer vers l'écran "Autres F.U."</a> #}
-        <a href="{{ path('app_awa_crea_eval',{'idsusar':idsusar}) }}" class="btn btn-primary me-2">Finaliser le cas pour tous : "Assessed without action"</a>
+        <a href="{{ path('app_awa_crea_eval',{'idsusar':idsusar, 'type_page_origine': type_page_origine}) }}" class="btn btn-primary me-2">Finaliser le cas pour tous : "Assessed without action"</a>
         {# <a href="#" class="btn btn-secondary" onclick="window.close(); return false;">annuler</a> #}
         <a href="{{ path('app_liste_susar_eu') }}" class="btn btn-secondary">annuler</a>
         

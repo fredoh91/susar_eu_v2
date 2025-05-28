@@ -3,9 +3,9 @@
 {% block title %}SUSAR affecté à plusieurs évaluateurs{% endblock %}
 
 
-{% block javascripts %}
+{# {% block javascripts %} #}
     {# {{ encore_entry_script_tags('popUpAWA') }} #}
-{% endblock %}
+{# {% endblock %} #}
 
 
 
@@ -56,11 +56,17 @@
         {# <a href="{{ path('app_autres_FU',{'specificcaseid':Susar.specificcaseid}) }}" class="btn btn-primary me-2">Continuer vers l'écran "Autres F.U."</a> #}
         <a href="{{ path('app_detail_susar_eu',{'idsusar':idsusar}) }}" class="btn btn-primary me-2">Continuer vers l'écran "Détail/Evaluation"</a>
         {# <a href="#" class="btn btn-secondary" onclick="window.close(); return false;">annuler</a> #}
-        <a href="#" class="btn btn-secondary">Pour annuler, merci de fermer cet onglet</a>
+        {# <a href="#" class="btn btn-secondary">Pour annuler, merci de fermer cet onglet</a> #}
+        <button id="BtnCloseTab" class="btn btn-secondary">Pour annuler, merci de fermer cet onglet</button>
         
     </div>
 
 </div>
 
 
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+	{{ encore_entry_script_tags('popUpMultiEval') }}
 {% endblock %}

@@ -42,6 +42,7 @@ class AWAController extends AbstractController
                 'Susar' => $Susar,
                 'SubPTs' => $SubPTs,
                 'nbIntSub' => $nbIntSub,
+                'type_page_origine' => $type_page_origine,
             ]);
         } else {
             // on crée les évaluations

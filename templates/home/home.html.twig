@@ -22,10 +22,12 @@
 					<a class="" href="{{ path ('app_liste_susar_eu_init') }}">Liste des SUSARs (type SUSAR_EU)</a>
 				</li>
 				{% endif %}
-				{% if is_granted('ROLE_DMFR_REF') or is_granted('ROLE_SURV_PILOTEVEC') %}
+				{% if is_granted('ROLE_SURV_PILOTEVEC') %}
 				<li class="">
 					<a class="" href="{{ path ('app_intervenant_substance') }}">Intervenants/substances</a>
 				</li>
+				{% endif %}
+				{% if is_granted('ROLE_DMFR_ADMIN') or is_granted('ROLE_SURV_PILOTEVEC') %}
 				<li class="">
 					<a class="" href="{{ path ('app_bilan_imports_ctll') }}">Bilan des imports des fichiers CTLL</a>
 				</li>
