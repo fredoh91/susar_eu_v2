@@ -30,7 +30,7 @@ class SusarEuListeController extends AbstractController
     private $logger;
     private $kernel;
     private $susarEUQueryService;
-    
+
     public function __construct(LoggerInterface $logger, KernelInterface $kernel, SusarEUQueryService $susarEUQueryService)
     {
         $this->logger = $logger;
@@ -51,7 +51,7 @@ class SusarEuListeController extends AbstractController
 
         if ($session->has('search_susar_eu')) {
             $session->remove('search_susar_eu');
-        } 
+        }
         if ($session->has('tri_search_susar_eu')) {
             $session->remove('tri_search_susar_eu');
         }
@@ -75,7 +75,7 @@ class SusarEuListeController extends AbstractController
         $nbResuPage = 50;
         $session = $request->getSession();
 
-        
+
         $defaultSearchSusarEU = new SearchSusarEU();
         // Set default values for SearchSusarEU properties
         $defaultSearchSusarEU->setNiveau1(true);
@@ -109,25 +109,25 @@ class SusarEuListeController extends AbstractController
         } else {
             $triSearchSusarEU = $session->get('tri_search_susar_eu');
         }
-        
+
         if ($this->kernel->getEnvironment() === 'dev') {
             // dump($session);
             if ($session->has('search_susar_eu')) {
                 $this->logger->info('Session search_susar_eu:', ['value' => $session->get('search_susar_eu') ?? 'null']);
-            
             } else {
                 $this->logger->info('Session search_susar_eu: vide');
             }
             if ($session->has('tri_search_susar_eu')) {
                 $this->logger->info('Session tri_search_susar_eu:', ['value' => $session->get('tri_search_susar_eu') ?? 'null']);
-            
             } else {
                 $this->logger->info('tri_search_susar_eu : vide');
             }
         }
-        
-        $form = $this->createForm(SearchSusarEUType::class, $searchSusarEU);
-        
+
+        $form = $this->createForm(SearchSusarEUType::class, $searchSusarEU, [
+            'show_import_dates' => $this->isGranted('ROLE_SUPER_ADMIN') || $this->isGranted('ROLE_SURV_PILOTEVEC'),
+        ]);
+
         $form->handleRequest($request);
 
         $entityManager = $doctrine->getManager();
@@ -143,7 +143,7 @@ class SusarEuListeController extends AbstractController
                 }
 
                 if ($form->isValid()) {
-                    
+
                     if ($this->kernel->getEnvironment() === 'dev') {
                         dump('liste_susar_eu - cas 2 - Recherche - Formulaire valide');
                         $this->logger->info('liste_susar_eu - cas 2 - Recherche - Formulaire valide');
@@ -151,7 +151,7 @@ class SusarEuListeController extends AbstractController
                     $page = 1;
                     // Stocker les critères de recherche dans la session
 
-                    $searchSusarEU =$form->getData();
+                    $searchSusarEU = $form->getData();
 
                     $session->set('search_susar_eu', $searchSusarEU);
                     $session->set('tri_search_susar_eu', $defaultTriSearchSusarEU);
@@ -175,7 +175,7 @@ class SusarEuListeController extends AbstractController
                     // Formulaire soumis, mais invalide
                 }
             }
-            
+
             if ($form->get('exportExcel')->isClicked()) {
                 if ($this->kernel->getEnvironment() === 'dev') {
                     dump('liste_susar_eu - cas 7 - Export Excel');
@@ -217,13 +217,15 @@ class SusarEuListeController extends AbstractController
             }
         } else {
             // Première arrivée sur le formulaire (GET)
-            
-            $form = $this->createForm(SearchSusarEUType::class, $searchSusarEU);
+
+            $form = $this->createForm(SearchSusarEUType::class, $searchSusarEU, [
+                'show_import_dates' => $this->isGranted('ROLE_SUPER_ADMIN') || $this->isGranted('ROLE_SURV_PILOTEVEC'),
+            ]);
 
             // $TousSusars = $entityManager->getRepository(SusarEU::class)->findBySearchSusarEuListe($searchSusarEU,$triSearchSusarEU);
             $TousSusars = $this->susarEUQueryService->findBySearchSusarEuListe($searchSusarEU, $triSearchSusarEU);
         }
-        
+
         $NbSusar = count($TousSusars);
         $Susars = $paginator->paginate(
             $TousSusars, // Requête contenant les données à paginer
@@ -246,7 +248,8 @@ class SusarEuListeController extends AbstractController
     }
 
 
-    public function export_Excel($TousSusars) {
+    public function export_Excel($TousSusars)
+    {
         dd($TousSusars);
     }
 }

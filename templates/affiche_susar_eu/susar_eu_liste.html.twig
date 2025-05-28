@@ -77,11 +77,12 @@
 					<div class="rech-chp_dgd">{{ form_widget(form.debutGatewayDate) }}</div>
 					<div class="rech-lib_fgd">{{ form_label(form.finGatewayDate, 'Date décla. cas (fin)') }}</div>
 					<div class="rech-chp_fgd">{{ form_widget(form.finGatewayDate) }}</div>
-					<div class="rech-lib_ddi">{{ form_label(form.debutDateImport, 'Date import (début)') }}</div>
-					<div class="rech-chp_ddi">{{ form_widget(form.debutDateImport) }}</div>
-					<div class="rech-lib_fdi">{{ form_label(form.finDateImport, 'Date import (fin)') }}</div>
-					<div class="rech-chp_fdi">{{ form_widget(form.finDateImport) }}</div>
-
+					{% if is_granted('ROLE_SUPER_ADMIN') or is_granted('ROLE_SURV_PILOTEVEC')  %}
+						<div class="rech-lib_ddi">{{ form_label(form.debutDateImport, 'Date import (début)') }}</div>
+						<div class="rech-chp_ddi">{{ form_widget(form.debutDateImport) }}</div>
+						<div class="rech-lib_fdi">{{ form_label(form.finDateImport, 'Date import (fin)') }}</div>
+						<div class="rech-chp_fdi">{{ form_widget(form.finDateImport) }}</div>
+					{% endif %}
 				</div>
 				
 				<div class="container_rech_susar_eu_bas">

@@ -215,31 +215,6 @@ class SearchSusarEUType extends AbstractType
                 ]
             )
 
-            ->add(
-                'debutDateImport',
-                DateType::class,
-                [
-                    'widget' => 'single_text',
-                    'label' => 'début de date d\'import dans SUSAR_EU : ',
-                    'format' => 'yyyy-MM-dd',
-                    // 'input' => 'string',
-                    'required' => false,
-                    // 'attr' => ['class' => 'chpRq'],
-                ]
-            )
-            ->add(
-                'finDateImport',
-                DateType::class,
-                [
-                    'widget' => 'single_text',
-                    'label' => 'fin de date d\'import dans SUSAR_EU : ',
-                    'format' => 'yyyy-MM-dd',
-                    // 'input' => 'string',
-                    'required' => false,
-                    // 'attr' => ['class' => 'chpRq'],
-                ]
-            )
-
             // Spécificités
             ->add('type_saMS_Mono', ChoiceType::class, [
                 'label' => 'saMS/Mono.',
@@ -352,6 +327,34 @@ class SearchSusarEUType extends AbstractType
                 ]
             )
         ;
+        if ($options['show_import_dates']) {
+            $builder
+
+                ->add(
+                    'debutDateImport',
+                    DateType::class,
+                    [
+                        'widget' => 'single_text',
+                        'label' => 'début de date d\'import dans SUSAR_EU : ',
+                        'format' => 'yyyy-MM-dd',
+                        // 'input' => 'string',
+                        'required' => false,
+                        // 'attr' => ['class' => 'chpRq'],
+                    ]
+                )
+                ->add(
+                    'finDateImport',
+                    DateType::class,
+                    [
+                        'widget' => 'single_text',
+                        'label' => 'fin de date d\'import dans SUSAR_EU : ',
+                        'format' => 'yyyy-MM-dd',
+                        // 'input' => 'string',
+                        'required' => false,
+                        // 'attr' => ['class' => 'chpRq'],
+                    ]
+                );
+        }
     }
 
     public function configureOptions(OptionsResolver $resolver): void
@@ -359,6 +362,7 @@ class SearchSusarEUType extends AbstractType
         $resolver->setDefaults([
             // Configure your form options here
             'data_class' => SearchSusarEU::class,
+            'show_import_dates' => false,
         ]);
     }
 }
