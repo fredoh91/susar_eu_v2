@@ -29,9 +29,9 @@
 
 							{% if bilan.nbInsertedSusar - bilan.nbSusarAttribue > 0 %}
 								<tr class="table-danger">
-							{% else %}
-								<tr class="table-success">
-							{% endif %}
+								{% else %}
+									<tr class="table-success">
+									{% endif %}
 
 									<td scope="row" style="width:20%;">
 										{{ bilan.dateFichier|format_datetime(dateFormat='short', timeFormat='short', locale='fr') }}
@@ -59,11 +59,24 @@
 
 									<td>{{ bilan.nbInsertedSusar - bilan.nbSusarAttribue }}</td>
 								</tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+							{% endfor %}
+						</tbody>
+					</tbody>
+				</table>
 			{% endif %}
 		</div>
+
+
+		<div>
+			<h2 class="fw-bold mb-3 text-center">SUSARs importés sur les 30 derniers jours par gateway date</h2>
+			<div style="height: 300px;">
+				{{ render_chart(chart) }}
+				{# {{ dump(lstSusarGateway)}} #}
+
+			</div>
+
+		</div>
+
 	</div>
 
 {% endblock %}

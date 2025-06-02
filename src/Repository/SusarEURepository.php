@@ -66,7 +66,7 @@ class SusarEURepository extends ServiceEntityRepository
 
     /**
      * 
-     */ 
+     */
     public function findSusarByMasterId(int $master_id): ?SusarEU
     {
         return $this->createQueryBuilder('s')
@@ -128,8 +128,8 @@ class SusarEURepository extends ServiceEntityRepository
     public function findAllOrder(array $orderCriteria = [['field' => 'statusdate', 'direction' => 'ASC']]): array
     {
         $queryBuilder = $this->createQueryBuilder('s')
-                            ->distinct()
-                            ->andWhere('s.casSusarEuV1 IS NULL');
+            ->distinct()
+            ->andWhere('s.casSusarEuV1 IS NULL');
         foreach ($orderCriteria as $criteria) {
             $field = $criteria['field'];
             $direction = $criteria['direction'] ?? 'ASC'; // Default to 'ASC' if not specified
@@ -138,12 +138,12 @@ class SusarEURepository extends ServiceEntityRepository
         // Ajout de la pagination
         // $queryBuilder->setFirstResult(($page - 1) * $nbResuPage)
         //     ->setMaxResults($nbResuPage);
-            return $queryBuilder
-                ->getQuery()
-                ->getResult();
+        return $queryBuilder
+            ->getQuery()
+            ->getResult();
     }
 
-/**
+    /**
      * Vérifie l'existence d'une SubstancePtEval liée pour un SusarEU donné
      * avec des valeurs spécifiques de substance et pt.
      *
@@ -196,14 +196,54 @@ class SusarEURepository extends ServiceEntityRepository
     {
         $result = $this->createQueryBuilder('s')
             ->andWhere('s.EV_SafetyReportIdentifier = :val')
-            ->setParameter('val', $EV_SafetyReportIdentifier)   
+            ->setParameter('val', $EV_SafetyReportIdentifier)
             ->getQuery()
             ->getOneOrNullResult();
 
         return $result !== null;
-    }       
+    }
 
 
+    public function countSusarByGatewayDateLastNDays(int $nbJour): array
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = "
+        SELECT DATE_FORMAT(gateway_date, '%d/%m/%Y') AS formatted_gateway_date,
+               COUNT(id) AS NbSusar
+        FROM susar_eu
+        WHERE gateway_date >= DATE_SUB(CURDATE(), INTERVAL :nbJour DAY)
+        GROUP BY formatted_gateway_date
+        ORDER BY gateway_date ASC
+    ";
+        $stmt = $conn->prepare($sql);
+        $result = $stmt->executeQuery(['nbJour' => $nbJour]);
+        return $result->fetchAllAssociative();
+    }
+    // public function countSusarByGatewayDateLastNDays(int $nbJour): array
+    // {
+    //     $qb = $this->createQueryBuilder('se')
+    //         ->select('se.GatewayDate, COUNT(se.id) AS NbSusar')
+    //         ->where('se.GatewayDate >= :dateLimit')
+    //         // ->setParameter('dateLimit', (new \DateTime('-90 days'))->setTime(0, 0, 0))
+    //         // ->setParameter('dateLimit', (new \DateTime('-30 days'))->setTime(0, 0, 0))
+    //         ->setParameter('dateLimit', (new \DateTime("-$nbJour days"))->setTime(0, 0, 0))
+
+    //         ->groupBy('se.GatewayDate')
+    //         ->orderBy('se.GatewayDate', 'ASC');
+
+    //     $results = $qb->getQuery()->getResult();
+
+    //     // Formatage des dates en PHP
+    //     $formatted = [];
+    //     foreach ($results as $row) {
+    //         $date = $row['GatewayDate'];
+    //         $formatted[] = [
+    //             'formatted_gateway_date' => $date ? $date->format('d/m/Y') : null,
+    //             'NbSusar' => $row['NbSusar'],
+    //         ];
+    //     }
+    //     return $formatted;
+    // }
 
     //    /**
     //     * @return SusarEU[] Returns an array of SusarEU objects
