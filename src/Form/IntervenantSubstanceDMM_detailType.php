@@ -82,7 +82,7 @@ class IntervenantSubstanceDMM_detailType extends AbstractType
             'idIntSub' => null,
         ]);
     }
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return 'intervenant_substance_dmm_substances';
     }

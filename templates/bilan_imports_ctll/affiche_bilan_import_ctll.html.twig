@@ -70,7 +70,16 @@
 		<div>
 			<h2 class="fw-bold mb-3 text-center">SUSARs importés sur les 30 derniers jours par gateway date</h2>
 			<div style="height: 300px;">
-				{{ render_chart(chart) }}
+				{{ render_chart(chart_day) }}
+				{# {{ dump(lstSusarGateway)}} #}
+
+			</div>
+
+		</div>
+		<div>
+			<h2 class="fw-bold mb-3 text-center">SUSARs importés sur les 10 dernières semaines par gateway date</h2>
+			<div style="height: 300px;">
+				{{ render_chart(chart_week) }}
 				{# {{ dump(lstSusarGateway)}} #}
 
 			</div>

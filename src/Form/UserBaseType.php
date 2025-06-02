@@ -16,7 +16,7 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class UserBaseType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('email', EmailType::class, [
@@ -80,10 +80,14 @@ class UserBaseType extends AbstractType
         ;
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => User::class,
         ]);
     }
+    public function getBlockPrefix(): string
+{
+    return 'intervenant_substance_dmm_detail';
+}
 }

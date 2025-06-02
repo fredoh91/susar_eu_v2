@@ -28,18 +28,20 @@ final class BilanImportsCtllController extends AbstractController
         $bilanImportsCtll = $repository->findAllOrderDateImportDesc();
         
         $repositorySusarEu = $entityManager->getRepository(SusarEU::class);
-        $lstSusarGateway = $repositorySusarEu->countSusarByGatewayDateLastNDays(30);
+        $lstSusarGateway_day = $repositorySusarEu->countSusarByGatewayDateLastNDays(30);
+
+        $lstSusarGateway_week = $repositorySusarEu->countSusarByGatewayDatePerWeekLastNWeeks(10);
 
         // Préparation des données pour Chart.js
         $labels = [];
         $data = [];
-        foreach ($lstSusarGateway as $row) {
+        foreach ($lstSusarGateway_day as $row) {
             $labels[] = $row['formatted_gateway_date'];
             $data[] = $row['NbSusar'];
         }
 
-        $chart = $chartBuilder->createChart(Chart::TYPE_LINE);
-        $chart->setData([
+        $chart_day = $chartBuilder->createChart(Chart::TYPE_LINE);
+        $chart_day->setData([
             'labels' => $labels,
             'datasets' => [
                 [
@@ -47,18 +49,45 @@ final class BilanImportsCtllController extends AbstractController
                     'backgroundColor' => 'rgba(54, 162, 235, 0.2)',
                     'borderColor' => 'rgba(54, 162, 235, 1)',
                     'data' => $data,
-                    // 'tension' => 0.4,
+                    'tension' => 0.2,
                 ],
             ],
         ]);
-        $chart->setOptions([
+        $chart_day->setOptions([
+            'maintainAspectRatio' => false,
+        ]);
+
+
+        
+        $labels = [];
+        $data = [];
+        foreach ($lstSusarGateway_week as $row) {
+            $labels[] = $row['start_of_week'] . ' - ' . $row['end_of_week'];
+            $data[] = $row['NbSusar'];
+        }
+
+        $chart_week = $chartBuilder->createChart(Chart::TYPE_LINE);
+        $chart_week->setData([
+            'labels' => $labels,
+            'datasets' => [
+                [
+                    'label' => 'Nb SUSAR par semaine',
+                    'backgroundColor' => 'rgba(54, 162, 235, 0.2)',
+                    'borderColor' => 'rgba(54, 162, 235, 1)',
+                    'data' => $data,
+                    'tension' => 0.2,
+                ],
+            ],
+        ]);
+        $chart_week->setOptions([
             'maintainAspectRatio' => false,
         ]);
 
         return $this->render('bilan_imports_ctll/affiche_bilan_import_ctll.html.twig', [
             'bilanImportsCtll' => $bilanImportsCtll,
             // 'lstSusarGateway' => $lstSusarGateway,
-            'chart' => $chart,
+            'chart_day' => $chart_day,
+            'chart_week' => $chart_week,
         ]);
     }
 }

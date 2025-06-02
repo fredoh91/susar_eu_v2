@@ -216,9 +216,39 @@ class SusarEURepository extends ServiceEntityRepository
         ORDER BY gateway_date ASC
     ";
         $stmt = $conn->prepare($sql);
-        $result = $stmt->executeQuery(['nbJour' => $nbJour]);
+        $stmt->bindValue('nbJour', $nbJour);
+        $result = $stmt->executeQuery();
         return $result->fetchAllAssociative();
     }
+
+
+
+    public function countSusarByGatewayDatePerWeekLastNWeeks(int $nbWeeks): array
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = "
+        SELECT
+            MIN(DATE_FORMAT(gateway_date, '%d/%m/%Y')) AS start_of_week,
+            MAX(DATE_FORMAT(gateway_date, '%d/%m/%Y')) AS end_of_week,
+            COUNT(id) AS NbSusar
+        FROM susar_eu
+        WHERE gateway_date >= DATE_SUB(CURDATE(), INTERVAL :nbWeeks WEEK)
+        GROUP BY
+            YEAR(gateway_date),
+            WEEK(gateway_date, 1)
+        ORDER BY
+            YEAR(gateway_date),
+            WEEK(gateway_date, 1) DESC
+    ";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindValue('nbWeeks', $nbWeeks);
+        $result = $stmt->executeQuery();
+        return $result->fetchAllAssociative();
+    }
+
+
+
+
     // public function countSusarByGatewayDateLastNDays(int $nbJour): array
     // {
     //     $qb = $this->createQueryBuilder('se')
