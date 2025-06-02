@@ -239,7 +239,7 @@ final class ExportsPilotageController extends AbstractController
                     // Save the Excel file to the specified directory
                     $writer->save($repExport . $nomFichierExcel);
 
-                    $this->addFlash('success', 'Export généré avec succès.');
+                    // $this->addFlash('success', 'Export généré avec succès.');
                     // Return the file as a response
                     return $this->file($repExport . $nomFichierExcel, $nomFichierExcel, ResponseHeaderBag::DISPOSITION_ATTACHMENT);
                 } else {
