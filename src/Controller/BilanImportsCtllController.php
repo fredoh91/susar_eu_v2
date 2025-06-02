@@ -55,6 +55,15 @@ final class BilanImportsCtllController extends AbstractController
         ]);
         $chart_day->setOptions([
             'maintainAspectRatio' => false,
+            'scales' => [
+                'x' => [
+                    'ticks' => [
+                        'maxRotation' => 45, // angle maximum
+                        'minRotation' => 45, // angle minimum
+                        // 'autoSkip' => false, // optionnel : pour ne pas masquer d'étiquettes
+                    ],
+                ],
+            ],
         ]);
 
 
@@ -81,6 +90,14 @@ final class BilanImportsCtllController extends AbstractController
         ]);
         $chart_week->setOptions([
             'maintainAspectRatio' => false,
+            'scales' => [
+                'x' => [
+                    'ticks' => [
+                        'maxRotation' => 45,
+                        'minRotation' => 45,
+                    ],
+                ],
+            ],
         ]);
 
         return $this->render('bilan_imports_ctll/affiche_bilan_import_ctll.html.twig', [

@@ -247,7 +247,22 @@ class SusarEURepository extends ServiceEntityRepository
     }
 
 
-
+    public function findSusarByGatewayDate_exportPilotage($debutGatewayDate, $finGatewayDate): ?array
+    {
+        return $this->createQueryBuilder('s')
+            ->andWhere('s.GatewayDate >= :dgd')
+            ->setParameter('dgd', $debutGatewayDate)
+            ->andWhere('s.GatewayDate <= :fgd')
+            ->setParameter('fgd', $finGatewayDate->modify('+1 day'))
+            ->andWhere('s.dateEvaluation IS NULL')
+            ->andWhere('s.priorisation IN (:prios)')
+            ->setParameter('prios', ['Niveau 2a', 'Niveau 2b', 'Niveau 2c'])
+            // ->andWhere('s.EV_SafetyReportIdentifier = :val')
+            // ->setParameter('val', $EVSafetyReportIdentifier)
+            ->orderBy('s.id', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
 
     // public function countSusarByGatewayDateLastNDays(int $nbJour): array
     // {

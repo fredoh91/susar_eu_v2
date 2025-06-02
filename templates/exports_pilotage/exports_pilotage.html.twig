@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Exports pilotage
+{% endblock %}
+
+{% block body %}
+
+	{% include "_partials/_affichage_msg_flash.html.twig" %}
+
+	<div class="container-fluid p-5">
+
+		<h2 class="fw-bold mb-3 text-center">Extraction des SUSARs (non-traités et de niveau 2)</h2>
+
+		{{form_start(form)}}
+		<div class="row mb-3">
+			<div class="col-3 fw-bold">
+				Date déclaration du cas (gateway date)
+			</div>
+			<div class="col-2">
+				{{ form_label(form.debutGatewayDate, 'début :') }}
+				{{ form_widget(form.debutGatewayDate) }}
+			</div>
+			<div class="col-2">
+				{{ form_label(form.finGatewayDate, 'fin :') }}
+				{{ form_widget(form.finGatewayDate) }}
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-5"></div>
+			<div class="col-3">
+				{{ form_widget(form.extraction) }}
+			</div>
+		</div>
+		{{ form_end(form) }}
+	</div>
+{% endblock %}

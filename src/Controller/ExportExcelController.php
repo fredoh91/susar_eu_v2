@@ -71,7 +71,7 @@ class ExportExcelController extends AbstractController
         $sheet->setCellValue('B1', 'WorldWide id');
         $sheet->setCellValue('C1', 'Case version');
         $sheet->setCellValue('D1', 'EV_SafetyReportIdentifier');
-        $sheet->setCellValue('E1', 'N° EudraCT');
+        $sheet->setCellValue('E1', 'N° EUCT');
         $sheet->setCellValue('F1', 'Sender');
         $sheet->setCellValue('G1', 'Pays survenue');
         $sheet->setCellValue('H1', 'Gateway date');
