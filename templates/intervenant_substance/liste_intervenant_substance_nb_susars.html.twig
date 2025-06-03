@@ -39,8 +39,8 @@
                                 <th scope="col">DMM/Pôle</th>
                                 <th scope="col">Eval.</th>
                                 <th scope="col">Inactif</th>
-                                <th scope="col">Modif.</th>
-                                {# <th scope="col">Nb susar</th> #}
+                                {# <th scope="col">Modif.</th> #}
+                                <th scope="col">Nb susar (6 deniers mois)</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -91,13 +91,13 @@
                                             Actif
                                         {% endif %}
                                     </td>
-                                    <td>
+                                    {# <td>
                                         {% if IntSub.ActiveSubstanceHighLevel %}
                                             <a href="{{ path('app_intervenant_substance_modif',{'id':IntSub.Id}) }}" class="btn btn-primary">Modifier</a>
                                         {% endif %}
-                                    </td>
+                                    </td> #}
 
-{# 
+
                                     {% set nb_jours = 180 %}
                                     {% set date_limite = (date()|date_modify('-' ~ nb_jours ~ ' days')) %}
 
@@ -109,8 +109,12 @@
                                     {% endfor %}
 
                                     <td>
-                                        {{ NbSusars }}
-                                    </td> #}
+                                        {% if NbSusars == 0 %} 
+                                            <span class="text-danger fw-bold">{{ NbSusars }}</span>
+                                        {% else %}
+                                            {{ NbSusars }}
+                                        {% endif %}
+                                    </td>
                                 </tr>
                             {% endfor %}
                         </tbody>

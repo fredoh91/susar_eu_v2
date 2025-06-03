@@ -38,6 +38,27 @@ class IntervenantSubstanceController extends AbstractController
         ]);
     }
 
+    #[Route('/intervenant_substance_nb_susars', name: 'app_intervenant_substance_nb_susars')]
+    #[IsGranted("ROLE_SURV_PILOTEVEC")]
+    public function liste_intervenant_substance_nb_susars(ManagerRegistry $doctrine): Response
+    {
+        $entityManager = $doctrine->getManager();
+        $repos = $entityManager->getRepository(IntervenantSubstanceDMM::class);
+        // $TousIntSub = $repos->findAllSortHL_SA();
+        $TousIntSub = $repos->findAllSortHL_SA_sans_non_attribue();
+        $nbActif = $repos->nbIntSub(false);
+        $nbInactif = $repos->nbIntSub(true);
+
+        $NbIntSub = count($TousIntSub);
+
+        return $this->render('intervenant_substance/liste_intervenant_substance_nb_susars.html.twig', [
+            'TousIntSub' => $TousIntSub,
+            'NbIntSub' => $NbIntSub,
+            'NbActif' => $nbActif,
+            'NbInactif' => $nbInactif,
+        ]);
+    }
+
     #[Route('/intervenant_substance/detail/{id}', name: 'app_intervenant_substance_detail')]
     #[IsGranted("ROLE_SURV_PILOTEVEC")]
     public function liste_intervenant_substance_detail(ManagerRegistry $doctrine, int $id): Response
