@@ -204,16 +204,45 @@ class SusarEURepository extends ServiceEntityRepository
     }
 
 
+    // public function countSusarByGatewayDateLastNDays(int $nbJour): array
+    // {
+    //     $conn = $this->getEntityManager()->getConnection();
+    //     $sql = "
+    //     SELECT DATE_FORMAT(gateway_date, '%d/%m/%Y') AS formatted_gateway_date,
+    //            COUNT(id) AS NbSusar
+    //     FROM susar_eu
+    //     WHERE gateway_date >= DATE_SUB(CURDATE(), INTERVAL :nbJour DAY)
+    //     GROUP BY formatted_gateway_date
+    //     ORDER BY gateway_date ASC
+    // ";
+    //     $stmt = $conn->prepare($sql);
+    //     $stmt->bindValue('nbJour', $nbJour);
+    //     $result = $stmt->executeQuery();
+    //     return $result->fetchAllAssociative();
+    // }
+
     public function countSusarByGatewayDateLastNDays(int $nbJour): array
     {
         $conn = $this->getEntityManager()->getConnection();
         $sql = "
-        SELECT DATE_FORMAT(gateway_date, '%d/%m/%Y') AS formatted_gateway_date,
-               COUNT(id) AS NbSusar
-        FROM susar_eu
-        WHERE gateway_date >= DATE_SUB(CURDATE(), INTERVAL :nbJour DAY)
-        GROUP BY formatted_gateway_date
-        ORDER BY gateway_date ASC
+        WITH RECURSIVE DateRange AS (
+            SELECT DATE_SUB(CURDATE(), INTERVAL :nbJour DAY) AS date
+            UNION ALL
+            SELECT DATE_ADD(date, INTERVAL 1 DAY)
+            FROM DateRange
+            WHERE date < CURDATE()
+        )
+        SELECT
+            DATE_FORMAT(dr.date, '%d/%m/%Y') AS formatted_gateway_date,
+            COUNT(se.id) AS NbSusar
+        FROM
+            DateRange dr
+        LEFT JOIN
+            susar_eu se ON DATE(dr.date) = DATE(se.gateway_date)
+        GROUP BY
+            dr.date
+        ORDER BY
+            dr.date ASC
     ";
         $stmt = $conn->prepare($sql);
         $stmt->bindValue('nbJour', $nbJour);
@@ -221,31 +250,64 @@ class SusarEURepository extends ServiceEntityRepository
         return $result->fetchAllAssociative();
     }
 
-
+    // public function countSusarByGatewayDatePerWeekLastNWeeks(int $nbWeeks): array
+    // {
+    //     $conn = $this->getEntityManager()->getConnection();
+    //     $sql = "
+    //     SELECT
+    //         MIN(DATE_FORMAT(gateway_date, '%d/%m/%Y')) AS start_of_week,
+    //         MAX(DATE_FORMAT(gateway_date, '%d/%m/%Y')) AS end_of_week,
+    //         COUNT(id) AS NbSusar
+    //     FROM susar_eu
+    //     WHERE gateway_date >= DATE_SUB(CURDATE(), INTERVAL :nbWeeks WEEK)
+    //     GROUP BY
+    //         YEAR(gateway_date),
+    //         WEEK(gateway_date, 1)
+    //     ORDER BY
+    //         YEAR(gateway_date),
+    //         WEEK(gateway_date, 1) DESC
+    // ";
+    //     $stmt = $conn->prepare($sql);
+    //     $stmt->bindValue('nbWeeks', $nbWeeks);
+    //     $result = $stmt->executeQuery();
+    //     return $result->fetchAllAssociative();
+    // }
 
     public function countSusarByGatewayDatePerWeekLastNWeeks(int $nbWeeks): array
     {
         $conn = $this->getEntityManager()->getConnection();
         $sql = "
+        WITH RECURSIVE WeekRange AS (
+            SELECT
+                DATE_SUB(CURDATE(), INTERVAL (DAYOFWEEK(CURDATE()) - 1) DAY) AS week_end,
+                DATE_SUB(DATE_SUB(CURDATE(), INTERVAL (DAYOFWEEK(CURDATE()) - 1) DAY), INTERVAL 6 DAY) AS week_start
+            UNION ALL
+            SELECT
+                DATE_SUB(week_end, INTERVAL 7 DAY),
+                DATE_SUB(week_start, INTERVAL 7 DAY)
+            FROM
+                WeekRange
+            WHERE
+                week_start > DATE_SUB(CURDATE(), INTERVAL :nbWeeks WEEK)
+        )
         SELECT
-            MIN(DATE_FORMAT(gateway_date, '%d/%m/%Y')) AS start_of_week,
-            MAX(DATE_FORMAT(gateway_date, '%d/%m/%Y')) AS end_of_week,
-            COUNT(id) AS NbSusar
-        FROM susar_eu
-        WHERE gateway_date >= DATE_SUB(CURDATE(), INTERVAL :nbWeeks WEEK)
+            DATE_FORMAT(wr.week_start, '%d/%m/%Y') AS start_of_week,
+            DATE_FORMAT(wr.week_end, '%d/%m/%Y') AS end_of_week,
+            COUNT(se.id) AS NbSusar
+        FROM
+            WeekRange wr
+        LEFT JOIN
+            susar_eu se ON DATE(se.gateway_date) BETWEEN DATE(wr.week_start) AND DATE(wr.week_end)
         GROUP BY
-            YEAR(gateway_date),
-            WEEK(gateway_date, 1)
+            wr.week_start, wr.week_end
         ORDER BY
-            YEAR(gateway_date),
-            WEEK(gateway_date, 1) DESC
+            wr.week_start ASC
     ";
         $stmt = $conn->prepare($sql);
         $stmt->bindValue('nbWeeks', $nbWeeks);
         $result = $stmt->executeQuery();
         return $result->fetchAllAssociative();
     }
-
 
     public function findSusarByGatewayDate_exportPilotage($debutGatewayDate, $finGatewayDate): ?array
     {
