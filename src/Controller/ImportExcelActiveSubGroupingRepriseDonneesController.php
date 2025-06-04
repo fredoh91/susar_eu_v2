@@ -115,23 +115,23 @@ class ImportExcelActiveSubGroupingRepriseDonneesController extends AbstractContr
         ]);
     }
 
-    #[Route('/test_findByHL_SA_avec_inactifs', name: 'app_test_findByHL_SA_avec_inactifs')]
-    public function test_findByHL_SA_avec_inactifs(ManagerRegistry $doctrine, EntityManagerInterface $em): Response
-    {
+    // #[Route('/test_findByHL_SA_avec_inactifs', name: 'app_test_findByHL_SA_avec_inactifs')]
+    // public function test_findByHL_SA_avec_inactifs(ManagerRegistry $doctrine, EntityManagerInterface $em): Response
+    // {
 
-        $tabActSubGrp = [];
-        $entityManager = $doctrine->getManager();
-        $HL_SA_1 = $entityManager->getRepository(IntervenantSubstanceDMM::class)->findByHL_SA_avec_inactifs('BELATACEPT');
-        $HL_SA_2 = $entityManager->getRepository(IntervenantSubstanceDMM::class)->findByHL_SA_avec_inactifs('FOSMANOGEPIX');
+    //     $tabActSubGrp = [];
+    //     $entityManager = $doctrine->getManager();
+    //     $HL_SA_1 = $entityManager->getRepository(IntervenantSubstanceDMM::class)->findByHL_SA_avec_inactifs('BELATACEPT');
+    //     $HL_SA_2 = $entityManager->getRepository(IntervenantSubstanceDMM::class)->findByHL_SA_avec_inactifs('FOSMANOGEPIX');
 
 
-        // dd($HL_SA);
-        return $this->render('import_excel_active_sub_grouping/aff_active_sub_grouping_reprise_donnees.html.twig', [
-            'HL_SA_1' => $HL_SA_1,
-            'HL_SA_2' => $HL_SA_2,
-        ]);
+    //     // dd($HL_SA);
+    //     return $this->render('import_excel_active_sub_grouping/aff_active_sub_grouping_reprise_donnees.html.twig', [
+    //         'HL_SA_1' => $HL_SA_1,
+    //         'HL_SA_2' => $HL_SA_2,
+    //     ]);
 
-    }
+    // }
 
 
     #[Route('/import_excel_activesubgrouping', name: 'app_import_excel_active_sub_grouping')]

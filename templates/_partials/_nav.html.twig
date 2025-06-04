@@ -30,6 +30,9 @@
               {% if is_granted('ROLE_SURV_PILOTEVEC') %}
                 <li><a class="dropdown-item" href="{{ path ('app_intervenant_substance') }}">Intervenants/substances</a></li>
               {% endif %}
+              {% if is_granted('ROLE_SURV_ADMIN') %}
+                <li><a class="dropdown-item" href="{{ path ('app_intervenant_substance_nb_susars') }}">Intervenants/substances (nb SUSARs)</a></li>
+              {% endif %}
               <li><a class="dropdown-item" href="{{ path ('app_liste_HL_SA') }}">Liste des substances (pour requête EVDAS)</a></li>
 
               <li><a class="dropdown-item" href="{{ path ('app_import_excel_ctll') }}">Import d'un fichier CTLL</a></li>

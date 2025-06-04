@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use DateTimeImmutable;
+use App\Entity\SusarEU;
 use App\Entity\IntervenantSubstanceDMM;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
@@ -11,6 +12,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Form\IntervenantSubstanceDMM_detailType;
 use Symfony\Component\ExpressionLanguage\Expression;
+use Symfony\UX\Chartjs\Builder\ChartBuilderInterface;
+use Symfony\UX\Chartjs\Model\Chart;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
@@ -61,13 +64,55 @@ class IntervenantSubstanceController extends AbstractController
 
     #[Route('/intervenant_substance/detail/{id}', name: 'app_intervenant_substance_detail')]
     #[IsGranted("ROLE_SURV_PILOTEVEC")]
-    public function liste_intervenant_substance_detail(ManagerRegistry $doctrine, int $id): Response
+    public function liste_intervenant_substance_detail(ManagerRegistry $doctrine, int $id,ChartBuilderInterface $chartBuilder): Response
     {
         $entityManager = $doctrine->getManager();
         $IntSub = $entityManager->getRepository(IntervenantSubstanceDMM::class)->findIntSubById($id);
+        $nbSusars = $entityManager->getRepository(SusarEU::class)->countSusarByGatewayRgpMonth($id);
+
+
+
+        // Préparation des données pour Chart.js
+        $labels = [];
+        $data = [];
+        foreach ($nbSusars as $row) {
+            $labels[] = $row['month'];
+            $data[] = $row['nbSUSARs'];
+        }
+
+        $chart_nbSusars = $chartBuilder->createChart(Chart::TYPE_LINE);
+        $chart_nbSusars->setData([
+            'labels' => $labels,
+            'datasets' => [
+                [
+                    'label' => 'Nb SUSAR par mois de date Gateway',
+                    'backgroundColor' => 'rgba(54, 162, 235, 0.2)',
+                    'borderColor' => 'rgba(54, 162, 235, 1)',
+                    'data' => $data,
+                    'tension' => 0.2,
+                ],
+            ],
+        ]);
+        $chart_nbSusars->setOptions([
+            'maintainAspectRatio' => false,
+            'scales' => [
+                'x' => [
+                    'ticks' => [
+                        'maxRotation' => 45, // angle maximum
+                        'minRotation' => 45, // angle minimum
+                        // 'autoSkip' => false, // optionnel : pour ne pas masquer d'étiquettes
+                    ],
+                ],
+            ],
+        ]);
+
+
+
 
         return $this->render('intervenant_substance/liste_intervenant_substance_detail.html.twig', [
             'IntSub' => $IntSub,
+            'nbSusars' => $nbSusars,
+            'chart_nbSusars' => $chart_nbSusars,
         ]);
     }
 

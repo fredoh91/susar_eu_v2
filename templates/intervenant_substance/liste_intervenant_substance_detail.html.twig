@@ -1,60 +1,103 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Détail d'un intervenant/substance{% endblock %}
+{% block title %}Détail d'un intervenant/substance
+{% endblock %}
 
 {% block body %}
 
-{# {{ encore_entry_link_tags('intervenant_substance_css') }} #}
+	{# {{ encore_entry_link_tags('intervenant_substance_css') }} #}
 
-{{ encore_entry_link_tags('int_sub_detail') }}
+	{{ encore_entry_link_tags('int_sub_detail') }}
 
-{# <div class="{% if IntSub.inactif %}rouge-clair{% else %}vert-clair{% endif %}"> #}
-<body class="{% if IntSub.inactif %}rouge-clair{% else %}vert-clair{% endif %}">
-    <div class="container-md">
-        {% if IntSub %}
-            <div class="row justify-content-center align-items-center">
-                <div class="col-12 text-center">
-                    <h1>{{ IntSub.ActiveSubstanceHighLevel }}</h1>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-12 text-left">
+	{# <div class="{% if IntSub.inactif %}rouge-clair{% else %}vert-clair{% endif %}"> #}
+	<body class="{% if IntSub.inactif %}rouge-clair{% else %}vert-clair{% endif %}">
+		<div class="container-md">
+			{% if IntSub %}
+				<div class="row justify-content-center align-items-center">
+					<div class="col-12 text-center">
+						<h1>{{ IntSub.ActiveSubstanceHighLevel }}</h1>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-12 text-left">
 
-                    Intervenant Substance DMM
-                    {% if IntSub.inactif %}
-                        <span class="fw-bold fs-4">Inactif</span><br>
-                    {% else %}
-                        <span class="fw-bold fs-4">Actif</span><br>
-                    {% endif %}
-                    Id : {{ IntSub.id }}<br>
-                    DMM : {{ IntSub.DMM }}<br>
-                    Pole court : {{ IntSub.PoleCourt }}<br>
-                    Évaluateur : {{ IntSub.IntervenantANSM.Prenom }} {{ IntSub.IntervenantANSM.Nom }} ({{ IntSub.evaluateur }}) <br>
-                    SaMS/Mono : {{ IntSub.TypeSaMSMono }}<br>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-12">
-                    {% if IntSub.AssociationDeSubstances %}
-                        <h2>Association de substances :</h2>
-                        <ul>
-                            {% for LL_SA in IntSub.IntervenantSubstanceDMMSubstances %}
-                                <li>{{ LL_SA.ActiveSubstanceLowLevel }}</li>
-                            {% endfor %}
-                        </ul>
-                    {% else %}
-                        Pas d'association de substances
-                    {% endif %}
-                </div>
-            </div>
-        {% else %}
-            <div class="row">
-                <div class="col-12 text-center">
-                    Il n'y pas d'intervenant substance DMM
-                </div>
-            </div>
-        {% endif %}
-    </div>
-</body>
+						Intervenant Substance DMM : 
+						{% if IntSub.inactif %}
+							<span class="fw-bold fs-4">Inactif</span><br>
+						{% else %}
+							<span class="fw-bold fs-4">Actif</span><br>
+						{% endif %}
+						Id :
+						{{ IntSub.id }}<br>
+						DMM :
+						{{ IntSub.DMM }}<br>
+						Pole court :
+						{{ IntSub.PoleCourt }}<br>
+						Évaluateur :
+						{{ IntSub.IntervenantANSM.Prenom }}
+						{{ IntSub.IntervenantANSM.Nom }}
+						({{ IntSub.evaluateur }})
+						<br>
+						SaMS/Mono :
+						{{ IntSub.TypeSaMSMono }}<br>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-12">
+						{% if IntSub.AssociationDeSubstances %}
+							<h2>Association de substances :</h2>
+							<ul>
+								{% for LL_SA in IntSub.IntervenantSubstanceDMMSubstances %}
+									<li>{{ LL_SA.ActiveSubstanceLowLevel }}</li>
+								{% endfor %}
+							</ul>
+						{% else %}
+							Pas d'association de substances
+						{% endif %}
+					</div>
+				</div>
+				{% if nbSusars %}
+					<div class="susar-titre">
+						<h3>Liste des SUSARs attribués à cette substance (ou association) :</h3>
+					</div>
+					<div class="susar-flex-container">
+						<div class="susar-table-container">
+							<table class="table table-success table-striped table-sm table-sm-custom">
+								<thead>
+									<tr>
+										<th scope="col">Année-Mois</th>
+										<th scope="col">Nb SUSARs</th>
+									</tr>
+								</thead>
+								<tbody>
+									{% for nbSusar in nbSusars %}
+										<tr>
+											<td>{{ nbSusar.month }}</td>
+											<td>{{ nbSusar.nbSUSARs }}</td>
+										</tr>
+									{% endfor %}
+								</tbody>
+							</table>
+						</div>
+						<div class="susar-graph-container">
+							{# <div style="height: 300px;"> #}
+								{{ render_chart(chart_nbSusars) }}
+								{# {{ dump(lstSusarGateway)}} #}
+
+							{# </div> #}
+						</div>
+					</div>
+				{% else %}
+					Pas de SUSARs attribué à cette substance
+				{% endif %}
+			{% else %}
+				<div class="row">
+					<div class="col-12 text-center">
+						Il n'y pas d'intervenant substance DMM
+					</div>
+				</div>
+			{% endif %}
+		</div>
+	</body>
 
 {% endblock %}
