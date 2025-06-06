@@ -50,11 +50,22 @@ class ImportCtllRepository extends ServiceEntityRepository
         //     ->getResult()
         // ;
 
+        // $result =  $this->createQueryBuilder('i')
+        //     ->leftJoin('i.susarEU', 's') 
+        //     ->addSelect('s')
+        //     ->leftJoin('s.Medicament', 'm') 
+        //     ->addSelect('m') 
+        //     ->andWhere('i.SusarAttribue IS NULL OR i.SusarAttribue = false')
+        //     ->andWhere('i.SusarDejaExistant IS NULL OR i.SusarDejaExistant = false')
+        //     ->andWhere('i.ImportCtllFicExcel = :val3')
+        //     ->setParameter('val3', $idImportCtllFicExcel)
+        //     ->orderBy('i.id', 'ASC')
+        //     ->getQuery()
+        //     ->getResult();
+
         $result =  $this->createQueryBuilder('i')
             ->leftJoin('i.susarEU', 's') 
             ->addSelect('s')
-            ->leftJoin('s.Medicament', 'm') 
-            ->addSelect('m') 
             ->andWhere('i.SusarAttribue IS NULL OR i.SusarAttribue = false')
             ->andWhere('i.SusarDejaExistant IS NULL OR i.SusarDejaExistant = false')
             ->andWhere('i.ImportCtllFicExcel = :val3')

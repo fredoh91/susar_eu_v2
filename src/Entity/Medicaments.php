@@ -89,6 +89,9 @@ class Medicaments
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $Type_saMS_Mono = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $substancename_avantModifAttribProductname = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -390,6 +393,18 @@ class Medicaments
     public function setTypeSaMSMono(?string $Type_saMS_Mono): static
     {
         $this->Type_saMS_Mono = $Type_saMS_Mono;
+
+        return $this;
+    }
+
+    public function getSubstancenameAvantModifAttribProductname(): ?string
+    {
+        return $this->substancename_avantModifAttribProductname;
+    }
+
+    public function setSubstancenameAvantModifAttribProductname(?string $substancename_avantModifAttribProductname): static
+    {
+        $this->substancename_avantModifAttribProductname = $substancename_avantModifAttribProductname;
 
         return $this;
     }

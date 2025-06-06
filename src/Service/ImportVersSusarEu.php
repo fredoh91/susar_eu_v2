@@ -40,8 +40,14 @@ class ImportVersSusarEu
     private int $nbOfInsertedMedHist = 0;
     private int $nbOfInsertedIndic = 0;
     private int $nbSusarAttribue = 0;
+    private int $nbSusarNonAttribue = 0;
     private int $nbMedicAttribue = 0;
     private $gatewayDate = [];
+    private $idNonAttribue = [];
+    private $lst_productname = [];
+    private $lst_substancename = [];
+    private $lst_productname_nonAttribue = [];
+    private $lst_substancename_nonAttribue = [];
     private LoggerInterface $logger;
 
     public function __construct(
@@ -68,10 +74,10 @@ class ImportVersSusarEu
 
     public function importExcelVersTbSusarEu(int $idImportCtllFicExcel, EntityManagerInterface $em, AuthenticationUtils $authenticationUtils, $user )
     {
-        $importCtll = $this->importCtllRepository->findByIdImport($idImportCtllFicExcel);
+        $importCtlls = $this->importCtllRepository->findByIdImport($idImportCtllFicExcel);
 
 
-        if ($importCtll) {
+        if ($importCtlls) {
             if ($user) {
                 $userName = $user->getUserName(); // Appelle la méthode getUserName() de l'entité User
                 // dd($userName); // Affiche le userName pour vérifier
@@ -83,7 +89,7 @@ class ImportVersSusarEu
             set_time_limit(600); 
 
 
-            foreach ($importCtll as $importCtll) {
+            foreach ($importCtlls as $importCtll) {
                 $EVSafetyReportIdentifier = $importCtll->getEVSafetyReportIdentifier();
                 if (!$this->susarEURepository->existeEV_SafetyReportIdentifier($EVSafetyReportIdentifier)) {
                     $importCtll->setSusarDejaExistant(false);
@@ -173,19 +179,35 @@ class ImportVersSusarEu
                     $susarEU->setUpdatedAt($dateImport);
                     $susarEU->setUtilisateurImport($userName);
                     $em->persist($susarEU);
-                    $em->flush();   // On flush ici pour que l'id du susar soit disponible pour les médicaments et effets indésirables
+                    // $em->flush();   // On flush ici pour que l'id du susar soit disponible pour les médicaments et effets indésirables
                     // Import des médicaments
                     $lstMedSupInter = $this->importMedicaments($importCtll, $susarEU, $em, $dateImport);
+
+                    if (is_array($lstMedSupInter) && empty($lstMedSupInter)) {
+                        // On n'a pas pu importer de médicaments, on supprime le susar
+                        foreach ($susarEU->getMedicament() as $medicament) {
+                            $em->remove($medicament);
+                            $this->nbOfInsertedMedic--;
+                        }
+                        $em->remove($susarEU);
+                        $importCtll->setSusarAttribue(false);
+
+                        $this->lst_productname_nonAttribue[] = $this->lst_productname;
+                        $this->lst_substancename_nonAttribue[] = $this->lst_substancename;
+                        // $em->flush();
+                        $this->logger->error('Aucun médicament n\'a pu être importé pour le susar, ce susar ne sera pas sauvegardé : ' . $susarEU->getEVSafetyReportIdentifier());
+                        continue; // On passe au susar suivant
+                    }
                     // Import des médicaments
                     $lstEffInd = $this->importEffetsIndesirables($importCtll, $susarEU, $em, $dateImport);
                     // Création des lignes dans la table substance_pt
-
+                    
                     $this->creationSubstancePt($lstMedSupInter, $lstEffInd, $susarEU, $em, $dateImport);
                     // Import medical history
                     $this->importMedicalHistory($importCtll, $susarEU, $em, $dateImport);
                     // Import indications
                     $this->importIndications($importCtll, $susarEU, $em, $dateImport);
-
+                    
                     $this->nbOfInsertedSusar++;
                 } else {
                     // ce cas est déjà dans la base, on flag l'import comme "deja existant"
@@ -205,8 +227,12 @@ class ImportVersSusarEu
             'nbOfInsertedMedHist' => $this->nbOfInsertedMedHist,
             'nbOfInsertedIndic' => $this->nbOfInsertedIndic,
             'nbSusarAttribue' => $this->nbSusarAttribue,
+            'nbSusarNonAttribue' => $this->nbSusarNonAttribue,
             'nbMedicAttribue' => $this->nbMedicAttribue,
             'gatewayDate' => $this->gatewayDate,
+            'idNonAttribue' => $this->idNonAttribue,
+            'lst_productname_nonAttribue' => $this->lst_productname_nonAttribue,
+            'lst_substancename_nonAttribue' => $this->lst_substancename_nonAttribue,
         ];
     }
 
@@ -223,6 +249,9 @@ class ImportVersSusarEu
     {
         $nbMedicAttribue = 0;
         $lstMedSupInter = [];
+        $this->lst_productname = [$importCtll->getId()];
+        $this->lst_substancename = [$importCtll->getId()];
+
         $tousMedicSuspInt = $importCtll->getSuspectInteractingEnhancedReportedDrugList();
 
         $tousMedicConc = $importCtll->getConcomitantNotAdministeredEnhancedReportedDrugList();
@@ -231,7 +260,8 @@ class ImportVersSusarEu
             $tousMedicSuspIntArray = $this->split_BR_BR($tousMedicSuspInt);
             foreach ($tousMedicSuspIntArray as $medic) {
                 $medicament = new Medicaments();
-                $medicament->setSusar($susarEU);
+                // $medicament->setSusar($susarEU);
+                $susarEU->addMedicament($medicament);
                 $medicament->setNomProduitBrut($medic);
 
                 $parsingMedic = $this->parsingMedicaments->donneParsing($medic);
@@ -241,12 +271,15 @@ class ImportVersSusarEu
                     if (($parsingMedic['substance']) === null || $parsingMedic['substance'] === '') {
                         $medicament->setSubstanceName($parsingMedic['produit']);
                         $substancePourRecherche = $parsingMedic['produit'];
+                        $this->lst_substancename[] = $parsingMedic['produit'];
                     } else {
                         $medicament->setSubstanceName($parsingMedic['substance']);
                         $substancePourRecherche = $parsingMedic['substance'];
+                        $this->lst_substancename[] = $parsingMedic['substance'];
                     }
                     $lstMedSupInter[] = $substancePourRecherche;
                     $medicament->setProductname($parsingMedic['produit']);
+                    $this->lst_productname[] = $parsingMedic['produit'];
                     switch ($parsingMedic['drug_char']) {
                         case 'S':
                             $medicament->setProductcharacterization('Suspect');
@@ -325,12 +358,61 @@ class ImportVersSusarEu
                 $em->persist($medicament);
                 $this->nbOfInsertedMedic++;
 
-
                 // return [
                 //     'nbSusarAttribue' => $nbSusarAttribue,
                 //     'nbMedicAttribue' => $nbMedicAttribue,
                 // ];
             }
+
+            if ($nbMedicAttribue == 0) {
+                // Aucun médicament n'a été attribué, on va reboucler sur les médicaments de ce susar, en essayant de faire l'attribution d'évaluateu
+                //   grace au Productname
+                foreach ($susarEU->getMedicament() as $medicament) {
+
+                    $substancePourRecherche = $medicament->getProductname();
+
+                    // attribution de l'évaluateur a ce médicament
+                    if ($substancePourRecherche) {
+                        // $IntervenantSubstanceDMM = $em->getRepository(IntervenantSubstanceDMM::class)->findByInHL_SA($parsingMedic['substance']);
+
+                        $IntervenantSubstanceDMM = $em->getRepository(IntervenantSubstanceDMM::class)->findContainingHL_SA($substancePourRecherche);
+                        if ($IntervenantSubstanceDMM) {
+                            if (count($IntervenantSubstanceDMM) === 1) {
+                                // Il n'y a qu'un seul intervenant-substance, on l'attribue au médicament
+                            } else {
+
+                                $this->logger->warning('Il y a plusieurs intervenants-substance pour l\'ID suivant de la table importCtll : '
+                                                        . $importCtll->getId()
+                                                        . '. Pour la substance suivante : ' . $substancePourRecherche . '.');
+
+                            }
+                            $nbMedicAttribue++;
+                            // On tag cette ligne comme "attribuée" dans la table d'import
+                            $importCtll->setSusarAttribue(true);
+                            $em->persist($importCtll);
+                            // Il faut lier ce médicament à l'intervenant substance DMM
+                            $medicament->setIntervenantSubstanceDMM($IntervenantSubstanceDMM[0]);
+                            $medicament->setTypeSaMSMono($IntervenantSubstanceDMM[0]->getTypeSaMSMono());
+
+                            // Il faut lier l'intervenant-substance au susar passé en paramètre
+                            $susarEU->addIntervenantSubstanceDMM($IntervenantSubstanceDMM[0]);
+
+                            // On stocke l'ancien nom de la substance avant modification
+                            $medicament->setSubstancenameAvantModifAttribProductname($medicament->getSubstancename());
+                            $medicament->setSubstancename($medicament->getProductname());
+
+                            $em->persist($medicament);
+                        }
+                    }
+                }
+            }
+            if ($nbMedicAttribue == 0) {
+                // On n'a pas réussi a attribuer d'évaluateur, on va essayer d'annuler l'enregistrement de ce susar
+                $this->idNonAttribue[] = $importCtll->getId();
+                $this->nbSusarNonAttribue++;
+                return [];
+            }
+
             $nbSusarAttribue = $nbMedicAttribue > 0 ? 1 : 0;
 
             $this->nbSusarAttribue = $this->nbSusarAttribue  + $nbSusarAttribue;
@@ -338,6 +420,7 @@ class ImportVersSusarEu
         }
 
         if ($tousMedicConc) {
+            //
             $tousMedicConcArray = $this->split_BR_BR($tousMedicConc);
             foreach ($tousMedicConcArray as $medic) {
                 $medicament = new Medicaments();

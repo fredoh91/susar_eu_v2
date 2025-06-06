@@ -22,20 +22,37 @@ class MedicamentsRepository extends ServiceEntityRepository
     }
 
 
-       /**
-        * @return Medicaments[] Returns an array of Medicaments objects
-        */
-       public function findBySusarId(int $susarId): array
-       {
-           return $this->createQueryBuilder('m')
-               ->andWhere('m.susar_id = :val')
-               ->setParameter('val', $susarId)
-               ->orderBy('m.id', 'ASC')
-               ->setMaxResults(10)
-               ->getQuery()
-               ->getResult()
-           ;
-       }
+    /**
+     * @return Medicaments[] Returns an array of Medicaments objects
+     */
+    public function findBySusarId(int $susarId): array
+    {
+        return $this->createQueryBuilder('m')
+            ->andWhere('m.susar_id = :val')
+            ->setParameter('val', $susarId)
+            ->orderBy('m.id', 'ASC')
+            ->setMaxResults(10)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    /**
+     * @return Medicaments[] Returns an array of Medicaments objects
+     */
+    public function findBySusarIdAndBySuspectInteracting(int $susarId): array
+    {
+        return $this->createQueryBuilder('m')
+            ->andWhere('m.susar = :val')
+            ->setParameter('val', $susarId)
+            ->andWhere('m.productcharacterization IN (:types)')
+            ->setParameter('types', ['Suspect', 'Interacting'])
+            ->orderBy('m.id', 'ASC')
+            ->setMaxResults(10)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 
     //    /**
     //     * @return Medicaments[] Returns an array of Medicaments objects

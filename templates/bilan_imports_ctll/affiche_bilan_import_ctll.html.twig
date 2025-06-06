@@ -14,7 +14,8 @@
 				<table class="table">
 					<thead>
 						<tr>
-							<th scope="col">Date du fichier</th>
+							<th scope="col">Nom du fichier</th>
+							{# <th scope="col">Date du fichier</th> #}
 							<th scope="col">Date d'import</th>
 							<th scope="col">Utilisateur import</th>
 							<th scope="col">Date(s) de gateway</th>
@@ -29,13 +30,16 @@
 
 							{% if bilan.nbInsertedSusar - bilan.nbSusarAttribue > 0 %}
 								<tr class="table-danger">
-								{% else %}
-									<tr class="table-success">
-									{% endif %}
+							{% else %}
+								<tr class="table-success">
+							{% endif %}
 
 									<td scope="row" style="width:20%;">
-										{{ bilan.dateFichier|format_datetime(dateFormat='short', timeFormat='short', locale='fr') }}
+										{{ bilan.FileName|e }}
 									</td>
+									{# <td scope="row" style="width:20%;">
+										{{ bilan.dateFichier|format_datetime(dateFormat='short', timeFormat='short', locale='fr') }}
+									</td> #}
 
 									<td scope="row" style="width:20%;">
 										{{ bilan.dateImport|format_datetime(dateFormat='short', timeFormat='medium', locale='fr') }}

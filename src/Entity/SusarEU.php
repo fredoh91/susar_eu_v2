@@ -177,7 +177,7 @@ class SusarEU
     // #[ORM\Column(length: 1000, nullable: true)]
     // private ?string $StudyRegistrationN = null;
 
-    #[ORM\OneToOne(inversedBy: 'susarEU', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(inversedBy: 'susarEU', cascade: ['persist'])]
     private ?ImportCtll $ImportCtll = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]

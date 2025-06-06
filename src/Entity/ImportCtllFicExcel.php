@@ -16,7 +16,7 @@ class ImportCtllFicExcel
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $dateFichier = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -60,6 +60,13 @@ class ImportCtllFicExcel
 
     #[ORM\Column(nullable: true)]
     private ?array $gatewayDate = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $nbSusarNonAttribue = null;
+
+    #[ORM\Column(type: Types::SIMPLE_ARRAY, nullable: true)]
+    private ?array $idNonAttribue = null;
+
 
     public function __construct()
     {
@@ -256,4 +263,29 @@ class ImportCtllFicExcel
 
         return $this;
     }
+
+    public function getNbSusarNonAttribue(): ?int
+    {
+        return $this->nbSusarNonAttribue;
+    }
+
+    public function setNbSusarNonAttribue(?int $nbSusarNonAttribue): static
+    {
+        $this->nbSusarNonAttribue = $nbSusarNonAttribue;
+
+        return $this;
+    }
+
+    public function getIdNonAttribue(): ?array
+    {
+        return $this->idNonAttribue;
+    }
+
+    public function setIdNonAttribue(?array $idNonAttribue): static
+    {
+        $this->idNonAttribue = $idNonAttribue;
+
+        return $this;
+    }
+
 }

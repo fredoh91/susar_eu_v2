@@ -28,6 +28,7 @@ final class ImportExcelCTLLController extends AbstractController
     private ImportVersSusarEu $importVersSusarEu;
     private array $nbDonneesInserees;
     private LoggerInterface $logger;
+    private string $nomFichierExcel = '';
 
     public function __construct(ImportVersSusarEu $importVersSusarEu, LoggerInterface $logger,)
     {
@@ -53,6 +54,9 @@ final class ImportExcelCTLLController extends AbstractController
             if ($FicExcel) {
                 // Démarrer le chronomètre
                 $startTime = microtime(true);
+
+
+
                 $user = $this->getUser(); // Récupère l'utilisateur connecté
                 if ($user) {
                     $userName = $user->getUserName(); // Appelle la méthode getUserName() de l'entité User
@@ -89,14 +93,20 @@ final class ImportExcelCTLLController extends AbstractController
 
                 // $this->finalizeImport($FicExcel, $importCtllFicExcel, $em);
                 // Ici on mettra a jour l'entité ImportCtllFicExcel avec le nombre de lignes insérées
+
+                // dump($this->nbDonneesInserees);
+
                 $importCtllFicExcel->setNbInsertedSusar($this->nbDonneesInserees['nbOfInsertedSusar'])
                     ->setNbInsertedMedic($this->nbDonneesInserees['nbOfInsertedMedic'])
                     ->setNbInsertedEffInd($this->nbDonneesInserees['nbOfInsertedEffInd'])
                     ->setNbInsertedMedHist($this->nbDonneesInserees['nbOfInsertedMedHist'])
                     ->setNbInsertedIndic($this->nbDonneesInserees['nbOfInsertedIndic'])
                     ->setNbSusarAttribue($this->nbDonneesInserees['nbSusarAttribue'])
+                    ->setNbSusarNonAttribue($this->nbDonneesInserees['nbSusarNonAttribue'])
                     ->setNbMedicAttribue($this->nbDonneesInserees['nbMedicAttribue'])
-                    ->setGatewayDate($this->nbDonneesInserees['gatewayDate']);
+                    ->setGatewayDate($this->nbDonneesInserees['gatewayDate'])
+                    ->setIdNonAttribue($this->nbDonneesInserees['idNonAttribue'])
+                    ;
 
                 $em->flush();
                 $em->clear();
@@ -116,6 +126,7 @@ final class ImportExcelCTLLController extends AbstractController
             'nbDonneesInserees' => $this->nbDonneesInserees,
             'dureeImport' => $dureeImport,
             'nonAttribues' => $nonAttribues,
+            'nomFichierExcel' => $this->nomFichierExcel
         ]);
     }
 
@@ -190,17 +201,26 @@ final class ImportExcelCTLLController extends AbstractController
         $activeWorksheet = $spreadsheet->getActiveSheet();
         $highestRow = $activeWorksheet->getHighestRow();
 
+
         $importCtllFicExcel = $this->createImportCtllFicExcel($FicExcel, $inputFileName, $authenticationUtils);
 
         $this->processWorksheetRows($activeWorksheet, $highestRow, $importCtllFicExcel, $em);
 
         $this->finalizeImport($FicExcel, $importCtllFicExcel, $em);
+        
+        // $timestampCreationExcel = $spreadsheet->getProperties()->getCreated();
+        // dump($timestampCreationExcel);
+        // dd(\DateTimeImmutable::createFromFormat('U', $timestampCreationExcel));
+        // if ($timestampCreationExcel) {
+        //     $importCtllFicExcel->setDateFichier(\DateTimeImmutable::createFromFormat('U', $timestampCreationExcel));
+        // }
+
         return $importCtllFicExcel;
     }
 
     private function createImportCtllFicExcel(UploadedFile $FicExcel, string $inputFileName, AuthenticationUtils $authenticationUtils): ImportCtllFicExcel
     {
-        $creation_time = DateTimeImmutable::createFromFormat('U', filectime($inputFileName));
+        // $creation_time = DateTimeImmutable::createFromFormat('U', filectime($inputFileName));
         $import_date = new DateTimeImmutable();
         // $lastUsername = $authenticationUtils->getLastUsername();
         $user = $this->getUser(); // Récupère l'utilisateur connecté
@@ -211,11 +231,12 @@ final class ImportExcelCTLLController extends AbstractController
             throw $this->createAccessDeniedException('Utilisateur non connecté.');
         }
         $importCtllFicExcel = new ImportCtllFicExcel();
-        $importCtllFicExcel->setDateFichier($creation_time)
+        $importCtllFicExcel
+            // ->setDateFichier($creation_time)
             ->setUtilisateurImport($userName)
             ->setFileName($FicExcel->getClientOriginalName())
             ->setDateImport($import_date);
-
+        $this->nomFichierExcel = $FicExcel->getClientOriginalName();
         return $importCtllFicExcel;
     }
 
@@ -237,7 +258,8 @@ final class ImportExcelCTLLController extends AbstractController
         $fileName = 'CTLL_' . $dateHeureUnique . '.xlsx';
 
 
-        $importCtllFicExcel->setFileName($fileName)
+        $importCtllFicExcel
+            // ->setFileName($fileName)
             ->setNbLignesDataFicExcel($this->importedRowsCount);
         // ->setNbInsertedSusar($this->nbDonneesInserees['nbOfInsertedSusar'])
         // ->setNbInsertedMedic($this->nbDonneesInserees['nbOfInsertedMedic'])

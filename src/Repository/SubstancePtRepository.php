@@ -48,6 +48,15 @@ class SubstancePtRepository extends ServiceEntityRepository
      */
     public function isLinkedToSusarEU(SubstancePt $substancePt, SusarEU $susarEU)
     {
+        // Si le SusarEU n'a pas d'ID, on teste en mémoire
+        if (null === $susarEU->getId()) {
+            foreach ($substancePt->getSusarEUs() as $susar) {
+                if ($susar === $susarEU) {
+                    return true;
+                }
+            }
+            return false;
+        }
         return $this->createQueryBuilder('s')
             ->where('s = :substance_pt')
             ->andWhere(':susar_eu MEMBER OF s.susarEUs')
@@ -56,7 +65,7 @@ class SubstancePtRepository extends ServiceEntityRepository
             ->getQuery()
             ->getOneOrNullResult() !== null;
     }
-    
+
     // public function isLinkedToSusarEU_2(SubstancePt $substancePt, int $susarEUId): bool
     // {
     //     return $this->createQueryBuilder('s')
