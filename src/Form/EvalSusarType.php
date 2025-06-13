@@ -57,7 +57,10 @@ class EvalSusarType extends AbstractType
             'reset',
             SubmitType::class,
             [
-                'attr' => ['class' => 'btn btn-primary m-2'],
+                'attr' => [
+                    'class' => 'btn btn-primary m-2',
+                    'formnovalidate' => 'formnovalidate',
+                ],
                 'label' => 'Annulation',
                 'row_attr' => ['id' => 'reset'],
             ]
