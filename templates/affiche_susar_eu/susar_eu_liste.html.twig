@@ -5,138 +5,147 @@
 	{{ encore_entry_link_tags('type_eu_css') }}
 	{{ encore_entry_link_tags('rech_susar_css') }}
 
-	<div
-		class="page_liste_susar">
+	<div class="page_liste_susar">
+
+
+
+
+
 		{# <div class="p-3"> #}
-		<div class="">
-			{% for message in app.flashes('success') %}
-				<div class="alert alert-success">
-					{{ message }}
+			<div class="">
+				{% for message in app.flashes('success') %}
+					<div class="alert alert-success">
+						{{ message }}
+					</div>
+				{% endfor %}
+			</div>
+
+			{# <div class="display-4 text-center mt-0 mb-4">Liste des SUSARs</div> #}
+			<div class="display-4 text-center mt-0 mb-0">Liste des SUSARs</div>
+
+			{# <div class="container-fluid p-5"> #}
+			<div class="container-fluid px-5">
+
+				{{form_start(form)}}
+				<div class="container_rech_susar_eu">
+					<div class="container_rech_susar_eu_haut">
+
+						<div class="rech-titre_att fw-bold">Attribution</div>
+						<div class="rech-lib_ref">{{ form_label(form.evaluateurAttribue, 'Évaluateur référent') }}</div>
+						<div class="rech-chp_ref">{{ form_widget(form.evaluateurAttribue) }}</div>
+						<div class="rech-lib_dmm">{{ form_label(form.dmmPoleChoice, 'DMM/Pôle') }}</div>
+						<div class="rech-chp_dmm">{{ form_widget(form.dmmPoleChoice) }}</div>
+
+						<div class="rech-titre_eva fw-bold">Évaluation</div>
+						<div class="rech-lib_castrt">{{ form_label(form.casTraite, 'Cas traité') }}</div>
+						<div class="rech-chp_castrt">{{ form_widget(form.casTraite) }}</div>
+						<div class="rech-lib_evalpar">{{ form_label(form.evaluateurEvaluation, 'Évalué par') }}</div>
+						<div class="rech-chp_evalpar">{{ form_widget(form.evaluateurEvaluation) }}</div>
+						<div class="rech-lib_concl">{{ form_label(form.assessment_outcome, 'Conclusion évaluation') }}</div>
+						<div class="rech-chp_concl">{{ form_widget(form.assessment_outcome) }}</div>
+
+						<div class="rech-titre_ess fw-bold">Essai concerné</div>
+						<div class="rech-lib_euct">{{ form_label(form.num_eudract, 'N° EUCT') }}</div>
+						<div class="rech-chp_euct">{{ form_widget(form.num_eudract) }}</div>
+						<div class="rech-lib_ssn">{{ form_label(form.sponsorstudynumb, 'Sponsor study num.') }}</div>
+						<div class="rech-chp_ssn">{{ form_widget(form.sponsorstudynumb) }}</div>
+						<div class="rech-lib_pays">{{ form_label(form.paysSurvenue, 'Pays survenue') }}</div>
+						<div class="rech-chp_pays">{{ form_widget(form.paysSurvenue) }}</div>
+
+						<div class="rech-titre_niv fw-bold">Niveau de classification</div>
+						<div class="rech-susar-niv1">
+							{{ form_row(form.niveau1, {'label': 'Niveau 1', 'row_attr': {'class': 'chbx_niv_form_row'}}) }}
+						</div>
+						<div class="rech-susar-niv2a">
+							{{ form_row(form.niveau2a, {'label': 'Niveau 2a', 'row_attr': {'class': 'chbx_niv_form_row'}}) }}
+						</div>
+						<div class="rech-susar-niv2b">
+							{{ form_row(form.niveau2b, {'label': 'Niveau 2b', 'row_attr': {'class': 'chbx_niv_form_row'}}) }}
+						</div>
+						<div class="rech-susar-niv2c">
+							{{ form_row(form.niveau2c, {'label': 'Niveau 2c', 'row_attr': {'class': 'chbx_niv_form_row'}}) }}
+						</div>
+
+						<div class="rech-titre_car fw-bold">Caractéristiques</div>
+						<div class="rech-lib_sa">{{ form_label(form.substanceName, 'Substance active') }}</div>
+						<div class="rech-chp_sa">{{ form_widget(form.substanceName) }}</div>
+						<div class="rech-lib_pt">{{ form_label(form.effetIndesirable, 'PT') }}</div>
+						<div class="rech-chp_pt">{{ form_widget(form.effetIndesirable) }}</div>
+						<div class="rech-lib_idsusar">{{ form_label(form.idSusar, 'IdSUSAR') }}</div>
+						<div class="rech-chp_idsusar">{{ form_widget(form.idSusar) }}</div>
+						<div class="rech-lib_wwid">{{ form_label(form.worldWide_id, 'ID cas (worldwide)') }}</div>
+						<div class="rech-chp_wwid">{{ form_widget(form.worldWide_id) }}</div>
+
+						<div class="rech-titre_per fw-bold">Période</div>
+						<div class="rech-lib_dgd">{{ form_label(form.debutGatewayDate, 'Date décla. cas (début)') }}</div>
+						<div class="rech-chp_dgd">{{ form_widget(form.debutGatewayDate) }}</div>
+						<div class="rech-lib_fgd">{{ form_label(form.finGatewayDate, 'Date décla. cas (fin)') }}</div>
+						<div class="rech-chp_fgd">{{ form_widget(form.finGatewayDate) }}</div>
+						{% if is_granted('ROLE_SUPER_ADMIN') or is_granted('ROLE_SURV_PILOTEVEC')  %}
+							<div class="rech-lib_ddi">{{ form_label(form.debutDateImport, 'Date import (début)') }}</div>
+							<div class="rech-chp_ddi">{{ form_widget(form.debutDateImport) }}</div>
+							<div class="rech-lib_fdi">{{ form_label(form.finDateImport, 'Date import (fin)') }}</div>
+							<div class="rech-chp_fdi">{{ form_widget(form.finDateImport) }}</div>
+						{% endif %}
+					</div>
+					
+					<div class="container_rech_susar_eu_bas">
+
+						<div class="container_rech_susar_eu_gauche">
+							<div class="rech-titre_spe fw-bold">Spécificités</div>
+							<div class="rech-lib_sams">{{ form_label(form.type_saMS_Mono, 'saMS/Mono.') }}</div>
+							<div class="rech-chp_sams">{{ form_widget(form.type_saMS_Mono) }}</div>
+							<div class="rech-lib_pop">{{ form_label(form.patientAgeGroup, 'Population') }}</div>
+							<div class="rech-chp_pop">{{ form_widget(form.patientAgeGroup) }}</div>
+							<div class="rech-lib_euro">{{ form_label(form.casEurope, 'Cas Europe') }}</div>
+							<div class="rech-chp_euro">{{ form_widget(form.casEurope) }}</div>
+							<div class="rech-lib_dme">{{ form_label(form.casDME, 'Cas DME') }}</div>
+							<div class="rech-chp_dme">{{ form_widget(form.casDME) }}</div>
+							<div class="rech-lib_ime">{{ form_label(form.casIME, 'Cas IME') }}</div>
+							<div class="rech-chp_ime">{{ form_widget(form.casIME) }}</div>
+							<div class="rech-lib_narr">{{ form_label(form.narratif, 'Narratif') }}</div>
+							<div class="rech-chp_narr">{{ form_widget(form.narratif) }}</div>
+						</div>
+
+
+						<div class="container_rech_susar_eu_droite">
+							<div class="rech-chp_rech">{{ form_widget(form.recherche) }}</div>
+							<div class="rech-chp_excel">{{ form_widget(form.exportExcel) }}</div>
+							<div class="rech-chp_reset">{{ form_widget(form.reset) }}</div>
+
+
+							<div class="rech-lib_arch">{{ form_label(form.casArchive, 'Cas archivés (traités dans SUSAR_EU_v1)') }}</div>
+							<div class="rech-chp_arch">{{ form_widget(form.casArchive) }}</div>
+						</div>
+					</div>
 				</div>
-			{% endfor %}
-		</div>
+				{{form_end(form)}}
 
-		{# <div class="display-4 text-center mt-0 mb-4">Liste des SUSARs</div> #}
-		<div class="display-4 text-center mt-0 mb-0">Liste des SUSARs</div>
+			</div>
 
-		{# <div class="container-fluid p-5"> #}
-		<div class="container-fluid px-5">
+			{# <div class="container-fluid p-5"> #}
+			<div class="container-fluid">
 
-			{{form_start(form)}}
-			<div class="container_rech_susar_eu">
-				<div class="container_rech_susar_eu_haut">
+				<div class="container-fluid container-tab">
+		{# <button id="scrollToTopBtn" class="btn btn-primary scroll-to-top" title="Remonter en haut"> #}
+					{% if Susars %}
 
-					<div class="rech-titre_att fw-bold">Attribution</div>
-					<div class="rech-lib_ref">{{ form_label(form.evaluateurAttribue, 'Évaluateur référent') }}</div>
-					<div class="rech-chp_ref">{{ form_widget(form.evaluateurAttribue) }}</div>
-					<div class="rech-lib_dmm">{{ form_label(form.dmmPoleChoice, 'DMM/Pôle') }}</div>
-					<div class="rech-chp_dmm">{{ form_widget(form.dmmPoleChoice) }}</div>
+						Nombre de lignes :
+						{{ NbSusar }}
+						<h3>Liste des SUSARs</h3>
 
-					<div class="rech-titre_eva fw-bold">Évaluation</div>
-					<div class="rech-lib_castrt">{{ form_label(form.casTraite, 'Cas traité') }}</div>
-					<div class="rech-chp_castrt">{{ form_widget(form.casTraite) }}</div>
-					<div class="rech-lib_evalpar">{{ form_label(form.evaluateurEvaluation, 'Évalué par') }}</div>
-					<div class="rech-chp_evalpar">{{ form_widget(form.evaluateurEvaluation) }}</div>
-					<div class="rech-lib_concl">{{ form_label(form.assessment_outcome, 'Conclusion évaluation') }}</div>
-					<div class="rech-chp_concl">{{ form_widget(form.assessment_outcome) }}</div>
+						{% include "_partials/_susar_eu_liste.html.twig" %}
 
-					<div class="rech-titre_ess fw-bold">Essai concerné</div>
-					<div class="rech-lib_euct">{{ form_label(form.num_eudract, 'N° EUCT') }}</div>
-					<div class="rech-chp_euct">{{ form_widget(form.num_eudract) }}</div>
-					<div class="rech-lib_ssn">{{ form_label(form.sponsorstudynumb, 'Sponsor study num.') }}</div>
-					<div class="rech-chp_ssn">{{ form_widget(form.sponsorstudynumb) }}</div>
-					<div class="rech-lib_pays">{{ form_label(form.paysSurvenue, 'Pays survenue') }}</div>
-					<div class="rech-chp_pays">{{ form_widget(form.paysSurvenue) }}</div>
-
-					<div class="rech-titre_niv fw-bold">Niveau de classification</div>
-					<div class="rech-susar-niv1">
-						{{ form_row(form.niveau1, {'label': 'Niveau 1', 'row_attr': {'class': 'chbx_niv_form_row'}}) }}
-					</div>
-					<div class="rech-susar-niv2a">
-						{{ form_row(form.niveau2a, {'label': 'Niveau 2a', 'row_attr': {'class': 'chbx_niv_form_row'}}) }}
-					</div>
-					<div class="rech-susar-niv2b">
-						{{ form_row(form.niveau2b, {'label': 'Niveau 2b', 'row_attr': {'class': 'chbx_niv_form_row'}}) }}
-					</div>
-					<div class="rech-susar-niv2c">
-						{{ form_row(form.niveau2c, {'label': 'Niveau 2c', 'row_attr': {'class': 'chbx_niv_form_row'}}) }}
-					</div>
-
-					<div class="rech-titre_car fw-bold">Caractéristiques</div>
-					<div class="rech-lib_sa">{{ form_label(form.substanceName, 'Substance active') }}</div>
-					<div class="rech-chp_sa">{{ form_widget(form.substanceName) }}</div>
-					<div class="rech-lib_pt">{{ form_label(form.effetIndesirable, 'PT') }}</div>
-					<div class="rech-chp_pt">{{ form_widget(form.effetIndesirable) }}</div>
-					<div class="rech-lib_idsusar">{{ form_label(form.idSusar, 'IdSUSAR') }}</div>
-					<div class="rech-chp_idsusar">{{ form_widget(form.idSusar) }}</div>
-					<div class="rech-lib_wwid">{{ form_label(form.worldWide_id, 'ID cas (worldwide)') }}</div>
-					<div class="rech-chp_wwid">{{ form_widget(form.worldWide_id) }}</div>
-
-					<div class="rech-titre_per fw-bold">Période</div>
-					<div class="rech-lib_dgd">{{ form_label(form.debutGatewayDate, 'Date décla. cas (début)') }}</div>
-					<div class="rech-chp_dgd">{{ form_widget(form.debutGatewayDate) }}</div>
-					<div class="rech-lib_fgd">{{ form_label(form.finGatewayDate, 'Date décla. cas (fin)') }}</div>
-					<div class="rech-chp_fgd">{{ form_widget(form.finGatewayDate) }}</div>
-					{% if is_granted('ROLE_SUPER_ADMIN') or is_granted('ROLE_SURV_PILOTEVEC')  %}
-						<div class="rech-lib_ddi">{{ form_label(form.debutDateImport, 'Date import (début)') }}</div>
-						<div class="rech-chp_ddi">{{ form_widget(form.debutDateImport) }}</div>
-						<div class="rech-lib_fdi">{{ form_label(form.finDateImport, 'Date import (fin)') }}</div>
-						<div class="rech-chp_fdi">{{ form_widget(form.finDateImport) }}</div>
+						{# {% include "_partials/_susar_eu_liste_v1.html.twig" %} #}
+						{{ knp_pagination_render(Susars) }}
 					{% endif %}
-				</div>
-				
-				<div class="container_rech_susar_eu_bas">
-
-					<div class="container_rech_susar_eu_gauche">
-						<div class="rech-titre_spe fw-bold">Spécificités</div>
-						<div class="rech-lib_sams">{{ form_label(form.type_saMS_Mono, 'saMS/Mono.') }}</div>
-						<div class="rech-chp_sams">{{ form_widget(form.type_saMS_Mono) }}</div>
-						<div class="rech-lib_pop">{{ form_label(form.patientAgeGroup, 'Population') }}</div>
-						<div class="rech-chp_pop">{{ form_widget(form.patientAgeGroup) }}</div>
-						<div class="rech-lib_euro">{{ form_label(form.casEurope, 'Cas Europe') }}</div>
-						<div class="rech-chp_euro">{{ form_widget(form.casEurope) }}</div>
-						<div class="rech-lib_dme">{{ form_label(form.casDME, 'Cas DME') }}</div>
-						<div class="rech-chp_dme">{{ form_widget(form.casDME) }}</div>
-						<div class="rech-lib_ime">{{ form_label(form.casIME, 'Cas IME') }}</div>
-						<div class="rech-chp_ime">{{ form_widget(form.casIME) }}</div>
-						<div class="rech-lib_narr">{{ form_label(form.narratif, 'Narratif') }}</div>
-						<div class="rech-chp_narr">{{ form_widget(form.narratif) }}</div>
-					</div>
-
-
-					<div class="container_rech_susar_eu_droite">
-						<div class="rech-chp_rech">{{ form_widget(form.recherche) }}</div>
-						<div class="rech-chp_excel">{{ form_widget(form.exportExcel) }}</div>
-						<div class="rech-chp_reset">{{ form_widget(form.reset) }}</div>
-
-
-						<div class="rech-lib_arch">{{ form_label(form.casArchive, 'Cas archivés (traités dans SUSAR_EU_v1)') }}</div>
-						<div class="rech-chp_arch">{{ form_widget(form.casArchive) }}</div>
-					</div>
+		{# </button> #}
 				</div>
 			</div>
-			{{form_end(form)}}
-
-		</div>
-
-		{# <div class="container-fluid p-5"> #}
-		<div class="container-fluid">
-
-			<div class="container-fluid container-tab">
-				{% if Susars %}
-
-					Nombre de lignes :
-					{{ NbSusar }}
-					<h3>Liste des SUSARs</h3>
-
-					{% include "_partials/_susar_eu_liste.html.twig" %}
-
-					{# {% include "_partials/_susar_eu_liste_v1.html.twig" %} #}
-					{{ knp_pagination_render(Susars) }}
-				{% endif %}
-			</div>
-		</div>
 	</div>
+	<button id="scrollToTopBtn" class="scroll-to-top" title="Retour haut de page">
+		Retour haut de page
+	</button>
 {% endblock %}
 
 {% block javascripts %}

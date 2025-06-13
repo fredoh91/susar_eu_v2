@@ -33,7 +33,7 @@ class EvalSusarType extends AbstractType
                 'Concern in CT' => 'Concern in CT',
                 'À garder en mémoire' => 'À garder en mémoire',
             ],
-            'placeholder' => 'merci de renseigner un assessment outcome',
+            'placeholder' => 'Choisir une conclusion',
             'required' => true,
             ])
             ->add('comments', TextareaType::class, [

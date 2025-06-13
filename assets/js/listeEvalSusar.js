@@ -80,6 +80,24 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
+
+document.addEventListener('DOMContentLoaded', function () {
+    const btn = document.getElementById('scrollToTopBtn');
+    const showAfter = 300; // px à partir duquel le bouton apparaît (modifiable)
+
+    window.addEventListener('scroll', function () {
+        if (window.scrollY > showAfter) {
+            btn.style.display = 'flex';
+        } else {
+            btn.style.display = 'none';
+        }
+    });
+
+    btn.addEventListener('click', function () {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+});
+
 // // console.log("Test JS module : 1");
 
 // const excelExport = require('./modules/excelExport');
