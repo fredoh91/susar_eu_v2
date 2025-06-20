@@ -29,6 +29,13 @@
 
 		{{form_end(form)}}
 
+		<div id="excelImportSpinner" class="text-center d-none my-3">
+			<div class="spinner-border" role="status">
+				<span class="visually-hidden">Loading...</span>
+			</div>
+			<div>Import en cours...</div>
+		</div>
+
 		{% if nbDonneesInserees is not empty %}
 			{% set labels = {
 			'nbOfExcelRow': 'Nombre de lignes Excel',
@@ -190,4 +197,9 @@
 
 	</div>
 
+{% endblock %}
+
+{% block javascripts %}
+  {{ parent() }}
+  {{ encore_entry_script_tags('importExcelCtll') }}
 {% endblock %}

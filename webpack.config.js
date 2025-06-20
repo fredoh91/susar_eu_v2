@@ -31,6 +31,8 @@ Encore
     .addEntry('SusarEuDetail', './assets/js/SusarEuDetail.js')
     .addEntry('SusarEuDetailAutreFU', './assets/js/SusarEuDetailAutreFU.js')
     .addEntry('popUpMultiEval', './assets/js/popUpMultiEval.js')
+    .addEntry('importExcelCtll', './assets/js/importExcelCtll.js')
+    .addEntry('susarEuListeSpinner', './assets/js/susarEuListeSpinner.js')
 
     // .addEntry('popUpAWA', './assets/js/popUpAWA.js')
 

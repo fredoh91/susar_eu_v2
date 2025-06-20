@@ -112,6 +112,12 @@
 							<div class="rech-chp_rech">{{ form_widget(form.recherche) }}</div>
 							<div class="rech-chp_excel">{{ form_widget(form.exportExcel) }}</div>
 							<div class="rech-chp_reset">{{ form_widget(form.reset) }}</div>
+							<div id="actionSpinner" class="text-center d-none my-3">
+								<div class="spinner-border" role="status">
+									<span class="visually-hidden">Loading...</span>
+								</div>
+								<div id="actionSpinnerMsg"></div>
+							</div>
 
 
 							<div class="rech-lib_arch">{{ form_label(form.casArchive, 'Cas archivés (traités dans SUSAR_EU_v1)') }}</div>
@@ -151,4 +157,5 @@
 {% block javascripts %}
 	{{ parent() }}
 	{{ encore_entry_script_tags('listeEvalSusar') }}
+	{{ encore_entry_script_tags('susarEuListeSpinner') }}
 {% endblock %}
