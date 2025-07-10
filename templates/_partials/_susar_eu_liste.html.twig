@@ -259,7 +259,7 @@
 						{% set commentEvalCas = commentEvalCas ~ eval.Comments ~ '<br>' %}
 					{% endif %}
 
-					{% if eval.userModif not in evaluateurEvalCas %}
+					{% if eval.userModif not in evaluateurEvalCas and eval.userModif != 'AWA_automatic' %}
 						{% set evaluateurEvalCas = evaluateurEvalCas ~ eval.userModif ~ '<br>' %}
 					{% endif %}									
 				{% endfor %}
