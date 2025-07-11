@@ -1,5 +1,3 @@
-
-
 {% for Susar in Susars %}
 
 	<div class="ligne_susar {{ Susar.casSusarEuV1 ? 'susar-v1' : 'susar-v2' }}"> 
@@ -226,8 +224,8 @@
 				{% set concluMaxEvalCas = null %}
 				{% set commentEvalCas = '' %}
 				{% set evaluateurEvalCas = '' %}
-				{% set allCommentsAreAutomatic = true %} {# Variable pour vérifier si tous les commentaires sont "Assessed without action automatic" #}
-				{% set hasNonEmptyComments = false %} {# Variable pour vérifier si au moins un commentaire est non vide #}
+				{# {% set allCommentsAreAutomatic = true %} Variable pour vérifier si tous les commentaires sont "Assessed without action automatic" #}
+				{# {% set hasNonEmptyComments = false %} Variable pour vérifier si au moins un commentaire est non vide #}
 				{% set niveauConclu = {
 					'Concern in CT': 7,
 					'Monitor': 6,
@@ -245,19 +243,53 @@
 					{% endif %}
 
 					{# Vérifie si le commentaire est différent de "Assessed without action automatic" #}
-					{% if eval.Comments != 'Assessed without action automatic' and eval.Comments is not empty %}
+					{# {% if eval.Comments != 'Assessed without action automatic' and eval.Comments is not empty %}
 						{% set allCommentsAreAutomatic = false %}
-					{% endif %}
+					{% endif %} #}
 
 					{# Vérifie si au moins un commentaire est non vide #}
-					{% if eval.Comments is not empty %}
+					{# {% if eval.Comments is not empty %}
 						{% set hasNonEmptyComments = true %}
-					{% endif %}
+					{% endif %} #}
 
 					{# Ajoute le commentaire uniquement s'il n'est pas déjà présent et s'il n'est pas "Assessed without action automatic" #}
-					{% if eval.Comments not in commentEvalCas and eval.Comments != 'Assessed without action automatic' and eval.Comments is not empty %}
+					{# {% if eval.Comments not in commentEvalCas 
+								and eval.Comments != 'Assessed without action automatic' 
+								and eval.Comments != 'Screened without action automatic' 
+								and eval.Comments is not empty %}
 						{% set commentEvalCas = commentEvalCas ~ eval.Comments ~ '<br>' %}
+					{% endif %} #}
+
+
+
+					{% set customComments = [] %}
+					{% set autoComments = [] %}
+					{% for eval in Susar.SubstancePtEvals %}
+						{% if eval.Comments is not empty %}
+							{% if eval.Comments == 'Assessed without action automatic' or eval.Comments == 'Screened without action automatic' %}
+								{% if eval.Comments not in autoComments %}
+									{% set autoComments = autoComments|merge([eval.Comments]) %}
+								{% endif %}
+							{% else %}
+								{% if eval.Comments not in customComments %}
+									{% set customComments = customComments|merge([eval.Comments]) %}
+								{% endif %}
+							{% endif %}
+						{% endif %}
+					{% endfor %}
+
+					{# Construction du commentaire à afficher #}
+					{% if customComments is not empty %}
+						{% set commentEvalCas = customComments|join('<br>') %}
+					{% elseif autoComments is not empty %}
+						{% set commentEvalCas = autoComments|join('<br>') %}
+					{% else %}
+						{% set commentEvalCas = '' %}
 					{% endif %}
+
+
+
+
 
 					{% if eval.userModif not in evaluateurEvalCas and eval.userModif != 'SWA_automatic' %}
 						{% set evaluateurEvalCas = evaluateurEvalCas ~ eval.userModif ~ '<br>' %}
@@ -265,9 +297,9 @@
 				{% endfor %}
 
 				{# Si tous les commentaires sont "Assessed without action automatic" et qu'il n'y a pas de commentaires non vides, on met uniquement ce texte dans commentEvalCas #}
-				{% if allCommentsAreAutomatic and hasNonEmptyComments %}
+				{# {% if allCommentsAreAutomatic and hasNonEmptyComments %}
 					{% set commentEvalCas = 'Assessed without action automatic' %}
-				{% endif %}
+				{% endif %} #}
 
 				<div class="ConcluCas_lib fw-bold">Conclusion cas</div>
 				{# <div class="ConcluCas">{{ concluEvalCas|raw }}</div> #}
