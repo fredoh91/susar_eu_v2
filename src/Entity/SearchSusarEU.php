@@ -72,6 +72,11 @@ class SearchSusarEU
     private ?string $casDME = null;
     private ?string $casEurope = null;
     private ?string $type_saMS_Mono = null;
+    private ?string $EV_SafetyReportIdentifier = null;
+    
+
+
+
 
     public function getIdSusar(): ?int
     {
@@ -1246,6 +1251,18 @@ class SearchSusarEU
     public function setFinGatewayDate($finGatewayDate)
     {
         $this->finGatewayDate = $finGatewayDate;
+
+        return $this;
+    }
+
+    public function getEVSafetyReportIdentifier(): ?string
+    {
+        return $this->EV_SafetyReportIdentifier;
+    }
+
+    public function setEVSafetyReportIdentifier(string $EV_SafetyReportIdentifier): self
+    {
+        $this->EV_SafetyReportIdentifier = $EV_SafetyReportIdentifier;
 
         return $this;
     }

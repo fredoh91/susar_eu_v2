@@ -102,6 +102,7 @@
   grid-template-areas:
     ". rech-chp_rech rech-chp_excel rech-chp_reset"
     "rech-lib_arch rech-lib_arch rech-chp_arch rech-chp_arch"
+    "rech-lib_ev rech-lib_ev rech-chp_ev ."
   ;
 }
 
@@ -358,6 +359,19 @@
 }
 .rech-chp_arch {
   @include m.rech-susar-chp(rech-chp_arch);
+}
+
+// EV_SafetyReportIdentifier
+
+.rech-lib_ev {
+  @include m.rech-susar-lib(rech-lib_ev);
+  padding-right:5%;
+  text-align: right;          // Pour le texte
+  justify-content: flex-end;  // Pour Flexbox
+
+}
+.rech-chp_ev {
+  @include m.rech-susar-chp(rech-chp_ev);
 }
 
 // réduction de la hauteur des différents champs

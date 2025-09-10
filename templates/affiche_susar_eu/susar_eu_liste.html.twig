@@ -122,6 +122,10 @@
 
 							<div class="rech-lib_arch">{{ form_label(form.casArchive, 'Cas archivés (traités dans SUSAR_EU_v1)') }}</div>
 							<div class="rech-chp_arch">{{ form_widget(form.casArchive) }}</div>
+							{% if is_granted('ROLE_SURV_ADMIN') %}
+								<div class="rech-lib_ev">{{ form_label(form.EV_SafetyReportIdentifier, 'EV Safety Report Identifier') }}</div>
+								<div class="rech-chp_ev">{{ form_widget(form.EV_SafetyReportIdentifier) }}</div>
+							{% endif %}							
 						</div>
 					</div>
 				</div>

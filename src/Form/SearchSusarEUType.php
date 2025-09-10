@@ -188,6 +188,15 @@ class SearchSusarEUType extends AbstractType
                     // 'attr' => ['class' => 'chpRq'],
                 ]
             )
+            ->add(
+                'EV_SafetyReportIdentifier',
+                TextType::class,
+                [
+                    'label' => 'EV Safety Report Identifier',
+                    'required' => false,
+                    // 'attr' => ['class' => 'chpRq'],
+                ]
+            )
 
             // Période
             ->add(

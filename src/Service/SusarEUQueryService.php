@@ -61,6 +61,20 @@ class SusarEUQueryService
                 ->setParameter('ids', $search->getIdSusar());
         }
 
+        if ($search->getEVSafetyReportIdentifier()) {
+
+            dump($search->getEVSafetyReportIdentifier());
+
+            $query = $query
+                ->andWhere($query->expr()->like('s.EV_SafetyReportIdentifier', ':evsri'))
+                ->setParameter('evsri', '%' . $search->getEVSafetyReportIdentifier() . '%');
+            // dd($query->getQuery()->getSQL());
+
+            // $query = $query
+            //     ->andWhere('s.EV_SafetyReportIdentifier = :evsri')
+            //     ->setParameter('evsri', $search->getEVSafetyReportIdentifier());
+        }
+
         if ($search->getdmmPoleChoice()) {
             $DmmPole = $search->getdmmPoleChoice();
 
