@@ -308,7 +308,9 @@ class ImportVersSusarEu
                     $medicament->setDelaiAdministrationSurvenue($parsingMedic['duration']);
                     $medicament->setDosage($parsingMedic['dose']);
                     $medicament->setVoieAdmin($parsingMedic['route']);
-                    $medicament->setComment($parsingMedic['comment']);
+                    if (isset($parsingMedic['comment'])) {
+                        $medicament->setComment(substr($parsingMedic['comment'], 0, 255));
+                    } 
 
                     // attribution de l'évaluateur a ce médicament
                     if ($substancePourRecherche) {
@@ -458,7 +460,9 @@ class ImportVersSusarEu
                     $medicament->setDelaiAdministrationSurvenue($parsingMedic['duration']);
                     $medicament->setDosage($parsingMedic['dose']);
                     $medicament->setVoieAdmin($parsingMedic['route']);
-                    $medicament->setComment($parsingMedic['comment']);
+                    if (isset($parsingMedic['comment'])) {
+                        $medicament->setComment(substr($parsingMedic['comment'], 0, 255));
+                    }
                 }
 
                 $medicament->setCreatedAt($dateImport);
@@ -552,7 +556,10 @@ class ImportVersSusarEu
 
                     $medicalHistory->setDisease($parsingMedHist['Disease']);
                     $medicalHistory->setContinuing($parsingMedHist['Continuing']);
-                    $medicalHistory->setComment($parsingMedHist['Comment']);
+
+                    if (isset($parsingMedHist['Comment'])) {
+                        $medicalHistory->setComment(substr($parsingMedHist['Comment'], 0, 255));
+                    }
                 }
 
                 $medicalHistory->setCreatedAt($dateImport);
