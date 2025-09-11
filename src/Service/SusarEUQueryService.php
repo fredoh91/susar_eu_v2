@@ -63,7 +63,7 @@ class SusarEUQueryService
 
         if ($search->getEVSafetyReportIdentifier()) {
 
-            dump($search->getEVSafetyReportIdentifier());
+            // dump($search->getEVSafetyReportIdentifier());
 
             $query = $query
                 ->andWhere($query->expr()->like('s.EV_SafetyReportIdentifier', ':evsri'))

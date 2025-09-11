@@ -165,8 +165,8 @@ class SusarEuListeController extends AbstractController
                     return $this->redirectToRoute('app_liste_susar_eu');
                 } else {
                     if ($this->kernel->getEnvironment() === 'dev') {
-                        dump('liste_susar_eu - cas 2 - Recherche - Formulaire INvalide');
-                        $this->logger->info('liste_susar_eu - cas 2 - Recherche - Formulaire INvalide');
+                        dump('liste_susar_eu - cas 2 - Recherche - Formulaire Invalide');
+                        $this->logger->info('liste_susar_eu - cas 2 - Recherche - Formulaire Invalide');
                     }
                     // Formulaire soumis, mais invalide
                 }
