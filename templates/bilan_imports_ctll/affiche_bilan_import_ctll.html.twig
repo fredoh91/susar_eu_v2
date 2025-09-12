@@ -23,6 +23,7 @@
 							<th scope="col">Nombre de SUSAR insérés</th>
 							<th scope="col">Nombre de susars attribués</th>
 							<th scope="col">Nombre de susars non-attribués</th>
+							<th scope="col">Temps d'exécution (en secondes)</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -62,6 +63,14 @@
 									<td>{{ bilan.nbSusarAttribue }}</td>
 
 									<td>{{ bilan.nbInsertedSusar - bilan.nbSusarAttribue }}</td>
+
+									<td>
+									{% if bilan.ExecutionTime is not empty %}
+										{{ bilan.ExecutionTime }}
+									{% else %}
+										--
+									{% endif %}
+									</td>
 								</tr>
 							{% endfor %}
 						</tbody>

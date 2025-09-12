@@ -106,6 +106,7 @@ final class ImportExcelCTLLController extends AbstractController
                     ->setNbMedicAttribue($this->nbDonneesInserees['nbMedicAttribue'])
                     ->setGatewayDate($this->nbDonneesInserees['gatewayDate'])
                     ->setIdNonAttribue($this->nbDonneesInserees['idNonAttribue'])
+                    ->setExecutionTime(round(microtime(true) - $startTime, 4))
                     ;
 
                 $em->flush();

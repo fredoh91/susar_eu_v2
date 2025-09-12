@@ -67,6 +67,9 @@ class ImportCtllFicExcel
     #[ORM\Column(type: Types::SIMPLE_ARRAY, nullable: true)]
     private ?array $idNonAttribue = null;
 
+    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 4, nullable: true)]
+    private ?string $ExecutionTime = null;
+
 
     public function __construct()
     {
@@ -284,6 +287,18 @@ class ImportCtllFicExcel
     public function setIdNonAttribue(?array $idNonAttribue): static
     {
         $this->idNonAttribue = $idNonAttribue;
+
+        return $this;
+    }
+
+    public function getExecutionTime(): ?string
+    {
+        return $this->ExecutionTime;
+    }
+
+    public function setExecutionTime(?string $ExecutionTime): static
+    {
+        $this->ExecutionTime = $ExecutionTime;
 
         return $this;
     }
