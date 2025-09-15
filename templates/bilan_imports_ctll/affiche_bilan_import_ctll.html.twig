@@ -29,8 +29,13 @@
 					<tbody>
 						{% for bilan in bilanImportsCtll %}
 
-							{% if bilan.nbInsertedSusar - bilan.nbSusarAttribue > 0 %}
+							{% if bilan.nbInsertedSusar is null 
+								or bilan.nbSusarAttribue is null 
+								or (bilan.nbInsertedSusar - bilan.nbSusarAttribue) > 0
+								or bilan.nbSusarNonAttribue > 0 %}
 								<tr class="table-danger">
+							{% elseif bilan.nbInsertedSusar == 0 %}
+								<tr class="table-warning">
 							{% else %}
 								<tr class="table-success">
 							{% endif %}
@@ -62,7 +67,10 @@
 
 									<td>{{ bilan.nbSusarAttribue }}</td>
 
-									<td>{{ bilan.nbInsertedSusar - bilan.nbSusarAttribue }}</td>
+									<td>
+										{# {{ bilan.nbInsertedSusar - bilan.nbSusarAttribue }} #}
+										{{ bilan.nbSusarNonAttribue }}
+									</td>
 
 									<td>
 									{% if bilan.ExecutionTime is not empty %}

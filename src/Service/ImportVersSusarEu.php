@@ -262,23 +262,23 @@ class ImportVersSusarEu
                 $medicament = new Medicaments();
                 // $medicament->setSusar($susarEU);
                 $susarEU->addMedicament($medicament);
-                $medicament->setNomProduitBrut($medic);
+                $medicament->setNomProduitBrut(substr($medic, 0, 1000));
 
                 $parsingMedic = $this->parsingMedicaments->donneParsing($medic);
                 if ($parsingMedic) {
                     $substancePourRecherche = null;
                     // Si le médicament ne contient pas de chaine de caractere entre crochet, on n'a pas de nom de substance, on prend le nom du produit
                     if (($parsingMedic['substance']) === null || $parsingMedic['substance'] === '') {
-                        $medicament->setSubstanceName($parsingMedic['produit']);
+                        $medicament->setSubstanceName(substr($parsingMedic['produit'] ?? '', 0, 255));
                         $substancePourRecherche = $parsingMedic['produit'];
                         $this->lst_substancename[] = $parsingMedic['produit'];
                     } else {
-                        $medicament->setSubstanceName($parsingMedic['substance']);
+                        $medicament->setSubstanceName(substr($parsingMedic['substance'] ?? '', 0, 255));
                         $substancePourRecherche = $parsingMedic['substance'];
                         $this->lst_substancename[] = $parsingMedic['substance'];
                     }
                     $lstMedSupInter[] = $substancePourRecherche;
-                    $medicament->setProductname($parsingMedic['produit']);
+                    $medicament->setProductname(substr($parsingMedic['produit'] ?? '', 0, 255));
                     $this->lst_productname[] = $parsingMedic['produit'];
                     switch ($parsingMedic['drug_char']) {
                         case 'S':
@@ -294,9 +294,9 @@ class ImportVersSusarEu
                             $medicament->setProductcharacterization('NA');
                             break;
                     }
-                    $medicament->setMaladie($parsingMedic['indication_pt']);
-                    $medicament->setStatutMedicApresEffet($parsingMedic['action_taken']);
-                    $medicament->setDateDerniereAdmin($parsingMedic['start_date']);
+                    $medicament->setMaladie(substr($parsingMedic['indication_pt'] ?? '', 0, 255));
+                    $medicament->setStatutMedicApresEffet(substr($parsingMedic['action_taken'] ?? '', 0, 255));
+                    $medicament->setDateDerniereAdmin(substr($parsingMedic['start_date'] ?? '', 0, 255));
                     $dateDerniereAdmin = \DateTime::createFromFormat('d/m/Y', $parsingMedic['start_date']);
                     if ($dateDerniereAdmin instanceof \DateTime) {
                         $medicament->setDateDerniereAdminFormatDate($dateDerniereAdmin);
@@ -305,9 +305,9 @@ class ImportVersSusarEu
                     }
                     
                     // $medicament->setDateDerniereAdminFormatDate($dateDerniereAdmin);
-                    $medicament->setDelaiAdministrationSurvenue($parsingMedic['duration']);
-                    $medicament->setDosage($parsingMedic['dose']);
-                    $medicament->setVoieAdmin($parsingMedic['route']);
+                    $medicament->setDelaiAdministrationSurvenue(substr($parsingMedic['duration'] ?? '', 0, 255));
+                    $medicament->setDosage(substr($parsingMedic['dose'] ?? '', 0, 255));
+                    $medicament->setVoieAdmin(substr($parsingMedic['route'] ?? '', 0, 255));
                     if (isset($parsingMedic['comment'])) {
                         $medicament->setComment(substr($parsingMedic['comment'], 0, 255));
                     } 
@@ -427,12 +427,12 @@ class ImportVersSusarEu
             foreach ($tousMedicConcArray as $medic) {
                 $medicament = new Medicaments();
                 $medicament->setSusar($susarEU);
-                $medicament->setNomProduitBrut($medic);
+                $medicament->setNomProduitBrut(substr($medic, 0, 1000));
 
                 $parsingMedic = $this->parsingMedicaments->donneParsing($medic);
                 if ($parsingMedic) {
-                    $medicament->setSubstanceName($parsingMedic['substance']);
-                    $medicament->setProductname($parsingMedic['produit']);
+                    $medicament->setSubstanceName(substr($parsingMedic['substance'] ?? '', 0, 255));
+                    $medicament->setProductname(substr($parsingMedic['produit'] ?? '', 0, 255));
                     switch ($parsingMedic['drug_char']) {
                         case 'S':
                             $medicament->setProductcharacterization('Suspect');
@@ -447,9 +447,9 @@ class ImportVersSusarEu
                             $medicament->setProductcharacterization('NA');
                             break;
                     }
-                    $medicament->setMaladie($parsingMedic['indication_pt']);
-                    $medicament->setStatutMedicApresEffet($parsingMedic['action_taken']);
-                    $medicament->setDateDerniereAdmin($parsingMedic['start_date']);
+                    $medicament->setMaladie(substr($parsingMedic['indication_pt'] ?? '', 0, 255));
+                    $medicament->setStatutMedicApresEffet(substr($parsingMedic['action_taken'] ?? '', 0, 255));
+                    $medicament->setDateDerniereAdmin(substr($parsingMedic['start_date'] ?? '', 0, 255));
                     $dateDerniereAdmin = \DateTime::createFromFormat('d/m/Y', $parsingMedic['start_date']);
                     if ($dateDerniereAdmin instanceof \DateTime) {
                         $medicament->setDateDerniereAdminFormatDate($dateDerniereAdmin);
@@ -457,9 +457,9 @@ class ImportVersSusarEu
                         $medicament->setDateDerniereAdminFormatDate(null);
                     }
                     // $medicament->setDateDerniereAdminFormatDate($dateDerniereAdmin);
-                    $medicament->setDelaiAdministrationSurvenue($parsingMedic['duration']);
-                    $medicament->setDosage($parsingMedic['dose']);
-                    $medicament->setVoieAdmin($parsingMedic['route']);
+                    $medicament->setDelaiAdministrationSurvenue(substr($parsingMedic['duration'] ?? '', 0, 255));
+                    $medicament->setDosage(substr($parsingMedic['dose'] ?? '', 0, 255));
+                    $medicament->setVoieAdmin(substr($parsingMedic['route'] ?? '', 0, 255));
                     if (isset($parsingMedic['comment'])) {
                         $medicament->setComment(substr($parsingMedic['comment'], 0, 255));
                     }
@@ -514,11 +514,11 @@ class ImportVersSusarEu
                                 'ReactionListPT' => $reactionListPT,
                             ];
                         }
-                        $effetIndesirable->setReactionListPT($reactionListPT);
+                        $effetIndesirable->setReactionListPT(substr($reactionListPT, 0, 255));
                     }
 
-                    $effetIndesirable->setOutcome($parsingEffInd['Outcome']);
-                    $effetIndesirable->setDate($parsingEffInd['Date']);
+                    $effetIndesirable->setOutcome(substr($parsingEffInd['Outcome'] ?? '', 0, 255));
+                    $effetIndesirable->setDate(substr($parsingEffInd['Date'] ?? '', 0, 255));
 
                     $date = \DateTime::createFromFormat('d/m/Y', $parsingEffInd['Date']);
                     if ($date instanceof \DateTime) {
@@ -526,7 +526,7 @@ class ImportVersSusarEu
                     } else {
                         $effetIndesirable->setDateFormatDate(null);
                     }
-                    $effetIndesirable->setDuration($parsingEffInd['Duration']);
+                    $effetIndesirable->setDuration(substr($parsingEffInd['Duration'] ?? '', 0, 255));
                 }
 
 
@@ -554,8 +554,8 @@ class ImportVersSusarEu
 
                 if ($parsingMedHist) {
 
-                    $medicalHistory->setDisease($parsingMedHist['Disease']);
-                    $medicalHistory->setContinuing($parsingMedHist['Continuing']);
+                    $medicalHistory->setDisease(substr($parsingMedHist['Disease'] ?? '', 0, 255));
+                    $medicalHistory->setContinuing(substr($parsingMedHist['Continuing'] ?? '', 0, 255));
 
                     if (isset($parsingMedHist['Comment'])) {
                         $medicalHistory->setComment(substr($parsingMedHist['Comment'], 0, 255));
@@ -584,8 +584,8 @@ class ImportVersSusarEu
 
                 if ($parsingIndications) {
 
-                    $indication->setProductName($parsingIndications['product_name']);
-                    $indication->setProductIndicationsEng($parsingIndications['product_indications_eng']);
+                    $indication->setProductName(substr($parsingIndications['product_name'] ?? '', 0, 255));
+                    $indication->setProductIndicationsEng(substr($parsingIndications['product_indications_eng'] ?? '', 0, 255));
                 }
 
                 $indication->setCreatedAt($dateImport);
@@ -618,8 +618,8 @@ class ImportVersSusarEu
                     if (!$substancePt) {
                         // Si la substance et l'effet indésirable n'existent pas, on les crée
                         $substancePt = new SubstancePt();
-                        $substancePt->setActiveSubstanceHighLevel($substance);
-                        $substancePt->setReactionmeddrapt($effetInd['ReactionListPT']);
+                        $substancePt->setActiveSubstanceHighLevel(substr($substance, 0, 1000));
+                        $substancePt->setReactionmeddrapt(substr($effetInd['ReactionListPT'], 0, 255));
                         $substancePt->setCodereactionmeddrapt($effetInd['PtCode']);
                         $substancePt->setCreatedAt($dateImport);
                         $substancePt->setUpdatedAt($dateImport);
