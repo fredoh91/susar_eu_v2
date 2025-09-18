@@ -34,6 +34,11 @@ final class BilanSusarsController extends AbstractController
 		// Indicateur 3: DMM / Pôle
 		$rows3 = $service->getCountsByDmmPolePerMonth($start, $end);
         [$chart3Counts, $chart3Pct, $table3Counts, $table3Pct] = $this->buildStackedChartsAndTable($chartBuilder, $months, $rows3, 'dmm_pole', 'Nombre de susar par mois selon la DMM/Pole');
+
+		// Indicateur 4: Propositions
+		$indicator4Rows = $service->getCountsForIndicator4($start, $end);
+		$chartsProp1 = $this->buildProposal1Charts($chartBuilder, $months, $indicator4Rows);
+		$chartsProp2 = $this->buildProposal2Charts($chartBuilder, $months, $indicator4Rows);
         
         return $this->render('bilan_susars/bilan_susars.html.twig', [
 			'filters' => [
@@ -66,8 +71,122 @@ final class BilanSusarsController extends AbstractController
                     'table_percent' => $table3Pct,
 				],
 			],
+			'proposal1_charts' => $chartsProp1,
+			'proposal2_charts' => $chartsProp2,
 		]);
     }
+
+	private function buildProposal1Charts(ChartBuilderInterface $chartBuilder, array $months, array $rows): array
+	{
+		// Data structure: [dmm_pole][month][prio_status] = effectif
+		$matrix = [];
+		$dmm_poles = [];
+		$prio_statuses = [];
+		foreach ($rows as $r) {
+			$dmm_pole = $r['dmm_pole'];
+			$prio_status = $r['priorisation'] . ' - ' . $r['status'];
+			$matrix[$dmm_pole][$r['ym']][$prio_status] = (int)$r['effectif'];
+			$dmm_poles[$dmm_pole] = true;
+			$prio_statuses[$prio_status] = true;
+		}
+		$dmm_poles = array_keys($dmm_poles);
+		sort($dmm_poles);
+		$prio_statuses = array_keys($prio_statuses);
+		sort($prio_statuses);
+
+		$palette = $this->getColorPalette(count($prio_statuses));
+		$charts = [];
+
+		foreach($dmm_poles as $dmm_pole) {
+			$datasets = [];
+			$idx = 0;
+			foreach($prio_statuses as $prio_status) {
+				$data = [];
+				foreach($months as $month) {
+					$data[] = $matrix[$dmm_pole][$month][$prio_status] ?? 0;
+				}
+				$color = $palette[$idx % count($palette)];
+				$datasets[] = [
+					'label' => $prio_status,
+					'backgroundColor' => $this->rgbaFromRgb($color, 0.7),
+					'borderColor' => $color,
+					'data' => $data,
+					'stack' => 'stack1',
+				];
+				$idx++;
+			}
+
+			$chart = $chartBuilder->createChart(Chart::TYPE_BAR);
+			$chart->setData(['labels' => $months, 'datasets' => $datasets]);
+			$chart->setOptions([
+				'responsive' => true,
+				'maintainAspectRatio' => false,
+				'plugins' => [
+					'title' => ['display' => true, 'text' => $dmm_pole],
+					'tooltip' => ['mode' => 'index', 'intersect' => false],
+				],
+				'scales' => ['x' => ['stacked' => true], 'y' => ['stacked' => true, 'beginAtZero' => true]],
+			]);
+			$charts[] = $chart;
+		}
+		return $charts;
+	}
+
+	private function buildProposal2Charts(ChartBuilderInterface $chartBuilder, array $months, array $rows): array
+	{
+		// Data structure: [month][dmm_pole][prio_status] = effectif
+		$matrix = [];
+		$dmm_poles = [];
+		$prio_statuses = [];
+		foreach ($rows as $r) {
+			$dmm_pole = $r['dmm_pole'];
+			$prio_status = $r['priorisation'] . ' - ' . $r['status'];
+			$matrix[$r['ym']][$dmm_pole][$prio_status] = (int)$r['effectif'];
+			$dmm_poles[$dmm_pole] = true;
+			$prio_statuses[$prio_status] = true;
+		}
+		$dmm_poles = array_keys($dmm_poles);
+		sort($dmm_poles);
+		$prio_statuses = array_keys($prio_statuses);
+		sort($prio_statuses);
+
+		$palette = $this->getColorPalette(count($prio_statuses));
+		$charts = [];
+
+		foreach($months as $month) {
+			$datasets = [];
+			$idx = 0;
+			foreach($prio_statuses as $prio_status) {
+				$data = [];
+				foreach($dmm_poles as $dmm_pole) {
+					$data[] = $matrix[$month][$dmm_pole][$prio_status] ?? 0;
+				}
+				$color = $palette[$idx % count($palette)];
+				$datasets[] = [
+					'label' => $prio_status,
+					'backgroundColor' => $this->rgbaFromRgb($color, 0.7),
+					'borderColor' => $color,
+					'data' => $data,
+					'stack' => 'stack1',
+				];
+				$idx++;
+			}
+
+			$chart = $chartBuilder->createChart(Chart::TYPE_BAR);
+			$chart->setData(['labels' => $dmm_poles, 'datasets' => $datasets]);
+			$chart->setOptions([
+				'responsive' => true,
+				'maintainAspectRatio' => false,
+				'plugins' => [
+					'title' => ['display' => true, 'text' => 'Répartition pour le mois ' . $month],
+					'tooltip' => ['mode' => 'index', 'intersect' => false],
+				],
+				'scales' => ['x' => ['stacked' => true], 'y' => ['stacked' => true, 'beginAtZero' => true]],
+			]);
+			$charts[] = $chart;
+		}
+		return $charts;
+	}
 
 	/**
 	 * @param array<int,string> $months
@@ -258,9 +377,9 @@ final class BilanSusarsController extends AbstractController
         return [$chartCounts, $chartPct, $tableCounts, $tablePercent];
 	}
 
-	private function getColorPalette(): array
+	private function getColorPalette(int $num = 0): array
 	{
-		return [
+		$base = [
 			'rgb(255, 99, 132)',
 			'rgb(54, 162, 235)',
 			'rgb(255, 206, 86)',
@@ -272,6 +391,15 @@ final class BilanSusarsController extends AbstractController
 			'rgb(206, 86, 255)',
 			'rgb(192, 75, 192)',
 		];
+		if ($num <= count($base)) {
+			return $base;
+		}
+		// Generate more colors if needed
+		$colors = $base;
+		for($i = count($base); $i < $num; $i++) {
+			$colors[] = 'rgb(' . rand(0,255) . ',' . rand(0,255) . ',' . rand(0,255) . ')';
+		}
+		return $colors;
 	}
 
 	private function rgbaFromRgb(string $rgb, float $alpha): string

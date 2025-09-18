@@ -149,6 +149,41 @@ class BilanSusarsService
 
 		return $rows;
 	}
+	/**
+	 * Indicateur 4: DMM / Pôle, priorisation, status par mois
+	 */
+	public function getCountsForIndicator4(DateTimeImmutable $start, DateTimeImmutable $end): array
+	{
+		$subEval = $this->getSubqueryEvaluated();
+		$subNon = $this->getSubqueryNonEvaluated();
+
+		$sql = <<<SQL
+		SELECT 
+			DATE_FORMAT(se.gateway_date, '%Y-%m') AS ym,
+			CONCAT(COALESCE(isd.dmm, 'NR'), '/', COALESCE(isd.pole_court, 'NR')) AS dmm_pole,
+			COALESCE(se.priorisation, 'Non renseigné') AS priorisation,
+			s.status,
+			COUNT(se.id) AS effectif
+		FROM susar_eu_v2.susar_eu se
+		JOIN (
+			SELECT id, 'Évalué' AS status FROM ({$subEval}) t1
+			UNION ALL
+			SELECT id, 'Non évalué' AS status FROM ({$subNon}) t2
+		) s ON s.id = se.id
+		LEFT JOIN susar_eu_v2.intervenant_substance_dmm_susar_eu isdse ON isdse.susar_eu_id = se.id
+		LEFT JOIN susar_eu_v2.intervenant_substance_dmm isd ON isdse.intervenant_substance_dmm_id = isd.id
+		WHERE se.gateway_date BETWEEN :start AND :end
+		GROUP BY ym, dmm_pole, priorisation, status
+		ORDER BY ym ASC, dmm_pole ASC, priorisation ASC, status ASC
+		SQL;
+
+		$rows = $this->connection->fetchAllAssociative($sql, [
+			'start' => $start->format('Y-m-d H:i:s.u'),
+			'end' => $end->format('Y-m-d H:i:s.u'),
+		]);
+
+		return $rows;
+	}
 }
 
 
