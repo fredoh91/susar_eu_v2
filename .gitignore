@@ -35,3 +35,5 @@ yarn-error.log
 /.php-cs-fixer.cache
 ###< php-cs-fixer/shim ###
 .qodo
+# Notes locales non versionnées
+docs_local/
