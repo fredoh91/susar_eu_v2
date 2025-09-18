@@ -16,5 +16,9 @@ import { startStimulusApp } from '@symfony/stimulus-bridge';
 import '@symfony/ux-toggle-password';
 
 // Démarrez l'application Stimulus
-const app = startStimulusApp();
+const app = startStimulusApp(require.context(
+    '@symfony/stimulus-bridge/lazy-controller-loader!./controllers',
+    true,
+    /\.[jt]s$/
+));
 

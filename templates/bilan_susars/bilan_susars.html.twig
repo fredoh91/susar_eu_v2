@@ -30,10 +30,10 @@
 						</div>
 						<div class="card-body">
 							<div class="chart-box" style="height: 320px;">
-								{{ render_chart(block.chart_counts) }}
+								{{ render_chart(block.chart_counts, {'data-controller': 'stacked-bar-chart'}) }}
 							</div>
 							<div class="chart-box mt-3" style="height: 320px;">
-								{{ render_chart(block.chart_percent) }}
+								{{ render_chart(block.chart_percent, {'data-controller': 'stacked-bar-chart'}) }}
 							</div>
 
 							<div class="mt-3">
