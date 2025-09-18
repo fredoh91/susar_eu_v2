@@ -40,6 +40,8 @@
               {% if is_granted('ROLE_DMFR_REF') %}
                 <li><a class="dropdown-item" href="{{ path ('app_bilan_imports_ctll') }}">Bilan des imports des fichiers CTLL</a></li>
               {% endif %}
+              
+              <li><a class="dropdown-item" href="{{ path ('app_bilan_susars') }}">Bilan sur les SUSARs (par DMM/pôle, par catégories de prio., évalués/non-évalués...)</a></li>
             </ul>
           </li>
         </ul>
