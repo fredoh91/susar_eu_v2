@@ -4,7 +4,8 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
-
+    # URL du nouveau serveur pour la redirection
+    new_server_url: '%env(NEW_SERVER_URL)%'
 services:
     # default configuration for services in *this* file
     _defaults:
@@ -36,3 +37,8 @@ services:
     App\Controller\ImportExcelCTLLController:
         arguments:
             $logger: '@monolog.logger.trace_import_CTLL'
+
+    App\EventSubscriber\RedirectSubscriber:
+        arguments:
+            $enableRedirection: '%env(bool:ENABLE_REDIRECTION)%'
+            $newServerUrl: '%env(NEW_SERVER_URL)%'

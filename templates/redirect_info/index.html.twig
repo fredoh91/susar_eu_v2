@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Redirection en cours...</title>
+    <meta http-equiv="refresh" content="{{ delay }};url={{ new_server_url }}">
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background-color: #f8f9fa; color: #212529; text-align: center; }
+        .container { max-width: 600px; padding: 2em; border: 1px solid #dee2e6; border-radius: .25rem; background-color: #fff; box-shadow: 0 0.5rem 1rem rgba(0,0,0,.15); }
+        h1 { color: #2e74b5; }
+        a { color: #0563c1; }
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border-left-color: #2e74b5;
+            animation: spin 1s ease infinite;
+            margin: 20px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Changement d'adresse de l'application</h1>
+        <p>L'application <strong>SUSAR EU V2</strong> a été déplacée vers une nouvelle adresse.</p>
+        <p>Vous allez être redirigé automatiquement dans {{ delay }} secondes.</p>
+        <div class="spinner"></div>
+        <p>Si la redirection ne fonctionne pas, veuillez cliquer sur ce lien :<br><a href="{{ new_server_url }}">{{ new_server_url }}</a></p>
+    </div>
+</body>
+</html>
