@@ -5,8 +5,10 @@ namespace App\Entity;
 use App\Repository\EffetsIndesirablesRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\Index;
 
 #[ORM\Entity(repositoryClass: EffetsIndesirablesRepository::class)]
+#[Index(name: "idx_reactionmeddrapt", columns: ["reactionmeddrapt"])]
 class EffetsIndesirables
 {
     #[ORM\Id]

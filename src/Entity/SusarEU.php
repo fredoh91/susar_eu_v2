@@ -11,6 +11,11 @@ use Doctrine\ORM\Mapping\Index;
 
 #[ORM\Entity(repositoryClass: SusarEURepository::class)]
 #[Index(name: "idx_ev_safety_report_identifier", columns: ["ev_safety_report_identifier"])]
+#[Index(name: "idx_priorisation", columns: ["priorisation"])]
+#[Index(name: "idx_cas_susar_eu_v1", columns: ["cas_susar_eu_v1"])]
+#[Index(name: "idx_date_evaluation", columns: ["date_evaluation"])]
+#[Index(name: "idx_world_wide_id", columns: ["world_wide_id"])]
+#[Index(name: "idx_cas_date_eval", columns: ["cas_susar_eu_v1", "date_evaluation"])]
 class SusarEU
 {
     #[ORM\Id]

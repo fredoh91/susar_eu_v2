@@ -5,8 +5,10 @@ namespace App\Entity;
 use App\Repository\MedicamentsRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\Index;
 
 #[ORM\Entity(repositoryClass: MedicamentsRepository::class)]
+#[Index(name: "idx_substancename", columns: ["substancename"])]
 class Medicaments
 {
     #[ORM\Id]
