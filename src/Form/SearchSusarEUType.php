@@ -188,15 +188,6 @@ class SearchSusarEUType extends AbstractType
                     // 'attr' => ['class' => 'chpRq'],
                 ]
             )
-            ->add(
-                'EV_SafetyReportIdentifier',
-                TextType::class,
-                [
-                    'label' => 'EV Safety Report Identifier',
-                    'required' => false,
-                    // 'attr' => ['class' => 'chpRq'],
-                ]
-            )
 
             // Période
             ->add(
@@ -364,6 +355,17 @@ class SearchSusarEUType extends AbstractType
                     ]
                 );
         }
+        if ($options['show_ev_safety_report_identifier']) {
+            $builder->add(
+                'EV_SafetyReportIdentifier',
+                TextType::class,
+                [
+                    'label' => 'EV Safety Report Identifier',
+                    'required' => false,
+                    // 'attr' => ['class' => 'chpRq'],
+                ]
+            );
+        }
     }
 
     public function configureOptions(OptionsResolver $resolver): void
@@ -372,6 +374,7 @@ class SearchSusarEUType extends AbstractType
             // Configure your form options here
             'data_class' => SearchSusarEU::class,
             'show_import_dates' => false,
+            'show_ev_safety_report_identifier' => false,
         ]);
     }
 }

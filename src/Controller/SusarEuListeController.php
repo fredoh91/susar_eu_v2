@@ -122,11 +122,12 @@ class SusarEuListeController extends AbstractController
 
         $form = $this->createForm(SearchSusarEUType::class, $searchSusarEU, [
             'show_import_dates' => $this->isGranted('ROLE_SUPER_ADMIN') || $this->isGranted('ROLE_SURV_PILOTEVEC'),
+            'show_ev_safety_report_identifier' => $this->isGranted('ROLE_SURV_ADMIN'),
         ]);
 
         $form->handleRequest($request);
 
-        $entityManager = $doctrine->getManager();
+        $TousSusars = [];
 
         // Le formulaire a été soumis (POST)
         if ($form->isSubmitted()) {
@@ -191,16 +192,8 @@ class SusarEuListeController extends AbstractController
                 $session->set('tri_search_susar_eu', $defaultTriSearchSusarEU);
                 return $this->redirectToRoute('app_liste_susar_eu');
             }
-        } else {
-            // Première arrivée sur le formulaire (GET)
-
-            $form = $this->createForm(SearchSusarEUType::class, $searchSusarEU, [
-                'show_import_dates' => $this->isGranted('ROLE_SUPER_ADMIN') || $this->isGranted('ROLE_SURV_PILOTEVEC'),
-            ]);
-
-            // $TousSusars = $entityManager->getRepository(SusarEU::class)->findBySearchSusarEuListe($searchSusarEU,$triSearchSusarEU);
-            $TousSusars = $this->susarEUQueryService->findBySearchSusarEuListe($searchSusarEU, $triSearchSusarEU);
         }
+        $TousSusars = $this->susarEUQueryService->findBySearchSusarEuListe($searchSusarEU, $triSearchSusarEU);
 
         $NbSusar = count($TousSusars);
         $Susars = $paginator->paginate(
