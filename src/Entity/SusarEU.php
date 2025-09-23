@@ -16,6 +16,7 @@ use Doctrine\ORM\Mapping\Index;
 #[Index(name: "idx_date_evaluation", columns: ["date_evaluation"])]
 #[Index(name: "idx_world_wide_id", columns: ["world_wide_id"])]
 #[Index(name: "idx_cas_date_eval", columns: ["cas_susar_eu_v1", "date_evaluation"])]
+#[Index(name: "idx_gateway_date", columns: ["gateway_date"])]
 class SusarEU
 {
     #[ORM\Id]
