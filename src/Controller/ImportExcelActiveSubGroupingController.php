@@ -47,8 +47,8 @@ class ImportExcelActiveSubGroupingController extends AbstractController
                 $spreadsheet = IOFactory::load($inputFileName);
                 $activeWorksheet = $spreadsheet->getActiveSheet();
                 $highestRow = $activeWorksheet->getHighestRow();
-                $creation_time = DateTimeImmutable::createFromFormat('U', filectime($inputFileName));
-                $creation_date = new DateTimeImmutable();
+                $creation_time = (new DateTimeImmutable())->setTimestamp(filectime($inputFileName));
+                $creation_date = new DateTimeImmutable('now', new \DateTimeZone('Europe/Paris'));
                 $lastUsername = $authenticationUtils->getLastUsername();
                 $ficExcel = new ActiveSubstanceGroupingFicExcel;
                 $ficExcel->setDateFichier($creation_time);

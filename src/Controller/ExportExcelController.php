@@ -33,7 +33,7 @@ class ExportExcelController extends AbstractController
     public function exportSusarEU(Request $request, EntityManagerInterface $entityManager): Response 
     {
 
-        $date = new DateTimeImmutable();
+        $date = new DateTimeImmutable('now', new \DateTimeZone('Europe/Paris'));
         $now = $date->format('Ymd_His');
         $nomFichierExcel= "Liste_Susar_EU_" . $now . ".xlsx";
         $repExport = "./Temp/ExportExcelListeSusarEU/";
@@ -385,7 +385,7 @@ class ExportExcelController extends AbstractController
 
 
 
-        $date = new DateTimeImmutable();
+        $date = new DateTimeImmutable('now', new \DateTimeZone('Europe/Paris'));
         $now = $date->format('Ymd_His');
         $nomFichierExcel= "Indic_Susar_Jarde_" . $now . ".xlsx";
         $repExport = "./Temp/ExportExcelPilotage/";

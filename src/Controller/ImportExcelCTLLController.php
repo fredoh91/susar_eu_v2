@@ -222,7 +222,7 @@ final class ImportExcelCTLLController extends AbstractController
     private function createImportCtllFicExcel(UploadedFile $FicExcel, string $inputFileName, AuthenticationUtils $authenticationUtils): ImportCtllFicExcel
     {
         // $creation_time = DateTimeImmutable::createFromFormat('U', filectime($inputFileName));
-        $import_date = new DateTimeImmutable();
+        $import_date = new DateTimeImmutable('now', new \DateTimeZone('Europe/Paris'));
         // $lastUsername = $authenticationUtils->getLastUsername();
         $user = $this->getUser(); // Récupère l'utilisateur connecté
         if ($user) {
@@ -290,9 +290,9 @@ final class ImportExcelCTLLController extends AbstractController
         $importCtll->setEVSafetyReportIdentifier(substr($activeWorksheet->getCell('D' . $row)->getFormattedValue(), 0, 255));
         $importCtll->setCaseReportNumber(substr($activeWorksheet->getCell('E' . $row)->getFormattedValue(), 0, 1000));
         $importCtll->setImportCtllFicExcel($importCtllFicExcel);
-        $importCtll->setSender(substr($activeWorksheet->getCell('F' . $row)->getFormattedValue(), 0, 255));
+        $importCtll->setSender(substr($activeWorksheet->getCell('F' . $row)->getFormattedValue(), 0, 255)); // phpcs:ignore Generic.Files.LineLength.TooLong
         $importCtll->setReportType(substr($activeWorksheet->getCell('G' . $row)->getFormattedValue(), 0, 255));
-        $importCtll->setEVDocumentType(substr($activeWorksheet->getCell('H' . $row)->getFormattedValue(), 0, 255));
+        $importCtll->setEVDocumentType(substr($activeWorksheet->getCell('H' . $row)->getFormattedValue(), 0, 255)); // phpcs:ignore Generic.Files.LineLength.TooLong
         $importCtll->setCountry(substr($activeWorksheet->getCell('I' . $row)->getFormattedValue(), 0, 255));
         $importCtll->setReceiveDate(new \DateTime($activeWorksheet->getCell('J' . $row)->getFormattedValue()));
         $importCtll->setReceiptDate(new \DateTime($activeWorksheet->getCell('K' . $row)->getFormattedValue()));

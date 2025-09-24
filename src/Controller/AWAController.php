@@ -67,8 +67,8 @@ class AWAController extends AbstractController
         $entityManager = $doctrine->getManager();
         $Susar = $entityManager->getRepository(SusarEU::class)->findOneById($idsusar);
         // 1/ Recherche des SubstancePt pour ce susar
-        $SubPTs = $Susar->getSubstancePts();
-        $dateModif = new \DateTimeImmutable();
+        $SubPTs = $Susar->getSubstancePts(); // phpcs:ignore Squiz.NamingConventions.ValidVariableName.NotCamelCaps
+        $dateModif = new \DateTimeImmutable('now', new \DateTimeZone('Europe/Paris'));
         // $lastUsername = $authenticationUtils->getLastUsername();
         $user = $this->getUser(); // Récupère l'utilisateur connecté
         if ($user) {

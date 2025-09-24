@@ -94,7 +94,7 @@ class ImportVersSusarEu
                 if (!$this->susarEURepository->existeEV_SafetyReportIdentifier($EVSafetyReportIdentifier)) {
                     $importCtll->setSusarDejaExistant(false);
                     $em->persist($importCtll);
-                    $dateImport = new \DateTimeImmutable();
+                    $dateImport = new \DateTimeImmutable('now', new \DateTimeZone('Europe/Paris'));
                     $susarEU = new SusarEU();
 
                     $casEurope = $this->paysEuropeRepository->isCasEurope($importCtll->getCountry());

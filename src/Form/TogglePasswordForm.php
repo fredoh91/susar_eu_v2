@@ -90,12 +90,13 @@ class TogglePasswordForm extends AbstractType
                     'class' => 'btn btn-lg btn-primary'
                 ]
             ])
-            ->add('_csrf_token', HiddenType::class, [
-                'mapped' => false,
-                'attr' => [
-                    'value' => '{{ csrf_token("authenticate") }}'
-                ],
-            ]);        
+            // ->add('_csrf_token', HiddenType::class, [
+            //     'mapped' => false,
+            //     'attr' => [
+            //         'value' => '{{ csrf_token("authenticate") }}'
+            //     ],
+            // ])
+            ;        
     }
     public function configureOptions(OptionsResolver $resolver): void
     {

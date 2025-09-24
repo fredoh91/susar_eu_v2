@@ -44,8 +44,8 @@ class ImportExcelActiveSubGroupingRepriseDonneesController extends AbstractContr
                 $spreadsheet = IOFactory::load($inputFileName);
                 $activeWorksheet = $spreadsheet->getActiveSheet();
                 $highestRow = $activeWorksheet->getHighestRow();
-                $creation_time = DateTimeImmutable::createFromFormat('U', filectime($inputFileName));
-                $creation_date = new DateTimeImmutable();
+                $creation_time = (new DateTimeImmutable())->setTimestamp(filectime($inputFileName));
+                $creation_date = new DateTimeImmutable('now', new \DateTimeZone('Europe/Paris'));
 
                 for ($row = 2; $row <= $highestRow; $row++) {
 

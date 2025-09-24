@@ -33,6 +33,7 @@ Encore
     .addEntry('popUpMultiEval', './assets/js/popUpMultiEval.js')
     .addEntry('importExcelCtll', './assets/js/importExcelCtll.js')
     .addEntry('susarEuListeSpinner', './assets/js/susarEuListeSpinner.js')
+    .addEntry('copySubstanceToClipboard', './assets/js/copySubstanceToClipboard.js')
 
     // .addEntry('popUpAWA', './assets/js/popUpAWA.js')
 

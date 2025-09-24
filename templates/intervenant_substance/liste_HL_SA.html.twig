@@ -9,19 +9,30 @@
 		<div class="container-fluid">
 			{% if TousHL_SA %}
 			
-				Nombre de lignes : {{ NbHL_SA }}
 				<h3>Liste des substances actives</h3>
+				<p>Nombre de lignes : {{ NbHL_SA }}</p>    
+                <div class="text-center py-3">
+                    {# Bouton pour copier la liste dans le presse-papiers #}
+                    <button type="button" id="copy-button" class="btn btn-primary">
+                        <i class="fas fa-copy"></i> Copier la liste
+                    </button>
+                </div>
 
-                {% set LstHL_SA = '' %}
-                        {% for HL_SA in TousHL_SA %}
-                            {% set LstHL_SA = (LstHL_SA == '' 
-                                                        ? HL_SA.ActiveSubstanceHighLevel 
-                                                        : LstHL_SA ~ '\n' ~ HL_SA.ActiveSubstanceHighLevel) %}
-                        {% endfor %}
-                    <textarea name="lst_HL_SA" id="lst_HL_SA" cols="150" rows="50" readonly>{{ LstHL_SA | raw }}</textarea>
-                
+				{# div pour le message de confirmation de la copie #}
+				<div id="copy-message" class="alert alert-success mt-2 mx-auto" style="display: none; max-width: 90%;"></div>
+				
+				{# On utilise `map` pour extraire la propriété et `join` pour l'assembler, avec un contrôle des espaces pour le textarea. #}
+				<textarea name="lst_HL_SA" id="lst_HL_SA" cols="150" rows="50" readonly class="form-control mx-auto" style="max-width: 90%;">
+                    {{- TousHL_SA|map(item => item.ActiveSubstanceHighLevel)|join('\n') -}}
+                </textarea>
+
 			{% endif %}
         </div>
 </div>
 
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+	{{ encore_entry_script_tags('copySubstanceToClipboard') }}
 {% endblock %}

@@ -68,30 +68,34 @@ class EvalSusarController extends AbstractController
         // dump($substances);
         // dump($PTs);
         if ($form->isSubmitted()) {
-            $formData = $request->request->all();
 
-            if (isset($formData['eval_susar']['reset'])) {
+            $formData = $request->request->all();
+            $data = $form->getData();
+
+            if ($form->has('reset') && $form->get('reset')->isClicked()) {
                 // dump(1);
                 // L'utilisateur a cliqué sur le bouton 'Annulation'
                 // return $this->redirectToRoute('app_eval_susar',['idsusar' => $idsusar]);
                 // return $this->redirectToRoute('app_detail_susar_eu', ['master_id' => $Susar->getMasterId()]);
                 return $this->redirectToRoute('app_detail_susar_eu', ['idsusar' => $Susar->getId()]);
                 // $TousSusars = $entityManager->getRepository(SusarEU::class)->findAll();
-            } elseif (isset($formData['eval_susar']['eval'])) {
+            } elseif ($form->has('eval') && $form->get('eval')->isClicked()) {
                 // L'utilisateur a cliqué sur le bouton 'Validation'
                 if ($form->isValid()) {
+                    // Le code ne devrait pas arriver ici si l'erreur CSRF se produit
+
+
                     // dump(2);
-                    // dd($formData['eval_susar']);
                     // 1/ vérification de ce couple substance/pt n'existe pas déjà pour ce susar avec "$hasLinkedEval"
                     // 2/ si oui : ajout du message flash et redirection : return $this->redirectToRoute('app_detail_susar_eu', ['master_id' => $Susar->getMasterId()]);
                     // 3/ si non : creation d'une évaluation $substancePtEval = new SubstancePtEval
                     // 4/ il faut rattacher cette entité au SusarEU en cours ainsi qu'a SubstancePt 
                     // 5/ redirection vers la page du détail du susar : return $this->redirectToRoute('app_detail_susar_eu', ['master_id' => $Susar->getMasterId()]);
 
-                    $sub = $formData['eval_susar']['substance'];
-                    $PT = $formData['eval_susar']['pt'];
-                    $assessment_outcome = $formData['eval_susar']['assessment_outcome'];
-                    $comments = $formData['eval_susar']['comments'];
+                    $sub = $data['substance'];
+                    $PT = $data['pt'];
+                    $assessment_outcome = $data['assessment_outcome'];
+                    $comments = $data['comments'];
                     $dateModif = new \DateTimeImmutable();
                     // $lastUsername = $authenticationUtils->getLastUsername();
                     $user = $this->getUser(); // Récupère l'utilisateur connecté
@@ -262,6 +266,7 @@ class EvalSusarController extends AbstractController
 
                 } else {
                     // Formulaire soumis, mais invalide
+
                     // dump(3);
                 }
             } else {
@@ -335,19 +340,19 @@ class EvalSusarController extends AbstractController
 
         if ($form->isSubmitted()) {
             $formData = $request->request->all();
-            if (isset($formData['modif_eval_susar']['reset'])) {
+            $data = $form->getData();
+            if ($form->get('reset')->isClicked()) {
                 // dump(1);
                 // L'utilisateur a cliqué sur le bouton 'Annulation'
                 // return $this->redirectToRoute('app_detail_susar_eu', ['master_id' => $Susar->getMasterId()]);
                 return $this->redirectToRoute('app_detail_susar_eu', ['idsusar' => $Susar->getId()]);
-            } elseif (isset($formData['modif_eval_susar']['eval'])) {
+            } elseif ($form->get('eval')->isClicked()) {
                 // L'utilisateur a cliqué sur le bouton 'Validation'
                 // dump($form->isValid());
                 if ($form->isValid()) {
-                    // dump(2);
-                    $assessment_outcome = $formData['modif_eval_susar']['assessment_outcome'];
-                    $comments = $formData['modif_eval_susar']['comments'];
-                    $dateModif = new \DateTimeImmutable();
+                    $assessment_outcome = $data['assessment_outcome'];
+                    $comments = $data['comments'];
+                    $dateModif = new \DateTimeImmutable('now', new \DateTimeZone('Europe/Paris'));
 
                     $SubstancePtEval->setAssessmentOutcome($assessment_outcome);
                     $SubstancePtEval->setComments($comments);
