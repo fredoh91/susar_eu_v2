@@ -396,6 +396,8 @@ class EvalSusarController extends AbstractController
         $entityManager = $doctrine->getManager();
         $worldwide_id = $request->request->get('worldwide_id');
         $assessment_outcome = $request->request->get('assessment_outcome');
+        $selected_substance = $request->request->get('substance'); // Peut être vide
+        $selected_pt = $request->request->get('pt'); // Peut être vide
         $user = $this->getUser();
 
         if (!$worldwide_id || !$assessment_outcome || !$user) {
@@ -417,37 +419,48 @@ class EvalSusarController extends AbstractController
                 $casModifies++;
                 
                 // Récupérer les couples SA/PT uniques pour ce SUSAR
-                $substances = [];
-                $pts = [];
+                $all_couples = [];
                 foreach ($susar->getSubstancePts() as $subPt) {
-                    $substances[] = $subPt->getActiveSubstanceHighLevel();
-                    $pts[] = $subPt->getReactionmeddrapt();
+                    $all_couples[$subPt->getActiveSubstanceHighLevel() . '||' . $subPt->getReactionmeddrapt()] = [
+                        'substance' => $subPt->getActiveSubstanceHighLevel(),
+                        'pt' => $subPt->getReactionmeddrapt(),
+                    ];
                 }
-                $substances = array_unique($substances);
-                $pts = array_unique($pts);
 
                 // Boucler sur chaque couple pour créer une évaluation
-                foreach ($substances as $sub) {
-                    foreach ($pts as $pt) {
-                        // On vérifie que le couple SA/PT est bien lié à ce SUSAR
-                        $substancePt = $entityManager->getRepository(SubstancePt::class)
-                                        ->findLinkedToSusarBySAAndPT($susar->getId(), $sub, $pt);
+                foreach ($all_couples as $couple) {
+                    $current_substance = $couple['substance'];
+                    $current_pt = $couple['pt'];
 
-                        if ($substancePt) {
-                            $substancePtEval = new SubstancePtEval();
+                    // Déterminer si le couple actuel est une cible de l'évaluation principale
+                    $isTarget = 
+                        (empty($selected_substance) || $selected_substance === $current_substance) &&
+                        (empty($selected_pt) || $selected_pt === $current_pt);
+
+                    $substancePt = $entityManager->getRepository(SubstancePt::class)
+                                    ->findLinkedToSusarBySAAndPT($susar->getId(), $current_substance, $current_pt);
+
+                    if ($substancePt) {
+                        $substancePtEval = new SubstancePtEval();
+
+                        if ($isTarget) {
+                            // C'est le couple (ou groupe) sélectionné par l'utilisateur
                             $substancePtEval->setAssessmentOutcome($assessment_outcome);
-                            $substancePtEval->setComments("Évaluation en masse depuis l\'écran des FU");
-                            $substancePtEval->setDateEval($dateModif);
-                            $substancePtEval->setCreatedAt($dateModif);
-                            $substancePtEval->setUpdatedAt($dateModif);
-                            $substancePtEval->setUserCreate($userName);
-                            $substancePtEval->setUserModif($userName);
-                            
-                            $substancePtEval->addSubstancePt($substancePt);
-                            $substancePtEval->addSusarEUs($susar);
-                            
-                            $entityManager->persist($substancePtEval);
+                            $substancePtEval->setComments(null); // Pas de commentaire
+                        } else {
+                            // C'est un autre couple, on met l'évaluation par défaut
+                            $substancePtEval->setAssessmentOutcome('Assessed without action');
+                            $substancePtEval->setComments('Assessed without action automatic');
                         }
+
+                        $substancePtEval->setDateEval($dateModif);
+                        $substancePtEval->setCreatedAt($dateModif);
+                        $substancePtEval->setUpdatedAt($dateModif);
+                        $substancePtEval->setUserCreate($userName);
+                        $substancePtEval->setUserModif($userName);
+                        $substancePtEval->addSubstancePt($substancePt);
+                        $substancePtEval->addSusarEUs($susar);
+                        $entityManager->persist($substancePtEval);
                     }
                 }
                 // Mettre à jour la date d'évaluation globale du SUSAR
