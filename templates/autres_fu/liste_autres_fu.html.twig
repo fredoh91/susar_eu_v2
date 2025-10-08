@@ -28,6 +28,55 @@
 				<div class="display-4 text-center  mt-0 mb-4">Liste des follow-up pour le SUSAR
 					{{ WW_id }}</div>
 
+				{% if isMultiEvaluator %}
+					<div class="alert alert-warning" role="alert">
+						<h5 class="alert-heading">Traitement en masse impossible</h5>
+						<p>Au moins un des SUSARs de cette liste est partagé par plusieurs évaluateurs. L'évaluation en masse est désactivée pour éviter les conflits.</p>
+					</div>
+				{% else %}
+					<div class="card bg-light mb-4">
+						<div class="card-body">
+							<h5 class="card-title">Évaluation en masse des Follow-ups</h5>
+							<p class="card-text small">Applique une évaluation à tous les couples Substance/PT pour chaque F.U. de cette liste qui n'a pas encore été évalué.</p>
+							
+							<form action="{{ path('app_autres_fu_eval_masse') }}" method="post">
+								<div class="row align-items-end g-3">
+									<div class="col-md-3">
+										<label for="substance_masse" class="form-label">Substance</label>
+										<select name="substance" id="substance_masse" class="form-select">
+											<option value="" {% if substances|length != 1 %}selected{% endif %}>Toutes</option>
+											{% for substance in substances %}
+												<option value="{{ substance }}" {% if substances|length == 1 %}selected{% endif %}>{{ substance }}</option>
+											{% endfor %}
+										</select>
+									</div>
+									<div class="col-md-3">
+										<label for="pt_masse" class="form-label">Effet Indésirable (PT)</label>
+										<select name="pt" id="pt_masse" class="form-select">
+											<option value="" {% if pts|length != 1 %}selected{% endif %}>Tous</option>
+											{% for pt in pts %}
+												<option value="{{ pt }}" {% if pts|length == 1 %}selected{% endif %}>{{ pt }}</option>
+											{% endfor %}
+										</select>
+									</div>
+									<div class="col-md-3">
+										<label for="assessment_outcome_masse" class="form-label">Conclusion de l'évaluation</label>
+										<select name="assessment_outcome" id="assessment_outcome_masse" class="form-select" required>
+											<option value="" selected disabled>Choisir une conclusion</option>
+											<option value="Screened without action">Screened without action</option>
+											<option value="Assessed without action">Assessed without action</option>
+											<option value="Under assessment">Under assessment</option>
+											<option value="Monitor">Monitor</option>
+											<option value="Concern in CT">Concern in CT</option>
+											<option value="À garder en mémoire">À garder en mémoire</option>
+										</select>
+									</div>
+									<div class="col-md-3"><input type="hidden" name="worldwide_id" value="{{ WW_id }}"><button type="submit" class="btn btn-primary w-100">Appliquer l'évaluation</button></div>
+								</div>
+							</form>
+						</div>
+					</div>
+				{% endif %}
 				{% if Susars %}
 
 					Nombre de lignes :

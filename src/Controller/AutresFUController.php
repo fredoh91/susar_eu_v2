@@ -28,11 +28,37 @@ class AutresFUController extends AbstractController
             $Susars = $entityManager->getRepository(SusarEU::class)->findSusarByWorldWideId($susarSelect->getWorldWideId());
             $NbSusar = count($Susars);
             $WW_id = $susarSelect->getWorldWideId();
+
+            // Vérifier si au moins un SUSAR est partagé par plusieurs évaluateurs
+            $isMultiEvaluator = false;
+            foreach ($Susars as $susar) {
+                if ($susar->getIntervenantSubstanceDMMs()->count() > 1) {
+                    $isMultiEvaluator = true;
+                    break;
+                }
+            }
+            // Récupérer les listes uniques de substances et PTs pour les menus déroulants
+            $substances = [];
+            $pts = [];
+            foreach ($Susars as $susar) {
+                foreach ($susar->getSubstancePts() as $subPt) {
+                    $substances[] = $subPt->getActiveSubstanceHighLevel();
+                    $pts[] = $subPt->getReactionmeddrapt();
+                }
+            }
+            $substances = array_unique($substances);
+            $pts = array_unique($pts);
+            sort($substances, SORT_STRING | SORT_FLAG_CASE);
+            sort($pts, SORT_STRING | SORT_FLAG_CASE);
+
             return $this->render('autres_fu/liste_autres_fu.html.twig', [
                 'Susars' => $Susars,
                 // 'TousSusars' => $TousSusars, // Requête contenant les données à paginer
                 'NbSusar' => $NbSusar,
                 'WW_id' => $WW_id,
+                'substances' => $substances,
+                'pts' => $pts,
+                'isMultiEvaluator' => $isMultiEvaluator,
             ]);
         }
     }

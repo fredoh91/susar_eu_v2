@@ -389,4 +389,90 @@ class EvalSusarController extends AbstractController
         // return $this->redirectToRoute('app_detail_susar_eu', ['master_id' => $Susar->getMasterId()]);
         return $this->redirectToRoute('app_detail_susar_eu', ['idsusar' => $Susar->getId()]);    
     }
+
+    #[Route('/autres_fu/eval_masse', name: 'app_autres_fu_eval_masse', methods: ['POST'])]
+    public function evalMasseAutresFU(Request $request, ManagerRegistry $doctrine, LoggerInterface $logger): Response
+    {
+        $entityManager = $doctrine->getManager();
+        $worldwide_id = $request->request->get('worldwide_id');
+        $assessment_outcome = $request->request->get('assessment_outcome');
+        $user = $this->getUser();
+
+        if (!$worldwide_id || !$assessment_outcome || !$user) {
+            $this->addFlash('error', 'Informations manquantes pour l\'évaluation en masse.');
+            // Rediriger vers la page d'origine si possible, sinon une page par défaut
+            return $this->redirectToRoute('app_liste_susar_eu');
+        }
+
+        $susars = $entityManager->getRepository(SusarEU::class)->findSusarByWorldWideId($worldwide_id);
+        
+        $casModifies = 0;
+        $casIgnores = 0;
+        $dateModif = new \DateTimeImmutable();
+        $userName = $user->getUserName();
+
+        foreach ($susars as $susar) {
+            // Condition : on ne traite que les SUSARs non évalués
+            if ($susar->getDateEvaluation() === null) {
+                $casModifies++;
+                
+                // Récupérer les couples SA/PT uniques pour ce SUSAR
+                $substances = [];
+                $pts = [];
+                foreach ($susar->getSubstancePts() as $subPt) {
+                    $substances[] = $subPt->getActiveSubstanceHighLevel();
+                    $pts[] = $subPt->getReactionmeddrapt();
+                }
+                $substances = array_unique($substances);
+                $pts = array_unique($pts);
+
+                // Boucler sur chaque couple pour créer une évaluation
+                foreach ($substances as $sub) {
+                    foreach ($pts as $pt) {
+                        // On vérifie que le couple SA/PT est bien lié à ce SUSAR
+                        $substancePt = $entityManager->getRepository(SubstancePt::class)
+                                        ->findLinkedToSusarBySAAndPT($susar->getId(), $sub, $pt);
+
+                        if ($substancePt) {
+                            $substancePtEval = new SubstancePtEval();
+                            $substancePtEval->setAssessmentOutcome($assessment_outcome);
+                            $substancePtEval->setComments("Évaluation en masse depuis l\'écran des FU");
+                            $substancePtEval->setDateEval($dateModif);
+                            $substancePtEval->setCreatedAt($dateModif);
+                            $substancePtEval->setUpdatedAt($dateModif);
+                            $substancePtEval->setUserCreate($userName);
+                            $substancePtEval->setUserModif($userName);
+                            
+                            $substancePtEval->addSubstancePt($substancePt);
+                            $substancePtEval->addSusarEUs($susar);
+                            
+                            $entityManager->persist($substancePtEval);
+                        }
+                    }
+                }
+                // Mettre à jour la date d'évaluation globale du SUSAR
+                $susar->setDateEvaluation($dateModif);
+                $entityManager->persist($susar);
+
+            } else {
+                $casIgnores++;
+            }
+        }
+
+        if ($casModifies > 0) {
+            $entityManager->flush();
+        }
+
+        $this->addFlash('success', sprintf('%d follow-up(s) ont été évalués. %d étaient déjà traités et ont été ignorés.', $casModifies, $casIgnores));
+
+        // Redirection vers la même page pour voir le résultat et le message flash
+        // Il faut l'id d'un des susars pour reconstruire la route
+        $premierSusar = $susars[0] ?? null;
+        if ($premierSusar) {
+            return $this->redirectToRoute('app_autres_FU', ['idsusar' => $premierSusar->getId()]);
+        }
+
+        // Fallback si la liste est vide
+        return $this->redirectToRoute('app_liste_susar_eu');
+    }
 }

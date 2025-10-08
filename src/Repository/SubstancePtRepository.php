@@ -77,6 +77,28 @@ class SubstancePtRepository extends ServiceEntityRepository
     //         ->getOneOrNullResult() !== null;
     // }
 
+    /**
+     * Retrouve une entité SubstancePt liée à un SusarEU spécifique par substance et PT.
+     *
+     * @param integer $susarId
+     * @param string $substance
+     * @param string $pt
+     * @return SubstancePt|null
+     */
+    public function findLinkedToSusarBySAAndPT(int $susarId, string $substance, string $pt): ?SubstancePt
+    {
+        return $this->createQueryBuilder('sp')
+            ->innerJoin('sp.susarEUs', 's')
+            ->where('sp.active_substance_high_level = :substance')
+            ->andWhere('sp.reactionmeddrapt = :pt')
+            ->andWhere('s.id = :susarId')
+            ->setParameter('substance', $substance)
+            ->setParameter('pt', $pt)
+            ->setParameter('susarId', $susarId)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 
     //    /**
     //     * @return SubstancePt[] Returns an array of SubstancePt objects
