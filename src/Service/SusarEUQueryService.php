@@ -37,6 +37,17 @@ class SusarEUQueryService
         SearchSusarEU $search,
         array $orderCriteria = [['field' => 'statusdate', 'direction' => 'ASC']]
     ): ?array {
+        $query = $this->getQueryBuilderBySearch($search, $orderCriteria);
+
+        return $query
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function getQueryBuilderBySearch(
+        SearchSusarEU $search,
+        array $orderCriteria = [['field' => 'statusdate', 'direction' => 'ASC']]
+    ): \Doctrine\ORM\QueryBuilder {
 
 
         $query = $this->susarEURepository
@@ -373,8 +384,6 @@ class SusarEUQueryService
         //     ->setMaxResults($nbResuPage);        
         // dump($query->getQuery()->getSQL());
 
-        return $query
-            ->getQuery()
-            ->getResult();
+        return $query;
     }
 }

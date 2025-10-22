@@ -160,9 +160,9 @@ class SusarEuListeController extends AbstractController
                     }
 
                     // Le formulaire est valide, on peut faire la recherche
-                    // $TousSusars = $entityManager->getRepository(SusarEU::class)->findBySearchSusarEuListe($searchSusarEU,$triSearchSusarEU);
-                    $TousSusars = $this->susarEUQueryService->findBySearchSusarEuListe($searchSusarEU, $triSearchSusarEU);
-                    // Redirection vers la route sans paramètres de page
+                    // On ne fait rien ici, la recherche se fera plus bas
+
+                    // Redirection vers la route sans paramètres de page pour afficher la page 1 des résultats
                     return $this->redirectToRoute('app_liste_susar_eu');
                 } else {
                     if ($this->kernel->getEnvironment() === 'dev') {
@@ -193,15 +193,19 @@ class SusarEuListeController extends AbstractController
                 return $this->redirectToRoute('app_liste_susar_eu');
             }
         }
-        $TousSusars = $this->susarEUQueryService->findBySearchSusarEuListe($searchSusarEU, $triSearchSusarEU);
 
-        $NbSusar = count($TousSusars);
+        // Récupération du QueryBuilder
+        $queryBuilder = $this->susarEUQueryService->getQueryBuilderBySearch($searchSusarEU, $triSearchSusarEU);
+
+        // Pagination des résultats
         $Susars = $paginator->paginate(
-            $TousSusars, // Requête contenant les données à paginer
-            $request->query->getInt('page', 1), // Numéro de la page en cours, passé dans l'URL, 1 si aucune page
+            $queryBuilder, // QueryBuilder et non les résultats
+            $request->query->getInt('page', 1), // Numéro de la page en cours
             $nbResuPage // Nombre de résultats par page
         );
 
+        // Récupération du nombre total de résultats depuis le paginateur
+        $NbSusar = $Susars->getTotalItemCount();
 
         if ($this->kernel->getEnvironment() === 'dev') {
             $this->logger->info('nb susar : ' . $NbSusar);

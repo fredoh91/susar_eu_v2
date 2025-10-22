@@ -375,6 +375,8 @@ class SearchSusarEUType extends AbstractType
             'data_class' => SearchSusarEU::class,
             'show_import_dates' => false,
             'show_ev_safety_report_identifier' => false,
+            'csrf_protection' => true,
+            'csrf_token_id'   => 'search_susar_eu_token',
         ]);
     }
 }
