@@ -40,6 +40,13 @@ final class ExportsPilotageController extends AbstractController
                     $susars = $em->getRepository(SusarEU::class)->findSusarByGatewayDate_exportPilotage($debutGatewayDate, $finGatewayDate);
                     // dump ($susars);
 
+                    if (empty($susars)) {
+                        $this->addFlash('error', 'Aucun SUSAR trouvé pour la période sélectionnée.');
+                        return $this->render('exports_indicateurs/exports_indicateurs.html.twig', [
+                            'form' => $form->createView(),
+                        ]);
+                    }
+
                     $spreadsheet = new Spreadsheet();
                     $sheet = $spreadsheet->getActiveSheet();
 

@@ -323,6 +323,181 @@ class SusarEURepository extends ServiceEntityRepository
     }
 
 
+    public function findSusarByGatewayDate_exportIndicateur($debutGatewayDate, $finGatewayDate): ?array
+    {
+        return $this->createQueryBuilder('s')
+            ->andWhere('s.GatewayDate >= :dgd')
+            ->setParameter('dgd', $debutGatewayDate)
+            ->andWhere('s.GatewayDate <= :fgd')
+            ->setParameter('fgd', $finGatewayDate->modify('+1 day'))
+            ->orderBy('s.id', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+
+    public function findSusarByGatewayDate_exportIndicateur_SQL($debutGatewayDate, $finGatewayDate): ?array
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = "
+        SELECT s.id,
+            s.dlpversion ,
+            s.num_eudract ,
+            s.pays_survenue ,
+            DATE_FORMAT(s.gateway_date, '%d/%m/%Y') AS gateway_date,
+            DATE_FORMAT(s.created_at, '%d/%m/%Y') AS date_import,
+            DATE_FORMAT(DATE_ADD(s.created_at, INTERVAL 15 DAY), '%d/%m/%Y') AS date_previsionnelle,
+            IFNULL(
+                (
+                    SELECT DATE_FORMAT(MIN(spe.date_eval), '%d/%m/%Y')
+                    FROM substance_pt_eval spe
+                    LEFT JOIN substance_pt_eval_susar_eu spese
+                        ON spese.substance_pt_eval_id = spe.id
+                    WHERE spese.susar_eu_id = s.id
+                ),
+                'Pas_eval'
+            ) AS premiere_date_eval,
+            CASE
+                WHEN (
+                    SELECT MIN(spe.date_eval)
+                    FROM substance_pt_eval spe
+                    LEFT JOIN substance_pt_eval_susar_eu spese
+                        ON spese.substance_pt_eval_id = spe.id
+                    WHERE spese.susar_eu_id = s.id
+                ) IS NULL THEN 'N/A'
+                WHEN (
+                    SELECT MIN(spe.date_eval)
+                    FROM substance_pt_eval spe
+                    LEFT JOIN substance_pt_eval_susar_eu spese
+                        ON spese.substance_pt_eval_id = spe.id
+                    WHERE spese.susar_eu_id = s.id
+                ) <= DATE_ADD(s.created_at, INTERVAL 15 DAY) THEN 'Oui'
+                ELSE 'Non'
+            END AS Dans_les_delais,
+            s.priorisation ,
+            CASE
+                WHEN EXISTS (
+                    SELECT 1
+                    FROM substance_pt_eval spe
+                    LEFT JOIN substance_pt_eval_susar_eu spese
+                        ON spese.substance_pt_eval_id = spe.id
+                    WHERE spese.susar_eu_id = s.id
+                ) THEN 'VRAI'
+                ELSE 'FAUX'
+            END AS Evalue,
+            (
+                SELECT 
+                    CASE 
+                        WHEN COUNT(isd.dmm) = 0 THEN 'non-attribué'
+                        ELSE GROUP_CONCAT(isd.dmm SEPARATOR '/')
+                        END AS dmm_concat_2
+                FROM intervenant_substance_dmm_susar_eu isdse 
+                LEFT JOIN intervenant_substance_dmm isd 
+                    ON isd.id = isdse.intervenant_substance_dmm_id 
+                    AND isd.dmm IS NOT NULL
+                WHERE isdse.susar_eu_id = s.id
+            ) AS DMM,
+            (
+                SELECT 
+                    CASE 
+                        WHEN COUNT(isd.pole_court) = 0 THEN 'non-attribué'
+                        ELSE GROUP_CONCAT(isd.pole_court SEPARATOR '/')
+                    END AS pole_court_concat_2
+                FROM intervenant_substance_dmm_susar_eu isdse 
+                LEFT JOIN intervenant_substance_dmm isd 
+                    ON isd.id = isdse.intervenant_substance_dmm_id 
+                    AND isd.pole_court IS NOT NULL
+                WHERE isdse.susar_eu_id = s.id
+            ) AS pole_court,
+            (
+                SELECT 
+                    CASE 
+                        WHEN COUNT(isd.evaluateur) = 0 THEN 'non-attribué'
+                        ELSE GROUP_CONCAT(isd.evaluateur SEPARATOR '/')
+                    END AS evaluateur_concat_2
+                FROM intervenant_substance_dmm_susar_eu isdse 
+                LEFT JOIN intervenant_substance_dmm isd 
+                    ON isd.id = isdse.intervenant_substance_dmm_id 
+                    AND isd.evaluateur IS NOT NULL
+                WHERE isdse.susar_eu_id = s.id
+            ) AS evaluateur,
+            (
+                SELECT 
+                    CASE 
+                        WHEN COUNT(isd.type_sa_ms_mono) = 0 THEN 'non-attribué'
+                        ELSE GROUP_CONCAT(isd.type_sa_ms_mono SEPARATOR '/')
+                    END AS type_sa_ms_mono_concat_2
+                FROM intervenant_substance_dmm_susar_eu isdse 
+                LEFT JOIN intervenant_substance_dmm isd 
+                    ON isd.id = isdse.intervenant_substance_dmm_id 
+                    AND isd.type_sa_ms_mono IS NOT NULL
+                WHERE isdse.susar_eu_id = s.id
+            ) AS Type_saMS_Mono,
+            (
+                SELECT GROUP_CONCAT(DISTINCT m.substancename SEPARATOR '/')
+                FROM medicaments m
+                WHERE m.susar_id = s.id
+                and m.productcharacterization = 'Suspect'
+            ) AS substance_names,
+            (
+                SELECT GROUP_CONCAT(DISTINCT ei.reaction_list_pt SEPARATOR '/')
+                FROM effets_indesirables ei 
+                WHERE ei.susar_id = s.id
+            ) AS EI_pt ,
+            (
+                SELECT 
+                CASE 
+                    WHEN COUNT(spe.assessment_outcome) = 0 THEN NULL
+                    ELSE GROUP_CONCAT(distinct spe.assessment_outcome SEPARATOR '/')
+                END AS ass_out_concat
+                FROM substance_pt_eval spe
+                LEFT JOIN substance_pt_eval_susar_eu spese
+                    ON spese.substance_pt_eval_id = spe.id
+                WHERE spese.susar_eu_id = s.id
+            ) AS assessment_outcome	,
+            (
+                SELECT 
+                    CASE 
+                        WHEN COUNT(spe.date_eval ) = 0 THEN NULL
+                        ELSE GROUP_CONCAT(distinct DATE_FORMAT(spe.date_eval, '%d/%m/%Y') SEPARATOR ',')
+                    END AS date_eval_concat
+                FROM substance_pt_eval spe
+                LEFT JOIN substance_pt_eval_susar_eu spese
+                    ON spese.substance_pt_eval_id = spe.id
+                WHERE spese.susar_eu_id = s.id
+            ) AS date_eval
+        FROM susar_eu_v2.susar_eu s
+        WHERE s.gateway_date BETWEEN :dgd AND :fgd
+        ";
+
+        $dgd = $debutGatewayDate->format('Y-m-d 00:00:00');
+        $fgd = $finGatewayDate->format('Y-m-d 23:59:59');
+        
+        try {
+            $stmt = $conn->prepare($sql);
+            $stmt->bindValue('dgd', $dgd);
+            $stmt->bindValue('fgd', $fgd);
+            $result = $stmt->executeQuery();
+            return $result->fetchAllAssociative();
+        } catch (\Doctrine\DBAL\Exception $e) {
+            $error = [
+                'message' => $e->getMessage(),
+                'code' => $e->getCode(),
+                'sql' => $sql,
+                'params' => ['dgd' => $dgd, 'fgd' => $fgd],
+            ];
+            if ($e->getPrevious()) {
+                $error['previous'] = $e->getPrevious()->getMessage();
+            }
+            // DEBUG temporaire : retourne les infos d'erreur pour inspection
+            return ['_sql_error' => $error];
+            // en prod, logger l'erreur puis relancer : throw new \RuntimeException($e->getMessage(), 0, $e);
+        } catch (\Throwable $e) {
+            return ['_sql_error' => ['message' => $e->getMessage(), 'sql' => $sql, 'params' => ['dgd' => $dgd, 'fgd' => $fgd]]];
+        }
+    }
+
+
 
 
 
