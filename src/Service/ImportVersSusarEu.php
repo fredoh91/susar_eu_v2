@@ -213,6 +213,26 @@ class ImportVersSusarEu
                     // ce cas est déjà dans la base, on flag l'import comme "deja existant"
                     $importCtll->setSusarDejaExistant(true);
                     $importCtll->setSusarAttribue(false);
+
+
+                    // gestion de la gatewaydate en cas de susar non-importé
+                    $gatewayDate = $importCtll->getGatewayDate();
+                    if ($gatewayDate instanceof \DateTimeInterface) {
+                        $gatewayDateStr = $gatewayDate->format('d/m/Y');
+                    } elseif (!empty($gatewayDate)) {
+                        // Si c'est une chaîne, essayez de la convertir
+                        $dateObj = \DateTime::createFromFormat('Y-m-d', $gatewayDate);
+                        $gatewayDateStr = $dateObj ? $dateObj->format('d/m/Y') : $gatewayDate;
+                    } else {
+                        $gatewayDateStr = null;
+                    }
+                    
+                    if ($gatewayDateStr && !in_array($gatewayDateStr, $this->gatewayDate, true)) {
+                        $this->gatewayDate[] = $gatewayDateStr;
+                    }
+
+
+
                     $em->persist($importCtll);
                 }
             }
