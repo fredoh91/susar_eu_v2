@@ -37,31 +37,15 @@ final class ExportsIndicateursController extends AbstractController
                 $repExport = "./Temp/ExportExcelPilotage/";
                 
                 if ($debutGatewayDate <= $finGatewayDate) {
-                    // dd('Coucou 02');
-                    
-                    $susars = $em->getRepository(SusarEU::class)->findSusarByGatewayDate_exportIndicateur($debutGatewayDate, $finGatewayDate);
-
-                    // si le repo a renvoyé une erreur SQL pour debug
-                    if (is_array($susars) && isset($susars['_sql_error'])) {
-                        $err = $susars['_sql_error'];
-
-                        // log (si le service logger est disponible)
-                        if ($this->container->has('logger')) {
-                            $this->container->get('logger')->error('ExportIndicateurs SQL error', $err);
-                        }
-
-                        // message utilisateur et debug
-                        $this->addFlash('error', 'Erreur SQL lors de l\'export : ' . ($err['message'] ?? 'voir logs'));
-                        dump($err); // enlever en production
-
-                        return $this->render('exports_indicateurs/exports_indicateurs.html.twig', [
-                            'form' => $form->createView(),
-                        ]);
+                    // Désactiver le profiler pour économiser de la mémoire
+                    if ($this->container->has('profiler')) {
+                        $this->container->get('profiler')->disable();
                     }
 
-                    // dump($susars);
+                    $repo = $em->getRepository(SusarEU::class);
+                    $allIds = $repo->findIdsSusarByGatewayDate($debutGatewayDate, $finGatewayDate);
 
-                    if (empty($susars)) {
+                    if (empty($allIds)) {
                         $this->addFlash('info', 'Aucun SUSAR trouvé pour la période sélectionnée.');
                         return $this->render('exports_indicateurs/exports_indicateurs.html.twig', [
                             'form' => $form->createView(),
@@ -125,9 +109,24 @@ final class ExportsIndicateursController extends AbstractController
                     $additionalHeight = 15; // Hauteur additionnelle pour substance et EI
 
                     $row = 2;
-// dd( $susars); 
+                    $batchSize = 100; // Réduit pour plus de sécurité
+                    $chunks = array_chunk($allIds, $batchSize);
 
-                    foreach ($susars as $susar) {
+                    foreach ($chunks as $chunk) {
+                        $susars = $repo->findSusarsByIdsForExport($chunk);
+
+                        // Batch fetching pour les collections (évite le Lazy Loading N+1)
+                        // On charge toutes les relations pour tout le lot en 4 requêtes au lieu de 400
+                        $em->createQuery('SELECT m, s FROM App\Entity\Medicaments m JOIN m.susar s WHERE s.id IN (:ids)')
+                           ->setParameter('ids', $chunk)->getResult();
+                        $em->createQuery('SELECT e, s FROM App\Entity\EffetsIndesirables e JOIN e.susar s WHERE s.id IN (:ids)')
+                           ->setParameter('ids', $chunk)->getResult();
+                        $em->createQuery('SELECT spe, s FROM App\Entity\SubstancePtEval spe JOIN spe.susarEUs s WHERE s.id IN (:ids)')
+                           ->setParameter('ids', $chunk)->getResult();
+                        $em->createQuery('SELECT isd, s FROM App\Entity\IntervenantSubstanceDMM isd JOIN isd.susarEUs s WHERE s.id IN (:ids)')
+                           ->setParameter('ids', $chunk)->getResult();
+
+                        foreach ($susars as $susar) {
 
                         // Substances
                         $medics = $susar->getMedicament();
@@ -164,9 +163,6 @@ final class ExportsIndicateursController extends AbstractController
                         $sheet->setCellValue('A' . $row, $susar->getId());
                         $sheet->setCellValue('B' . $row, $susar->getDLPVersion());
                         $sheet->setCellValue('C' . $row, $susar->getNumEudract());
-                        $sheet->getStyle('C' . $row)
-                        ->getNumberFormat()
-                        ->setFormatCode(\PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_TEXT);
                         $sheet->setCellValue('D' . $row, $susar->getPaysSurvenue());
 
                         // Gateway date
@@ -180,11 +176,6 @@ final class ExportsIndicateursController extends AbstractController
 
                                 // Set the cell value with the Excel date serial number
                                 $sheet->setCellValue('E' . $row, $excelgatewayDate);
-
-                                // Apply the date format to the cell
-                                $sheet->getStyle('E' . $row)
-                                    ->getNumberFormat()
-                                    ->setFormatCode(\PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_DATE_DDMMYYYY);
                             } else {
                                 // Handle invalid date formats if necessary
                                 $sheet->setCellValue('E' . $row, 'Date Invalide');
@@ -207,14 +198,7 @@ final class ExportsIndicateursController extends AbstractController
                                 $exceldatePrev   = \PhpOffice\PhpSpreadsheet\Shared\Date::PHPToExcel($datePrev);
 
                                 $sheet->setCellValue('F' . $row, $exceldateImport);
-                                $sheet->getStyle('F' . $row)
-                                    ->getNumberFormat()
-                                    ->setFormatCode(\PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_DATE_DDMMYYYY);
-
                                 $sheet->setCellValue('G' . $row, $exceldatePrev);
-                                $sheet->getStyle('G' . $row)
-                                    ->getNumberFormat()
-                                    ->setFormatCode(\PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_DATE_DDMMYYYY);
                             } else {
                                 $sheet->setCellValue('F' . $row, 'Date Invalide');
                             }
@@ -235,9 +219,6 @@ final class ExportsIndicateursController extends AbstractController
                         if ($premiereDateEval instanceof \DateTimeInterface) {
                             $excelPremiere = \PhpOffice\PhpSpreadsheet\Shared\Date::PHPToExcel($premiereDateEval);
                             $sheet->setCellValue('H' . $row, $excelPremiere);
-                            $sheet->getStyle('H' . $row)
-                                ->getNumberFormat()
-                                ->setFormatCode(\PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_DATE_DDMMYYYY);
                         } else {
                             $sheet->setCellValue('H' . $row, 'non-évalué');
                         }
@@ -400,16 +381,42 @@ final class ExportsIndicateursController extends AbstractController
 
                         $row++;
                     }
+
+                    $em->clear();
+                    gc_collect_cycles(); // Forcer le ramasse-miettes
+                }
+
+                if ($row === 2) {
+                    $this->addFlash('info', 'Aucun SUSAR trouvé pour la période sélectionnée.');
+                    return $this->render('exports_indicateurs/exports_indicateurs.html.twig', [
+                        'form' => $form->createView(),
+                    ]);
+                }
 // dd($row);
                     ////////////////////////////////////
                     // Mise en forme du fichier Excel //
                     ////////////////////////////////////
+
+                    $rowFinal = $row - 1;
 
                     // On met la première ligne en gris
                     for ($col = 'A'; $col != 'T'; $col++) {
                         $sheet->getStyle($col . '1')->getFill()
                             ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
                             ->getStartColor()->setARGB('D6DCE1');
+                    }
+
+                    // Formattage des colonnes (à faire en une fois pour la performance)
+                    if ($rowFinal >= 2) {
+                        // N° EUCT en texte
+                        $sheet->getStyle('C2:C' . $rowFinal)
+                            ->getNumberFormat()
+                            ->setFormatCode(\PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_TEXT);
+
+                        // Dates (Gateway, Import, Prévisionnelle, Eval)
+                        $sheet->getStyle('E2:H' . $rowFinal)
+                            ->getNumberFormat()
+                            ->setFormatCode(\PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_DATE_DDMMYYYY);
                     }
 
                     // Ajout du filtre automatique
