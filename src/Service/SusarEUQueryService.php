@@ -165,8 +165,16 @@ class SusarEUQueryService
         if ($search->getsubstanceName()) {
             $sub = $search->getsubstanceName();
             $query = $query
-                ->andWhere($query->expr()->like('med.substancename', ':sn'))
-                ->setParameter('sn', '%' . $sub . '%');
+                    ->andWhere($query->expr()->like('med.substancename', ':sn'))
+                    ->setParameter('sn', '%' . $sub . '%')
+                    ->andWhere(
+                        $query->expr()->orX(
+                            $query->expr()->eq('med.productcharacterization', ':pc_suspect'),
+                            $query->expr()->eq('med.productcharacterization', ':pc_interacting')
+                        )
+                    )
+                    ->setParameter('pc_suspect', 'Suspect')
+                    ->setParameter('pc_interacting', 'Interacting');
         }
         if ($search->geteffetIndesirable()) {
             $EI = $search->geteffetIndesirable();
