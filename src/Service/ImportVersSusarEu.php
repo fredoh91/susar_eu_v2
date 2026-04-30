@@ -289,11 +289,11 @@ class ImportVersSusarEu
                     $substancePourRecherche = null;
                     // Si le médicament ne contient pas de chaine de caractere entre crochet, on n'a pas de nom de substance, on prend le nom du produit
                     if (($parsingMedic['substance']) === null || $parsingMedic['substance'] === '') {
-                        $medicament->setSubstanceName(substr($parsingMedic['produit'] ?? '', 0, 255));
+                        $medicament->setSubstanceName(substr($parsingMedic['produit'] ?? '', 0, 400));
                         $substancePourRecherche = $parsingMedic['produit'];
                         $this->lst_substancename[] = $parsingMedic['produit'];
                     } else {
-                        $medicament->setSubstanceName(substr($parsingMedic['substance'] ?? '', 0, 255));
+                        $medicament->setSubstanceName(substr($parsingMedic['substance'] ?? '', 0, 400));
                         $substancePourRecherche = $parsingMedic['substance'];
                         $this->lst_substancename[] = $parsingMedic['substance'];
                     }
@@ -451,7 +451,7 @@ class ImportVersSusarEu
 
                 $parsingMedic = $this->parsingMedicaments->donneParsing($medic);
                 if ($parsingMedic) {
-                    $medicament->setSubstanceName(substr($parsingMedic['substance'] ?? '', 0, 255));
+                    $medicament->setSubstanceName(substr($parsingMedic['substance'] ?? '', 0, 400));
                     $medicament->setProductname(substr($parsingMedic['produit'] ?? '', 0, 255));
                     switch ($parsingMedic['drug_char']) {
                         case 'S':

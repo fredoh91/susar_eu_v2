@@ -37,7 +37,7 @@ class Medicaments
     #[ORM\Column(nullable: true)]
     private ?int $NBBlock = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(length: 400, nullable: true)]
     private ?string $substancename = null;
 
     #[ORM\ManyToOne(inversedBy: 'Medicament')]
